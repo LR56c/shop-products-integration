@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    "paths": {
+      "~features/*": ["../features/*"]
+    },
+    "rootDirs": [
+      "./src",
+      "../features"
+    ],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
