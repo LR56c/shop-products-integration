@@ -3,12 +3,12 @@ import {FC, JSX} from "react";
 export const Button:FC<ButtonProps> =  ({name,callback,className,leading,action,size}) => {
     return (
        <>
-           {size === "sm" && <button className={`flex items-center justify-center rounded-sm w-20 font-semibold h-10 
+           {size === "sm" ? <button className={`flex items-center justify-center rounded-sm w-20 font-semibold h-10 
            ${className}`} onClick={callback}>
                {name}
-           </button>}
+           </button> : null}
 
-           {size === "lg" && <button className={`flex items-center rounded-sm w-32 md:w-36 lg:w-40 font-semibold h-10 
+           {size === "lg" ? <button className={`flex items-center rounded-sm w-32 md:w-36 lg:w-40 font-semibold h-10 
            ${className}`} onClick={callback}>
                <div className="basis-[10.0%]"></div>
                <div className={"basis-[10.0%]"}>
@@ -21,9 +21,9 @@ export const Button:FC<ButtonProps> =  ({name,callback,className,leading,action,
                    {action}
                </div>
                <div className="basis-[10.0%]"></div>
-           </button>}
+           </button> : null}
 
-           {size === "md" && <button className={`flex items-center rounded-sm w-32 md:w-36 lg:w-40 font-semibold h-10 
+           {size === "md" ? <button className={`flex items-center rounded-sm w-32 md:w-36 lg:w-40 font-semibold h-10 
            ${className}`} onClick={callback}>
                <div className="basis-[10.0%]"></div>
                <div className={"basis-[10.0%]"}>
@@ -36,12 +36,12 @@ export const Button:FC<ButtonProps> =  ({name,callback,className,leading,action,
                    {action}
                </div>
                <div className="basis-[10.0%]"></div>
-           </button>}
+           </button> : null}
 
-           {size === "icon" && <button className={`flex items-center justify-center rounded-sm w-20 font-semibold h-10 
+           {size === "icon" ? <button className={`flex items-center justify-center rounded-sm w-20 font-semibold h-10 
            ${className}`} onClick={callback}>
                {leading}
-           </button>}
+           </button> : null}
        </>
     );
 };
