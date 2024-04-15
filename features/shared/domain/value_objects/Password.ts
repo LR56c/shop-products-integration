@@ -1,6 +1,7 @@
+import { PasswordError } from 'features/shared/domain/exceptions/PasswordException'
 import { z } from 'zod'
 
-export class Password{
+export class Password {
 	private readonly value: string
 
 	private constructor( value: string ) {
@@ -8,10 +9,13 @@ export class Password{
 	}
 
 	static from( value: string ): Password {
-		// z.string().
-		if ( value.length < 6 ) {
-			throw new Error( "Password must be at least 6 characters long" )
-		}
-		return new Password( value )
+		const parseValue = z.string().superRefine( ( value, ctx ) => {
+			                    if ( value.length < 6 ) {
+				                    throw new PasswordError()
+			                    }
+			                    return value
+		                    } )
+		                    .parse( value )
+		return new Password( parseValue )
 	}
 }
