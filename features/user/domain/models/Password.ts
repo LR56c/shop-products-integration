@@ -1,4 +1,4 @@
-import { PasswordError } from 'features/shared/domain/exceptions/PasswordException'
+import { PasswordError } from 'features/user/domain/exceptions/PasswordException'
 import { z } from 'zod'
 
 export class Password {

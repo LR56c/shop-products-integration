@@ -1,0 +1,20 @@
+Role Enum
+User
+NewsLetter
+Shops Address
+Payment
+Payment Method Data
+Payment Method Enum
+Report Enum
+Report
+Cart
+Product Cart
+Order
+Item Confirmed
+Order Confirmed
+Order Product
+Promotion
+Promotion Product
+Product
+Category
+Sale
