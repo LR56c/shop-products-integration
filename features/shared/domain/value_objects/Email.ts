@@ -1,4 +1,6 @@
-import {z} from 'zod'
+import { EmailError } from 'features/shared/domain/exceptions'
+import { z } from 'zod'
+
 export class Email {
 	private readonly value: string
 
@@ -7,7 +9,11 @@ export class Email {
 	}
 
 	static from( value: string ): Email {
-		const parseValue = z.string().email().parse( value)
-		return new Email( parseValue )
+		const parseValue = z.string().email()
+		           .safeParse( value )
+		if ( !parseValue.success ) {
+			throw new EmailError()
+		}
+		return new Email( parseValue.data )
 	}
 }
