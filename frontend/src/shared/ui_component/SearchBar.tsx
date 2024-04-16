@@ -1,0 +1,88 @@
+import React, { FC, useEffect, useState } from "react";
+
+interface Product {
+  id: number;
+  nombre: string;
+  // Agrega aquí las demás propiedades de tu objeto de producto si las hay
+}
+
+interface SearchBarProps {
+  placeholder: string;
+  className?: string;
+}
+
+export const SearchBar: FC<SearchBarProps> = ({ placeholder }) => {
+  const [inputValue, setInputValue] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const fetchData = (value: string) => {
+    fetch(`https://test-products-json-default-rtdb.firebaseio.com/.json`)
+      .then((response) => response.json())
+      .then((data) => {
+        const filteredData: Product[] = data.filter((item: Product) => {
+          return item?.nombre?.toLowerCase().includes(value.toLowerCase());
+        });
+        setSearchResults(filteredData);
+      });
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData(inputValue);
+    } else {
+      setSearchResults([]);
+    }
+  }, [inputValue, isFocused]);
+
+  const handleChange = (value: string) => {
+    setInputValue(value);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  return (
+    <>
+      <div>
+        <div className="flex">
+          <input
+            type="text"
+            className="bg-white h-10 font-semibold text-sm px-3 rounded-l-sm border-2 border-white focus:outline-none w-full"
+            placeholder={placeholder}
+            value={inputValue}
+            onChange={(e) => handleChange(e.target.value)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+          <button className="bg-primary-400 border-2 border-primary-400 px-5 rounded-r-sm">
+            <div className="text-white">
+              <svg
+                viewBox="0 0 1024 1024"
+                fill="currentColor"
+                height="1.5em"
+                width="1.5em"
+              >
+                <path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" />
+              </svg>
+            </div>
+          </button>
+        </div>
+        <div
+          className={`bg-white mt-2 overflow-y-scroll h-80 rounded-lg ${isFocused ? "" : "hidden"}`}
+        >
+          {searchResults.map((product) => (
+            <a className="block p-1" key={product.id} href="">
+              {product.nombre}
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
