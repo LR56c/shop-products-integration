@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 
 interface Product {
   id: number;
   nombre: string;
-  // Agrega aquí las demás propiedades de tu objeto de producto si las hay
 }
 
 interface SearchBarProps {
@@ -16,7 +15,13 @@ export const SearchBar: FC<SearchBarProps> = ({ placeholder }) => {
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
+  const [inSuggestion, setInSuggestion] = useState<boolean>(false);
+  const [indexSuggestedSelected, setIndexSuggestedSelected] = useState<number>(0);
+  const inputRef = useRef<HTMLInputElement>(null)
+
+
   const fetchData = (value: string) => {
+
     fetch(`https://test-products-json-default-rtdb.firebaseio.com/.json`)
       .then((response) => response.json())
       .then((data) => {
@@ -26,6 +31,36 @@ export const SearchBar: FC<SearchBarProps> = ({ placeholder }) => {
         setSearchResults(filteredData);
       });
   };
+
+  addEventListener("keydown", (e)=>{
+    if (e.key === "ArrowDown"){
+      if(isFocused){ // focus -> suggestion
+        inputRef.current?.blur()
+        setIsFocused(false);
+        setInSuggestion(true)
+      }
+      if(inSuggestion){
+        setIndexSuggestedSelected((prevState)=>prevState +1)
+      }
+      console.log("Down")
+    }
+    else if (e.key === "ArrowUp"){
+      //
+      if (indexSuggestedSelected < 0){
+        setInSuggestion(false)
+        setIsFocused(true)
+        setIndexSuggestedSelected(0);
+        inputRef.current?.focus()
+      }
+
+      if (inSuggestion) {
+        setIndexSuggestedSelected((prevState) => prevState - 1);
+      }
+      console.log("Up");
+    }
+  })
+
+
 
   useEffect(() => {
     if (isFocused) {
@@ -52,6 +87,7 @@ export const SearchBar: FC<SearchBarProps> = ({ placeholder }) => {
       <div>
         <div className="flex">
           <input
+              ref={inputRef}
             type="text"
             className="bg-white h-10 font-semibold text-sm px-3 rounded-l-sm border-2 border-white focus:outline-none w-full"
             placeholder={placeholder}
@@ -74,10 +110,10 @@ export const SearchBar: FC<SearchBarProps> = ({ placeholder }) => {
           </button>
         </div>
         <div
-          className={`bg-white mt-2 overflow-y-scroll h-80 rounded-lg ${isFocused ? "" : "hidden"}`}
+          className={`bg-white mt-2 overflow-y-scroll h-80 rounded-lg ${inSuggestion ? "" : "hidden"}`}
         >
-          {searchResults.map((product) => (
-            <a className="block p-1" key={product.id} href="">
+          {searchResults.map((product, i) => (
+            <a className={`block p-1 ${indexSuggestedSelected === i ? 'bg-blue-500' : ''}`} key={product.id} href="">
               {product.nombre}
             </a>
           ))}
