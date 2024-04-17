@@ -6,7 +6,10 @@ function App() {
 
   return (
     <>
-        <TextFieldComponent/>
+        <TextFieldComponent
+        callback={(value)=>{
+          console.log("padre: " + value)
+        }}/>
     </>
   )
 }

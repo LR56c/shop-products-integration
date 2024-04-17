@@ -2,7 +2,7 @@ import { PasswordError } from 'features/shared/domain/exceptions/PasswordExcepti
 import { z } from 'zod'
 
 export class Password {
-	private readonly value: string
+	readonly value: string
 
 	private constructor( value: string ) {
 		this.value = value
