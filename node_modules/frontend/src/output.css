@@ -562,18 +562,16 @@ video {
   margin: 0.625rem;
 }
 
-.my-0 {
-  margin-top: 0px;
-  margin-bottom: 0px;
+.m-1 {
+  margin: 0.25rem;
 }
 
-.my-0\.5 {
-  margin-top: 0.125rem;
-  margin-bottom: 0.125rem;
+.m-0 {
+  margin: 0px;
 }
 
-.block {
-  display: block;
+.m-0\.5 {
+  margin: 0.125rem;
 }
 
 .inline-flex {
@@ -582,6 +580,14 @@ video {
 
 .rounded-xl {
   border-radius: 0.75rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
 }
 
 .bg-primary-500 {
