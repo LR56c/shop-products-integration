@@ -554,28 +554,30 @@ video {
   --tw-contain-style:  ;
 }
 
-.flex {
-  display: flex;
+.m-2 {
+  margin: 0.5rem;
 }
 
-.grow {
-  flex-grow: 1;
+.m-2\.5 {
+  margin: 0.625rem;
 }
 
-.content-center {
-  align-content: center;
+.my-0 {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
-.justify-center {
-  justify-content: center;
+.my-0\.5 {
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
 }
 
-.justify-stretch {
-  justify-content: stretch;
+.block {
+  display: block;
 }
 
-.rounded-lg {
-  border-radius: 0.5rem;
+.inline-flex {
+  display: inline-flex;
 }
 
 .rounded-xl {

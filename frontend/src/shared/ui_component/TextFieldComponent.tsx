@@ -8,13 +8,15 @@ interface TextFieldProps {
     rows? : number;
 }
 
+
+
 export const TextFieldComponent: FC<TextFieldProps> = ({className, placeholder="Input text"}) => {
     return(
         <>
-            <div className="bg-primary-500 rounded-xl">
+            <div className="bg-primary-500 rounded-xl inline-flex ">
                 <textarea  
-                    className={`rounded-xl ${className}`}
-                    placeholder={`${placeholder}`}
+                    className={` rounded-xl m-2.5 ${className}`}
+                    placeholder={`  ${placeholder}`}
                     cols={35}
                     rows={5}>
                 </textarea>
