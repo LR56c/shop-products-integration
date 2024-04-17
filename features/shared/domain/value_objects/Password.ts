@@ -9,7 +9,8 @@ export class Password {
 	}
 
 	static from( value: string ): Password {
-		const parseValue = z.string().superRefine( ( value, ctx ) => {
+		const parseValue = z.string()
+		                    .superRefine( ( value ) => {
 			                    if ( value.length < 6 ) {
 				                    throw new PasswordError()
 			                    }

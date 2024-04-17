@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@types/node": "^20.12.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0-canary-657428a9e-20240416",
+    "react-dom": "^19.0.0-canary-657428a9e-20240416"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
