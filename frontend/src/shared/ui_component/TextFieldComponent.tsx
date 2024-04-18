@@ -1,45 +1,41 @@
 import {
 	ChangeEvent,
 	FC,
-	useEffect,
 	useState
 } from 'react'
 import { Password } from '@features/shared/domain/value_objects/Password'
 import { PasswordError } from '@features/shared/domain/exceptions/PasswordException'
-
+import {
+	Path,
+	UseFormRegister
+} from 'react-hook-form'
 
 interface TextFieldProps {
-	className?: string;
-	placeholder?: string;
-	minimumLength?: number;
-	type?: 'text' | 'email' | 'password' | 'number';
-	callback: ( value: string | null ) => void;
+	className?: string,
+	placeholder?: string,
+	minimumLength?: number,
+	type?: 'text' | 'email' | 'password' | 'number',
+	label: Path<string>,
+	register: UseFormRegister<any>,
 }
 
 
 export const TextFieldComponent: FC<TextFieldProps> = ( {
 	className,
-	callback,
 	placeholder = 'Input text',
-	type = 'password'
+	type = 'password',
+	label,
+	register,
 } ) => {
-	//logica
 	const [ errorMsg, setErrorMsg ] = useState<string | null>( null )
 	const [ valueType, setValueType ] = useState<string | null>( null )
 
-	useEffect(
-		()=>{
-			callback(valueType)
-		},
-	[valueType]
-	)
-
-	const handleChange = ( element : ChangeEvent<HTMLInputElement> ) => {
+	const handleChange = ( element: ChangeEvent<HTMLInputElement> ) => {
 		switch ( type ) {
 			case 'password':
 				try {
 					const result = Password.from( element.currentTarget.value )
-					setErrorMsg(null)
+					setErrorMsg( null )
 					setValueType( result.value )
 				}
 				catch ( e: unknown ) {
@@ -58,11 +54,11 @@ export const TextFieldComponent: FC<TextFieldProps> = ( {
 		<>
 			<div className="bg-primary-500 rounded-md inline-flex display-block">
 				<input
+					{ ...register( `${ label }` ) }
+					onChange={ handleChange }
 					className={ ` rounded-md m-0.5 ${ className }` }
-					onChange={ ( e ) => handleChange( e ) }
 					placeholder={ `  ${ placeholder }` }
 					type="text"
-					// type={` ${type}`}
 				/>
 			</div>
 			<div>{ errorMsg }</div>
