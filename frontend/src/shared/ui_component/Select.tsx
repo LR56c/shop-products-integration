@@ -1,47 +1,66 @@
-import {FC, JSX, useState} from "react";
+import {FC, JSX, useEffect, useState} from "react";
 
-export const Select:FC<SelectProps> = ({leadingOn,leadingOff, callback, entries = []}) => {
+export const Select:FC<SelectProps> = ({leadingOn,
+                                           leadingOff,
+                                           callback,
+                                           entries = [],}) => {
+
     const [showList, setShowList] = useState(false)
-    const [itemValue, setItemValue] = useState<string>("Select item");
+    const [itemValue, setItemValue] = useState<string>("select item");
     const [leadingValue, setLeadingValue] = useState(false)
-1
+    const [errorMessage, setErrorMessage] = useState<string| null >(null)
 
     const toggleList = () => {
         setShowList(!showList)
     }
+    const validateSelection = () =>{
+        itemValue === "select item" ? (
+            setErrorMessage("Debe seleccionar un item")
+        ) : (
+            setErrorMessage(null)
+        )
+    }
+
+    useEffect(() => {
+        validateSelection()
+    }, [itemValue, showList])
+    
 
     return (
         <>
         <div className="w-60 h-24 space-y-2 font-semibold">
-                <div className="flex justify-between items-center bg-gray-700 text-white p-2 rounded-md"
+                <div className="flex justify-between items-center bg-primary-600 text-primary-50 p-2 rounded-md"
                 onClick={() =>{
                     toggleList(),
-                    setLeadingValue(!leadingValue)}}>
+                        setLeadingValue(!leadingValue)
+                        validateSelection()}}>
                     {itemValue}
                     {leadingValue ? (
-                        <span>
+                        <span className="text-2xl">
                             {leadingOn}
                         </span>
                     ) :
-                        <span>
+                        <span className="text-2xl">
                             {leadingOff}
                         </span>}
                 </div>
             {showList ? (
                 <>
-                    <ul className="bg-gray-500 text-white rounded-md overflow-y-auto max-h-32">
+                    <ul className="bg-primary-600 text-primary-50 rounded-md overflow-y-auto max-h-32">
                         {entries.map((entry) => (
-                            <li onClick={()=>{callback(entry.id),
+                            <li onClick={() => {
+                                callback(entry.id),
                                     setItemValue(entry.name),
                                     toggleList(),
                                     setLeadingValue(!leadingValue)}}
                                 key={entry.id}
-                                className="p-2 text-sm hover:bg-terciary-300">
+                                className="p-2 text-sm hover:bg-primary-50 hover:text-primary-600">
                                 {entry.name}
-                            </li>))}
+                            </li>
+                        ))}
                     </ul>
                 </>
-                ) : null}
+            ) : <div>{errorMessage}</div>}
         </div>
         </>
     );
@@ -52,4 +71,5 @@ interface SelectProps {
     leadingOff?: JSX.Element;
     entries: { id: string, name: string }[];
     callback: (id :string)=>void;
+    placeholder?: string;
 }

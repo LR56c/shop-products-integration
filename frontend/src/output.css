@@ -566,14 +566,6 @@ video {
   height: 6rem;
 }
 
-.h-6 {
-  height: 1.5rem;
-}
-
-.max-h-28 {
-  max-height: 7rem;
-}
-
 .max-h-32 {
   max-height: 8rem;
 }
@@ -588,10 +580,6 @@ video {
 
 .w-32 {
   width: 8rem;
-}
-
-.w-6 {
-  width: 1.5rem;
 }
 
 .w-60 {
@@ -653,18 +641,23 @@ video {
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
-.bg-gray-700 {
+.bg-primary-400 {
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  background-color: rgb(20 157 36 / var(--tw-bg-opacity));
+}
+
+.bg-primary-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(10 137 32 / var(--tw-bg-opacity));
+}
+
+.bg-primary-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 118 27 / var(--tw-bg-opacity));
 }
 
 .p-2 {
   padding: 0.5rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
 }
 
 .text-2xl {
@@ -672,13 +665,13 @@ video {
   line-height: 2rem;
 }
 
-.font-semibold {
-  font-weight: 600;
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
-.text-gray-800 {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+.font-semibold {
+  font-weight: 600;
 }
 
 .text-white {
@@ -686,9 +679,44 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-primary-50 {
+  --tw-text-opacity: 1;
+  color: rgb(221 229 197 / var(--tw-text-opacity));
+}
+
 .hover\:bg-terciary-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(42 147 204 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-terciary-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(94 134 217 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-terciary-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(210 199 234 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-primary-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(221 229 197 / var(--tw-bg-opacity));
+}
+
+.hover\:text-primary-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(10 137 32 / var(--tw-text-opacity));
+}
+
+.hover\:text-primary-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(15 118 27 / var(--tw-text-opacity));
+}
+
+.hover\:text-primary-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(29 99 26 / var(--tw-text-opacity));
 }
 
 @media (min-width: 768px) {
@@ -700,12 +728,5 @@ video {
 @media (min-width: 1024px) {
   .lg\:w-40 {
     width: 10rem;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .dark\:text-white {
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity));
   }
 }

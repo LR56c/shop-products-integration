@@ -46,10 +46,10 @@ function App() {
           }}
           entries={m}
           leadingOff={
-          <IoIosArrowDown className="text-2xl" />
+          <IoIosArrowDown/>
       }
           leadingOn={
-          <IoIosArrowUp className="text-2xl"/>
+          <IoIosArrowUp/>
       }
       />
     </>
@@ -57,4 +57,3 @@ function App() {
 }
 
 export default App
-
