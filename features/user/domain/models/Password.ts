@@ -1,4 +1,4 @@
-import { PasswordError } from 'features/user/domain/exceptions/PasswordException'
+import { PasswordException } from '../exceptions/PasswordException'
 import { z } from 'zod'
 
 export class Password {
@@ -8,10 +8,14 @@ export class Password {
 		this.value = value
 	}
 
+	/**
+	 * Create a Password instance
+	 * @throws {PasswordException} - if password is invalid
+	 */
 	static from( value: string ): Password {
 		const parseValue = z.string().superRefine( ( value, ctx ) => {
 			                    if ( value.length < 6 ) {
-				                    throw new PasswordError()
+				                    throw new PasswordException()
 			                    }
 			                    return value
 		                    } )

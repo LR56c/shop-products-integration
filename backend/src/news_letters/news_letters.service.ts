@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { NewsLetter } from '~features/news_letter/domain/models/NewsLetter'
 import { NewsLetterRepository } from '~features/news_letter/domain/repository/NewsLetterRepository'
 import { CreateNewsLetterDto } from './dto/create-news_letter.dto';
 import { UpdateNewsLetterDto } from './dto/update-news_letter.dto';
 
 @Injectable()
 export class NewsLettersService {
-  constructor(private s : NewsLetterRepository) {}
+  constructor(private repository : NewsLetterRepository) {}
 
   create(createNewsLetterDto: CreateNewsLetterDto) {
     return 'This action adds a new newsLetter';
   }
 
-  findAll() {
-    console.log("this.s")
-    console.log(this.s)
-    return `This action returns all newsLetters`;
+  async findAll() : Promise<NewsLetter[]> {
+    return this.repository.getAll()
   }
 
   findOne(id: number) {

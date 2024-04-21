@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "ulid": "^2.3.0"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
   }
 }

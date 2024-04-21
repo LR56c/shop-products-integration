@@ -1,4 +1,4 @@
-import { InvalidULIDException } from 'features/shared/domain/exceptions/InvalidUUIDException'
+import { InvalidULIDException } from '../exceptions/InvalidULIDException'
 import {
 	decodeTime,
 	ulid
@@ -16,6 +16,10 @@ export class ULID {
 		return new ULID( ulid() )
 	}
 
+	/**
+	 * Create a ULID instance
+	 * @throws {InvalidULIDException} - if ulid is invalid
+	 */
 	static from( value: string ): ULID {
 		const result = z.string()
 		                .ulid()

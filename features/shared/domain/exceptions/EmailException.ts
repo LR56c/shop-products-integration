@@ -1,5 +1,5 @@
-export class EmailError extends Error {
+export class EmailException extends Error {
 	constructor(message?: string) {
-		super(`EmailError`)
+		super("EmailException")
 	}
 }

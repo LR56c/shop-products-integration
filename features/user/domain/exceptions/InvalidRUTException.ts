@@ -1,5 +1,5 @@
-export class InvalidRUTError extends Error {
+export class InvalidRUTException extends Error {
 	constructor(message?: string) {
-		super(`InvalidRUTError${message == null ? '' : `: ${message}`}`)
+		super("InvalidRUTException")
 	}
 }

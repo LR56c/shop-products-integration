@@ -1,5 +1,5 @@
-export class PasswordError extends Error {
+export class PasswordException extends Error {
 	constructor(message?: string) {
-		super(`PasswordError${message == null ? '' : `: ${message}`}`)
+		super("PasswordException")
 	}
 }

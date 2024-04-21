@@ -1,4 +1,4 @@
-import { EmailError } from '../exceptions/EmailException'
+import { EmailException } from '../exceptions/EmailException'
 import { z } from 'zod'
 
 export class Email {
@@ -8,11 +8,15 @@ export class Email {
 		this.value = value
 	}
 
+	/**
+	 * Create an Email instance
+	 * @throws {EmailException} - if string is invalid
+	 */
 	static from( value: string ): Email {
 		const parseValue = z.string().email()
 		           .safeParse( value )
 		if ( !parseValue.success ) {
-			throw new EmailError()
+			throw new EmailException()
 		}
 		return new Email( parseValue.data )
 	}
