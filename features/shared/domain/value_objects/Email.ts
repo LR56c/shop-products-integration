@@ -1,8 +1,8 @@
-import { EmailError } from 'features/shared/domain/exceptions'
+import { EmailError } from '../exceptions/EmailException'
 import { z } from 'zod'
 
 export class Email {
-	private readonly value: string
+	readonly value: string
 
 	private constructor( value: string ) {
 		this.value = value
