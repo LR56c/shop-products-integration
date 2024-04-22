@@ -1,28 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpStatus
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpStatus,
+	Param,
+	Patch,
+	Post
 } from '@nestjs/common'
+import { parseTranslation } from 'src/shared/infrastructure/parseTranslation'
 import { NewsLetter } from '~features/news_letter/domain/models/NewsLetter'
+import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import {
+	FlatErrors,
+	flatErrors
+} from '~features/shared/utils/FlatErrors'
 import { HttpResultData } from '~features/shared/utils/HttpResultData'
-import { NewsLettersService } from './news_letters.service'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { CreateNewsLetterDto } from './dto/create-news_letter.dto'
-import { UpdateNewsLetterDto } from './dto/update-news_letter.dto'
-
-// presentacion (como interactua el usuario): frontend = page / backend = controller/api
-// comunicacion con el negocio = backend: service / frontend: viewModel (react: hooks)
-// dominio (negocio) (usuarios, notificaciones)
-    // nucleo
-        // que cosas se usan
-    // casos de uso
-        // como se comportan
-    // infraestructura
-        // como se conecta el exterior
+import { NewsLettersService } from './news_letters.service'
 
 @Controller( 'news-letters' )
 export class NewsLettersController {
@@ -30,40 +27,73 @@ export class NewsLettersController {
 
 	@Post()
 	create( @Body() createNewsLetterDto: CreateNewsLetterDto ) {
-		return this.newsLettersService.create( createNewsLetterDto )
+		return false
 	}
 
+
 	@Get()
-	 async findAll(): Promise<HttpResultData<NewsLetter[]>> {
+	async findAll( @Body("limit") limit: number ): Promise<HttpResultData<NewsLetter[]>> {
 		try {
-      const newsletter =  await this.newsLettersService.findAll()
-      return {
-        data: newsletter,
-        statusCode: HttpStatus.OK
-      }
+			const { limit : limitResult, errors } = this.parseGetAllParams( limit )
+			if ( errors && errors.length > 0 ) {
+				return {
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : parseTranslation( errors )
+				}
+			}
+
+			const newsletter = await this.newsLettersService.getAll(
+				limitResult as ValidInteger )
+			return {
+				data      : newsletter,
+				statusCode: HttpStatus.OK
+			}
 		}
 		catch ( e ) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: "muri"
-      }
+			return {
+				statusCode: HttpStatus.BAD_REQUEST
+			}
+		}
+	}
+
+	parseGetAllParams( limit : number ): {
+		limit?: ValidInteger,
+		errors?: FlatErrors[]
+	}
+	{
+		let errors: Error[] = []
+
+		const limitResult = wrapType<ValidInteger, InvalidIntegerException>(
+			() => ValidInteger.from( limit ) )
+
+		if ( limitResult instanceof Error ) {
+			errors.push( limitResult )
+		}
+
+		if ( errors.length > 0 ) {
+			return {
+				errors: flatErrors( errors )
+			}
+		}
+
+		return {
+			limit: limitResult as ValidInteger
 		}
 	}
 
 	@Get( ':id' )
 	findOne( @Param( 'id' ) id: string ) {
-		return this.newsLettersService.findOne( +id )
+		return ''
 	}
 
 	@Patch( ':id' )
-	update( @Param( 'id' ) id: string,
-		@Body() updateNewsLetterDto: UpdateNewsLetterDto )
+	update( @Param( 'id' ) id: string )
 	{
-		return this.newsLettersService.update( +id, updateNewsLetterDto )
+		return ''
 	}
 
 	@Delete( ':id' )
 	remove( @Param( 'id' ) id: string ) {
-		return this.newsLettersService.remove( +id )
+		return ''
 	}
 }

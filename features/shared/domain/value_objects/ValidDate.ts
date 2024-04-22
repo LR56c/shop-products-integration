@@ -2,7 +2,7 @@ import { InvalidDateException } from '../exceptions/InvalidDateException'
 import { z } from 'zod'
 
 export class ValidDate{
-	private readonly value: Date
+	readonly value: Date
 
 	private constructor( value: Date ) {
 		this.value = value

@@ -2,7 +2,7 @@ import { InvalidStringException } from '../exceptions/InvalidStringException'
 import { z } from 'zod'
 
 export class ValidString {
-	private readonly value: string
+	readonly value: string
 
 	private constructor( value: string ) {
 		this.value = value

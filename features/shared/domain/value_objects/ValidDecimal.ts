@@ -2,7 +2,7 @@ import { InvalidDecimalException } from '../exceptions/InvalidDecimalException'
 import { z } from 'zod'
 
 export class ValidDecimal {
-	private readonly value: number
+	readonly value: number
 
 	private constructor( value: number ) {
 		this.value = value

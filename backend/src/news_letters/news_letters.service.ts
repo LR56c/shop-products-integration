@@ -1,30 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 import { NewsLetter } from '~features/news_letter/domain/models/NewsLetter'
 import { NewsLetterRepository } from '~features/news_letter/domain/repository/NewsLetterRepository'
-import { CreateNewsLetterDto } from './dto/create-news_letter.dto';
-import { UpdateNewsLetterDto } from './dto/update-news_letter.dto';
+import { Email } from '~features/shared/domain/value_objects/Email'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 
 @Injectable()
-export class NewsLettersService {
-  constructor(private repository : NewsLetterRepository) {}
+export class NewsLettersService implements NewsLetterRepository {
+	constructor( private repository: NewsLetterRepository ) {}
 
-  create(createNewsLetterDto: CreateNewsLetterDto) {
-    return 'This action adds a new newsLetter';
-  }
+	async add( email: Email, name: ValidString ): Promise<boolean> {
+		return this.repository.add( email, name )
+	}
 
-  async findAll() : Promise<NewsLetter[]> {
-    return this.repository.getAll()
-  }
+	async check( email: Email ): Promise<boolean> {
+		return this.repository.check( email )
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} newsLetter`;
-  }
+	async remove( email: Email ): Promise<boolean> {
+		return this.repository.remove( email )
+	}
 
-  update(id: number, updateNewsLetterDto: UpdateNewsLetterDto) {
-    return `This action updates a #${id} newsLetter`;
-  }
+	async getAll( limit: ValidInteger ): Promise<NewsLetter[]> {
+		return this.repository.getAll( limit )
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} newsLetter`;
-  }
 }

@@ -11,7 +11,7 @@ enum RoleEnum {
 const RoleSchema = z.nativeEnum(RoleEnum)
 
 export class Role {
-	private readonly value: RoleEnum
+	readonly value: RoleEnum
 
 	private constructor( value: RoleEnum ) {
 		this.value = value

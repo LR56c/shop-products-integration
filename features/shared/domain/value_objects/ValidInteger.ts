@@ -2,7 +2,7 @@ import { InvalidIntegerException } from '../exceptions/InvalidIntegerException'
 import { z } from 'zod'
 
 export class ValidInteger {
-	private readonly value: number
+	readonly value: number
 
 	private constructor( value: number ) {
 		this.value = value

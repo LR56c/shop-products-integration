@@ -4,16 +4,18 @@ import {
 import {
 	Database
 } from 'backend/database.types'
+import { ValidInteger } from 'features/shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { NewsLetter } from '../domain/models/NewsLetter'
 import { NewsLetterRepository } from '../domain/repository/NewsLetterRepository'
-import { SupabaseDataException } from './SupabaseDataError'
+import { SupabaseDataException } from './SupabaseDataException'
 
 export class NewsLetterSupabaseData implements NewsLetterRepository {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
-	async add( email: Email ): Promise<boolean> {
+	async add( email: Email, name :ValidString ): Promise<boolean> {
 		return false
 	}
 
@@ -30,18 +32,16 @@ export class NewsLetterSupabaseData implements NewsLetterRepository {
 	 * Get all NewsLetters
 	 * @throws {SupabaseDataException} - if data is invalid
 	 */
-	async getAll(): Promise<NewsLetter[]> {
+	async getAll(limit : ValidInteger): Promise<NewsLetter[]> {
 
 		const { data, error } = await this.client
 		                                  .from( 'news_letter' )
 		                                  .select( '*' )
+		                                  .limit(limit.value)
 
 		if ( error ) {
 			throw new SupabaseDataException()
 		}
-
-		console.log( "data")
-		console.log( data)
 
 		return data.map( ( newsLetterTable ) => {
 			return NewsLetter.from( {

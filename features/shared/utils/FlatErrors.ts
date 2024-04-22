@@ -2,9 +2,33 @@
  * Flattens error messages from an array of errors strings
  * @returns {undefined} - if errors is not a type of error, returns array of undefined
  */
-export function flatErrors( errors: unknown ): string[] {
+export interface FlatErrors{
+	token: string
+}
+
+export function flatErrors( errors: unknown ): FlatErrors[]
+{
 	if ( Array.isArray( errors ) ) {
-		return errors.map( ( error ) => error.message )
+		errors.map( ( error ) => {
+			if ( error instanceof Error ) {
+				return {
+					token  : error.name
+				}
+			}
+			return {
+				token: 'unknown'
+			}
+		} )
 	}
-	return [ ( errors as Error ).message ]
+
+	if ( errors instanceof Error ) {
+		return [ {
+			token  : errors.name
+		} ]
+	}
+	return [
+		{
+			token: 'unknown'
+		}
+	]
 }
