@@ -1,5 +1,6 @@
-export class EmailError extends Error {
+export class EmailException extends Error {
 	constructor(message?: string) {
-		super(`EmailError${message == null ? '' : `: ${message}`}`)
+		super("EmailException")
+		this.name = "email"
 	}
 }

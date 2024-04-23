@@ -1,5 +1,6 @@
-export class InvalidULIDException extends Error {
+export class InvalidUUIDException extends Error {
 	constructor(message?: string) {
-		super(`InvalidULIDException${message == null ? '' : `: ${message}`}`)
+		super("InvalidUUIDException")
+		this.name = "uuid"
 	}
 }

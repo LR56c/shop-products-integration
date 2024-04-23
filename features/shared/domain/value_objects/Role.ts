@@ -1,17 +1,17 @@
 import { z } from 'zod'
 
 enum RoleEnum {
-	ADMIN       = 'admin',
-	SHOP_KEEPER = 'shop_keeper',
-	CLIENT      = 'client',
-	ACCOUNTANT  = 'accountant',
-	SELLER      = 'seller',
+	ADMIN       = 'ADMIN',
+	SHOP_KEEPER = 'SHOPKEEPER',
+	CLIENT      = 'CLIENT',
+	ACCOUNTANT  = 'ACCOUNTANT',
+	SELLER      = 'SELLER',
 }
 
 const RoleSchema = z.nativeEnum(RoleEnum)
 
 export class Role {
-	private readonly value: RoleEnum
+	readonly value: RoleEnum
 
 	private constructor( value: RoleEnum ) {
 		this.value = value
