@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, HttpStatus } from '@nestjs/common';
+import { Translation } from 'src/shared/infrastructure/parseTranslation'
 import { DeleteProductService } from './delete-product.service';
 import { ValidString } from '~features/shared/domain/value_objects/ValidString';
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
@@ -17,7 +18,7 @@ export class DeleteProductController {
       const { code: codeResult, errors } = this.parseGetAllParams(
         code,
       )
-      if (errors && errors.length > 0) {
+      if (errors && errors.size > 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: flatErrors(errors),
@@ -40,7 +41,7 @@ export class DeleteProductController {
 
   parseGetAllParams(code: string): {
     code?: ValidString;
-    errors?: FlatErrors[];
+    errors?: Map<string, Translation>
   } {
     let errors: Error[] = [];
 

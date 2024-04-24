@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpStatus } from '@nestjs/common';
+import { Translation } from 'src/shared/infrastructure/parseTranslation'
 import { GetRecommendProductService } from './get-recommend-product.service';
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
@@ -12,7 +13,7 @@ import { Product } from 'features/products/domain/models/product';
 export class GetRecommendProductController {
   constructor(private readonly getRecommendProductService: GetRecommendProductService) {}
   @Get()
-  async getRecommendProducts( 
+  async getRecommendProducts(
     @Body('threshold')
     threshold: number,
     @Body('Product')
@@ -24,7 +25,7 @@ export class GetRecommendProductController {
   ) {
     try {
       const {threshold : thresholdResult, from : fromResult, to : toResult, errors } = this.parseGetAllParams(threshold, from, to);
-      if (errors && errors.length > 0) {
+      if (errors && errors.size > 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: errors,
@@ -45,7 +46,7 @@ export class GetRecommendProductController {
     threshold?: ValidRank,
     from?: ValidInteger,
     to?: ValidInteger,
-    errors?: FlatErrors[]
+    errors?: Map<string, Translation>
   }
   {
     let errors: Error[] = []

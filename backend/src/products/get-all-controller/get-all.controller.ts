@@ -4,7 +4,10 @@ import { HttpResultData } from '~features/shared/utils/HttpResultData';
 import { Product } from '../domain/models/Product';
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
 import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
-import { parseTranslation } from 'src/shared/infrastructure/parseTranslation';
+import {
+	parseTranslation,
+	Translation
+} from 'src/shared/infrastructure/parseTranslation'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
 import { wrapType } from '~features/shared/utils/WrapType';
 
@@ -20,7 +23,7 @@ export class GetAllController {
   ): Promise<HttpResultData<Product[]>> {
     try {
       const { limit: limitResult, errors } = this.parseGetAllParams(limit);
-      if (errors && errors.length > 0) {
+      if (errors && errors.size > 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: parseTranslation( errors ),
@@ -43,7 +46,7 @@ export class GetAllController {
   }
   parseGetAllParams( limit : number ): {
 		limit?: ValidInteger,
-		errors?: FlatErrors[]
+		errors?: Map<string, Translation>
 	}
 	{
 		let errors: Error[] = []

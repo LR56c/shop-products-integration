@@ -15,7 +15,7 @@ export function productToJson(product: Product): Record<string, any> {
 	}
 }
 
-export function productFromJson(json: Record<string, any>): Product {
+export function productFromJson(json: Record<string, any>): Product | Error[] {
 	try {
 		return Product.from({
 			id:json.id,

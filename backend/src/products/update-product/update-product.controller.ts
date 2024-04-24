@@ -1,4 +1,5 @@
 import { Body, Controller, HttpStatus, Put } from '@nestjs/common';
+import { Translation } from 'src/shared/infrastructure/parseTranslation'
 import { UpdateProductService } from './update-product.service';
 import { ValidString } from '~features/shared/domain/value_objects/ValidString';
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
@@ -21,7 +22,7 @@ export class UpdateProductController {
         code,
         quantity,
       )
-      if (errors && errors.length > 0) {
+      if (errors && errors.size > 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: flatErrors(errors),
@@ -45,7 +46,7 @@ export class UpdateProductController {
   parseGetAllParams( code : string, quantity : number): {
     code?: ValidString,
     quantity?: ValidInteger,
-    errors?: FlatErrors[]
+    errors?: Map<string, Translation>
   }
   {
     let errors: Error[] = []

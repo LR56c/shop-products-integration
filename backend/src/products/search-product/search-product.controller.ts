@@ -1,11 +1,12 @@
 import { Controller } from '@nestjs/common';
+import { Translation } from 'src/shared/infrastructure/parseTranslation'
 import { SearchProductService } from './search-product.service';
 import { ValidString } from '~features/shared/domain/value_objects/ValidString';
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
 import { wrapType } from '~features/shared/utils/WrapType';
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
-import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
+import { flatErrors } from '~features/shared/utils/FlatErrors';
 
 @Controller('search-product')
 export class SearchProductController {
@@ -14,7 +15,7 @@ export class SearchProductController {
     name?: ValidString,
     from?: ValidInteger,
     to?: ValidInteger,
-    errors?: FlatErrors[]
+    errors?: Map<string, Translation>
   }
   {
     let errors: Error[] = []
