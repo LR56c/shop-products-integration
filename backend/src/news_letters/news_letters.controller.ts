@@ -8,7 +8,10 @@ import {
 	Patch,
 	Post
 } from '@nestjs/common'
-import { parseTranslation } from 'src/shared/infrastructure/parseTranslation'
+import {
+	parseTranslation,
+	Translation
+} from 'src/shared/infrastructure/parseTranslation'
 import { NewsLetter } from '~features/news_letter/domain/models/NewsLetter'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
@@ -35,7 +38,7 @@ export class NewsLettersController {
 	async findAll( @Body("limit") limit: number ): Promise<HttpResultData<NewsLetter[]>> {
 		try {
 			const { limit : limitResult, errors } = this.parseGetAllParams( limit )
-			if ( errors && errors.length > 0 ) {
+			if ( errors && errors.size > 0 ) {
 				return {
 					statusCode: HttpStatus.BAD_REQUEST,
 					message   : parseTranslation( errors )
@@ -58,7 +61,7 @@ export class NewsLettersController {
 
 	parseGetAllParams( limit : number ): {
 		limit?: ValidInteger,
-		errors?: FlatErrors[]
+		errors?: Map<string, Translation>
 	}
 	{
 		let errors: Error[] = []

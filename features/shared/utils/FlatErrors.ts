@@ -1,34 +1,41 @@
+import { Translation } from 'backend/src/shared/infrastructure/parseTranslation'
+
 /**
  * Flattens error messages from an array of errors strings
  * @returns {undefined} - if errors is not a type of error, returns array of undefined
  */
-export interface FlatErrors{
+export interface FlatErrors {
 	token: string
 }
 
-export function flatErrors( errors: unknown ): FlatErrors[]
+export function flatErrors( errors: unknown ): Map<string, Translation>
 {
+	const map = new Map<string, Translation>()
 	if ( Array.isArray( errors ) ) {
+
 		errors.map( ( error ) => {
 			if ( error instanceof Error ) {
-				return {
-					token  : error.name
-				}
+				map.set( error.message, {
+					'token': error.message
+				} )
 			}
-			return {
-				token: 'unknown'
+			else {
+				map.set( 'unknown', {
+					'token': 'unknown'
+				} )
 			}
 		} )
 	}
 
 	if ( errors instanceof Error ) {
-		return [ {
-			token  : errors.name
-		} ]
+		map.set( errors.message, {
+			'token': errors.message
+		} )
 	}
-	return [
-		{
-			token: 'unknown'
-		}
-	]
+	else {
+		map.set( 'unknown', {
+			'token': 'unknown'
+		} )
+	}
+	return map
 }

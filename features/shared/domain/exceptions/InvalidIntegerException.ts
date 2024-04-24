@@ -1,6 +1,6 @@
 export class InvalidIntegerException extends Error {
 	constructor(message?: string) {
-		super("InvalidIntegerException")
-		this.name = "integer"
+		super(message != null ? message : "integer")
+		this.name = "InvalidIntegerException"
 	}
 }

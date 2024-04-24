@@ -1,6 +1,6 @@
 export class InvalidDateException extends Error {
 	constructor(message?: string) {
-		super("InvalidDateException")
-		this.name = "date"
+		super(message != null ? message : "date")
+		this.name = "InvalidDateException"
 	}
 }

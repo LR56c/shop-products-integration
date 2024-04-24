@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpStatus } from '@nestjs/common';
-import { GetAllControllerService } from './get-all-controller.service';
+import { GetAllService } from 'src/products/get-all-controller/get-all.service';
 import { HttpResultData } from '~features/shared/utils/HttpResultData';
 import { Product } from '../domain/models/Product';
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
@@ -9,9 +9,9 @@ import { InvalidIntegerException } from '~features/shared/domain/exceptions/Inva
 import { wrapType } from '~features/shared/utils/WrapType';
 
 @Controller('products')
-export class GetAllControllerController {
+export class GetAllController {
   constructor(
-    private readonly getAllControllerService: GetAllControllerService,
+    private readonly getAllControllerService: GetAllService,
   ) {}
 
   @Get()
@@ -28,6 +28,7 @@ export class GetAllControllerController {
       }
 
       const products = await this.getAllControllerService.getAll(
+        limitResult as ValidInteger,
         limitResult as ValidInteger,
       );
       return {

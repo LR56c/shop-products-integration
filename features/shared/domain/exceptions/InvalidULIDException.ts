@@ -1,6 +1,6 @@
 export class InvalidULIDException extends Error {
 	constructor(message?: string) {
-		super("InvalidULIDException")
-		this.name = "ulid"
+		super(message != null ? message : "ulid")
+		this.name = "InvalidULIDException"
 	}
 }
