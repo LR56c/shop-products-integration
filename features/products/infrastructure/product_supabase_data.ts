@@ -41,7 +41,15 @@ export class ProductSupabaseData implements ProductRepository {
     from: ValidInteger,
     to: ValidInteger ): Promise<Product[]> {
 
-    // const getProductCategories = products.map( product => product.category )
+		const set = new Set(products.map( product => product.category_name.value ))
+
+		set.forEach( category => {
+			//peticion
+			//agrego lista/mapa de productos, viendo si el rank es mayor al threshold
+			//from/to se aplica para cada query
+		})
+
+		//return lista de productos
 		return Promise.resolve( [] )
 	}
 }
