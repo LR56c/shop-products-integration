@@ -8,6 +8,7 @@ export interface FlatErrors {
 	token: string
 }
 
+//TODO: combinar flat & parse erro, y crear otro flat con i18n
 export function flatErrors( errors: unknown ): Map<string, Translation>
 {
 	const map = new Map<string, Translation>()

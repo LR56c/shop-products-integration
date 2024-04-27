@@ -9,10 +9,10 @@ import { wrapType } from '~features/shared/utils/WrapType';
 import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
 import { Product } from 'features/products/domain/models/product';
 
-@Controller('get-recommend-product')
+@Controller('products')
 export class GetRecommendProductController {
   constructor(private readonly getRecommendProductService: GetRecommendProductService) {}
-  @Get()
+  @Get('recommend')
   async getRecommendProducts(
     @Body('threshold')
     threshold: number,

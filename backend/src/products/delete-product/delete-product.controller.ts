@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, HttpStatus } from '@nestjs/common';
+import { i18nValidationMessage } from 'nestjs-i18n'
 import { Translation } from 'src/shared/infrastructure/parseTranslation'
 import { DeleteProductService } from './delete-product.service';
 import { ValidString } from '~features/shared/domain/value_objects/ValidString';

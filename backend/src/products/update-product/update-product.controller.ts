@@ -8,7 +8,7 @@ import { InvalidIntegerException } from '~features/shared/domain/exceptions/Inva
 import { wrapType } from '~features/shared/utils/WrapType';
 import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
 
-@Controller('update-product')
+@Controller('products')
 export class UpdateProductController {
   constructor(private readonly updateProductService: UpdateProductService) {}
 

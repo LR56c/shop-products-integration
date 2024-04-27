@@ -11,12 +11,12 @@ import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
 import { wrapType } from '~features/shared/utils/WrapType';
 
-@Controller('get-product')
+@Controller('products')
 export class GetProductController {
   constructor(private readonly getProductService: GetProductService) {}
 
 
-  @Get()
+  @Get(":id")
     async getProduct(
       @Body('code') code: string,
     ) : Promise<HttpResultData<Product>> {

@@ -8,7 +8,7 @@ import { wrapType } from '~features/shared/utils/WrapType';
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
 import { flatErrors } from '~features/shared/utils/FlatErrors';
 
-@Controller('search-product')
+@Controller('products')
 export class SearchProductController {
   constructor(private readonly searchProductService: SearchProductService) {}
   parseGetAllParams( name : string, from : number, to : number): {

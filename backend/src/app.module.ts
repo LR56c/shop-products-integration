@@ -7,6 +7,13 @@ import {
 	SupabaseClient
 } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import {
+	AcceptLanguageResolver,
+	HeaderResolver,
+	I18nModule,
+	QueryResolver
+} from 'nestjs-i18n'
+import * as path from 'node:path'
 import { NewsLetterRepository } from '~features/news_letter/domain/repository/NewsLetterRepository'
 import { NewsLetterSupabaseData } from '~features/news_letter/infrastructure/NewsLetterSupabaseData'
 import { AppController } from './app.controller'
@@ -28,6 +35,7 @@ import { RolesTypesModule } from './roles_types/roles_types.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
+import { join } from 'node:path'
 
 @Global()
 @Module( {
@@ -35,28 +43,47 @@ import { UsersModule } from './users/users.module'
 	providers  : [
 		AppService,
 		{
-			provide: SupabaseClient<Database>,
-			useFactory: async ( ) => {
-				let a = createClient<Database>( 'https://uppjyrysymgslbnkxhaq.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
-				const { data, error } = await a.from( 'news_letter' ).select( '*' )
-				console.log( "data" )
+			provide   : SupabaseClient<Database>,
+			useFactory: async () => {
+				let a                 = createClient<Database>(
+					'https://uppjyrysymgslbnkxhaq.supabase.co',
+					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
+				const { data, error } = await a.from( 'news_letter' )
+				                               .select( '*' )
+				console.log( 'data' )
 				console.log( data )
 				return a
-			},
+			}
 		},
 		{
-			provide: NewsLetterRepository,
+			provide   : NewsLetterRepository,
 			useFactory: ( client: SupabaseClient<Database> ) => {
 				return new NewsLetterSupabaseData( client )
 			},
-			inject: [ SupabaseClient<Database> ]
+			inject    : [ SupabaseClient<Database> ]
 		}
 	],
-	imports    : [ PromotionsModule, NewsLettersModule, OrdersModule,
+	imports    : [
+		I18nModule.forRootAsync( {
+			useFactory: () => ( {
+				fallbackLanguage: 'en',
+				loaderOptions   : {
+					path : join( __dirname, '/i18n/' ),
+					watch: true
+				}
+			} ),
+			resolvers : [
+				{ use: QueryResolver, options: [ 'lang' ] },
+				AcceptLanguageResolver,
+				new HeaderResolver( [ 'x-lang' ] )
+			],
+			inject    : []
+		} ),
+		PromotionsModule, NewsLettersModule, OrdersModule,
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule,
 		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
 		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule ],
-	exports		: [ NewsLetterRepository ]
+	exports    : [ NewsLetterRepository ]
 } )
 export class AppModule {}
