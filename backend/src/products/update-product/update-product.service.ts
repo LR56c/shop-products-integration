@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
-import { ValidString } from '~features/shared/domain/value_objects/ValidString';
-import { ProductRepository } from '../domain/repository/product_repository';
+import { UpdateProduct } from '~features/products/application/update_product'
+import { Product } from '~features/products/domain/models/product'
+import { ProductRepository } from '~features/products/domain/repository/product_repository'
 @Injectable()
 export class UpdateProductService {
     constructor(private repository: ProductRepository){
     }
-    async updateProduct(arg0: ValidString, arg1: ValidInteger): Promise<boolean> {
-        return this.repository.updateProduct(arg0, arg1);
+    async updateProduct(code: string, product: Product): Promise<boolean> {
+        return UpdateProduct(this.repository, { code: code, product: product, subtractStock: true })
     }
 }

@@ -20,7 +20,7 @@ export class ProductSupabaseData implements ProductRepository {
 
 	async updateProduct(
 		code: ValidString,
-		quantity: ValidInteger
+		product: Product
 	): Promise<boolean> {
 		return false
 	}

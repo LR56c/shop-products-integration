@@ -13,11 +13,8 @@ import {
 	I18nModule,
 	QueryResolver
 } from 'nestjs-i18n'
-import * as path from 'node:path'
-import { NewsLetterRepository } from '~features/news_letter/domain/repository/NewsLetterRepository'
-import { NewsLetterSupabaseData } from '~features/news_letter/infrastructure/NewsLetterSupabaseData'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { join } from 'node:path'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { AuthModule } from './auth/auth.module'
 import { CartsModule } from './carts/carts.module'
 import { CategoriesModule } from './categories/categories.module'
@@ -35,13 +32,11 @@ import { RolesTypesModule } from './roles_types/roles_types.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
-import { join } from 'node:path'
 
 @Global()
 @Module( {
-	controllers: [ AppController ],
 	providers  : [
-		AppService,
+		TranslationService,
 		{
 			provide   : SupabaseClient<Database>,
 			useFactory: async () => {
@@ -55,13 +50,6 @@ import { join } from 'node:path'
 				return a
 			}
 		},
-		{
-			provide   : NewsLetterRepository,
-			useFactory: ( client: SupabaseClient<Database> ) => {
-				return new NewsLetterSupabaseData( client )
-			},
-			inject    : [ SupabaseClient<Database> ]
-		}
 	],
 	imports    : [
 		I18nModule.forRootAsync( {
@@ -84,6 +72,6 @@ import { join } from 'node:path'
 		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
 		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule ],
-	exports    : [ NewsLetterRepository ]
+	exports		: [ TranslationService, SupabaseClient<Database> ]
 } )
 export class AppModule {}

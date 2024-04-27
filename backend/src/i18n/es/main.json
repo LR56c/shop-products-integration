@@ -1,3 +1,5 @@
 {
-	"HELLO": "Hello"
+	"HELLO": "Hello",
+	"from": "desde",
+	"to": "hasta"
 }

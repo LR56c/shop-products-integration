@@ -1,6 +1,8 @@
-export class InvalidDecimalException extends Error {
-	constructor(message?: string) {
-		super(message != null ? message : "decimal")
+import { BaseException } from './BaseException'
+
+export class InvalidDecimalException extends BaseException {
+	constructor(message?: string, readonly rawValue?: string) {
+		super(message != null ? message : "decimal", rawValue)
 		this.name = "InvalidDecimalException"
 	}
 }

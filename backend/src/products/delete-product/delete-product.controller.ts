@@ -1,34 +1,25 @@
-import { Body, Controller, Delete, HttpStatus } from '@nestjs/common';
-import { i18nValidationMessage } from 'nestjs-i18n'
-import { Translation } from 'src/shared/infrastructure/parseTranslation'
-import { DeleteProductService } from './delete-product.service';
-import { ValidString } from '~features/shared/domain/value_objects/ValidString';
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
-import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
-import { wrapType } from '~features/shared/utils/WrapType';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpStatus
+} from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { DeleteProductService } from './delete-product.service'
 
 
+@ApiTags('products')
 @Controller('products')
 export class DeleteProductController {
-  constructor(private readonly deleteProductService: DeleteProductService) {}
+  constructor(private readonly deleteProductService: DeleteProductService,
+    private readonly translation: TranslationService ) {}
   @Delete()
   async deleteProduct(
     @Body('code') code: string,
   ) {
     try {
-      const { code: codeResult, errors } = this.parseGetAllParams(
-        code,
-      )
-      if (errors && errors.size > 0) {
-        return {
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: flatErrors(errors),
-        }
-      }
-
-      const product = await this.deleteProductService.deleteProduct(
-        codeResult as ValidString,
-      )
+      const product = await this.deleteProductService.deleteProduct( code )
       return {
         data: product,
         statusCode: HttpStatus.OK,
@@ -36,32 +27,8 @@ export class DeleteProductController {
     } catch (e) {
       return {
         statusCode: HttpStatus.BAD_REQUEST,
+        message   : this.translation.translateAll( e )
       }
     }
-  }
-
-  parseGetAllParams(code: string): {
-    code?: ValidString;
-    errors?: Map<string, Translation>
-  } {
-    let errors: Error[] = [];
-
-    const codeResult = wrapType<ValidString, InvalidStringException>(() =>
-      ValidString.from(code),
-    );
-
-    if (codeResult instanceof Error) {
-      errors.push(codeResult);
-    }
-
-    if (errors.length > 0) {
-      return {
-        errors: flatErrors(errors),
-      };
-    }
-
-    return {
-      code: codeResult as ValidString
-    };
   }
 }

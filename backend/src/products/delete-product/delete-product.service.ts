@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { ProductRepository } from '../domain/repository/product_repository';
-import { ValidString } from '~features/shared/domain/value_objects/ValidString';
+import { Injectable } from '@nestjs/common'
+import { DeleteProduct } from '~features/products/application/delete_product'
+import { ProductRepository } from '~features/products/domain/repository/product_repository'
 
 @Injectable()
 export class DeleteProductService {
-    constructor(private repository: ProductRepository){
-    }
-    async deleteProduct(code: ValidString): Promise<boolean> {
-        return await this.repository.deleteProduct(code);
-    }
+	constructor( private repository: ProductRepository ) {
+	}
+
+	async deleteProduct( code: string ): Promise<boolean> {
+		return DeleteProduct( this.repository, {
+			code: code
+		} )
+	}
 }

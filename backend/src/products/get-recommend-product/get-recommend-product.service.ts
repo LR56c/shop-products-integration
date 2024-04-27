@@ -1,13 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { ProductRepository } from '../domain/repository/product_repository';
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
-import { Product } from 'features/products/domain/models/product';
-import { ValidRank } from 'features/products/domain/models/ValidRank';
+import { Injectable } from '@nestjs/common'
+import { Product } from '~features/products/domain/models/product'
+import { GetRecommendProducts } from '~features/products/application/get_recommend_products'
+import { ProductRepository } from '~features/products/domain/repository/product_repository'
+
 @Injectable()
 export class GetRecommendProductService {
-    constructor(private repository: ProductRepository) {}
-    
-    async getRecommendProducts(threshold: ValidRank, products: Product[], from: ValidInteger, to: ValidInteger) {
-        return this.repository.getRecommendProducts(threshold, products, from, to);
-    }
+	constructor( private repository: ProductRepository ) {}
+
+	async getRecommendProducts( threshold: number, products: Product[],
+		from: number, to: number )
+	{
+		return GetRecommendProducts( this.repository, {
+			threshold: threshold,
+			products,
+			from     : from,
+			to       : to
+		} )
+	}
 }

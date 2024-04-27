@@ -1,79 +1,51 @@
-import { Body, Controller, HttpStatus, Put } from '@nestjs/common';
-import { Translation } from 'src/shared/infrastructure/parseTranslation'
-import { UpdateProductService } from './update-product.service';
-import { ValidString } from '~features/shared/domain/value_objects/ValidString';
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException';
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
-import { wrapType } from '~features/shared/utils/WrapType';
-import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
+import {
+	Body,
+	Controller,
+	HttpStatus,
+	Put
+} from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { HttpResult } from 'src/shared/utils/HttpResult'
+import { productFromJson } from '~features/products/application/product_mapper'
+import { Product } from '~features/products/domain/models/product'
+import { UpdateProductService } from './update-product.service'
 
-@Controller('products')
+@ApiTags( 'products' )
+@Controller( 'products' )
 export class UpdateProductController {
-  constructor(private readonly updateProductService: UpdateProductService) {}
+	constructor( private readonly updateProductService: UpdateProductService,
+		private readonly translation: TranslationService )
+	{}
 
-  @Put()
-  async updateProduct(
-    @Body('code') code: string,
-    @Body('quantity') quantity: number,
-  ) {
-    try {
-      const { code: codeResult, quantity: quantityResult, errors } = this.parseGetAllParams(
-        code,
-        quantity,
-      )
-      if (errors && errors.size > 0) {
-        return {
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: flatErrors(errors),
-        }
-      }
+	@Put()
+	async updateProduct(
+		@Body( 'code' ) code: string,
+		@Body( 'product' ) product: any
+	): Promise<HttpResult> {
+		try {
 
-      const product = await this.updateProductService.updateProduct(
-        codeResult as ValidString,
-        quantityResult as ValidInteger,
-      )
-      return {
-        data: product,
-        statusCode: HttpStatus.OK,
-      }
-    } catch (e) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      }
-    }
-  }
-  parseGetAllParams( code : string, quantity : number): {
-    code?: ValidString,
-    quantity?: ValidInteger,
-    errors?: Map<string, Translation>
-  }
-  {
-    let errors: Error[] = []
+			const p = productFromJson( product )
 
-    const codeResult = wrapType<ValidString, InvalidStringException>(
-      () => ValidString.from( code ) )
+			if ( !( p instanceof Product ) ) {
+				return {
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll( p )
+				}
+			}
 
-    if ( codeResult instanceof Error ) {
-      errors.push( codeResult )
-    }
+			const productResult = await this.updateProductService.updateProduct( code,
+				p as Product )
 
-    const quantityResult = wrapType<ValidInteger, InvalidIntegerException>(
-      () => ValidInteger.from( quantity ) )
-
-    if ( quantityResult instanceof Error ) {
-      errors.push( quantityResult )
-    }
-
-    if ( errors.length > 0 ) {
-      return {
-        errors: flatErrors( errors )
-      }
-    }
-    return {
-      code: codeResult as ValidString,
-      quantity: quantityResult as ValidInteger
-    }
-  }
+			return {
+				statusCode: HttpStatus.OK
+			}
+		}
+		catch ( e ) {
+			return {
+				statusCode: HttpStatus.BAD_REQUEST
+			}
+		}
+	}
 }
 

@@ -1,71 +1,42 @@
-import { Body, Controller, Get, HttpStatus } from '@nestjs/common';
-import { GetAllService } from 'src/products/get-all-controller/get-all.service';
-import { HttpResultData } from '~features/shared/utils/HttpResultData';
-import { Product } from '../domain/models/Product';
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger';
-import { FlatErrors, flatErrors } from '~features/shared/utils/FlatErrors';
 import {
-	parseTranslation,
-	Translation
-} from 'src/shared/infrastructure/parseTranslation'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException';
-import { wrapType } from '~features/shared/utils/WrapType';
+	Body,
+	Controller,
+	Get,
+	HttpStatus
+} from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { GetAllService } from 'src/products/get-all-controller/get-all.service'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { Product } from '../domain/models/Product'
+import { HttpResultData } from 'src/shared/utils/HttpResultData'
 
-@Controller('products')
+@ApiTags( 'products' )
+@Controller( 'products' )
 export class GetAllController {
-  constructor(
-    private readonly getAllControllerService: GetAllService,
-  ) {}
+	constructor(
+		private readonly getAllControllerService: GetAllService,
+		private readonly translation: TranslationService
+	)
+	{}
 
-  @Get()
-  async getAll(
-    @Body('limit') limit: number,
-  ): Promise<HttpResultData<Product[]>> {
-    try {
-      const { limit: limitResult, errors } = this.parseGetAllParams(limit);
-      if (errors && errors.size > 0) {
-        return {
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: parseTranslation( errors ),
-        };
-      }
+	@Get()
+	async getAll(
+		@Body( 'from' ) from: number,
+		@Body( 'to' ) to: number
+	): Promise<HttpResultData<Product[]>> {
+		try {
 
-      const products = await this.getAllControllerService.getAll(
-        limitResult as ValidInteger,
-        limitResult as ValidInteger,
-      );
-      return {
-        data: products,
-        statusCode: HttpStatus.OK,
-      };
-    } catch (e) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-      };
-    }
-  }
-  parseGetAllParams( limit : number ): {
-		limit?: ValidInteger,
-		errors?: Map<string, Translation>
-	}
-	{
-		let errors: Error[] = []
-
-		const limitResult = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( limit ) )
-
-		if ( limitResult instanceof Error ) {
-			errors.push( limitResult )
-		}
-
-		if ( errors.length > 0 ) {
+			const products = await this.getAllControllerService.getAll( from, to )
 			return {
-				errors: flatErrors( errors )
+				data: products,
+				statusCode: HttpStatus.OK
 			}
 		}
-
-		return {
-			limit: limitResult as ValidInteger
+		catch ( e ) {
+			return {
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : this.translation.translateAll( e )
+			}
 		}
-  }
+	}
 }
