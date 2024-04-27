@@ -13,11 +13,12 @@ export class ValidRank {
      * @throws {InvalidRankException} - if rank is invalid
      */
 
-    static from( value: number ): ValidRank {
-        const result = z.number().min(0).max(5).safeParse(value)
+    static from( value: string ): ValidRank {
+        const n = Number(value)
+        const result = z.number().min(0).max(5).safeParse(n)
         if ( result.success === false) {
             throw new InvalidRankException()
         }
-        return new ValidRank( result.data )    
+        return new ValidRank( n )    
     }
 }

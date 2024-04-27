@@ -19,11 +19,13 @@ import { GetProductController } from './get-product/get-product.controller'
 import { GetRecommendProductController } from './get-recommend-product/get-recommend-product.controller'
 import { SearchProductController } from './search-product/search-product.controller'
 import { UpdateProductController } from './update-product/update-product.controller'
+import { CreateProductController } from './create-product/create-product.controller'
+import { CreateProductService } from './create-product/create-product.service'
 
 @Module( {
 	controllers: [ UpdateProductController, SearchProductController,
 		GetRecommendProductController,
-		GetProductController, GetAllController, DeleteProductController
+		GetProductController, GetAllController, DeleteProductController, CreateProductController
 	],
 	providers  : [
 		{
@@ -34,10 +36,10 @@ import { UpdateProductController } from './update-product/update-product.control
 			inject    : [ SupabaseClient<Database> ]
 		},
 		UpdateProductService, SearchProductService, GetRecommendProductService,
-		GetProductService, GetAllService, DeleteProductService
+		GetProductService, GetAllService, DeleteProductService, CreateProductService 
 	],
 	imports    : [
-		forwardRef( () => AppModule )
+		forwardRef( () => AppModule ), 
 	]
 } )
 export class ProductsModule {}

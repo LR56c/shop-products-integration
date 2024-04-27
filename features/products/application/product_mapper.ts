@@ -79,7 +79,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		() => ValidInteger.from( json.price ) )
 
 	if ( price instanceof Error ) {
-		errors.push( new InvalidIntegerException('code') )
+		errors.push( new InvalidIntegerException('price') )
 	}
 
 	const image_url = wrapType<ValidURL, InvalidURLException>(
@@ -93,7 +93,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		() => ValidInteger.from( json.stock ) )
 
 	if ( stock instanceof Error ) {
-		errors.push( new InvalidIntegerException('code') )
+		errors.push( new InvalidIntegerException('stock') )
 	}
 
 	const rank = wrapType<ValidRank, InvalidRankException>(

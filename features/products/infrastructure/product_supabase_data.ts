@@ -10,6 +10,10 @@ import { ValidRank } from '../domain/models/ValidRank'
 export class ProductSupabaseData implements ProductRepository {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
+	async createProduct( product: Product ): Promise<boolean> {
+		return false
+	}
+
 	async getAll( limit: ValidInteger ): Promise<Product[]> {
 		return []
 	}
