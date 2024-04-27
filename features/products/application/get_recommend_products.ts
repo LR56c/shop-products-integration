@@ -1,3 +1,5 @@
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { InvalidRankException } from '../domain/exceptions/InvalidRankException'
 import { Product } from '../domain/models/product'
 import { ValidRank } from '../domain/models/ValidRank'
@@ -19,18 +21,18 @@ export const GetRecommendProducts = async ( repo: ProductRepository, props: {
 		errors.push( new InvalidRankException( 'threshold' ) )
 	}
 
-	const fromResult = wrapType<ValidRank, InvalidRankException>(
-		() => ValidRank.from( props.from ) )
+	const fromResult = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from( props.from ) )
 
 	if ( fromResult instanceof Error ) {
-		errors.push( new InvalidRankException( 'from' ) )
+		errors.push( new InvalidIntegerException( 'from' ) )
 	}
 
-	const toResult = wrapType<ValidRank, InvalidRankException>(
-		() => ValidRank.from( props.to ) )
+	const toResult = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from( props.to ) )
 
 	if ( toResult instanceof Error ) {
-		errors.push( new InvalidRankException( 'to' ) )
+		errors.push( new InvalidIntegerException( 'to' ) )
 	}
 
 	if ( errors.length > 0 ) {
@@ -38,6 +40,6 @@ export const GetRecommendProducts = async ( repo: ProductRepository, props: {
 	}
 
 	return await repo.getRecommendProducts( thresholdResult as ValidRank,
-		props.products, fromResult as ValidRank, toResult as ValidRank )
+		props.products, fromResult as ValidInteger, toResult as ValidInteger )
 
 }

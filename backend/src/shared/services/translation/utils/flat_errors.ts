@@ -15,7 +15,7 @@ export function flatErrors( errors: BaseException[] ): Map<string, FlatErrors>
 	errors.map( ( error ) => {
 		map.set( error.message, {
 			'token': error.message,
-			'type' : error.rawValue ?? 'undefined'
+			'type' : error.value ?? 'undefined'
 		} )
 	} )
 	return map

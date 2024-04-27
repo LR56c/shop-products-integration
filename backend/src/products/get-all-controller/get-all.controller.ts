@@ -7,6 +7,8 @@ import {
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllService } from 'src/products/get-all-controller/get-all.service'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { PasswordInsufficientCharacterException } from '~features/user/domain/exceptions/PasswordException'
 import { Product } from '../domain/models/Product'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
 
@@ -25,7 +27,6 @@ export class GetAllController {
 		@Body( 'to' ) to: number
 	): Promise<HttpResultData<Product[]>> {
 		try {
-
 			const products = await this.getAllControllerService.getAll( from, to )
 			return {
 				data: products,

@@ -1,5 +1,15 @@
 {
 	"HELLO": "Hello",
 	"from": "from",
-	"to": "to"
+	"to": "to",
+	"invalid": {
+		"string": "The field '{field}' is not valid",
+		"password": {
+			"uppercase": "The password must contain at least one uppercase letter",
+			"lowercase": "The password must contain at least one lowercase letter",
+			"number": "The password must contain at least one number",
+			"special": "The password must contain at least one special character",
+			"length": "The password must be at least 8 characters long"
+		}
+	}
 }

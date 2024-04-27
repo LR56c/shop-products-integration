@@ -17,21 +17,38 @@ export class TranslationService {
 		}
 
 		console.log( 'i18n translate' )
-		//TODO: revisar palabras compuestas? ej: cada error tiene un msg por lo que deberia utilizarse para formar: "'variable' no es un numero"
-		// reconociendo el error base, pero agregando en caso que se necesite especificar, la traduccion de la 'variable
 		let obj: Translation = {}
 		errors.forEach( ( error ) => {
-			if ( error.rawValue != null ) {
-				obj[`${ error.message }`] =
-					this.i18n!.translate( `main.${ error.message }`, {
-						args: {
-							value: error.rawValue
-						}
-					} )
-			}
-			obj[`${ error.message }`] =
-				this.i18n!.translate( `main.${ error.message }` )
+			obj[`${ error.message }`] = this.i18nTranslation( error )
 		} )
 		return obj
+	}
+
+	i18nTranslation( error: BaseException ): string {
+		if ( error.field != undefined && error.value != undefined ) {
+			return this.i18n!.translate( `main.${ error.message }`, {
+				args: {
+					value: error.value,
+					field: error.field
+				}
+			} )
+		}
+		else if ( error.field != undefined ) {
+			return this.i18n!.translate( `main.${ error.message }`, {
+				args: {
+					field: error.field
+				}
+			} )
+		}
+		else if ( error.value != undefined ) {
+			return this.i18n!.translate( `main.${ error.message }`, {
+				args: {
+					value: error.value
+				}
+			} )
+		}
+		else {
+			return this.i18n!.translate( `main.${ error.message }` )
+		}
 	}
 }

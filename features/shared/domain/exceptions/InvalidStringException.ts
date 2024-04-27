@@ -1,8 +1,9 @@
 import { BaseException } from './BaseException'
 
 export class InvalidStringException extends BaseException {
-	constructor(message?: string, readonly rawValue?: string) {
-		super(message != null ? message : "string", rawValue)
+	constructor(readonly field?: string, message?: string, readonly value?: string) {
+		super( `invalid.string${message != null ? `.${message}`:''}`, value, field)
 		this.name = "InvalidStringException"
 	}
 }
+

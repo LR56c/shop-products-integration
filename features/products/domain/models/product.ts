@@ -1,6 +1,6 @@
+import { ValidRank } from './ValidRank'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
-import { ValidDecimal } from '../../../shared/domain/value_objects/ValidDecimal'
 import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
@@ -16,7 +16,7 @@ export class Product {
    readonly price: ValidInteger,
    readonly image_url: ValidURL,
    readonly stock: ValidInteger,
-   readonly rank: ValidDecimal,
+   readonly rank: ValidRank,
    readonly category_name: ValidString) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {

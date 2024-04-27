@@ -2,13 +2,19 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
+	Param,
 	Put
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+	ApiBody,
+	ApiProperty,
+	ApiTags
+} from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { productFromJson } from '~features/products/application/product_mapper'
 import { Product } from '~features/products/domain/models/product'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { UpdateProductService } from './update-product.service'
 
 @ApiTags( 'products' )
@@ -18,19 +24,74 @@ export class UpdateProductController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put()
+	@Put( ':code' )
+	@ApiBody( {
+		schema: {
+			type      : 'object',
+			properties: {
+				product: {
+					type      : 'object',
+					properties: {
+						id           : {
+							type   : 'string',
+							example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
+						},
+						code         : {
+							type   : 'string',
+							example: 'abc'
+						},
+						name         : {
+							type   : 'string',
+							example: 'n'
+						},
+						description  : {
+							type   : 'string',
+							example: 'd'
+						},
+						create_at    : {
+							type   : 'string',
+							example: '2024-04-27'
+						},
+						brand        : {
+							type   : 'string',
+							example: 'b'
+						},
+						price        : {
+							type   : 'number',
+							example: 2
+						},
+						image_url    : {
+							type   : 'string',
+							example: 'http://img'
+						},
+						stock        : {
+							type   : 'number',
+							example: 2
+						},
+						rank         : {
+							type   : 'number',
+							example: 2
+						},
+						category_name: {
+							type   : 'string',
+							example: 'cn'
+						}
+					}
+				}
+			}
+		}
+	} )
 	async updateProduct(
-		@Body( 'code' ) code: string,
-		@Body( 'product' ) product: any
+		@Param( 'code' ) code: string,
+		@Body( 'product' ) body: any
 	): Promise<HttpResult> {
 		try {
-
-			const p = productFromJson( product )
+			const p = productFromJson( body )
 
 			if ( !( p instanceof Product ) ) {
 				return {
 					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( p )
+					message   : this.translation.translateAll( p as BaseException[] )
 				}
 			}
 
