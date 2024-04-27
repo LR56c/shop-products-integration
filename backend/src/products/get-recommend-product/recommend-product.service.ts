@@ -4,10 +4,10 @@ import { GetRecommendProducts } from '~features/products/application/get_recomme
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
 
 @Injectable()
-export class GetRecommendProductService {
+export class RecommendProductService {
 	constructor( private repository: ProductRepository ) {}
 
-	async getRecommendProducts( threshold: number, products: Product[],
+	async recommendProducts( threshold: string, products: Product[],
 		from: string, to: string )
 	{
 		return GetRecommendProducts( this.repository, {

@@ -2,7 +2,8 @@ import {
   Body,
   Controller,
   Delete,
-  HttpStatus
+  HttpStatus,
+  Param
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { TranslationService } from '../../shared/services/translation/translation.service'
@@ -14,9 +15,9 @@ import { DeleteProductService } from './delete-product.service'
 export class DeleteProductController {
   constructor(private readonly deleteProductService: DeleteProductService,
     private readonly translation: TranslationService ) {}
-  @Delete()
+  @Delete(":code")
   async deleteProduct(
-    @Body('code') code: string,
+    @Param('code') code: string,
   ) {
     try {
       const product = await this.deleteProductService.deleteProduct( code )

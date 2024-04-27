@@ -24,6 +24,7 @@ export class GetProductController {
 	): Promise<HttpResultData<Product>> {
 		try {
 			const product = await this.getProductService.getProduct( code );
+
 			return {
 				data      : product,
 				statusCode: HttpStatus.OK

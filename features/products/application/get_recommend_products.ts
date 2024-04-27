@@ -7,7 +7,7 @@ import { ProductRepository } from '../domain/repository/product_repository'
 import { wrapType } from '../../shared/utils/WrapType'
 
 export const GetRecommendProducts = async ( repo: ProductRepository, props: {
-	threshold: number,
+	threshold: string,
 	products: Product[],
 	from: string,
 	to: string

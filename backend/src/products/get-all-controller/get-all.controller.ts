@@ -26,21 +26,6 @@ export class GetAllController {
 	{}
 
 	@Get()
-	// @ApiBody( {
-	// 	schema: {
-	// 		type      : 'object',
-	// 		properties: {
-	// 			from           : {
-	// 				type   : 'number',
-	// 				example: '2'
-	// 			},
-	// 			to           : {
-	// 				type   : 'number',
-	// 				example: '2'
-	// 			},
-	// 		}
-	// 	}
-	// } )
 	async getAll(
 		@Query( 'from' ) from: string,
 		@Query( 'to' ) to: string

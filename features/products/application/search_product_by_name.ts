@@ -1,10 +1,10 @@
-import { Product } from 'features/products/domain/models/product'
-import { ProductRepository } from 'features/products/domain/repository/product_repository'
-import { InvalidIntegerException } from 'features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidStringException } from 'features/shared/domain/exceptions/InvalidStringException'
-import { ValidInteger } from 'features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from 'features/shared/domain/value_objects/ValidString'
-import { wrapType } from 'features/shared/utils/WrapType'
+import { Product } from '../domain/models/product'
+import { ProductRepository } from '../domain/repository/product_repository'
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { wrapType } from '../../shared/utils/WrapType'
 
 export const SearchProductByName = async ( repo: ProductRepository, props: {
 	name: string,
