@@ -1,6 +1,8 @@
-export class UnknownException extends Error {
-	constructor(message?: string,) {
-		super("UnknownException")
-		this.name = "unknown"
+import { BaseException } from './BaseException'
+
+export class UnknownException extends BaseException {
+	constructor(message?: string, readonly value?: string) {
+		super(message != null ? message : "invalid.unknown", value)
+		this.name = "UnknownException"
 	}
 }

@@ -1,0 +1,15 @@
+{
+	"HELLO": "Hello",
+	"from": "desde",
+	"invalid": {
+		"integer": "El numero '{field}' es inválido",
+		"string": "El campo '{field}' es inválido",
+		"password": {
+			"uppercase": "La contraseña debe contener al menos una letra mayúscula",
+			"lowercase": "La contraseña debe contener al menos una letra minúscula",
+			"number": "La contraseña debe contener al menos un número",
+			"special": "La contraseña debe contener al menos un carácter especial",
+			"length": "La contraseña debe tener al menos 8 caracteres"
+		}
+	}
+}

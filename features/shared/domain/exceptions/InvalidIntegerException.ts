@@ -1,6 +1,8 @@
-export class InvalidIntegerException extends Error {
-	constructor(message?: string) {
-		super("InvalidIntegerException")
-		this.name = "integer"
+import { BaseException } from './BaseException'
+
+export class InvalidIntegerException extends BaseException {
+	constructor(readonly field?: string, message?: string, readonly value?: string) {
+		super( `invalid.integer${message != null ? `.${message}`:''}`, value, field)
+		this.name = "InvalidIntegerException"
 	}
 }
