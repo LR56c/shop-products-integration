@@ -23,9 +23,9 @@ export class GetRecommendProductController {
 		@Body( 'Product' )
 			productos: Product[],
 		@Body( 'from' )
-			from: number,
+			from: string,
 		@Body( 'to' )
-			to: number
+			to: string
 	)
 	{
 		try {

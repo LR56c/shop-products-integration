@@ -9,8 +9,8 @@ import { wrapType } from '../../shared/utils/WrapType'
 export const GetRecommendProducts = async ( repo: ProductRepository, props: {
 	threshold: number,
 	products: Product[],
-	from: number,
-	to: number
+	from: string,
+	to: string
 } ): Promise<Product[]> => {
 	const errors: Error[] = []
 

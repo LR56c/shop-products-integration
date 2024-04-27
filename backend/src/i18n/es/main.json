@@ -2,6 +2,7 @@
 	"HELLO": "Hello",
 	"from": "desde",
 	"invalid": {
+		"integer": "El numero '{field}' es inválido",
 		"string": "El campo '{field}' es inválido",
 		"password": {
 			"uppercase": "La contraseña debe contener al menos una letra mayúscula",

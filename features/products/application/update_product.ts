@@ -20,7 +20,7 @@ export const UpdateProduct = async ( repo: ProductRepository, props: {
 	}
 
 	if ( props.subtractStock ){
-		props.product.subtractStock(ValidInteger.from(1))
+		props.product.subtractStock(ValidInteger.from("1"))
 	}
 
 	if ( errors.length > 0 ) {

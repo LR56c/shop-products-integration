@@ -3,6 +3,7 @@
 	"from": "from",
 	"to": "to",
 	"invalid": {
+		"integer": "The field '{field}' must be an integer",
 		"string": "The field '{field}' is not valid",
 		"password": {
 			"uppercase": "The password must contain at least one uppercase letter",

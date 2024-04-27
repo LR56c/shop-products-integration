@@ -54,7 +54,7 @@ import { UsersModule } from './users/users.module'
 	imports    : [
 		I18nModule.forRootAsync( {
 			useFactory: () => ( {
-				fallbackLanguage: 'es',
+				fallbackLanguage: 'en',
 				loaderOptions   : {
 					path : join( __dirname, '/i18n/' ),
 					watch: true

@@ -8,7 +8,7 @@ export class GetRecommendProductService {
 	constructor( private repository: ProductRepository ) {}
 
 	async getRecommendProducts( threshold: number, products: Product[],
-		from: number, to: number )
+		from: string, to: string )
 	{
 		return GetRecommendProducts( this.repository, {
 			threshold: threshold,

@@ -12,11 +12,12 @@ export class ValidInteger {
 	 * Create a ValidInteger instance
 	 * @throws {InvalidIntegerException} - if number is invalid
 	 */
-	static from( value: number ): ValidInteger {
-		const result = z.number().int().safeParse(value)
+	static from( value: string ): ValidInteger {
+		const n = Number(value)
+		const result = z.number().int().safeParse(n)
 		if ( result.success === false ) {
 			throw new InvalidIntegerException()
 		}
-		return new ValidInteger( result.data )
+		return new ValidInteger( n )
 	}
 }

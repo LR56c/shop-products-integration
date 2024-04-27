@@ -2,9 +2,13 @@ import {
 	Body,
 	Controller,
 	Get,
-	HttpStatus
+	HttpStatus,
+	Query
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+	ApiBody,
+	ApiTags
+} from '@nestjs/swagger'
 import { GetAllService } from 'src/products/get-all-controller/get-all.service'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
@@ -22,9 +26,24 @@ export class GetAllController {
 	{}
 
 	@Get()
+	// @ApiBody( {
+	// 	schema: {
+	// 		type      : 'object',
+	// 		properties: {
+	// 			from           : {
+	// 				type   : 'number',
+	// 				example: '2'
+	// 			},
+	// 			to           : {
+	// 				type   : 'number',
+	// 				example: '2'
+	// 			},
+	// 		}
+	// 	}
+	// } )
 	async getAll(
-		@Body( 'from' ) from: number,
-		@Body( 'to' ) to: number
+		@Query( 'from' ) from: string,
+		@Query( 'to' ) to: string
 	): Promise<HttpResultData<Product[]>> {
 		try {
 			const products = await this.getAllControllerService.getAll( from, to )

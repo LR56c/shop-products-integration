@@ -5,7 +5,7 @@ import { ProductRepository } from '~features/products/domain/repository/product_
 @Injectable()
 export class GetAllService {
   constructor (private repository: ProductRepository) {}
-  async getAll(from: number, to: number) : Promise<Product[]> {
+  async getAll(from: string, to: string) : Promise<Product[]> {
     return GetAllProducts(this.repository, {
       from: from,
       to: to
