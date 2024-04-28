@@ -18,9 +18,9 @@ export class TranslationService {
 
 		console.log( 'i18n translate' )
 		let obj: Translation = {}
-		errors.forEach( ( error ) => {
+		for ( const error of errors ) {
 			obj[`${ error.message }`] = this.i18nTranslation( error )
-		} )
+		}
 		return obj
 	}
 

@@ -1,26 +1,22 @@
 import {
-	Body,
 	Controller,
 	Get,
 	HttpStatus,
 	Query
 } from '@nestjs/common'
 import {
-	ApiBody,
 	ApiTags
 } from '@nestjs/swagger'
-import { GetAllService } from 'src/products/get-all-controller/get-all.service'
+import { GetAllProductsService } from 'src/products/get-all-controller/get-all-products.service'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { PasswordInsufficientCharacterException } from '~features/user/domain/exceptions/PasswordException'
-import { Product } from '../domain/models/Product'
+import { productToJson } from '~features/products/application/product_mapper'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
 
 @ApiTags( 'products' )
 @Controller( 'products' )
-export class GetAllController {
+export class GetAllProductsController {
 	constructor(
-		private readonly getAllControllerService: GetAllService,
+		private readonly getAllControllerService: GetAllProductsService,
 		private readonly translation: TranslationService
 	)
 	{}
@@ -29,11 +25,18 @@ export class GetAllController {
 	async getAll(
 		@Query( 'from' ) from: string,
 		@Query( 'to' ) to: string
-	): Promise<HttpResultData<Product[]>> {
+	// ): Promise<HttpResultData<Product[]>> {
+	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 			const products = await this.getAllControllerService.getAll( from, to )
+
+			let json : Record<string, any>[] = []
+			for ( const product of products ) {
+				json.push( productToJson( product ) )
+			}
+
 			return {
-				data: products,
+				data: json,
 				statusCode: HttpStatus.OK
 			}
 		}

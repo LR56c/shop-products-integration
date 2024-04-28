@@ -1,3 +1,4 @@
+import { InsufficientStockException } from '../domain/exceptions/InsufficientStockException'
 import { Product } from '../domain/models/product'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -19,12 +20,21 @@ export const UpdateProduct = async ( repo: ProductRepository, props: {
 		errors.push( new InvalidStringException( 'code' ) )
 	}
 
-	if ( props.subtractStock ){
-		props.product.subtractStock(ValidInteger.from("1"))
-	}
-
 	if ( errors.length > 0 ) {
 		throw errors
+	}
+
+	if ( props.subtractStock ) {
+
+		const newStock = wrapType<Product, InsufficientStockException>(
+			() => props.product.subtractStock( ValidInteger.from( '1' ) ) )
+
+		if ( newStock instanceof Error ) {
+			errors.push( new InsufficientStockException() )
+			throw errors
+		}
+
+		return await repo.updateProduct( codeResult as ValidString, newStock as Product )
 	}
 
 	return await repo.updateProduct( codeResult as ValidString, props.product )

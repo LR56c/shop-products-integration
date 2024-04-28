@@ -8,6 +8,7 @@ export abstract class ProductRepository {
     abstract getProduct(code: ValidString): Promise<Product>
     abstract updateProduct(code: ValidString, product : Product ): Promise<boolean>
     abstract deleteProduct(code: ValidString): Promise<boolean>
+    abstract deleteAll(): Promise<boolean>
     abstract searchProduct(name: ValidString, from: ValidInteger, to: ValidInteger): Promise<Product[]>
-    abstract getRecommendProducts(threshold: ValidRank, products: Product[] ,from: ValidInteger, to: ValidInteger): Promise<Product[]>
+    abstract getRecommendProductsGroupByCategory(threshold: ValidRank, products: Product[] ,limit: ValidInteger): Promise<Map<string, Product[]>>
 }

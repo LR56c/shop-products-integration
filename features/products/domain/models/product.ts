@@ -1,3 +1,4 @@
+import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 import { ValidRank } from './ValidRank'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
@@ -9,9 +10,10 @@ export class Product {
  constructor(
    readonly id: UUID,
    readonly code: ValidString,
+   readonly product_code: ValidString,
    readonly name: ValidString,
    readonly description: ValidString,
-   readonly create_at: ValidDate,
+   readonly created_at: ValidDate,
    readonly brand: ValidString,
    readonly price: ValidInteger,
    readonly image_url: ValidURL,
@@ -20,12 +22,17 @@ export class Product {
    readonly category_name: ValidString) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {
+    if ( newQuantity.value > this.stock.value ) {
+      throw new InsufficientStockException()
+    }
+
     return new Product(
       this.id,
       this.code,
+      this.product_code,
       this.name,
       this.description,
-      this.create_at,
+      this.created_at,
       this.brand,
       this.price,
       this.image_url,

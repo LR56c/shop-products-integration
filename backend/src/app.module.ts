@@ -40,14 +40,11 @@ import { UsersModule } from './users/users.module'
 		{
 			provide   : SupabaseClient<Database>,
 			useFactory: async () => {
-				let a                 = createClient<Database>(
+				let client                 = createClient<Database>(
 					'https://uppjyrysymgslbnkxhaq.supabase.co',
 					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
-				const { data, error } = await a.from( 'news_letter' )
-				                               .select( '*' )
-				console.log( 'data' )
-				console.log( data )
-				return a
+				await client.auth.signInAnonymously()
+				return client
 			}
 		},
 	],

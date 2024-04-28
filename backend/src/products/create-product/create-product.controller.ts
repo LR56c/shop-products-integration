@@ -1,9 +1,11 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateProductService } from './create-product.service';
 import { TranslationService } from 'src/shared/services/translation/translation.service';
-import { HttpResultData } from 'src/shared/utils/HttpResultData';
-import { Product } from 'features/products/domain/models/Product';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiTags
+} from '@nestjs/swagger'
 
 @ApiTags('products')
 @Controller('products')
@@ -12,13 +14,73 @@ export class CreateProductController {
     private readonly translation: TranslationService) {}
 
     @Post()
+    @ApiBody( {
+      schema: {
+        type      : 'object',
+        properties: {
+          product: {
+            type      : 'object',
+            properties: {
+              id           : {
+                type   : 'string',
+                example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
+              },
+              code         : {
+                type   : 'string',
+                example: 'abc'
+              },
+              product_code         : {
+                type   : 'string',
+                example: 'abc2'
+              },
+              name         : {
+                type   : 'string',
+                example: 'n'
+              },
+              description  : {
+                type   : 'string',
+                example: 'd'
+              },
+              created_at    : {
+                type   : 'string',
+                example: '2024-04-27'
+              },
+              brand        : {
+                type   : 'string',
+                example: 'b'
+              },
+              price        : {
+                type   : 'number',
+                example: 2
+              },
+              image_url    : {
+                type   : 'string',
+                example: 'http://img'
+              },
+              stock        : {
+                type   : 'number',
+                example: 2
+              },
+              rank         : {
+                type   : 'number',
+                example: 2
+              },
+              category: {
+                type   : 'string',
+                example: 'TEST'
+              }
+            }
+          }
+        }
+      }
+    } )
     async createProduct(
     @Body('product') props: {
       id: string;
       code: string;
       name: string;
       description: string;
-      create_at: string;
+      created_at: string;
       brand: string;
       image_url: string;
       rank: string;
@@ -26,7 +88,7 @@ export class CreateProductController {
       stock: string;
       category_name: string;
     }
-  ): Promise<HttpResultData<Product>> {
+  ): Promise<HttpResult> {
     try {
       await this.createProductService.createProduct(props);
       return {

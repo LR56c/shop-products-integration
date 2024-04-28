@@ -1,10 +1,11 @@
 import {
-  Controller,
-  Get,
-  HttpStatus,
-  Param
+	Controller,
+	Get,
+	HttpStatus,
+	Param
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { productToJson } from '~features/products/application/product_mapper'
 import { Product } from '~features/products/domain/models/product'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { GetProductService } from './get-product.service'
@@ -21,19 +22,19 @@ export class GetProductController {
 	@Get( ':code' )
 	async getProduct(
 		@Param( 'code' ) code: string
-	): Promise<HttpResultData<Product>> {
+	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const product = await this.getProductService.getProduct( code );
+			const product = await this.getProductService.getProduct( code )
 
 			return {
-				data      : product,
+				data      : productToJson( product ),
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
-        message   : this.translation.translateAll( e )
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}
