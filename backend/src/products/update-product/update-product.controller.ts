@@ -5,6 +5,7 @@ import {
 	Param,
 	Put
 } from '@nestjs/common'
+import { OnEvent } from '@nestjs/event-emitter'
 import {
 	ApiBody,
 	ApiProperty,
@@ -107,5 +108,15 @@ export class UpdateProductController {
 			}
 		}
 	}
+
+
+	@OnEvent('rank.average')
+	handleEvent(payload: any) {
+		// get by code (use case)
+		// calculate average (use case)
+		// update product (use case)
+		console.log('payload', payload)
+	}
+
 }
 

@@ -18,7 +18,7 @@ export class Product {
    readonly price: ValidInteger,
    readonly image_url: ValidURL,
    readonly stock: ValidInteger,
-   readonly rank: ValidRank,
+   readonly average_rank: ValidRank,
    readonly category_name: ValidString) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {
@@ -37,7 +37,7 @@ export class Product {
       this.price,
       this.image_url,
       newQuantity,
-      this.rank,
+      this.average_rank,
       this.category_name
     )
   }

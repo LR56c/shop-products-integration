@@ -2,6 +2,7 @@ import {
 	Global,
 	Module
 } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import {
 	createClient,
 	SupabaseClient
@@ -32,6 +33,7 @@ import { RolesTypesModule } from './roles_types/roles_types.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
+import { RanksModule } from './ranks/ranks.module';
 
 @Global()
 @Module( {
@@ -49,6 +51,7 @@ import { UsersModule } from './users/users.module'
 		},
 	],
 	imports    : [
+		EventEmitterModule.forRoot(),
 		I18nModule.forRootAsync( {
 			useFactory: () => ( {
 				fallbackLanguage: 'en',
@@ -68,7 +71,7 @@ import { UsersModule } from './users/users.module'
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule,
 		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
 		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
-		ShopsAddressModule, CategoriesModule, AuthModule ],
+		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
 	exports		: [ TranslationService, SupabaseClient<Database> ]
 } )
 export class AppModule {}

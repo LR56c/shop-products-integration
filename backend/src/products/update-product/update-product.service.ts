@@ -7,6 +7,6 @@ export class UpdateProductService {
     constructor(private repository: ProductRepository){
     }
     async updateProduct(code: string, product: Product): Promise<boolean> {
-        return UpdateProduct(this.repository, { code: code, product: product, subtractStock: true })
+        return UpdateProduct(this.repository, { code: code, product: product })
     }
 }

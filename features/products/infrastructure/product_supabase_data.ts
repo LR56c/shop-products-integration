@@ -19,31 +19,34 @@ export class ProductSupabaseData implements ProductRepository {
 	readonly tableName = 'products'
 
 	async deleteAll(): Promise<boolean> {
-		const result = await this.client.from( this.tableName )
-		                         .delete()
+		try {
+			await this.client.from( this.tableName )
+			          .delete()
 
-		if ( result.error ) {
+			return true
+		}
+		catch ( e ) {
 			console.log( 'supabase unexpected error' )
-			console.log( result.error )
+			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
-
-		return true
 	}
 
 	async createProduct( product: Product ): Promise<boolean> {
-
-		const result = await this.client.from( this.tableName )
-		                         .insert( productToJson( product ) as any )
-		if ( result.error ) {
+		try {
+			await this.client.from( this.tableName )
+			          .insert( productToJson( product ) as any )
+			return true
+		}
+		catch ( e ) {
 			console.log( 'supabase unexpected error' )
-			console.log( result.error )
+			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
-		return true
 	}
 
 	async getAll( from: ValidInteger, to: ValidInteger ): Promise<Product[]> {
+
 		const result = await this.client.from( this.tableName )
 		                         .select()
 		                         .range( from.value, to.value )
@@ -94,37 +97,37 @@ export class ProductSupabaseData implements ProductRepository {
 		code: ValidString,
 		product: Product
 	): Promise<boolean> {
-		const result = await this.client.from( this.tableName )
-		                         .update( productToJson( product ) as any )
-		                         .eq(
-			                         'product_code',
-			                         code.value
-		                         )
-
-		if ( result.error ) {
+		try {
+			await this.client.from( this.tableName )
+			          .update( productToJson( product ) as any )
+			          .eq(
+				          'product_code',
+				          code.value
+			          )
+			return true
+		}
+		catch ( e ) {
 			console.log( 'supabase unexpected error' )
-			console.log( result.error )
+			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
-
-		return true
 	}
 
 	async deleteProduct( code: ValidString ): Promise<boolean> {
-		const result = await this.client.from( this.tableName )
-		                         .delete()
-		                         .eq(
-			                         'product_code',
-			                         code.value
-		                         )
-
-		if ( result.error ) {
+		try {
+			await this.client.from( this.tableName )
+			          .delete()
+			          .eq(
+				          'product_code',
+				          code.value
+			          )
+			return true
+		}
+		catch ( e ) {
 			console.log( 'supabase unexpected error' )
-			console.log( result.error )
+			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
-
-		return true
 	}
 
 	async searchProduct( name: ValidString, from: ValidInteger,
@@ -161,12 +164,12 @@ export class ProductSupabaseData implements ProductRepository {
 
 	public getRecommendProductsGroupByCategory( threshold: ValidRank,
 		products: Product[],
-		limit: ValidInteger): Promise<Map<string, Product[]>> {
+		limit: ValidInteger ): Promise<Map<string, Product[]>> {
 
 		const categoriesSet = new Set(
 			products.map( product => product.category_name.value ) )
 
-		const map = new Map<string, Product[]>()
+		const mapResult = new Map<string, Product[]>()
 
 		console.log( 'set' )
 		categoriesSet.forEach( async ( category ) => {
@@ -175,13 +178,15 @@ export class ProductSupabaseData implements ProductRepository {
 			                                        .select()
 			                                        .eq( 'category', category )
 			                                        .gte( 'rank', threshold.value )
-			                                        .limit(limit.value)
+			                                        .limit( limit.value )
 
 			if ( categoryQueryProducts.error ) {
 				console.log( 'supabase unexpected error' )
 				console.log( categoryQueryProducts.error )
 				throw [ new InfrastructureException() ]
 			}
+
+			//Map<categoryName, rawProducts]>
 
 			const errors: BaseException[] = []
 
@@ -209,11 +214,9 @@ export class ProductSupabaseData implements ProductRepository {
 			// const unMatchedProducts = parsedQueryProducts.filter(
 			// 	bd => !products.some( p => p.product_code === bd.product_code ) )
 
-			map.set( category, parsedQueryProducts )
+			mapResult.set( category, parsedQueryProducts )
 		} )
 
-		return Promise.resolve( map )
+		return Promise.resolve( mapResult )
 	}
 }
-
-//TODO: colocar todos los metodos en try/catch

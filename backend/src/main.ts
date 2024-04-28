@@ -3,7 +3,6 @@ import {
 	DocumentBuilder,
 	SwaggerModule
 } from '@nestjs/swagger'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { AppModule } from './app.module'
 
 async function bootstrap() {

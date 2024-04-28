@@ -26,7 +26,7 @@ export function productToJson( product: Product ): Record<string, any> {
 		price       : product.price.value,
 		image_url   : product.image_url.value,
 		stock       : product.stock.value,
-		rank        : product.rank.value,
+		average_rank        : product.average_rank.value,
 		category    : product.category_name.value
 	}
 }
@@ -105,7 +105,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 	}
 
 	const rank = wrapType<ValidRank, InvalidRankException>(
-		() => ValidRank.from( json.rank ) )
+		() => ValidRank.from( json.average_rank ) )
 
 	if ( rank instanceof BaseException ) {
 		errors.push( new InvalidRankException() )
