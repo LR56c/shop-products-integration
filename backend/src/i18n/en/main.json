@@ -1,0 +1,22 @@
+{
+	"HELLO": "Hello",
+	"from": "from",
+	"to": "to",
+	"infrastructure": "An error occurred in the infrastructure",
+	"invalid": {
+		"id": "The field '{field}' must be a valid identifier",
+		"email": "The field '{field}' must be a valid email",
+		"url": "The field '{field}' must be a valid URL",
+		"rank": "The field '{field}' must be a valid rank",
+		"integer": "The field '{field}' must be an integer",
+		"date": "The field '{field}' must be a date",
+		"string": "The field '{field}' is not valid",
+		"password": {
+			"uppercase": "The password must contain at least one uppercase letter",
+			"lowercase": "The password must contain at least one lowercase letter",
+			"number": "The password must contain at least one number",
+			"special": "The password must contain at least one special character",
+			"length": "The password must be at least 8 characters long"
+		}
+	}
+}
