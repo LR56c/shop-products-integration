@@ -7,8 +7,8 @@ export class CreateProductService {
     constructor( private repository: ProductRepository) {}
 
     async createProduct(props: {
-        id: string;
         code: string;
+        product_code: string;
         name: string;
         description: string;
         brand: string;
@@ -19,8 +19,8 @@ export class CreateProductService {
         category_name: string;
     }): Promise<boolean> {
         return CreateProduct(this.repository, {
-            id: props.id,
             code: props.code,
+            product_code: props.product_code,
             name: props.name,
             description: props.description,
             brand: props.brand,

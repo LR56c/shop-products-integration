@@ -5,10 +5,8 @@ import {
 	Param,
 	Put
 } from '@nestjs/common'
-import { OnEvent } from '@nestjs/event-emitter'
 import {
 	ApiBody,
-	ApiProperty,
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
@@ -41,6 +39,10 @@ export class UpdateProductController {
 							type   : 'string',
 							example: 'abc'
 						},
+						product_code         : {
+							type   : 'string',
+							example: 'abc'
+						},
 						name         : {
 							type   : 'string',
 							example: 'n'
@@ -49,7 +51,7 @@ export class UpdateProductController {
 							type   : 'string',
 							example: 'd'
 						},
-						create_at    : {
+						created_at    : {
 							type   : 'string',
 							example: '2024-04-27'
 						},
@@ -69,13 +71,13 @@ export class UpdateProductController {
 							type   : 'number',
 							example: 2
 						},
-						rank         : {
+						average_rank         : {
 							type   : 'number',
 							example: 2
 						},
 						category_name: {
 							type   : 'string',
-							example: 'cn'
+							example: 'TEST'
 						}
 					}
 				}
@@ -83,7 +85,6 @@ export class UpdateProductController {
 		}
 	} )
 	async updateProduct(
-		@Param( 'code' ) code: string,
 		@Body( 'product' ) body: any
 	): Promise<HttpResult> {
 		try {
@@ -96,7 +97,7 @@ export class UpdateProductController {
 				}
 			}
 
-			await this.updateProductService.updateProduct( code, p as Product )
+			await this.updateProductService.updateProduct( p as Product )
 
 			return {
 				statusCode: HttpStatus.OK

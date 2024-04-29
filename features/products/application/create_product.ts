@@ -17,8 +17,8 @@ import { Product } from '../domain/models/Product'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
 
 export const CreateProduct = async ( repo: ProductRepository, props: {
-	id: string
 	code: string
+	product_code: string
 	name: string
 	description: string
 	brand: string
@@ -39,7 +39,7 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 	}
 
 	const code_productResult = wrapType<ValidString, InvalidStringException>(
-		() => ValidString.from( props.code ) )
+		() => ValidString.from( props.product_code ) )
 
 	if ( code_productResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'code_product' ) )
@@ -113,7 +113,7 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 		throw errors
 	}
 	const product = new Product(
-		UUID.from( props.id ),
+		UUID.create(),
 		codeResult as ValidString,
 		code_productResult as ValidString,
 		nameResult as ValidString,
@@ -122,8 +122,8 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 		brandResult as ValidString,
 		priceResult as ValidInteger,
 		image_urlResult as ValidURL,
-		rankResult as ValidRank,
 		stockResult as ValidInteger,
+		rankResult as ValidRank,
 		category_nameResult as ValidString
 	)
 	return await repo.createProduct( product as Product )
