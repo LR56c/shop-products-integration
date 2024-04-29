@@ -108,15 +108,5 @@ export class UpdateProductController {
 			}
 		}
 	}
-
-
-	@OnEvent('rank.average')
-	handleEvent(payload: any) {
-		// get by code (use case)
-		// calculate average (use case)
-		// update product (use case)
-		console.log('payload', payload)
-	}
-
 }
 

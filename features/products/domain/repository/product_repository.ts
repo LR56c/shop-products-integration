@@ -1,7 +1,7 @@
+import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { ValidInteger } from "../../../shared/domain/value_objects/ValidInteger"
 import { ValidString } from "../../../shared/domain/value_objects/ValidString"
 import { Product } from "../models/Product"
-import { ValidRank } from "../models/ValidRank"
 export abstract class ProductRepository {
     abstract createProduct(product: Product): Promise<boolean>
     abstract getAll(from: ValidInteger, to: ValidInteger): Promise<Product[]>

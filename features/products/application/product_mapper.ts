@@ -1,5 +1,5 @@
-import { InvalidRankException } from '../domain/exceptions/InvalidRankException'
-import { ValidRank } from '../domain/models/ValidRank'
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
@@ -108,7 +108,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		() => ValidRank.from( json.average_rank ) )
 
 	if ( rank instanceof BaseException ) {
-		errors.push( new InvalidRankException() )
+		errors.push( new InvalidRankException('average_rank') )
 	}
 
 	const category_name = wrapType<ValidString, InvalidStringException>(

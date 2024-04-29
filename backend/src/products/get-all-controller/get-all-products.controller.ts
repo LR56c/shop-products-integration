@@ -25,7 +25,6 @@ export class GetAllProductsController {
 	async getAll(
 		@Query( 'from' ) from: string,
 		@Query( 'to' ) to: string
-	// ): Promise<HttpResultData<Product[]>> {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 			const products = await this.getAllControllerService.getAll( from, to )

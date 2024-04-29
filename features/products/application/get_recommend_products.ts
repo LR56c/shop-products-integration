@@ -1,8 +1,8 @@
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { InvalidRankException } from '../domain/exceptions/InvalidRankException'
 import { Product } from '../domain/models/product'
-import { ValidRank } from '../domain/models/ValidRank'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { wrapType } from '../../shared/utils/WrapType'
 

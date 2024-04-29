@@ -11,7 +11,6 @@ export class CreateProductService {
         code: string;
         name: string;
         description: string;
-        created_at: string;
         brand: string;
         image_url: string;
         rank: string;
@@ -24,7 +23,6 @@ export class CreateProductService {
             code: props.code,
             name: props.name,
             description: props.description,
-            create_at: props.created_at,
             brand: props.brand,
             image_url: props.image_url,
             rank: props.rank,

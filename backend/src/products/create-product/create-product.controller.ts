@@ -41,10 +41,6 @@ export class CreateProductController {
                 type   : 'string',
                 example: 'd'
               },
-              created_at    : {
-                type   : 'string',
-                example: '2024-04-27'
-              },
               brand        : {
                 type   : 'string',
                 example: 'b'
@@ -80,7 +76,6 @@ export class CreateProductController {
       code: string;
       name: string;
       description: string;
-      created_at: string;
       brand: string;
       image_url: string;
       rank: string;

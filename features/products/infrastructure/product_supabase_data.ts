@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import {
@@ -10,7 +11,6 @@ import { Product } from '../domain/models/Product'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { ValidRank } from '../domain/models/ValidRank'
 
 
 export class ProductSupabaseData implements ProductRepository {
@@ -57,15 +57,13 @@ export class ProductSupabaseData implements ProductRepository {
 			throw [ new InfrastructureException() ]
 		}
 
-		const errors: BaseException[] = []
 		const products: Product[]     = []
 		for ( const json of result.data ) {
 
 			const product = productFromJson( json )
 
 			if ( product instanceof BaseException ) {
-				errors.push( product )
-				throw errors
+				throw product
 			}
 			products.push( product as Product )
 		}

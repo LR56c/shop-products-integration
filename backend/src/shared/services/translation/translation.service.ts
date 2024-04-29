@@ -11,6 +11,7 @@ export class TranslationService {
 	constructor( private readonly i18n ?: I18nService ) {}
 
 	translateAll( errors: BaseException[] ): Translation {
+		return manualTranslation( flatErrors( errors ) )
 		if ( this.i18n == null ) {
 			console.log( 'manual translate' )
 			return manualTranslation( flatErrors( errors ) )

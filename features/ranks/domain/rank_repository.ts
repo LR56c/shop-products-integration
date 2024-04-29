@@ -1,4 +1,7 @@
+import { Rank } from 'features/ranks/domain/rank'
+import { ValidString } from 'features/shared/domain/value_objects/ValidString'
+
 export abstract class RankRepository {
-	abstract addRank(data: any): Promise<any>
-	abstract getAllRankByCode(code: string): Promise<any>
+	abstract addRank(rank : Rank): Promise<boolean>
+	abstract getAllRankByCode(code: ValidString): Promise<Rank[]>
 }

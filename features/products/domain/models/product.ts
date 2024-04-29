@@ -1,5 +1,5 @@
+import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { InsufficientStockException } from '../exceptions/InsufficientStockException'
-import { ValidRank } from './ValidRank'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'

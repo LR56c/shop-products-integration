@@ -1,3 +1,5 @@
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -11,17 +13,14 @@ import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
-import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
-import { ValidRank } from '../domain/models/ValidRank'
-import { InvalidRankException } from '../domain/exceptions/InvalidRankException'
 import { Product } from '../domain/models/Product'
+import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
 
 export const CreateProduct = async ( repo: ProductRepository, props: {
 	id: string
 	code: string
 	name: string
 	description: string
-	create_at: string
 	brand: string
 	image_url: string
 	rank: string
@@ -61,7 +60,7 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 	}
 
 	const create_atResult = wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( props.create_at ) )
+		() => ValidDate.from( new Date() ) )
 
 	if ( create_atResult instanceof BaseException ) {
 		errors.push( new InvalidDateException( 'created_at' ) )
