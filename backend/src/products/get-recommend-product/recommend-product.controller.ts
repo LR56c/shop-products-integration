@@ -10,9 +10,13 @@ import {
 	ApiBody,
 	ApiTags
 } from '@nestjs/swagger'
+import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { Product } from '~features/products/domain/models/product'
 import { TranslationService } from '../../shared/services/translation/translation.service'
-import { productFromJson } from '~features/products/application/product_mapper'
+import {
+	productFromJson,
+	productToJson
+} from '~features/products/application/product_mapper'
 import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
 
 @ApiTags( 'products' )
@@ -30,15 +34,11 @@ export class RecommendProductController {
 					type   : 'string',
 					example: '2'
 				},
-				from: {
+				limit: {
 					type   : 'string',
 					example: '2'
 				},
-				to: {
-					type   : 'string',
-					example: '2'
-				},
-				product: {
+				products: {
 					type      : 'object',
 					properties: {
 						id           : {
@@ -49,6 +49,10 @@ export class RecommendProductController {
 							type   : 'string',
 							example: 'abc'
 						},
+						product_code         : {
+							type   : 'string',
+							example: 'abc2'
+						},
 						name         : {
 							type   : 'string',
 							example: 'n'
@@ -57,7 +61,7 @@ export class RecommendProductController {
 							type   : 'string',
 							example: 'd'
 						},
-						create_at    : {
+						created_at    : {
 							type   : 'string',
 							example: '2024-04-27'
 						},
@@ -81,9 +85,9 @@ export class RecommendProductController {
 							type   : 'number',
 							example: 2
 						},
-						category_name: {
+						category: {
 							type   : 'string',
-							example: 'cn'
+							example: 'TEST'
 						}
 					}
 				}
@@ -93,14 +97,11 @@ export class RecommendProductController {
 	async getRecommendProducts(
 		@Body( 'threshold' )
 			threshold: string,
-		@Body( 'product' )
+		@Body( 'products' )
 			products: any,
-		@Body( 'from' )
-			from: string,
-		@Body( 'to' )
-			to: string
-	)
-	{
+		@Body( 'limit' )
+			limit: string
+	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
       const productResultList : Product[] = []
 
@@ -116,18 +117,27 @@ export class RecommendProductController {
       }
 
 
-			const productsResult = await this.getRecommendProductService.recommendProducts(
+			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
 				threshold,
 				productResultList,
-				from,
-				to
+				limit,
 			)
+
+			let json : Record<string, any[]>[] = []
+
+			productsGroupByCategory.forEach( ( productList, key ) => {
+				const products = productList.map( product => productToJson( product ) )
+				json.push( { [ key ]: products } )
+			})
+
 			return {
-				data: productsResult,
+				data: json,
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
+			console.log( "e" )
+			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )

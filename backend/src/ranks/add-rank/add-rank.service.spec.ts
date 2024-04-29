@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetAllService } from 'src/products/get-all-controller/get-all.service';
+import { AddRankService } from './add-rank.service';
 
-describe('GetAllService', () => {
-  let service: GetAllService;
+describe('AddRankService', () => {
+  let service: AddRankService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GetAllService],
+      providers: [AddRankService],
     }).compile();
 
-    service = module.get<GetAllService>(GetAllService);
+    service = module.get<AddRankService>(AddRankService);
   });
 
   it('should be defined', () => {

@@ -5,6 +5,7 @@ import {
 	Param,
 	Put
 } from '@nestjs/common'
+import { OnEvent } from '@nestjs/event-emitter'
 import {
 	ApiBody,
 	ApiProperty,
@@ -95,8 +96,7 @@ export class UpdateProductController {
 				}
 			}
 
-			const productResult = await this.updateProductService.updateProduct( code,
-				p as Product )
+			await this.updateProductService.updateProduct( code, p as Product )
 
 			return {
 				statusCode: HttpStatus.OK

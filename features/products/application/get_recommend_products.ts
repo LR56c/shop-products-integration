@@ -1,17 +1,16 @@
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { InvalidRankException } from '../domain/exceptions/InvalidRankException'
 import { Product } from '../domain/models/product'
-import { ValidRank } from '../domain/models/ValidRank'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { wrapType } from '../../shared/utils/WrapType'
 
-export const GetRecommendProducts = async ( repo: ProductRepository, props: {
+export const GetRecommendProductsGroupByCateogry = async ( repo: ProductRepository, props: {
 	threshold: string,
 	products: Product[],
-	from: string,
-	to: string
-} ): Promise<Product[]> => {
+	limit: string,
+} ): Promise<Map<string, Product[]>> => {
 	const errors: Error[] = []
 
 	const thresholdResult = wrapType<ValidRank, InvalidRankException>(
@@ -21,25 +20,18 @@ export const GetRecommendProducts = async ( repo: ProductRepository, props: {
 		errors.push( new InvalidRankException( 'threshold' ) )
 	}
 
-	const fromResult = wrapType<ValidInteger, InvalidIntegerException>(
-		() => ValidInteger.from( props.from ) )
+	const limitResult = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from( props.limit ) )
 
-	if ( fromResult instanceof Error ) {
-		errors.push( new InvalidIntegerException( 'from' ) )
-	}
-
-	const toResult = wrapType<ValidInteger, InvalidIntegerException>(
-		() => ValidInteger.from( props.to ) )
-
-	if ( toResult instanceof Error ) {
-		errors.push( new InvalidIntegerException( 'to' ) )
+	if ( limitResult instanceof Error ) {
+		errors.push( new InvalidIntegerException( 'limit' ) )
 	}
 
 	if ( errors.length > 0 ) {
 		throw errors
 	}
 
-	return await repo.getRecommendProducts( thresholdResult as ValidRank,
-		props.products, fromResult as ValidInteger, toResult as ValidInteger )
+	return await repo.getRecommendProductsGroupByCategory( thresholdResult as ValidRank,
+		props.products, limitResult as ValidInteger )
 
 }
