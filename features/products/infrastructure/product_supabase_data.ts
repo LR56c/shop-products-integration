@@ -1,5 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { LimitIsNotInRange } from '../../shared/infrastructure/limit_is_not_in_range'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
@@ -33,16 +35,16 @@ export class ProductSupabaseData implements ProductRepository {
 	}
 
 	async createProduct( product: Product ): Promise<boolean> {
-		try {
-			await this.client.from( this.tableName )
-			          .insert( productToJson( product ) as any )
-			return true
-		}
-		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
+		const result = await this.client.from( this.tableName )
+		                         .insert( productToJson( product ) as any )
+
+		if ( result.error != null ) {
+			if ( result.error.code === '23505' ) {
+				throw [ new KeyAlreadyExistException( 'product' ) ]
+			}
 			throw [ new InfrastructureException() ]
 		}
+		return true
 	}
 
 	async getAll( from: ValidInteger, to: ValidInteger ): Promise<Product[]> {
@@ -52,12 +54,13 @@ export class ProductSupabaseData implements ProductRepository {
 		                         .range( from.value, to.value )
 
 		if ( result.error ) {
-			console.log( 'supabase unexpected error' )
-			console.log( result.error )
+			if ( result.error.code === 'PGRST103' ) {
+				throw [ new LimitIsNotInRange() ]
+			}
 			throw [ new InfrastructureException() ]
 		}
 
-		const products: Product[]     = []
+		const products: Product[] = []
 		for ( const json of result.data ) {
 
 			const product = productFromJson( json )
@@ -92,16 +95,17 @@ export class ProductSupabaseData implements ProductRepository {
 	}
 
 	async updateProduct(
-		code: ValidString,
 		product: Product
 	): Promise<boolean> {
 		try {
-			await this.client.from( this.tableName )
+			const result = await this.client.from( this.tableName )
 			          .update( productToJson( product ) as any )
 			          .eq(
 				          'product_code',
-				          code.value
+				          product.product_code.value
 			          )
+			console.log("result")
+			console.log(result)
 			return true
 		}
 		catch ( e ) {

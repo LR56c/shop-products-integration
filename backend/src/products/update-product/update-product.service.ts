@@ -6,7 +6,7 @@ import { ProductRepository } from '~features/products/domain/repository/product_
 export class UpdateProductService {
     constructor(private repository: ProductRepository){
     }
-    async updateProduct(code: string, product: Product): Promise<boolean> {
-        return UpdateProduct(this.repository, { code: code, product: product })
+    async updateProduct(product: Product): Promise<boolean> {
+        return UpdateProduct(this.repository, product )
     }
 }

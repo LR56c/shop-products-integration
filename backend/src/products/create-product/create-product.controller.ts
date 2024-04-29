@@ -4,6 +4,8 @@ import { CreateProductService } from './create-product.service';
 import { TranslationService } from 'src/shared/services/translation/translation.service';
 import {
   ApiBody,
+  ApiOperation,
+  ApiResponse,
   ApiTags
 } from '@nestjs/swagger'
 
@@ -21,10 +23,6 @@ export class CreateProductController {
           product: {
             type      : 'object',
             properties: {
-              id           : {
-                type   : 'string',
-                example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
-              },
               code         : {
                 type   : 'string',
                 example: 'abc'
@@ -61,7 +59,7 @@ export class CreateProductController {
                 type   : 'number',
                 example: 2
               },
-              category: {
+              category_name: {
                 type   : 'string',
                 example: 'TEST'
               }
@@ -70,10 +68,21 @@ export class CreateProductController {
         }
       }
     } )
+    @ApiOperation({
+      summary: 'Create a product',
+    })
+    @ApiResponse({
+      status: 200,
+      description: 'CODE: 200. The product has been successfully created.'
+    })
+    @ApiResponse({
+      status: 400,
+      description: 'CODE: 400 with translation. The product could not be created.',
+    })
     async createProduct(
     @Body('product') props: {
-      id: string;
       code: string;
+      product_code: string;
       name: string;
       description: string;
       brand: string;
