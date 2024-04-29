@@ -2,6 +2,7 @@ import {
 	Global,
 	Module
 } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import {
 	createClient,
 	SupabaseClient
@@ -32,6 +33,7 @@ import { RolesTypesModule } from './roles_types/roles_types.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
+import { RanksModule } from './ranks/ranks.module';
 
 @Global()
 @Module( {
@@ -40,18 +42,16 @@ import { UsersModule } from './users/users.module'
 		{
 			provide   : SupabaseClient<Database>,
 			useFactory: async () => {
-				let a                 = createClient<Database>(
+				let client                 = createClient<Database>(
 					'https://uppjyrysymgslbnkxhaq.supabase.co',
 					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
-				const { data, error } = await a.from( 'news_letter' )
-				                               .select( '*' )
-				console.log( 'data' )
-				console.log( data )
-				return a
+				await client.auth.signInAnonymously()
+				return client
 			}
 		},
 	],
 	imports    : [
+		EventEmitterModule.forRoot(),
 		I18nModule.forRootAsync( {
 			useFactory: () => ( {
 				fallbackLanguage: 'en',
@@ -71,7 +71,7 @@ import { UsersModule } from './users/users.module'
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule,
 		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
 		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
-		ShopsAddressModule, CategoriesModule, AuthModule ],
+		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
 	exports		: [ TranslationService, SupabaseClient<Database> ]
 } )
 export class AppModule {}

@@ -4,8 +4,11 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { DeleteAllProductsController } from './delete-all-products/delete-all-products.controller'
+import { DeleteAllProductsService } from './delete-all-products/delete-all-products.service'
+import { ApplyAverageRankToProductService } from 'src/products/shared/services/calculate-average-rank-product/apply-average-rank-to-product.service'
 import { DeleteProductService } from './delete-product/delete-product.service'
-import { GetAllService } from './get-all-controller/get-all.service'
+import { GetAllProductsService } from 'src/products/get-all-controller/get-all-products.service'
 import { GetProductService } from './get-product/get-product.service'
 import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
 import { SearchProductService } from './search-product/search-product.service'
@@ -14,7 +17,7 @@ import { ProductRepository } from '~features/products/domain/repository/product_
 import { ProductSupabaseData } from '~features/products/infrastructure/product_supabase_data'
 import { AppModule } from '../app.module'
 import { DeleteProductController } from './delete-product/delete-product.controller'
-import { GetAllController } from './get-all-controller/get-all.controller'
+import { GetAllProductsController } from 'src/products/get-all-controller/get-all-products.controller'
 import { GetProductController } from './get-product/get-product.controller'
 import { RecommendProductController } from 'src/products/get-recommend-product/recommend-product.controller'
 import { SearchProductController } from './search-product/search-product.controller'
@@ -25,7 +28,8 @@ import { CreateProductService } from './create-product/create-product.service'
 @Module( {
 	controllers: [ UpdateProductController, SearchProductController,
 		RecommendProductController,
-		GetProductController, GetAllController, DeleteProductController, CreateProductController
+		GetProductController, GetAllProductsController, DeleteProductController,
+		CreateProductController, DeleteAllProductsController
 	],
 	providers  : [
 		{
@@ -35,11 +39,13 @@ import { CreateProductService } from './create-product/create-product.service'
 			},
 			inject    : [ SupabaseClient<Database> ]
 		},
+		ApplyAverageRankToProductService,
 		UpdateProductService, SearchProductService, RecommendProductService,
-		GetProductService, GetAllService, DeleteProductService,CreateProductService
+		GetProductService, GetAllProductsService, DeleteProductService,
+		CreateProductService, DeleteAllProductsService
 	],
 	imports    : [
-		forwardRef( () => AppModule ),
+		forwardRef( () => AppModule )
 	]
 } )
 export class ProductsModule {}

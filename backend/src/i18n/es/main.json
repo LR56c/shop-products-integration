@@ -1,8 +1,15 @@
 {
 	"HELLO": "Hello",
 	"from": "desde",
+	"to": "hasta",
+	"infrastructure": "Un error ha ocurrido en la infraestructura",
 	"invalid": {
+		"id": "El campo '{field}' debe ser un identificador válido",
+		"email": "El campo '{field}' debe ser un correo electrónico válido",
+		"url": "El campo '{field}' debe ser una URL válida",
+		"rank": "El campo '{field}' debe ser un rango válido",
 		"integer": "El numero '{field}' es inválido",
+		"date": "La fecha '{field}' es inválida",
 		"string": "El campo '{field}' es inválido",
 		"password": {
 			"uppercase": "La contraseña debe contener al menos una letra mayúscula",

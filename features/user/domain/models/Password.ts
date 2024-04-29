@@ -1,3 +1,4 @@
+import { BaseException } from 'features/shared/domain/exceptions/BaseException'
 import {
 	PasswordInsufficientCharacterException,
 	PasswordInsufficientLengthException,
@@ -36,7 +37,7 @@ export class Password {
 		                    .safeParse( value )
 
 		if ( parseValue.success === false ) {
-			const errors: Error[] = []
+			const errors: BaseException[] = []
 			for ( let e of parseValue.error.errors ) {
 
 				if ( e.message === 'lowercase' ) {
