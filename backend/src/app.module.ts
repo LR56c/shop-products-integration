@@ -30,7 +30,6 @@ import { PromotionsModule } from './promotions/promotions.module'
 import { ReportsModule } from './reports/reports.module'
 import { ReportsTypesModule } from './reports_types/reports_types.module'
 import { RolesTypesModule } from './roles_types/roles_types.module'
-import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
 import { RanksModule } from './ranks/ranks.module';
@@ -69,7 +68,7 @@ import { RanksModule } from './ranks/ranks.module';
 		} ),
 		PromotionsModule, NewsLettersModule, OrdersModule,
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule,
-		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
+		PaymentMethodsModule, CartsModule, ProductsModule,
 		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
 	exports		: [ TranslationService, SupabaseClient<Database> ]
