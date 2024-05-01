@@ -8,7 +8,7 @@ export class RecommendProductService {
 	constructor( private repository: ProductRepository ) {}
 
 	async recommendProductsGroupByCateogry( threshold: string, products: Product[],
-		limit: string ) : Promise<Map<string, Product[]>>
+		limit: number ) : Promise<Map<string, Product[]>>
 	{
 		return GetRecommendProductsGroupByCateogry( this.repository, {
 			threshold: threshold,

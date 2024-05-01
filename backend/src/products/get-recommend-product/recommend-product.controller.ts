@@ -100,7 +100,7 @@ export class RecommendProductController {
 		@Body( 'products' )
 			products: any,
 		@Body( 'limit' )
-			limit: string
+			limit: number
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
       const productResultList : Product[] = []

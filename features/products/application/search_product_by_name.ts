@@ -8,8 +8,8 @@ import { wrapType } from '../../shared/utils/WrapType'
 
 export const SearchProductByName = async ( repo: ProductRepository, props: {
 	name: string,
-	from: string,
-	to: string
+	from: number,
+	to: number
 } ): Promise<Product[]> => {
 
 	const errors: Error[] = []

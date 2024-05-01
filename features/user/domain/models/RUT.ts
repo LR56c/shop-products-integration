@@ -1,4 +1,4 @@
-import { InvalidRUTException } from 'features/user/domain/exceptions/InvalidRUTException'
+import { InvalidRUTException } from '../exceptions/InvalidRUTException'
 import { z } from 'zod'
 
 export class RUT {

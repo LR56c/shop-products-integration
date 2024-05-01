@@ -5,8 +5,8 @@ import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { wrapType } from '../../shared/utils/WrapType'
 
 export const GetAllProducts = async (repo : ProductRepository, props : {
-	from: string
-	to: string
+	from: number
+	to: number
 }): Promise<Product[]> =>   {
 
 	const errors : Error[] = []

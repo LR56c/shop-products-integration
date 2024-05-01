@@ -9,7 +9,7 @@ import { wrapType } from '../../shared/utils/WrapType'
 export const GetRecommendProductsGroupByCateogry = async ( repo: ProductRepository, props: {
 	threshold: string,
 	products: Product[],
-	limit: string,
+	limit: number,
 } ): Promise<Map<string, Product[]>> => {
 	const errors: Error[] = []
 
