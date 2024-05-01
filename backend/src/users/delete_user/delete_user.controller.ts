@@ -21,20 +21,20 @@ export class DeleteUserController {
 
 	@Delete( ':email' )
 	async deleteUser(
-		@Param() dto: DeleteUserDto
+		@Param('email') email: string
 	): Promise<HttpResult> {
 		try {
-			const email = wrapType<Email, BaseException>(
-				() => Email.from( dto.email ) )
+			const emailResult = wrapType<Email, BaseException>(
+				() => Email.from( email ) )
 
-			if ( email instanceof BaseException ) {
+			if ( emailResult instanceof BaseException ) {
 				return {
 					statusCode: HttpStatus.BAD_REQUEST,
-					message: this.translation.translateAll( [email])
+					message: this.translation.translateAll( [emailResult])
 				}
 			}
 
-			await this.deleteUserService.deleteUser( email )
+			await this.deleteUserService.deleteUser( emailResult )
 			return {
 				statusCode: HttpStatus.OK
 			}

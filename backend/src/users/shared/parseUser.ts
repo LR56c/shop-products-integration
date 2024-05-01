@@ -36,14 +36,14 @@ export function parseUser( dto: CreateUserDto ): {
 		errors.push( email )
 	}
 
-	const name = wrapType<RUT, InvalidStringException>(
+	const name = wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( dto.name ) )
 
 	if ( name instanceof BaseException ) {
 		errors.push( name )
 	}
 
-	const role = wrapType<RUT, InvalidRoleException>(
+	const role = wrapType<Role, InvalidRoleException>(
 		() => Role.from( dto.role ) )
 
 	if ( role instanceof BaseException ) {

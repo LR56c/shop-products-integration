@@ -6,7 +6,7 @@ import { ProductRepository } from '~features/products/domain/repository/product_
 export class SearchProductService {
     constructor(private repository: ProductRepository) {}
 
-    async searchProduct(name: string, from: string, to: string) {
+    async searchProduct(name: string, from: number, to: number) {
         return SearchProductByName(this.repository, {
             name,
             from,

@@ -1,3 +1,4 @@
+import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
 import {User} from "../domain/models/User";
 import {BaseException} from "../../shared/domain/exceptions/BaseException";
 import {InvalidRUTException} from "../domain/exceptions/InvalidRUTException";
@@ -14,11 +15,12 @@ export function userToJson(user: User): Record<string, any> {
     rut: user.rut.value,
     name: user.name.value,
     email: user.email.value,
-    role: user.role.value,
+    role_type: user.role.value,
   };
 }
 export function userFromJson(json: Record<string, any>): User | BaseException[] {
     const errors: BaseException[] = []
+  console.log('json', json)
 
     const rut = wrapType<RUT, InvalidRUTException>(
         () => RUT.from( json.rut ) )
@@ -37,10 +39,10 @@ export function userFromJson(json: Record<string, any>): User | BaseException[] 
         errors.push( new EmailException('email') )
     }
 
-    const role = wrapType<Role, InvalidStringException>(
-        () => Role.from( json.role ) )
+    const role = wrapType<Role, InvalidRoleException>(
+        () => Role.from( json.role_type ) )
     if ( role instanceof BaseException ) {
-        errors.push( new InvalidStringException('role') )
+        errors.push( new InvalidRoleException('role') )
     }
 
     if ( errors.length > 0 ) {

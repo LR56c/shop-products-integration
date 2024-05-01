@@ -23,8 +23,8 @@ export class GetAllProductsController {
 
 	@Get()
 	async getAll(
-		@Query( 'from' ) from: string,
-		@Query( 'to' ) to: string
+		@Query( 'from' ) from: number,
+		@Query( 'to' ) to: number
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 			const products = await this.getAllControllerService.getAll( from, to )

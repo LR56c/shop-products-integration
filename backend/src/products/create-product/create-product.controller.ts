@@ -79,8 +79,8 @@ export class CreateProductController {
       brand: string;
       image_url: string;
       rank: string;
-      price: string;
-      stock: string;
+      price: number;
+      stock: number;
       category_name: string;
     }
   ): Promise<HttpResult> {

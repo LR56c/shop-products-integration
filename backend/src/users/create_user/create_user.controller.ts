@@ -67,9 +67,9 @@ export class CreateUserController {
 
 			await this.createUserService.createUser( new User(
 				data.rut,
-				data.email,
 				data.name,
-				data.role
+				data.email,
+				data.role,
 			) )
 
 			return {

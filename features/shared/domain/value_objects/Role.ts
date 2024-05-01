@@ -1,3 +1,4 @@
+import { InvalidRoleException } from '../exceptions/InvalidRoleException'
 import { z } from 'zod'
 
 export enum RoleEnum {
@@ -20,7 +21,7 @@ export class Role {
 	static from( value: string ): Role {
 		const parseValue = RoleSchema.safeParse( value )
 		if ( !parseValue.success ) {
-			throw new Error( 'Invalid role' )
+			throw new InvalidRoleException()
 		}
 		return new Role( parseValue.data )
 	}

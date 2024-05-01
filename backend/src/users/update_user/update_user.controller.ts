@@ -2,35 +2,22 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
-	Param,
 	Put
 } from '@nestjs/common'
-import {
-	I18n,
-	I18nContext
-} from 'nestjs-i18n'
-import { CreateUserDto } from 'src/users/create_user/create_user_dto'
-import { parseUser } from 'src/users/shared/parseUser'
-import { UpdateUserDto } from 'src/users/update_user/update_user_dto'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { InvalidRoleException } from '~features/shared/domain/exceptions/InvalidRoleException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { Role } from '~features/shared/domain/value_objects/Role'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { InvalidRUTException } from '~features/user/domain/exceptions/InvalidRUTException'
-import { RUT } from '~features/user/domain/models/RUT'
-import { UpdateUserService } from './update_user.service'
 import {
 	ApiBody,
 	ApiTags
 } from '@nestjs/swagger'
+import {
+	I18n,
+	I18nContext
+} from 'nestjs-i18n'
+import { parseUser } from 'src/users/shared/parseUser'
+import { UpdateUserDto } from 'src/users/update_user/update_user_dto'
+import { User } from '~features/user/domain/models/User'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { userFromJson } from '~features/user/application/user_mapper'
-import { User } from '~features/user/domain/models/User'
+import { UpdateUserService } from './update_user.service'
 
 @ApiTags( 'users' )
 @Controller( 'users' )
@@ -49,19 +36,19 @@ export class UpdateUserController {
 					properties: {
 						rut  : {
 							type   : 'string',
-							example: '123456789'
+							example: '123456789-7'
 						},
 						name : {
 							type   : 'string',
 							example: 'John Doe'
 						},
+						role : {
+							type   : 'string',
+							example: 'CLIENT'
+						},
 						email: {
 							type   : 'string',
 							example: 'abc@gmail.com'
-						},
-						role : {
-							type   : 'string',
-							example: 'role'
 						}
 					}
 				}
@@ -69,7 +56,6 @@ export class UpdateUserController {
 		}
 	} )
 	async updateUser(
-		@I18n() i18n: I18nContext,
 		@Body( 'user' ) dto: UpdateUserDto
 	): Promise<HttpResult> {
 		try {
@@ -84,8 +70,8 @@ export class UpdateUserController {
 
 			await this.updateUserService.updateUser( data.email, new User(
 				data.rut,
-				data.email,
 				data.name,
+				data.email,
 				data.role
 			) )
 

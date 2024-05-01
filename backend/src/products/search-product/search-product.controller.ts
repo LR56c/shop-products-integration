@@ -21,8 +21,8 @@ export class SearchProductController {
   @Get( 'search' )
   async searchProduct(
     @Query( 'name' ) name: string,
-    @Query( 'to' ) to: string,
-    @Query( 'from' ) from: string,
+    @Query( 'to' ) to: number,
+    @Query( 'from' ) from: number,
   ): Promise<HttpResultData<Record<string, any>[]>> {
     try {
       const products = await this.searchProductService.searchProduct( name, to, from )
