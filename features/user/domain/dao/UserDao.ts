@@ -9,6 +9,4 @@ export abstract class UserDao {
     abstract getUser(role: Role, name: ValidString, from: ValidInteger, to: ValidInteger): Promise<User[]>
     abstract updateUser(email: Email, user : User ): Promise<boolean>
     abstract deleteUser(email: Email): Promise<boolean>
-
-
 }

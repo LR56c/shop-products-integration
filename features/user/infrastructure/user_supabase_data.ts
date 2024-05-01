@@ -22,7 +22,7 @@ export class UserSupaBaseData implements UserDao {
             .range(from.value, to.value)
 
         if (result.error) {
-            throw [new InfrastructureException()]
+            throw new InfrastructureException()
         }
 
         const users: User[] = []
@@ -42,7 +42,7 @@ export class UserSupaBaseData implements UserDao {
                 .eq('email', email)
             return true
         } catch (e) {
-            throw [new InfrastructureException()]
+            throw new InfrastructureException()
         }
     }
     async deleteUser(email: ValidString): Promise<boolean> {
@@ -52,7 +52,7 @@ export class UserSupaBaseData implements UserDao {
                 .eq('email', email)
             return true
         } catch (e) {
-            throw [new InfrastructureException()]
+            throw new InfrastructureException()
         }
     }
     async createUser(user: User): Promise<boolean> {
@@ -61,7 +61,7 @@ export class UserSupaBaseData implements UserDao {
                 .insert(userToJson(user) as any)
             return true
         } catch (e) {
-            throw [new InfrastructureException()]
+            throw new InfrastructureException()
         }
     }
 }

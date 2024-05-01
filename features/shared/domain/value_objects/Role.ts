@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-enum RoleEnum {
+export enum RoleEnum {
 	ADMIN       = 'ADMIN',
 	SHOP_KEEPER = 'SHOPKEEPER',
 	CLIENT      = 'CLIENT',
