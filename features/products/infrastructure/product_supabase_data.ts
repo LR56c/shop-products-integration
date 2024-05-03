@@ -20,20 +20,6 @@ export class ProductSupabaseData implements ProductRepository {
 
 	readonly tableName = 'products'
 
-	async deleteAll(): Promise<boolean> {
-		try {
-			await this.client.from( this.tableName )
-			          .delete()
-
-			return true
-		}
-		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
-			throw [ new InfrastructureException() ]
-		}
-	}
-
 	async createProduct( product: Product ): Promise<boolean> {
 		const result = await this.client.from( this.tableName )
 		                         .insert( productToJson( product ) as any )
@@ -47,21 +33,28 @@ export class ProductSupabaseData implements ProductRepository {
 		return true
 	}
 
-	async getAll( from: ValidInteger, to: ValidInteger ): Promise<Product[]> {
+	async getAll( from: ValidInteger, to: ValidInteger,
+		name?: ValidString ): Promise<Product[]> {
 
-		const result = await this.client.from( this.tableName )
-		                         .select()
-		                         .range( from.value, to.value )
+		const result = this.client.from( this.tableName )
+		                   .select()
 
-		if ( result.error ) {
-			if ( result.error.code === 'PGRST103' ) {
+		if ( name !== undefined ) {
+			result.eq( 'name', name.value )
+		}
+
+		const {data, error} = await result.range( from.value, to.value )
+
+
+		if ( error ) {
+			if ( error.code === 'PGRST103' ) {
 				throw [ new LimitIsNotInRange() ]
 			}
 			throw [ new InfrastructureException() ]
 		}
 
 		const products: Product[] = []
-		for ( const json of result.data ) {
+		for ( const json of data ) {
 
 			const product = productFromJson( json )
 
@@ -99,13 +92,13 @@ export class ProductSupabaseData implements ProductRepository {
 	): Promise<boolean> {
 		try {
 			const result = await this.client.from( this.tableName )
-			          .update( productToJson( product ) as any )
-			          .eq(
-				          'product_code',
-				          product.product_code.value
-			          )
-			console.log("result")
-			console.log(result)
+			                         .update( productToJson( product ) as any )
+			                         .eq(
+				                         'product_code',
+				                         product.product_code.value
+			                         )
+			console.log( 'result' )
+			console.log( result )
 			return true
 		}
 		catch ( e ) {
@@ -130,38 +123,6 @@ export class ProductSupabaseData implements ProductRepository {
 			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
-	}
-
-	async searchProduct( name: ValidString, from: ValidInteger,
-		to: ValidInteger ): Promise<Product[]> {
-
-		const result = await this.client.from( this.tableName )
-		                         .select()
-		                         .range( from.value, to.value )
-		                         .ilike( 'name', `%${ name.value }%` )
-
-		if ( result.error ) {
-			console.log( 'supabase unexpected error' )
-			console.log( result.error )
-			throw [ new InfrastructureException() ]
-		}
-
-		const errors: BaseException[] = []
-
-		const products: Product[] = []
-
-		for ( const json of result.data ) {
-			const product = productFromJson( json )
-
-			if ( product instanceof BaseException ) {
-				errors.push( product )
-				throw errors
-			}
-
-			products.push( product as Product )
-		}
-
-		return products
 	}
 
 	public getRecommendProductsGroupByCategory( threshold: ValidRank,

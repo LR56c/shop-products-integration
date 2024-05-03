@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { GetProductByCode } from '~features/products/application/get_product_by_code'
-import { UpdateProduct } from '~features/products/application/update_product'
 import { Product } from '~features/products/domain/models/product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
 import { ProductRankUpdateEvent } from '~features/shared/domain/events/product_rank_update_event'
+import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { wrapType } from '~features/shared/utils/WrapType'
 
 @Injectable()
 export class ApplyAverageRankToProductService {
@@ -16,9 +17,15 @@ export class ApplyAverageRankToProductService {
 	@OnEvent( ProductRankUpdateEvent.tag )
 	async handleEvent( payload: ProductRankUpdateEvent ) {
 		try {
-			const productResult = await GetProductByCode( this.repository,
-				{ code: payload.code } )
+			const code = wrapType<ValidString, InvalidStringException>(
+				() => ValidString.from( payload.code ) )
 
+			if ( code instanceof InvalidStringException ) {
+				throw code
+			}
+
+			const productResult = await this.repository.getProduct(
+				code as ValidString )
 
 			const newProduct = new Product(
 				productResult.id,
@@ -31,14 +38,11 @@ export class ApplyAverageRankToProductService {
 				productResult.price,
 				productResult.image_url,
 				productResult.stock,
-				ValidRank.from( payload.rank.toString()),
+				ValidRank.from( payload.rank ),
 				productResult.category_name
 			)
 
-			await UpdateProduct( this.repository, {
-				code   : payload.code,
-				product: newProduct
-			} )
+			await this.repository.updateProduct( newProduct )
 
 			console.log( `success updated average rank of product ${ payload.code }` )
 		}

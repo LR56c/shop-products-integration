@@ -1,29 +1,35 @@
 import {
 	Body,
 	Controller,
-	Get,
 	HttpStatus,
-	Post,
-	Query
+	Post
 } from '@nestjs/common'
 import {
 	ApiBody,
 	ApiTags
 } from '@nestjs/swagger'
+import { GetRecommendProductDto } from 'src/products/get-recommend-product/get_recommend_product_dto'
+import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
+import { ProductDto } from 'src/products/shared/dto/product_dto'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { Product } from '~features/products/domain/models/product'
-import { TranslationService } from '../../shared/services/translation/translation.service'
 import {
 	productFromJson,
 	productToJson
 } from '~features/products/application/product_mapper'
-import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
+import { Product } from '~features/products/domain/models/product'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
+import { wrapType } from '~features/shared/utils/WrapType'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 
 @ApiTags( 'products' )
 @Controller( 'products' )
 export class RecommendProductController {
 	constructor( private readonly getRecommendProductService: RecommendProductService,
-    private readonly translation: TranslationService) {}
+		private readonly translation: TranslationService )
+	{}
 
 	@Post( 'recommend' )
 	@ApiBody( {
@@ -34,58 +40,58 @@ export class RecommendProductController {
 					type   : 'string',
 					example: '2'
 				},
-				limit: {
+				limit    : {
 					type   : 'string',
 					example: '2'
 				},
-				products: {
+				products : {
 					type      : 'object',
 					properties: {
-						id           : {
+						id          : {
 							type   : 'string',
 							example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
 						},
-						code         : {
+						code        : {
 							type   : 'string',
 							example: 'abc'
 						},
-						product_code         : {
+						product_code: {
 							type   : 'string',
 							example: 'abc2'
 						},
-						name         : {
+						name        : {
 							type   : 'string',
 							example: 'n'
 						},
-						description  : {
+						description : {
 							type   : 'string',
 							example: 'd'
 						},
-						created_at    : {
+						created_at  : {
 							type   : 'string',
 							example: '2024-04-27'
 						},
-						brand        : {
+						brand       : {
 							type   : 'string',
 							example: 'b'
 						},
-						price        : {
+						price       : {
 							type   : 'number',
 							example: 2
 						},
-						image_url    : {
+						image_url   : {
 							type   : 'string',
 							example: 'http://img'
 						},
-						stock        : {
+						stock       : {
 							type   : 'number',
 							example: 2
 						},
-						rank         : {
+						rank        : {
 							type   : 'number',
 							example: 2
 						},
-						category: {
+						category    : {
 							type   : 'string',
 							example: 'TEST'
 						}
@@ -95,52 +101,86 @@ export class RecommendProductController {
 		}
 	} )
 	async getRecommendProducts(
-		@Body( 'threshold' )
-			threshold: string,
-		@Body( 'products' )
-			products: any,
-		@Body( 'limit' )
-			limit: number
+		@Body() dto: GetRecommendProductDto
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-      const productResultList : Product[] = []
+			console.log( 'dto', dto )
 
-      for ( const product of products ) {
-        const p = productFromJson( product )
-        if ( !( p instanceof Product ) ) {
-          return {
-            statusCode: HttpStatus.BAD_REQUEST,
-            message   : this.translation.translateAll( p )
-          }
-        }
-        productResultList.push( p as Product )
-      }
+			const { errors, data } = this.parseRecommendProduct( dto )
 
+			if ( errors.length > 0 ) {
+				return {
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll( errors )
+				}
+			}
 
 			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
-				threshold,
-				productResultList,
-				limit,
-			)
+				data.threshold, data.products, data.limit )
 
-			let json : Record<string, any[]>[] = []
+			let json: Record<string, any[]>[] = []
 
 			productsGroupByCategory.forEach( ( productList, key ) => {
 				const products = productList.map( product => productToJson( product ) )
-				json.push( { [ key ]: products } )
-			})
+				json.push( { [key]: products } )
+			} )
 
 			return {
-				data: json,
+				data      : json,
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
-			console.log( "e" )
+			console.log( 'e' )
 			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
+			}
+		}
+	}
+
+	parseRecommendProduct( dto: {
+		threshold: number, products: ProductDto[], limit: number
+	} ): {
+		errors: BaseException[],
+		data: {
+			threshold: ValidRank, products: Product[], limit: ValidInteger
+		}
+	}
+	{
+		const errors: BaseException[]      = []
+		const productResultList: Product[] = []
+
+		for ( const product of dto.products ) {
+			const p = productFromJson( product )
+			if ( !( p instanceof Product ) ) {
+				errors.push( ...p )
+				break
+			}
+			productResultList.push( p as Product )
+		}
+
+		const limit = wrapType<ValidInteger, InvalidIntegerException>(
+			() => ValidInteger.from( dto.limit ) )
+
+		if ( limit instanceof InvalidIntegerException ) {
+			errors.push( limit )
+		}
+
+		const threshold = wrapType<ValidRank, InvalidIntegerException>(
+			() => ValidRank.from( dto.threshold ) )
+
+		if ( threshold instanceof InvalidIntegerException ) {
+			errors.push( threshold )
+		}
+
+		return {
+			errors,
+			data: {
+				threshold: threshold as ValidRank,
+				products : productResultList,
+				limit    : limit as ValidInteger
 			}
 		}
 	}

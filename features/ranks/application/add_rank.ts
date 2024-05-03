@@ -10,10 +10,10 @@ import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../shared/utils/WrapType'
 
-export const AddRank = async ( repo: RankRepository, props: {
+export const AddRank = async (props: {
 	code: string
-	rank: string
-} ): Promise<boolean> => {
+	rank: number
+} ): Promise<Rank> => {
 	const errors: BaseException[] = []
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(
@@ -41,14 +41,10 @@ export const AddRank = async ( repo: RankRepository, props: {
 		throw errors
 	}
 
-	const rank = new Rank(
+	return new Rank(
 		UUID.create(),
 		dateResult as ValidDate,
 		rankResult as ValidRank,
 		codeResult as ValidString
 	)
-
-	await repo.addRank( rank )
-
-	return true
 }

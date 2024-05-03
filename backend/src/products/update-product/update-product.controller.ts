@@ -9,6 +9,7 @@ import {
 	ApiBody,
 	ApiTags
 } from '@nestjs/swagger'
+import { ProductDto } from 'src/products/shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { productFromJson } from '~features/products/application/product_mapper'
@@ -85,10 +86,10 @@ export class UpdateProductController {
 		}
 	} )
 	async updateProduct(
-		@Body( 'product' ) body: any
+		@Body( 'product' ) dto: ProductDto
 	): Promise<HttpResult> {
 		try {
-			const p = productFromJson( body )
+			const p = productFromJson( dto )
 
 			if ( !( p instanceof Product ) ) {
 				return {
