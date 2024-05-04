@@ -7,13 +7,19 @@ import {
 } from '@nestjs/common'
 import {
 	ApiBody,
+	ApiOperation,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { ProductDto } from 'src/products/shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { productFromJson } from '~features/products/application/product_mapper'
 import { Product } from '~features/products/domain/models/product'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { UpdateProductService } from './update-product.service'
 
 @ApiTags( 'products' )
@@ -23,7 +29,7 @@ export class UpdateProductController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put( ':code' )
+	@Put( ':product_code' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -33,7 +39,7 @@ export class UpdateProductController {
 					properties: {
 						id           : {
 							type   : 'string',
-							example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
+							example: 'aab298c3-6b7e-4c3e-b6fc-0817bb49837a'
 						},
 						code         : {
 							type   : 'string',
@@ -41,7 +47,7 @@ export class UpdateProductController {
 						},
 						product_code         : {
 							type   : 'string',
-							example: 'abc'
+							example: 'abc2'
 						},
 						name         : {
 							type   : 'string',
@@ -65,17 +71,17 @@ export class UpdateProductController {
 						},
 						image_url    : {
 							type   : 'string',
-							example: 'http://img'
+							example: 'http://img.com/img.jpg'
 						},
 						stock        : {
 							type   : 'number',
-							example: 2
+							example: 2.0
 						},
 						average_rank         : {
 							type   : 'number',
 							example: 2
 						},
-						category_name: {
+						category: {
 							type   : 'string',
 							example: 'TEST'
 						}
@@ -84,11 +90,81 @@ export class UpdateProductController {
 			}
 		}
 	} )
+	@ApiOperation( {
+		summary: 'Update a product',
+		description: 'Update a product by product_code and json data',
+	} )
+	@ApiResponse( {
+		status     : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
+					}
+				}
+			}
+		}
+	} )
 	async updateProduct(
-		@Body( 'product' ) body: any
+		@Param( 'product_code' ) product_code : string,
+		@Body( 'product' ) dto: ProductDto
 	): Promise<HttpResult> {
 		try {
-			const p = productFromJson( body )
+			const product_codeResult = wrapType<ValidString, InvalidStringException>(
+				() => ValidString.from( product_code ) )
+
+			if ( product_codeResult instanceof InvalidStringException ) {
+				throw [new InvalidStringException('product_code')]
+			}
+
+			const p = productFromJson( dto )
 
 			if ( !( p instanceof Product ) ) {
 				return {
@@ -97,7 +173,7 @@ export class UpdateProductController {
 				}
 			}
 
-			await this.updateProductService.updateProduct( p as Product )
+			await this.updateProductService.updateProduct(product_codeResult as ValidString, p as Product )
 
 			return {
 				statusCode: HttpStatus.OK
@@ -105,7 +181,7 @@ export class UpdateProductController {
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.BAD_REQUEST
+				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
 			}
 		}
 	}

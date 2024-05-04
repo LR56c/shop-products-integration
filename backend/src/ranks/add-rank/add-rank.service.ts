@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { AddRank } from '~features/ranks/application/add_rank'
+import { Rank } from '~features/ranks/domain/rank'
 import { RankRepository } from '~features/ranks/domain/rank_repository'
 
 @Injectable()
 export class AddRankService {
 	constructor(private repo : RankRepository) {}
 
-	async execute( code: string, rank: string ): Promise<boolean> {
-		return AddRank( this.repo, { code, rank } )
+	async execute(rank : Rank): Promise<boolean> {
+		return this.repo.addRank(rank)
 	}
 }

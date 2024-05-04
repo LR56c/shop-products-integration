@@ -1,8 +1,9 @@
-import { BaseException } from '../domain/exceptions/BaseException'
+import { InfrastructureException } from './infrastructure_exception'
 
-export class ParameterNotMatchException extends BaseException {
-	constructor(readonly field?: string, message?: string, readonly value?: string) {
-		super( `infrastructure${message != null ? `.${message}`:''}`, value, field)
+export class ParameterNotMatchException extends InfrastructureException {
+	constructor(readonly field?: string, readonly value?: string) {
+		super( value, field)
+		this.message = `${this.message}parameter_not_match`
 		this.name = "ParameterNotMatchException"
 	}
 }

@@ -1,8 +1,9 @@
 import { BaseException } from '../domain/exceptions/BaseException'
 
 export class InfrastructureException extends BaseException {
-	constructor(readonly field?: string, message?: string, readonly value?: string) {
-		super( `infrastructure${message != null ? `.${message}`:''}`, value, field)
+	constructor(message?: string, readonly field?: string, readonly value?: string) {
+		super( value, field)
+		this.message = `infrastructure.${message != null ? `.${message}`:''}`
 		this.name = "InfrastructureException"
 	}
 }

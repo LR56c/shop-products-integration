@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { GetProductByCode } from '~features/products/application/get_product_by_code'
-import { UpdateProduct } from '~features/products/application/update_product'
 import { Product } from '~features/products/domain/models/product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
 import { ProductRankUpdateEvent } from '~features/shared/domain/events/product_rank_update_event'
+import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { wrapType } from '~features/shared/utils/WrapType'
 
 @Injectable()
 export class ApplyAverageRankToProductService {
@@ -16,8 +17,8 @@ export class ApplyAverageRankToProductService {
 	@OnEvent( ProductRankUpdateEvent.tag )
 	async handleEvent( payload: ProductRankUpdateEvent ) {
 		try {
-			const productResult = await GetProductByCode( this.repository,
-				{ code: payload.code } )
+			const productResult = await this.repository.getProduct(
+				payload.product_code )
 
 
 			const newProduct = new Product(
@@ -31,19 +32,18 @@ export class ApplyAverageRankToProductService {
 				productResult.price,
 				productResult.image_url,
 				productResult.stock,
-				ValidRank.from( payload.rank.toString()),
+				payload.average_value,
 				productResult.category_name
 			)
 
-			await UpdateProduct( this.repository, {
-				code   : payload.code,
-				product: newProduct
-			} )
+			await this.repository.updateProduct( payload.product_code, newProduct )
 
-			console.log( `success updated average rank of product ${ payload.code }` )
+			console.log(
+				`success updated average rank of product ${ payload.product_code }` )
 		}
 		catch ( e ) {
-			console.log( `failed updated average rank of product ${ payload.code }` )
+			console.log(
+				`failed updated average rank of product ${ payload.product_code }` )
 			console.log( e )
 		}
 	}

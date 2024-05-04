@@ -6,6 +6,7 @@ import { BaseException } from '~features/shared/domain/exceptions/BaseException'
  */
 export interface FlatErrors {
 	token: string,
+	field: string,
 	type: string
 }
 
@@ -15,6 +16,7 @@ export function flatErrors( errors: BaseException[] ): Map<string, FlatErrors>
 	errors.map( ( error ) => {
 		map.set( error.message, {
 			'token': error.message,
+			'field': error.field ?? '',
 			'type' : error.value ?? 'undefined'
 		} )
 	} )
