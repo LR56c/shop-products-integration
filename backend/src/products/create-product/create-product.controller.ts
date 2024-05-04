@@ -44,10 +44,6 @@ export class CreateProductController {
 							type   : 'string',
 							example: 'n'
 						},
-						description  : {
-							type   : 'string',
-							example: 'd'
-						},
 						brand        : {
 							type   : 'string',
 							example: 'b'
@@ -58,17 +54,17 @@ export class CreateProductController {
 						},
 						image_url    : {
 							type   : 'string',
-							example: 'http://img'
+							example: 'http://img.com/img.jpg'
 						},
 						stock        : {
 							type   : 'number',
 							example: 2
 						},
-						rank         : {
-							type   : 'number',
-							example: 2
+						description  : {
+							type   : 'string',
+							example: 'd'
 						},
-						category_name: {
+						category: {
 							type   : 'string',
 							example: 'TEST'
 						}
@@ -78,15 +74,66 @@ export class CreateProductController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Create a product'
+		summary: 'Create a product',
+		description: 'Create a product by json data',
 	} )
 	@ApiResponse( {
 		status     : 200,
-		description: 'CODE: 200. The product has been successfully created.'
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
 	} )
 	@ApiResponse( {
 		status     : 400,
-		description: 'CODE: 400 with translation. The product could not be created.'
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
+					}
+				}
+			}
+		}
 	} )
 	async createProduct(
 		@Body( 'product' ) dto: CreateProductDto
@@ -102,7 +149,7 @@ export class CreateProductController {
 				image_url    : dto.image_url,
 				price        : dto.price,
 				stock        : dto.stock,
-				category_name: dto.category_name
+				category_name: dto.category
 			} )
 
 			await this.createProductService.createProduct( productResult as Product )

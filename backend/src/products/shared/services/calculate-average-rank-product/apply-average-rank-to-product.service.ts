@@ -17,15 +17,9 @@ export class ApplyAverageRankToProductService {
 	@OnEvent( ProductRankUpdateEvent.tag )
 	async handleEvent( payload: ProductRankUpdateEvent ) {
 		try {
-			const code = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( payload.code ) )
-
-			if ( code instanceof InvalidStringException ) {
-				throw code
-			}
-
 			const productResult = await this.repository.getProduct(
-				code as ValidString )
+				payload.product_code )
+
 
 			const newProduct = new Product(
 				productResult.id,
@@ -38,16 +32,18 @@ export class ApplyAverageRankToProductService {
 				productResult.price,
 				productResult.image_url,
 				productResult.stock,
-				ValidRank.from( payload.rank ),
+				payload.average_value,
 				productResult.category_name
 			)
 
-			await this.repository.updateProduct( newProduct )
+			await this.repository.updateProduct( payload.product_code, newProduct )
 
-			console.log( `success updated average rank of product ${ payload.code }` )
+			console.log(
+				`success updated average rank of product ${ payload.product_code }` )
 		}
 		catch ( e ) {
-			console.log( `failed updated average rank of product ${ payload.code }` )
+			console.log(
+				`failed updated average rank of product ${ payload.product_code }` )
 			console.log( e )
 		}
 	}

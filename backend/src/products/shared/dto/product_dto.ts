@@ -3,6 +3,7 @@ import {
 	IsDate,
 	IsDecimal,
 	IsInt,
+	IsNumber,
 	IsOptional,
 	IsString,
 	IsUrl,
@@ -52,14 +53,12 @@ export class ProductDto{
 	@IsInt()
 	stock : number
 
-	@Min(0)
-	@Max(5)
-	@IsDecimal()
+	@IsNumber()
 	average_rank : number
 
 	@MinLength(1)
 	@IsString()
-	category_name : string
+	category : string
 
 	@IsOptional()
 	@ValidateNested()

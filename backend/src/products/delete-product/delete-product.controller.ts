@@ -5,7 +5,11 @@ import {
 	HttpStatus,
 	Param
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+	ApiOperation,
+	ApiResponse,
+	ApiTags
+} from '@nestjs/swagger'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
@@ -21,17 +25,79 @@ export class DeleteProductController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Delete( ':code' )
+	@Delete( ':product_code' )
+	@ApiOperation( {
+		summary: 'Delete product',
+		description: 'Delete product by product_code'
+	} )
+	@ApiResponse( {
+		status     : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
+					}
+				}
+			}
+		}
+	} )
 	async deleteProduct(
-		@Param( 'code' ) code: string
+		@Param( 'product_code' ) product_code: string
 	): Promise<HttpResult> {
 		try {
 
 			const codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( code ) )
+				() => ValidString.from( product_code ) )
 
 			if ( codeResult instanceof InvalidStringException ) {
-				throw codeResult
+				throw [new  InvalidStringException( 'product_code' )]
 			}
 
 			const product = await this.deleteProductService.deleteProduct(

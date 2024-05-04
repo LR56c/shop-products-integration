@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common'
 import {
 	ApiBody,
+	ApiOperation,
 	ApiTags
 } from '@nestjs/swagger'
 import { GetRecommendProductDto } from 'src/products/get-recommend-product/get_recommend_product_dto'
@@ -32,6 +33,10 @@ export class RecommendProductController {
 	{}
 
 	@Post( 'recommend' )
+	@ApiOperation( {
+		summary: 'Get recommend products',
+		description: 'Get recommend products by products related, threshold and limit',
+	} )
 	@ApiBody( {
 		schema: {
 			type      : 'object',

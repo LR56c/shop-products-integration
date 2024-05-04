@@ -16,5 +16,5 @@ export abstract class ProductRepository {
 	abstract getRecommendProductsGroupByCategory( threshold: ValidRank,
 		products: Product[], limit: ValidInteger ): Promise<Map<string, Product[]>>
 
-	abstract updateProduct( product: Product ): Promise<boolean>
+	abstract updateProduct(product_code : ValidString, product: Product ): Promise<boolean>
 }

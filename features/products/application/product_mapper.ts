@@ -112,15 +112,13 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 	}
 
 	const category_name = wrapType<ValidString, InvalidStringException>(
-		() => ValidString.from( json.category_name ) )
+		() => ValidString.from( json.category ) )
 
 	if ( category_name instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'category' ) )
 	}
 
 	if ( errors.length > 0 ) {
-		console.log("usecase")
-		console.log(errors)
 		throw errors
 	}
 

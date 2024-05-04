@@ -5,7 +5,9 @@ import {
 	Query
 } from '@nestjs/common'
 import {
+	ApiOperation,
 	ApiQuery,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
 import { GetAllProductsService } from 'src/products/get-all-controller/get-all-products.service'
@@ -14,9 +16,7 @@ import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { productToJson } from '~features/products/application/product_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidRoleException } from '~features/shared/domain/exceptions/InvalidRoleException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { Role } from '~features/shared/domain/value_objects/Role'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
@@ -31,22 +31,140 @@ export class GetAllProductsController {
 	{}
 
 	@Get()
-	@ApiQuery({
-		name: 'name',
-		type: String,
-		required: false,
-	})
+	@ApiQuery( {
+		name    : 'name',
+		type    : String,
+		required: false
+	} )
+	@ApiOperation( {
+		summary: 'Get all products',
+		description: 'Get all products from a range of products, and optionally filter by name',
+	} )
+	@ApiResponse( {
+		status : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						},
+						data      : {
+							type : 'array',
+							items: {
+								type      : 'object',
+								properties: {
+									id          : {
+										type   : 'string',
+										example: 'uuid'
+									},
+									code        : {
+										type   : 'string',
+										example: 'string'
+									},
+									product_code: {
+										type   : 'string',
+										example: 'string'
+									},
+									name        : {
+										type   : 'string',
+										example: 'string'
+									},
+									description : {
+										type   : 'string',
+										example: 'string'
+									},
+									created_at  : {
+										type   : 'string',
+										example: 'date'
+									},
+									brand       : {
+										type   : 'string',
+										example: 'string'
+									},
+									price       : {
+										type   : 'string',
+										example: 'number'
+									},
+									image_url   : {
+										type   : 'string',
+										example: 'url'
+									},
+									stock       : {
+										type   : 'string',
+										example: 'number'
+									},
+									average_rank: {
+										type   : 'string',
+										example: 'decimal'
+									},
+									category    : {
+										type   : 'string',
+										example: 'string'
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message   : {
+							type      : 'object',
+							properties: {
+								code_error: {
+									type   : 'string',
+									example: 'error translation'
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content    : {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						}
+					}
+				}
+			}
+		}
+	} )
 	async getAll(
 		@Query( 'from' ) from: number,
 		@Query( 'to' ) to: number,
-		@Query( 'name' ) name?: string,
+		@Query( 'name' ) name?: string
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllProduct( { from, to , name} )
+			const { data } = this.parseGetAllProduct( { from, to, name } )
 
 			const products = await this.getAllControllerService.getAll( data.from,
-				data.to )
+				data.to, data.name )
 
 			let json: Record<string, any>[] = []
 			for ( const product of products ) {
@@ -84,18 +202,24 @@ export class GetAllProductsController {
 			() => ValidInteger.from( dto.from ) )
 
 		if ( from instanceof InvalidIntegerException ) {
-			errors.push( from )
+			errors.push( new InvalidIntegerException( 'from' ) )
 		}
 
 		const to = wrapType<ValidInteger, InvalidIntegerException>(
 			() => ValidInteger.from( dto.to ) )
 
 		if ( to instanceof InvalidIntegerException ) {
-			errors.push( to )
+			errors.push( new InvalidIntegerException( 'to' ) )
 		}
 
-		const name = dto.name === undefined ? undefined : wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( dto.name ?? '' ) )
+		const name = dto.name === undefined
+			? undefined
+			: wrapType<ValidString, InvalidStringException>(
+				() => ValidString.from( dto.name ?? '' ) )
+
+		if ( name != undefined && name instanceof InvalidStringException ) {
+			errors.push( new InvalidStringException( 'name' ) )
+		}
 
 		if ( errors.length > 0 ) {
 			throw errors

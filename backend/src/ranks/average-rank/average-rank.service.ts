@@ -4,6 +4,7 @@ import { CalculateAverageRankByCode } from '~features/ranks/application/calculat
 import { RankRepository } from '~features/ranks/domain/rank_repository'
 import { ProductRankUpdateEvent } from '~features/shared/domain/events/product_rank_update_event'
 import { ValidDecimal } from '~features/shared/domain/value_objects/ValidDecimal'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 
 @Injectable()
 export class AverageRankService {
@@ -11,13 +12,12 @@ export class AverageRankService {
 		private eventEmitter: EventEmitter2 )
 	{}
 
-	async execute( code: string ): Promise<ValidDecimal> {
-		const result = await CalculateAverageRankByCode( this.repo,
-			{ code } )
+	async execute( code: ValidString ): Promise<ValidDecimal> {
+		const result = await CalculateAverageRankByCode( this.repo, code)
 
 		this.eventEmitter.emit( ProductRankUpdateEvent.tag, {
 			product_code : code,
-			average_value: result.value
+			average_value: result
 		} )
 
 		return result

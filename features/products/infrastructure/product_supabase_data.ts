@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { LimitIsNotInRange } from '../../shared/infrastructure/limit_is_not_in_range'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
+import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
@@ -43,12 +44,15 @@ export class ProductSupabaseData implements ProductRepository {
 			result.eq( 'name', name.value )
 		}
 
-		const {data, error} = await result.range( from.value, to.value )
+		const { data, error } = await result.range( from.value, to.value )
 
+		if ( name != undefined && data?.length === 0 ) {
+			throw [ new ParameterNotMatchException( 'name' ) ]
+		}
 
 		if ( error ) {
 			if ( error.code === 'PGRST103' ) {
-				throw [ new LimitIsNotInRange() ]
+				throw [ new LimitIsNotInRangeException() ]
 			}
 			throw [ new InfrastructureException() ]
 		}
@@ -68,48 +72,60 @@ export class ProductSupabaseData implements ProductRepository {
 	}
 
 	async getProduct( code: ValidString ): Promise<Product> {
-		const result = await this.client.from( this.tableName )
-		                         .select()
-		                         .eq( 'product_code', code.value )
+		try {
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'product_code', code.value )
 
-		if ( result.error ) {
-			console.log( 'supabase unexpected error' )
-			console.log( result.error )
-			throw [ new InfrastructureException() ]
+			if ( result.error ) {
+				throw [ new InfrastructureException() ]
+			}
+
+			if ( result.data.length === 0 ) {
+				throw [ new ParameterNotMatchException( 'product_code' ) ]
+			}
+
+			const product = productFromJson( result.data[0] )
+
+			if ( product instanceof BaseException ) {
+				throw product
+			}
+
+			return product as Product
 		}
-
-		const product = productFromJson( result.data[0] )
-
-		if ( product instanceof BaseException ) {
-			throw product
+		catch ( e ) {
+			throw e
 		}
-
-		return product as Product
 	}
 
 	async updateProduct(
+		product_code: ValidString,
 		product: Product
 	): Promise<boolean> {
 		try {
-			const result = await this.client.from( this.tableName )
-			                         .update( productToJson( product ) as any )
-			                         .eq(
-				                         'product_code',
-				                         product.product_code.value
-			                         )
-			console.log( 'result' )
-			console.log( result )
+			await this.client.from( this.tableName )
+			          .update( productToJson( product ) as any )
+			          .eq(
+				          'product_code',
+				          product_code.value
+			          )
 			return true
 		}
 		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
 			throw [ new InfrastructureException() ]
 		}
 	}
 
 	async deleteProduct( code: ValidString ): Promise<boolean> {
 		try {
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'product_code', code.value )
+
+			if ( result.data?.length === 0 ) {
+				throw [ new ParameterNotMatchException( 'product_code' ) ]
+			}
+
 			await this.client.from( this.tableName )
 			          .delete()
 			          .eq(
@@ -119,9 +135,7 @@ export class ProductSupabaseData implements ProductRepository {
 			return true
 		}
 		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
-			throw [ new InfrastructureException() ]
+			throw e
 		}
 	}
 
