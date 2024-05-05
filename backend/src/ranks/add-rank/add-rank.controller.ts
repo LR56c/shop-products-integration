@@ -11,10 +11,7 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { Product } from '~features/products/domain/models/product'
 import { AddRank } from '~features/ranks/application/add_rank'
-import { Rank } from '~features/ranks/domain/rank'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { AddRankService } from './add-rank.service'
 

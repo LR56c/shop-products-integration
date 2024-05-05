@@ -100,7 +100,7 @@ export class DeleteProductController {
 				throw [new  InvalidStringException( 'product_code' )]
 			}
 
-			const product = await this.deleteProductService.deleteProduct(
+			await this.deleteProductService.deleteProduct(
 				codeResult as ValidString )
 			return {
 				statusCode: HttpStatus.OK
