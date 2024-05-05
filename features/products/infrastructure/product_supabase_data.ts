@@ -26,6 +26,7 @@ export class ProductSupabaseData implements ProductRepository {
 		                         .insert( productToJson( product ) as any )
 
 		if ( result.error != null ) {
+
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'product' ) ]
 			}

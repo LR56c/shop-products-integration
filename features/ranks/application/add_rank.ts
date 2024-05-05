@@ -1,5 +1,6 @@
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Email } from '../../shared/domain/value_objects/Email'
 import { Rank } from '../domain/rank'
-import { RankRepository } from '../domain/rank_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
@@ -12,6 +13,7 @@ import { wrapType } from '../../shared/utils/WrapType'
 
 export const AddRank = async (props: {
 	code: string
+	user_email: string
 	rank: number
 } ): Promise<Rank> => {
 	const errors: BaseException[] = []
@@ -37,12 +39,20 @@ export const AddRank = async (props: {
 		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
+	const email = wrapType<Email, EmailException>(
+		() => Email.from( props.user_email ) )
+
+	if ( email instanceof BaseException ) {
+		errors.push( new EmailException() )
+	}
+
 	if ( errors.length > 0 ) {
 		throw errors
 	}
 
 	return new Rank(
 		UUID.create(),
+		email as Email,
 		dateResult as ValidDate,
 		rankResult as ValidRank,
 		codeResult as ValidString

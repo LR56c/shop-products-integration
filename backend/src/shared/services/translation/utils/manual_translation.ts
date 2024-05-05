@@ -24,8 +24,14 @@ export function manualTranslation( tokens: Map<string, FlatErrors> ): Translatio
 		else if ( tokens.has( 'infrastructure.limit_is_not_in_range' ) ) {
 			obj[`${ key }`] = 'El límite no está en el rango permitido'
 		}
+		else if ( tokens.has( 'infrastructure.not_found' ) ) {
+			obj[`${ key }`] = `El objeto ${ value.field.length > 0 ? `'`+value.field + `' ` : `` }no fue encontrado`
+		}
 		else if ( tokens.has( 'infrastructure.parameter_not_match' ) ) {
 			obj[`${ key }`] = `El parámetro ${ value.field.length > 0 ? `'`+value.field + `' ` : `` }no coincide con el esperado`
+		}
+		else if ( tokens.has( 'infrastructure.key_already_exist' ) ) {
+			obj[`${ key }`] = `El objeto ${ value.field.length > 0 ? `'`+value.field + `' ` : `` }ya existe`
 		}
 		else if ( tokens.has( 'invalid.string' ) ) {
 			obj[`${ value.field.length > 0 ? value.field : key }`] =

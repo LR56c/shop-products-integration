@@ -1,6 +1,8 @@
 import {
 	IsDate,
 	IsDecimal,
+	IsEmail,
+	IsNumber,
 	IsString,
 	IsUUID,
 	Max,
@@ -12,16 +14,19 @@ export class RankDto {
 	@IsUUID()
 	id: string
 
+	@IsEmail()
+	user_email: string
+
 	@IsDate()
 	created_at: Date
 
 	@Max( 5 )
 	@Min( 0 )
-	@IsDecimal()
+	@IsNumber()
 	value: number
 
 	@MinLength( 0 )
 	@IsString()
-	code: string
+	product_code: string
 }
 

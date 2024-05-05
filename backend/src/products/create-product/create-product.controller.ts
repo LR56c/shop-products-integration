@@ -75,7 +75,7 @@ export class CreateProductController {
 	} )
 	@ApiOperation( {
 		summary: 'Create a product',
-		description: 'Create a product by json data',
+		description: 'Create a product by json data. Category must exist. product_code & code must be unique',
 	} )
 	@ApiResponse( {
 		status     : 200,

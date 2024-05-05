@@ -1,3 +1,5 @@
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Email } from '../../shared/domain/value_objects/Email'
 import { Rank } from '../domain/rank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -15,7 +17,8 @@ export function rankToJson( rank: Rank ): Record<string, any> {
 		id          : rank.id.value,
 		created_at  : rank.createdAt.value,
 		value       : rank.value.value,
-		product_code: rank.code.value
+		product_code: rank.code.value,
+		user_email  : rank.user_email.value
 	}
 }
 
@@ -50,12 +53,20 @@ export function rankFromJson( rank: Record<string, any> ): Rank | BaseException[
 		errors.push( new InvalidStringException( 'product_code' ) )
 	}
 
+	const email = wrapType<Email, EmailException>(
+		() => Email.from( rank.user_email ) )
+
+	if ( email instanceof BaseException ) {
+		errors.push( new EmailException() )
+	}
+
 	if ( errors.length > 0 ) {
 		return errors
 	}
 
 	return new Rank(
 		id as UUID,
+		email as Email,
 		createdAt as ValidDate,
 		value as ValidRank,
 		code as ValidString

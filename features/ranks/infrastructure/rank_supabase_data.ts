@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import {
 	rankFromJson,
 	rankToJson
@@ -14,14 +15,30 @@ export class RankSupabaseData implements RankRepository {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
+	async updateRank( rank: Rank ): Promise<boolean> {
+		try {
+			const result = await this.client.from( this.tableName )
+			          .update( rankToJson( rank ) as any )
+			          .eq( 'id', rank.id.value )
+			if ( result.error?.code === '23503' ) {
+				throw [ new DataNotFoundException() ]
+			}
+
+			return true
+		}
+		catch ( e ) {
+			throw e
+		}
+	}
+
 	readonly tableName = 'rank'
 
 	async addRank( rank: Rank ): Promise<boolean> {
 		try {
 			const r = await this.client.from( this.tableName )
-			          .insert( rankToJson( rank ) as any )
-			console.log( "r")
-			console.log( r)
+			                    .insert( rankToJson( rank ) as any )
+			console.log( 'r' )
+			console.log( r )
 			return true
 		}
 		catch ( e ) {
@@ -32,31 +49,31 @@ export class RankSupabaseData implements RankRepository {
 	}
 
 	async getAllRankByCode( code: ValidString ): Promise<Rank[]> {
-		try{
+		try {
 
-		const result = await this.client.from( this.tableName )
-		                         .select()
-		                         .eq( 'product_code', code.value )
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'product_code', code.value )
 
-		if ( result.error ) {
-			throw [ new InfrastructureException() ]
-		}
-
-		const ranks: Rank[]     = []
-		for ( const json of result.data ) {
-
-			const product = rankFromJson( json )
-
-			if ( product instanceof BaseException ) {
-				throw product
+			if ( result.error ) {
+				throw [ new InfrastructureException() ]
 			}
-			ranks.push( product as Rank )
-		}
 
-		return ranks
+			const ranks: Rank[] = []
+			for ( const json of result.data ) {
+
+				const product = rankFromJson( json )
+
+				if ( product instanceof BaseException ) {
+					throw product
+				}
+				ranks.push( product as Rank )
+			}
+
+			return ranks
 		}
 		catch ( e ) {
-			throw  e
+			throw e
 		}
 	}
 }

@@ -2,7 +2,7 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
-	Post
+	Put
 } from '@nestjs/common'
 import {
 	ApiBody,
@@ -10,51 +10,60 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { RankDto } from 'src/ranks/dto/rank_dto'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { Product } from '~features/products/domain/models/product'
-import { AddRank } from '~features/ranks/application/add_rank'
+import { rankFromJson } from '~features/ranks/application/rank_mapper'
 import { Rank } from '~features/ranks/domain/rank'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { AddRankService } from './add-rank.service'
+import { UpdateRankService } from './update-rank.service'
 
 @ApiTags( 'ranks' )
 @Controller( 'ranks' )
-export class AddRankController {
-	constructor( private readonly addRankService: AddRankService,
+export class UpdateRankController {
+	constructor( private readonly updateRankService: UpdateRankService,
 		private readonly translation: TranslationService
 	)
 	{}
 
-	@Post()
+	@Put( ':id' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
 			properties: {
-				code: {
+				id          : {
 					type   : 'string',
-					example: 'abc'
+					example: 'a27a730c-3050-4d26-80b9-74163a3590fa'
 				},
 				user_email: {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
-				rank: {
+				product_code: {
 					type   : 'string',
-					example: 'abc'
+					example: 'abc2'
+				},
+				created_at  : {
+					type   : 'string',
+					example: '2024-04-27'
+				},
+				value       : {
+					type   : 'string',
+					example: '2'
 				}
 			}
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Add rank',
+		summary    : 'Update rank',
+		description: 'Update rank by json data'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -66,23 +75,23 @@ export class AddRankController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -93,48 +102,36 @@ export class AddRankController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
 		}
 	} )
 	async handle(
-		@Body( 'code' ) code: string,
-		@Body( 'rank' ) rank: number,
-		@Body( 'user_email' ) user_email: string
+		@Body(  ) rank: RankDto
 	): Promise<HttpResult>
 	{
 		try {
+			const r = rankFromJson( rank )
 
-			const rankResult = await AddRank( {
-				code, user_email, rank
-			} )
-
-			if ( !( rankResult instanceof Rank ) ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll(
-						rankResult as BaseException[] )
-				}
-			}
-
-			await this.addRankService.execute( rankResult )
+			await this.updateRankService.updateRank( r as Rank)
 			return {
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+				statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll(e)
 			}
 		}
 	}

@@ -1,8 +1,9 @@
 import { InfrastructureException } from './infrastructure_exception'
 
 export class KeyAlreadyExistException extends InfrastructureException {
-	constructor(readonly field?: string, message?: string, readonly value?: string) {
-		super( `key_already_exist${message != null ? `.${message}`:''}`, value, field)
+	constructor(readonly field?: string, readonly value?: string) {
+		super( value, field)
+		this.message = `${this.message}key_already_exist`
 		this.name = "KeyAlreadyExistException"
 	}
 }

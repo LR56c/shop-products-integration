@@ -6,7 +6,7 @@ export class DataNotFoundException extends InfrastructureException {
 		readonly value?: string )
 	{
 		super( value, field)
-		this.message = `${this.message}.not_found`
+		this.message = `${this.message}not_found`
 		this.name = 'RankNotFoundException'
 	}
 }

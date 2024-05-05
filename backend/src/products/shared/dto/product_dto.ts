@@ -53,6 +53,8 @@ export class ProductDto{
 	@IsInt()
 	stock : number
 
+	@Min(0)
+	@Max(5)
 	@IsNumber()
 	average_rank : number
 
