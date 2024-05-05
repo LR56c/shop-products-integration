@@ -35,10 +35,7 @@ export class ApplyAverageRankToProductService {
 				productResult.category_name
 			)
 
-			await UpdateProduct( this.repository, {
-				code   : payload.code,
-				product: newProduct
-			} )
+			await UpdateProduct( this.repository, newProduct )
 
 			console.log( `success updated average rank of product ${ payload.code }` )
 		}
