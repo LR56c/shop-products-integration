@@ -18,8 +18,10 @@ export class RankSupabaseData implements RankRepository {
 
 	async addRank( rank: Rank ): Promise<boolean> {
 		try {
-			await this.client.from( this.tableName )
+			const r = await this.client.from( this.tableName )
 			          .insert( rankToJson( rank ) as any )
+			console.log( "r")
+			console.log( r)
 			return true
 		}
 		catch ( e ) {
@@ -30,13 +32,13 @@ export class RankSupabaseData implements RankRepository {
 	}
 
 	async getAllRankByCode( code: ValidString ): Promise<Rank[]> {
+		try{
+
 		const result = await this.client.from( this.tableName )
 		                         .select()
 		                         .eq( 'product_code', code.value )
 
 		if ( result.error ) {
-			console.log( 'supabase unexpected error' )
-			console.log( result.error )
 			throw [ new InfrastructureException() ]
 		}
 
@@ -52,5 +54,9 @@ export class RankSupabaseData implements RankRepository {
 		}
 
 		return ranks
+		}
+		catch ( e ) {
+			throw  e
+		}
 	}
 }

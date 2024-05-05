@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreateProductDto } from 'src/products/create-product/create_product_dto'
+import { CreateProductDto } from './create_product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { CreateProduct } from '~features/products/application/create_product'
 import { Product } from '~features/products/domain/models/product'

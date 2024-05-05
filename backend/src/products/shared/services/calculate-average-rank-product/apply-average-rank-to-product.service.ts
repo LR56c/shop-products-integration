@@ -39,11 +39,11 @@ export class ApplyAverageRankToProductService {
 			await this.repository.updateProduct( payload.product_code, newProduct )
 
 			console.log(
-				`success updated average rank of product ${ payload.product_code }` )
+				`success updated average rank of product ${ payload.product_code.value }` )
 		}
 		catch ( e ) {
 			console.log(
-				`failed updated average rank of product ${ payload.product_code }` )
+				`failed updated average rank of product ${ payload.product_code.value }` )
 			console.log( e )
 		}
 	}

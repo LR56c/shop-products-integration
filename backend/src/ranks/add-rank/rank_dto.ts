@@ -13,7 +13,7 @@ export class RankDto {
 	id: string
 
 	@IsDate()
-	createdAt: Date
+	created_at: Date
 
 	@Max( 5 )
 	@Min( 0 )
@@ -24,3 +24,4 @@ export class RankDto {
 	@IsString()
 	code: string
 }
+

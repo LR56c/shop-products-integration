@@ -4,7 +4,11 @@ import {
 	HttpStatus,
 	Param
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+	ApiOperation,
+	ApiResponse,
+	ApiTags
+} from '@nestjs/swagger'
 import { rankToJson } from '~features/ranks/application/rank_mapper'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { TranslationService } from '../../shared/services/translation/translation.service'
@@ -17,11 +21,97 @@ export class GetAllRankByCodeController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Get( ':code' )
+	@Get( ':product_code' )
+	@ApiOperation( {
+		summary: 'Get all rank',
+		description: 'Get all rank by code',
+	} )
+	@ApiResponse( {
+		status : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						},
+						data      : {
+							type : 'array',
+							items: {
+								type      : 'object',
+								properties: {
+									id          : {
+										type   : 'string',
+										example: 'uuid'
+									},
+									created_at          : {
+										type   : 'string',
+										example: 'date'
+									},
+									value          : {
+										type   : 'string',
+										example: 'integer'
+									},
+									product_code          : {
+										type   : 'string',
+										example: 'string'
+									},
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
+					}
+				}
+			}
+		}
+	} )
 	async handle( @Param(
-		'code' ) code: string ): Promise<HttpResultData<Record<string, any>[]>> {
+		'product_code' ) product_code: string ): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const result = await this.getAllRankByCodeService.execute( code )
+			const result = await this.getAllRankByCodeService.execute( product_code )
 
 			let json: Record<string, any>[] = []
 			for ( const r of result ) {

@@ -12,10 +12,10 @@ import { wrapType } from '../../shared/utils/WrapType'
 
 export function rankToJson( rank: Rank ): Record<string, any> {
 	return {
-		id        : rank.id.value,
-		created_at: rank.createdAt.value,
-		value     : rank.value.value,
-		code      : rank.code.value
+		id          : rank.id.value,
+		created_at  : rank.createdAt.value,
+		value       : rank.value.value,
+		product_code: rank.code.value
 	}
 }
 
@@ -33,7 +33,7 @@ export function rankFromJson( rank: Record<string, any> ): Rank | BaseException[
 		() => ValidDate.from( rank.created_at ) )
 
 	if ( createdAt instanceof BaseException ) {
-		errors.push( new InvalidDateException('created_at') )
+		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
 	const value = wrapType<ValidRank, InvalidRankException>(
@@ -44,10 +44,10 @@ export function rankFromJson( rank: Record<string, any> ): Rank | BaseException[
 	}
 
 	const code = wrapType<ValidString, InvalidStringException>(
-		() => ValidString.from( rank.code ) )
+		() => ValidString.from( rank.product_code ) )
 
 	if ( code instanceof BaseException ) {
-		errors.push( new InvalidStringException('code') )
+		errors.push( new InvalidStringException( 'product_code' ) )
 	}
 
 	if ( errors.length > 0 ) {

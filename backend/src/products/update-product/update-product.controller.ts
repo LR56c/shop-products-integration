@@ -11,7 +11,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { ProductDto } from 'src/products/shared/dto/product_dto'
+import { ProductDto } from '../shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { productFromJson } from '~features/products/application/product_mapper'

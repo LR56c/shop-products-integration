@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common'
 import {
 	ApiBody,
+	ApiOperation,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
@@ -26,18 +28,80 @@ export class AverageRankController {
 		schema: {
 			type      : 'object',
 			properties: {
-				code: {
+				product_code: {
 					type   : 'string',
-					example: 'abc'
+					example: 'abc2'
 				}
 			}
 		}
 	} )
-	async handle( @Body( 'code' ) code: string ): Promise<HttpResult> {
+	@ApiOperation( {
+		summary: 'Calculate average rank',
+		description: 'Calculate average rank by product_code',
+	} )
+	@ApiResponse( {
+		status     : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
+					}
+				}
+			}
+		}
+	} )
+	async handle( @Body( 'product_code' ) product_code: string ): Promise<HttpResult> {
 		try {
 
 			const product_codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( code ) )
+				() => ValidString.from( product_code ) )
 
 			if ( product_codeResult instanceof InvalidStringException) {
 				throw [new InvalidStringException('product_code')]
