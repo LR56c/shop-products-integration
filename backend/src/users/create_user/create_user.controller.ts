@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common'
 import {
 	ApiBody,
+	ApiOperation,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
@@ -47,6 +49,68 @@ export class CreateUserController {
 							type   : 'string',
 							example: 'abc@gmail.com'
 						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiOperation( {
+		summary: 'Create user',
+		description: 'Create user by json data',
+	} )
+	@ApiResponse( {
+		status     : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
 					}
 				}
 			}

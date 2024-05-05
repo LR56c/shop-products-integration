@@ -1,3 +1,4 @@
+import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { UserDao } from '../domain/dao/UserDao'
 import { SupabaseClient } from '@supabase/supabase-js'
@@ -36,6 +37,9 @@ export class UserSupaBaseData implements UserDao {
 			const { data, error } = await result.range( from.value, to.value )
 
 			if ( error ) {
+				if ( error.code === 'PGRST103' ) {
+					throw [ new LimitIsNotInRangeException() ]
+				}
 				if ( error.code === '22P02' ) {
 					throw new ParameterNotMatchException()
 				}

@@ -6,12 +6,10 @@ import {
 } from '@nestjs/common'
 import {
 	ApiBody,
+	ApiOperation,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import {
-	I18n,
-	I18nContext
-} from 'nestjs-i18n'
 import { parseUser } from 'src/users/shared/parseUser'
 import { UpdateUserDto } from 'src/users/update_user/update_user_dto'
 import { User } from '~features/user/domain/models/User'
@@ -50,6 +48,68 @@ export class UpdateUserController {
 							type   : 'string',
 							example: 'abc@gmail.com'
 						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiOperation( {
+		summary: 'Update user',
+		description: 'Update user by json data',
+	} )
+	@ApiResponse( {
+		status     : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message: {
+							type      : 'object',
+							properties: {
+								code_error   : {
+									type   : 'string',
+									example: 'error translation'
+								},
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
+						},
 					}
 				}
 			}
