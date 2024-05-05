@@ -1,24 +1,31 @@
-import {Body, Controller, HttpStatus, Post} from '@nestjs/common';
-import { CreatePaymentService } from './create_payment.service';
-import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {Controller, Get, HttpStatus, Param} from '@nestjs/common';
+import { GetPaymentService } from './get_payment.service';
+import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {TranslationService} from "../../shared/services/translation/translation.service";
-import {CreatePaymentDto} from "./create_payment_dto";
 import {HttpResult} from "../../shared/utils/HttpResult";
 import {Payment} from "~features/payments/domain/models/payment";
-import {CreatePayment} from "~features/payments/application/creat_payment";
+import {wrapType} from "~features/shared/utils/WrapType";
+import {UUID} from "~features/shared/domain/value_objects/UUID";
+import {InvalidUUIDException} from "~features/shared/domain/exceptions/InvalidUUIDException";
+import {HttpResultData} from "../../shared/utils/HttpResultData";
+import {paymentToJson} from "~features/payments/application/payment_mapper";
 
 @ApiTags('payments')
 @Controller('payments')
-export class CreatePaymentController {
-  constructor(private readonly createPaymentService: CreatePaymentService,
-              private readonly translationService: TranslationService) {}
-  @Post()
-  @ApiBody( {
-    schema: {
-      type      : 'object',
-      properties: {
-        payment: {
-          type      : 'object',
+export class GetPaymentController {
+  constructor(private readonly getPaymentService: GetPaymentService,
+              private readonly translation: TranslationService) {}
+  @Get(':id')
+  @ApiOperation( {
+    summary: 'Get a payment',
+    description: 'Get a payment by id',
+  } )
+  @ApiResponse( {
+    status     : 200,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
           properties: {
             id: {
               type   : 'string',
@@ -43,26 +50,6 @@ export class CreatePaymentController {
             paymentMethod: {
               type   : 'string',
               example: 'Credit'
-            }
-          }
-        }
-      }
-    }
-  } )
-  @ApiOperation( {
-    summary: 'Create a payment',
-    description: 'Create a payment by json data. product must exist. id must be unique',
-  } )
-  @ApiResponse( {
-    status     : 200,
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: {
-              type   : 'number',
-              example: 200
             }
           }
         }
@@ -111,28 +98,23 @@ export class CreatePaymentController {
       }
     }
   } )
-  async createPayment(
-      @Body('payment') dto: CreatePaymentDto
-  ): Promise<HttpResult> {
+  async getPayment(@Param('id') id: string): Promise<HttpResultData<Record<string, any>>> {
     try {
-      const paymentResult = await CreatePayment({
-        id: dto.id,
-        creationDate: dto.creationDate,
-        approved: dto.approved,
-        deliveryName: dto.deliveryName,
-        paymentValue: dto.paymentValue,
-        paymentMethod: dto.paymentMethod
-      })
-      await this.createPaymentService.createPayment(paymentResult as Payment)
+      const paymentIdResult = wrapType<UUID, InvalidUUIDException>(
+          () => UUID.from(id))
+      if (paymentIdResult instanceof InvalidUUIDException) {
+        throw [new InvalidUUIDException('id')]
+      }
+      const payment = await this.getPaymentService.getPayment(paymentIdResult as UUID)
       return {
+        data: paymentToJson(payment),
         statusCode: HttpStatus.OK
       }
     } catch (e) {
       return {
         statusCode: HttpStatus.BAD_REQUEST,
-        message   : this.translationService.translateAll(e)
+        message: this.translation.translateAll(e)
       }
     }
   }
-
 }

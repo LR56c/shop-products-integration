@@ -1,57 +1,62 @@
-import {Body, Controller, HttpStatus, Post} from '@nestjs/common';
-import { CreatePaymentService } from './create_payment.service';
+import {Body, Controller, HttpStatus, Param, Put} from '@nestjs/common';
+import { UpdatePaymentService } from './update_payment.service';
 import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {TranslationService} from "../../shared/services/translation/translation.service";
-import {CreatePaymentDto} from "./create_payment_dto";
+import {PaymentDto} from "../shared/payment_dto";
 import {HttpResult} from "../../shared/utils/HttpResult";
+import {UUID} from "~features/shared/domain/value_objects/UUID";
+import {wrapType} from "~features/shared/utils/WrapType";
+import {InvalidUUIDException} from "~features/shared/domain/exceptions/InvalidUUIDException";
+import {paymentFromJson} from "~features/payments/application/payment_mapper";
 import {Payment} from "~features/payments/domain/models/payment";
-import {CreatePayment} from "~features/payments/application/creat_payment";
+import {TranslationService} from "../../shared/services/translation/translation.service";
+import {BaseException} from "~features/shared/domain/exceptions/BaseException";
 
 @ApiTags('payments')
 @Controller('payments')
-export class CreatePaymentController {
-  constructor(private readonly createPaymentService: CreatePaymentService,
-              private readonly translationService: TranslationService) {}
-  @Post()
-  @ApiBody( {
+export class UpdatePaymentController {
+  constructor(private readonly updatePaymentService: UpdatePaymentService,
+              private readonly translation: TranslationService ) {}
+
+  @Put(':id')
+  @ApiBody({
     schema: {
-      type      : 'object',
+      type: 'object',
       properties: {
         payment: {
-          type      : 'object',
+          type: 'object',
           properties: {
             id: {
-              type   : 'string',
+              type: 'string',
               example: 'AAAA-AAAA-AAAA'
             },
             creationDate: {
-              type   : 'date',
+              type: 'date',
               example: '2021-09-21'
             },
             approved: {
-              type   : 'boolean',
+              type: 'boolean',
               example: true
             },
             deliveryName: {
-              type   : 'string',
+              type: 'string',
               example: 'John Doe'
             },
             paymentValue: {
-              type   : 'integer',
+              type: 'integer',
               example: 1000
             },
             paymentMethod: {
-              type   : 'string',
+              type: 'string',
               example: 'Credit'
             }
           }
         }
       }
     }
-  } )
+  })
   @ApiOperation( {
-    summary: 'Create a payment',
-    description: 'Create a payment by json data. product must exist. id must be unique',
+    summary: 'Payment Updated',
+    description: 'Update a payment by id and json data',
   } )
   @ApiResponse( {
     status     : 200,
@@ -111,28 +116,17 @@ export class CreatePaymentController {
       }
     }
   } )
-  async createPayment(
-      @Body('payment') dto: CreatePaymentDto
+  async updatePayment(
+      @Body('payment') dto: PaymentDto
   ): Promise<HttpResult> {
     try {
-      const paymentResult = await CreatePayment({
-        id: dto.id,
-        creationDate: dto.creationDate,
-        approved: dto.approved,
-        deliveryName: dto.deliveryName,
-        paymentValue: dto.paymentValue,
-        paymentMethod: dto.paymentMethod
-      })
-      await this.createPaymentService.createPayment(paymentResult as Payment)
-      return {
-        statusCode: HttpStatus.OK
-      }
-    } catch (e) {
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-        message   : this.translationService.translateAll(e)
+      const {errors, data} = dto
+      if (errors.length > 0) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: this.translation.translateAll(errors)
+        }
       }
     }
   }
-
 }

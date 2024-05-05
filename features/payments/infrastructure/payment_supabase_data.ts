@@ -9,7 +9,6 @@ import {BaseException} from "../../shared/domain/exceptions/BaseException";
 import {ValidInteger} from "../../shared/domain/value_objects/ValidInteger";
 import {ValidBoolean} from "../../shared/domain/value_objects/ValidBoolean";
 import {ValidDate} from "../../shared/domain/value_objects/ValidDate";
-import {LimitIsNotInRange} from "../../shared/infrastructure/limit_is_not_in_range";
 import {ParameterNotMatchException} from "../../shared/infrastructure/parameter_not_match_exception";
 
 export class PaymentSupabaseData implements PaymentRepository {
