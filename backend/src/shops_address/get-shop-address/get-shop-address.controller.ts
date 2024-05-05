@@ -11,17 +11,14 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { shopAddressToJson } from '~features/shop-address/application/shop-address-mapper'
-import { ShopAddress } from '~features/shop-address/domain/shop-address'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetShopAddressService } from './get-shop-address.service'
 
 @ApiTags( 'shops-address' )

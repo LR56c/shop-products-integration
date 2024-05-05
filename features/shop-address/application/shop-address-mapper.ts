@@ -16,7 +16,7 @@ export function shopAddressFromJson( json: Record<string, any> ): ShopAddress | 
 		() => ValidString.from( json.name ) )
 
 	if ( name instanceof BaseException ) {
-		throw new InvalidStringException( 'name' )
+		throw [new InvalidStringException( 'name' )]
 	}
 
 	return new ShopAddress(
