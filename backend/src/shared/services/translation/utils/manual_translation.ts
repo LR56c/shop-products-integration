@@ -9,6 +9,9 @@ export function manualTranslation( tokens: Map<string, FlatErrors> ): Translatio
 		if ( tokens.has( 'password.uppercase' ) ) {
 			obj[`${ key }`] = 'Contraseña debe contener al menos una mayúscula'
 		}
+		else if ( tokens.has( 'invalid.rank' ) ) {
+			obj[`${ key }`] = 'Rango ingresado inválido'
+		}
 		else if ( tokens.has( 'password.lowercase' ) ) {
 			obj[`${ key }`] = 'Contraseña debe contener al menos una minúscula'
 		}

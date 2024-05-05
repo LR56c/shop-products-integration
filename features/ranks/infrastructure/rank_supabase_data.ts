@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import {
 	rankFromJson,
@@ -18,8 +19,9 @@ export class RankSupabaseData implements RankRepository {
 	async updateRank( rank: Rank ): Promise<boolean> {
 		try {
 			const result = await this.client.from( this.tableName )
-			          .update( rankToJson( rank ) as any )
-			          .eq( 'id', rank.id.value )
+			                         .update( rankToJson( rank ) as any )
+			                         .eq( 'product_code', rank.code.value )
+			                         .eq( 'user_email', rank.user_email.value)
 			if ( result.error?.code === '23503' ) {
 				throw [ new DataNotFoundException() ]
 			}
@@ -35,16 +37,19 @@ export class RankSupabaseData implements RankRepository {
 
 	async addRank( rank: Rank ): Promise<boolean> {
 		try {
-			const r = await this.client.from( this.tableName )
-			                    .insert( rankToJson( rank ) as any )
-			console.log( 'r' )
-			console.log( r )
+			const result = await this.client.from( this.tableName )
+			                         .insert( rankToJson( rank ) as any )
+			if ( result.error?.code === '23505' ) {
+				throw [ new KeyAlreadyExistException( 'rank' ) ]
+			}
+			if ( result.error?.code === '23503' ) {
+				throw [ new DataNotFoundException() ]
+			}
 			return true
 		}
 		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
-			throw [ new InfrastructureException() ]
+			console.log( e)
+			throw e
 		}
 	}
 

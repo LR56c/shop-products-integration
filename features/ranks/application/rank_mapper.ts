@@ -14,7 +14,6 @@ import { wrapType } from '../../shared/utils/WrapType'
 
 export function rankToJson( rank: Rank ): Record<string, any> {
 	return {
-		id          : rank.id.value,
 		created_at  : rank.createdAt.value,
 		value       : rank.value.value,
 		product_code: rank.code.value,
@@ -24,13 +23,6 @@ export function rankToJson( rank: Rank ): Record<string, any> {
 
 export function rankFromJson( rank: Record<string, any> ): Rank | BaseException[] {
 	const errors: BaseException[] = []
-
-	const id = wrapType<UUID, InvalidUUIDException>(
-		() => UUID.from( rank.id ) )
-
-	if ( id instanceof BaseException ) {
-		errors.push( new InvalidUUIDException() )
-	}
 
 	const createdAt = wrapType<ValidDate, InvalidDateException>(
 		() => ValidDate.from( rank.created_at ) )
@@ -65,7 +57,6 @@ export function rankFromJson( rank: Record<string, any> ): Rank | BaseException[
 	}
 
 	return new Rank(
-		id as UUID,
 		email as Email,
 		createdAt as ValidDate,
 		value as ValidRank,

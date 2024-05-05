@@ -1,19 +1,14 @@
 import {
 	IsDate,
-	IsDecimal,
 	IsEmail,
 	IsNumber,
 	IsString,
-	IsUUID,
 	Max,
 	Min,
 	MinLength
 } from 'class-validator'
 
 export class RankDto {
-	@IsUUID()
-	id: string
-
 	@IsEmail()
 	user_email: string
 

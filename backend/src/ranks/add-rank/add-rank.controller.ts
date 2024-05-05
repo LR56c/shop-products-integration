@@ -31,17 +31,17 @@ export class AddRankController {
 		schema: {
 			type      : 'object',
 			properties: {
-				code: {
+				product_code: {
 					type   : 'string',
-					example: 'abc'
+					example: 'abc2'
 				},
 				user_email: {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
 				rank: {
-					type   : 'string',
-					example: 'abc'
+					type   : 'number',
+					example: 2
 				}
 			}
 		}
@@ -108,7 +108,7 @@ export class AddRankController {
 		}
 	} )
 	async handle(
-		@Body( 'code' ) code: string,
+		@Body( 'product_code' ) code: string,
 		@Body( 'rank' ) rank: number,
 		@Body( 'user_email' ) user_email: string
 	): Promise<HttpResult>
@@ -119,14 +119,6 @@ export class AddRankController {
 				code, user_email, rank
 			} )
 
-			if ( !( rankResult instanceof Rank ) ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll(
-						rankResult as BaseException[] )
-				}
-			}
-
 			await this.addRankService.execute( rankResult )
 			return {
 				statusCode: HttpStatus.OK
@@ -134,7 +126,8 @@ export class AddRankController {
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll(e)
 			}
 		}
 	}

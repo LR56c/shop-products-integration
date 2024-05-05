@@ -51,7 +51,6 @@ export const AddRank = async (props: {
 	}
 
 	return new Rank(
-		UUID.create(),
 		email as Email,
 		dateResult as ValidDate,
 		rankResult as ValidRank,
