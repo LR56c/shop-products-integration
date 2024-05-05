@@ -1,12 +1,20 @@
-import { Category } from 'features/categories/domain/models/category'
+import { Category } from '../domain/category'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { wrapType } from '../../shared/utils/WrapType'
 
-export function categoryFromJson(json : Record<string, any> ) : Category | Error{
-	try {
-		return Category.from(json.name)
+export function categoryFromJson(json : Record<string, any> ) : Category | BaseException{
+	const name = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.name ) )
+
+	if ( name instanceof BaseException ) {
+		throw [new InvalidStringException( 'name' )]
 	}
-	catch ( e ){
-		return e
-	}
+
+	return new Category(
+		name as ValidString
+	)
 }
 
 export function categoryToJson(categor : Category): Record<string, any> {
