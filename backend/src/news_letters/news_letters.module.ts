@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { NewsLetterRepository } from '~features/news_letter/domain/news_letter_repository'
 import { AppModule } from '../app.module'
 import { AddNewsLetterController } from './add-news-letter/add-news-letter.controller'
 import { AddNewsLetterService } from './add-news-letter/add-news-letter.service'
@@ -13,8 +14,7 @@ import { GetAllNewsLetterController } from './get-all-news-letter/get-all-news-l
 import { GetAllNewsLetterService } from './get-all-news-letter/get-all-news-letter.service'
 import { RemoveNewsLetterController } from './remove-news-letter/remove-news-letter.controller'
 import { RemoveNewsLetterService } from './remove-news-letter/remove-news-letter.service'
-import { NewsLetterRepository } from '~features/news_letter/domain/repository/NewsLetterRepository'
-import { NewsLetterSupabaseData } from '~features/news_letter/infrastructure/NewsLetterSupabaseData'
+import { NewsLetterSupabaseData } from '~features/news_letter/infrastructure/news_letter_supabase_data'
 
 @Module( {
 	imports    : [ forwardRef( () => AppModule ) ],

@@ -24,6 +24,9 @@ export function manualTranslation( tokens: Map<string, FlatErrors> ): Translatio
 		else if ( tokens.has( 'password.length' ) ) {
 			obj[`${ key }`] = 'Contraseña debe contener al menos 8 caracteres'
 		}
+		else if ( tokens.has( 'infrastructure' ) ) {
+			obj[`${ key }`] = 'Error de infraestructura no controlado. Lo sentimos'
+		}
 		else if ( tokens.has( 'infrastructure.limit_is_not_in_range' ) ) {
 			obj[`${ key }`] = 'El límite no está en el rango permitido'
 		}
