@@ -45,7 +45,9 @@ import { RanksModule } from './ranks/ranks.module'
 				let client = createClient<Database>(
 					'https://uppjyrysymgslbnkxhaq.supabase.co',
 					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
+
 				await client.auth.signInAnonymously()
+				// const r = await client.from('carts').select('*, product:product_id(*)').eq('user_email', 'aaaa@gmail.com')
 				return client
 			}
 		}

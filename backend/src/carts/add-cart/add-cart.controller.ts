@@ -10,17 +10,16 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { newsLetterFromJson } from '~features/news_letter/application/news_letter_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { AddNewsLetterService } from './add-news-letter.service'
-import { NewsLetterDto } from '../dto/news_letter_dto'
-import { NewsLetter } from '~features/news_letter/domain/news_letter'
+import { CartDto } from '../dto/cart_dto'
+import { AddCartService } from './add-cart.service'
+import { parseAddCart } from '../utils/parse-add.cart'
 
-@ApiTags( 'news-letters' )
-@Controller( 'news-letters' )
-export class AddNewsLetterController {
-	constructor( private readonly addNewsLetterService: AddNewsLetterService,
+@ApiTags( 'carts' )
+@Controller( 'carts' )
+export class AddCartController {
+	constructor( private readonly addCartService: AddCartService,
 		private readonly translation: TranslationService )
 	{}
 
@@ -29,31 +28,31 @@ export class AddNewsLetterController {
 		schema: {
 			type      : 'object',
 			properties: {
-				email          : {
+				user_email: {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
-				name          : {
+				product_id: {
 					type   : 'string',
-					example: 'John'
+					example: '359b6378-f875-4d31-b415-d3de60a59875'
 				},
-				created_at  : {
-					type   : 'string',
-					example: '2024-04-27'
+				quantity  : {
+					type   : 'number',
+					example: 1
 				}
 			}
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Create a news letter',
-		description: 'Create a news letter by json data',
+		summary    : 'Add cart',
+		description: 'Add cart by json data'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -65,23 +64,23 @@ export class AddNewsLetterController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -92,26 +91,30 @@ export class AddNewsLetterController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
 		}
 	} )
-	async addNewsLetter( @Body() dto: NewsLetterDto ): Promise<HttpResult> {
+	async addCart( @Body() dto: CartDto ): Promise<HttpResult> {
 		try {
 
-			const newsLetter = newsLetterFromJson( dto )
+			const { data } = parseAddCart( dto )
 
-			await this.addNewsLetterService.addNewsLetter( newsLetter as NewsLetter )
+			await this.addCartService.addCart(
+				data.user_email,
+				data.product_id,
+				data.quantity
+			)
 			return {
 				statusCode: HttpStatus.OK
 			}
@@ -124,3 +127,4 @@ export class AddNewsLetterController {
 		}
 	}
 }
+
