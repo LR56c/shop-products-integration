@@ -9,26 +9,25 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { paymentToJson } from '~features/payments/application/payment_mapper'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { GetOrderConfirmedService } from './get-order-confirmed.service'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
+import { GetPaymentService } from './get_payment.service'
 
-@ApiTags( 'orders-confirmed' )
-@Controller( 'orders-confirmed' )
-export class GetOrderConfirmedController {
-	constructor( private readonly getOrderConfirmedService: GetOrderConfirmedService,
+@ApiTags( 'payments' )
+@Controller( 'payments' )
+export class GetPaymentController {
+	constructor( private readonly getPaymentService: GetPaymentService,
 		private readonly translation: TranslationService )
 	{}
 
 	@Get( ':id' )
 	@ApiOperation( {
-		summary    : 'Get order confirmed',
-		description: 'Get order confirmed by id'
+		summary    : 'Get a payment',
+		description: 'Get a payment by id'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -44,19 +43,32 @@ export class GetOrderConfirmedController {
 						data      : {
 							type      : 'object',
 							properties: {
-								id              : {
+								id           : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								created_at      : {
+								creationDate : {
 									type   : 'string',
 									example: 'date'
 								},
-								accountant_email: {
+								approved     : {
 									type   : 'string',
-									example: 'email'
+									example: 'boolean'
+								},
+								deliveryName : {
+									type   : 'string',
+									example: 'string'
+								},
+								paymentValue : {
+									type   : 'string',
+									example: 'integer'
+								},
+								paymentMethod: {
+									type   : 'string',
+									example: 'string'
 								}
 							}
+
 						}
 					}
 				}
@@ -105,22 +117,19 @@ export class GetOrderConfirmedController {
 			}
 		}
 	} )
-	async getOrder(
-		@Param( 'id' ) id: string
-	): Promise<HttpResultData<Record<string, any>>> {
+	async getPayment( @Param(
+		'id' ) id: string ): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
+			const paymentIdResult = wrapType<UUID, InvalidUUIDException>(
 				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
+			if ( paymentIdResult instanceof InvalidUUIDException ) {
 				throw [ new InvalidUUIDException( 'id' ) ]
 			}
-
-			const result = await this.getOrderConfirmedService.execute( idResult )
-
+			const payment = await this.getPaymentService.getPayment(
+				paymentIdResult as UUID )
 			return {
-				statusCode: HttpStatus.OK,
-				data      : orderConfirmedToJson( result )
+				data      : paymentToJson( payment ),
+				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
