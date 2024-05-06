@@ -12,7 +12,9 @@ export function itemConfirmedToJson( itemConfirmed: ItemConfirmed ): Record<stri
 	return {
 		id               : itemConfirmed.id.value,
 		creation_date    : itemConfirmed.creation_date.value,
-		shop_keeper_email: itemConfirmed.shop_keeper_email?.value
+		shop_keeper_email: itemConfirmed.shop_keeper_email
+			? itemConfirmed.shop_keeper_email.value
+			: 'null'
 	}
 }
 
@@ -27,7 +29,7 @@ export function itemConfirmedFromJson( json: Record<string, any> ): ItemConfirme
 	}
 
 	const creation_date = wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( json.creation_date ) )
+		() => ValidDate.from( json.created_at ) )
 
 	if ( creation_date instanceof BaseException ) {
 		errors.push( new InvalidDateException( 'created_at' ) )

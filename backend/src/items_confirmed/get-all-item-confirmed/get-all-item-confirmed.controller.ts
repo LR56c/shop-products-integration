@@ -9,26 +9,27 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
 import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { GetAllOrderConfirmedService } from './get-all-order-confirmed.service'
+import { GetAllItemConfirmedService } from './get-all-item-confirmed.service'
 
-@ApiTags( 'orders-confirmed' )
-@Controller( 'orders-confirmed' )
-export class GetAllOrderConfirmedController {
-	constructor( private readonly getAllOrderConfirmedService: GetAllOrderConfirmedService,
+@ApiTags( 'items-confirmed' )
+@Controller( 'items-confirmed' )
+export class GetAllItemConfirmedController {
+	constructor( private readonly getAllItemConfirmedService: GetAllItemConfirmedService,
 		private readonly translation: TranslationService )
 	{}
 
 	@Get()
 	@ApiOperation( {
-		summary    : 'Get all orders',
-		description: 'Get all orders from a range of orders, and optionally filter by client email'
+		summary    : 'Get all items confirmed',
+		description: 'Get all items confirmed from a range of dates'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -46,15 +47,15 @@ export class GetAllOrderConfirmedController {
 							items: {
 								type      : 'object',
 								properties: {
-									id              : {
+									id               : {
 										type   : 'string',
 										example: 'uuid'
 									},
-									creation_date   : {
+									created_at       : {
 										type   : 'string',
 										example: 'date'
 									},
-									accountant_email: {
+									shop_keeper_email: {
 										type   : 'string',
 										example: 'email'
 									}
@@ -108,21 +109,21 @@ export class GetAllOrderConfirmedController {
 			}
 		}
 	} )
-	async getAllOrderConfirmed(
+	async getAll(
 		@Query( 'from' ) from: number,
 		@Query( 'to' ) to: number
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllOrdersConfirmed( { from, to } )
+			const { data } = this.parseGetAllItemConfirmed( { from, to } )
 
-			const ordersConfirmed = await this.getAllOrderConfirmedService.execute(
+			const ordersConfirmed = await this.getAllItemConfirmedService.execute(
 				data.from,
 				data.to )
 
 			let json: Record<string, any>[] = []
 			for ( const o of ordersConfirmed ) {
-				json.push( orderConfirmedToJson( o ) )
+				json.push( itemConfirmedToJson( o ) )
 			}
 
 			return {
@@ -138,7 +139,7 @@ export class GetAllOrderConfirmedController {
 		}
 	}
 
-	parseGetAllOrdersConfirmed( dto: {
+	parseGetAllItemConfirmed( dto: {
 		from: number,
 		to: number,
 	} ): {

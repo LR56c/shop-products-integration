@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { OrderConfirmedRepository } from '../domain/order_confirmed_repository'
+import { itemConfirmedFromJson } from '../application/item_confimed_mapper'
+import { ItemConfirmedRepository } from '../domain/item_confirmed_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
@@ -8,25 +9,20 @@ import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import {
-	orderConfirmedFromJson,
-	orderConfirmedToJson
-} from '../application/order_confirmed_mapper'
-import { OrderConfirmed } from '../domain/order_confirmed'
+import { ItemConfirmed } from '../domain/item_confirmed'
 
-export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
-
+export class ItemConfirmedSupabaseData implements ItemConfirmedRepository {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
-	readonly tableName = 'orders_confirmed'
+	readonly tableName = 'items_confirmed'
 
-	async create( order_confirmed: OrderConfirmed ): Promise<boolean> {
+	async create( order_confirmed: ItemConfirmed ): Promise<boolean> {
 		const result = await this.client.from( this.tableName )
 		                         .insert( {
-				                         id              : order_confirmed.id.value,
-				                         created_at   : order_confirmed.creation_date.value,
-				                         accountant_email: order_confirmed.accountant_email?.value
-			                         } as any)
+			                         id               : order_confirmed.id.value,
+			                         created_at       : order_confirmed.creation_date.value,
+			                         shop_keeper_email: order_confirmed.shop_keeper_email?.value
+		                         } as any )
 
 		if ( result.error != null ) {
 			if ( result.error.code === '23505' ) {
@@ -61,7 +57,7 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 	}
 
 	async getAll( from: ValidInteger,
-		to: ValidInteger ): Promise<OrderConfirmed[]> {
+		to: ValidInteger ): Promise<ItemConfirmed[]> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
@@ -77,16 +73,16 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException() ]
 			}
-			const ordersConfirmed: OrderConfirmed[] = []
+			const ordersConfirmed: ItemConfirmed[] = []
 
 			for ( const orderConfirmed of result.data ) {
-				const order = orderConfirmedFromJson( orderConfirmed )
+				const order = itemConfirmedFromJson( orderConfirmed )
 
 				if ( order instanceof BaseException ) {
 					throw order
 				}
 
-				ordersConfirmed.push( order as OrderConfirmed )
+				ordersConfirmed.push( order as ItemConfirmed )
 			}
 
 			return ordersConfirmed
@@ -96,7 +92,7 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 		}
 	}
 
-	async get( id: UUID ): Promise<OrderConfirmed> {
+	async get( id: UUID ): Promise<ItemConfirmed> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
@@ -110,16 +106,18 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 				throw [ new ParameterNotMatchException() ]
 			}
 
-			const orderConfirmed = orderConfirmedFromJson( result.data[0] )
+			const orderConfirmed = itemConfirmedFromJson( result.data[0] )
 
 			if ( orderConfirmed instanceof BaseException ) {
 				throw orderConfirmed
 			}
 
-			return orderConfirmed as OrderConfirmed
+			return orderConfirmed as ItemConfirmed
 		}
 		catch ( e ) {
 			throw e
 		}
+
 	}
+
 }

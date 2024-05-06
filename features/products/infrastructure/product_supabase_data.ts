@@ -170,10 +170,6 @@ export class ProductSupabaseData implements ProductRepository {
 
 			const parsedQueryProducts: Product[] = []
 
-			//TODO: en caso de diccionario, se guardan los productos en un diccionario
-			// en otro diccionario de cateogira, y luego se recorre el diccionario de
-			// categorias y se recorre el diccionario de productos, quedando un
-			// diccionario de productos nuevos y se mapean
 			console.log( 'json' )
 			for ( const json of categoryQueryProducts.data ) {
 				const p = productFromJson( json )
@@ -185,9 +181,6 @@ export class ProductSupabaseData implements ProductRepository {
 
 				parsedQueryProducts.push( p as Product )
 			}
-
-			//TODO: no es valido hacerlo aqui porque revisaria productos que no estan
-			// en categoria, habria que hacerlo afuera, e igualmente no seria tan eficiente
 
 			// const unMatchedProducts = parsedQueryProducts.filter(
 			// 	bd => !products.some( p => p.product_code === bd.product_code ) )
