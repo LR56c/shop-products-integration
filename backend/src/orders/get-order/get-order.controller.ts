@@ -26,7 +26,6 @@ export class GetOrderController {
 	{}
 
 	@Get( ':id' )
-
 	@ApiOperation( {
 		summary    : 'Get order',
 		description: 'Get order by id'

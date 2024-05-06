@@ -11,7 +11,7 @@ import { wrapType } from '../../shared/utils/WrapType'
 export function orderConfirmedToJson( orderConfirmed: OrderConfirmed ): Record<string, any> {
 	return {
 		id              : orderConfirmed.id.value,
-		creation_date   : orderConfirmed.creation_date.value,
+		created_at   : orderConfirmed.creation_date.value,
 		accountant_email: orderConfirmed.accountant_email?.value
 	}
 }
@@ -27,7 +27,7 @@ export function orderConfirmedFromJson( json: Record<string, any> ): OrderConfir
 	}
 
 	const creation_date = wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( json.creation_date ) )
+		() => ValidDate.from( json.created_at ) )
 
 	if ( creation_date instanceof BaseException ) {
 		errors.push( new InvalidDateException( 'created_at' ) )

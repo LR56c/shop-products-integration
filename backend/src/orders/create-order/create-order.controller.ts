@@ -14,7 +14,6 @@ import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
 import { PartialOrder } from '~features/orders/domain/order'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { OrderDto } from '../dto/order_dto'
 import { CreateOrderService } from './create-order.service'
 import { parseOrder } from 'src/orders/utils/parse.order'
 

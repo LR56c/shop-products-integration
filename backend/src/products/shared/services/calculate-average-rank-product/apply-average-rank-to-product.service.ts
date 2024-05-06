@@ -3,10 +3,6 @@ import { OnEvent } from '@nestjs/event-emitter'
 import { Product } from '~features/products/domain/models/product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
 import { ProductRankUpdateEvent } from '~features/shared/domain/events/product_rank_update_event'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
 
 @Injectable()
 export class ApplyAverageRankToProductService {
