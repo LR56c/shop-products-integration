@@ -7,5 +7,4 @@ export abstract class OrderConfirmedRepository {
 	abstract delete( id: UUID ): Promise<boolean>
 	abstract getAll( from: ValidInteger, to: ValidInteger ): Promise<OrderConfirmed[]>
 	abstract get( id: UUID ): Promise<OrderConfirmed>
-	abstract update( id: UUID, order_confirmed: OrderConfirmed ): Promise<boolean>
 }

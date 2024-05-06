@@ -105,9 +105,8 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 	}
 
 	let orderResult: OrderConfirmed | undefined = undefined
-
-	if ( json.order_confirmed !== null ) {
-		const order_confirmed = orderConfirmedFromJson( json.order_confirmed )
+	if ( json.orders_confirmed !== null ) {
+		const order_confirmed = orderConfirmedFromJson( json.orders_confirmed )
 
 		if ( order_confirmed instanceof BaseException ) {
 			errors.push( order_confirmed )

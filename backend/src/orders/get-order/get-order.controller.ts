@@ -56,13 +56,17 @@ export class GetOrderController {
 									type   : 'string',
 									example: 'string'
 								},
+								order_confirmed: {
+									type   : 'string',
+									example: 'uuid'
+								},
+								item_confirmed: {
+									type   : 'string',
+									example: 'uuid'
+								},
 								created_at  : {
 									type   : 'string',
 									example: 'date'
-								},
-								approved    : {
-									type   : 'string',
-									example: 'boolean'
 								},
 								payment     : {
 									type      : 'object',

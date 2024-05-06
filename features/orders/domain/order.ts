@@ -17,6 +17,7 @@ export class Order{
 				readonly order_confirmed?: OrderConfirmed,
 				readonly item_confirmed?: ItemConfirmed
 		){}
+	//TODO: se podria agregar status. aparte de agregar update partial
 }
 
 export class PartialOrder{

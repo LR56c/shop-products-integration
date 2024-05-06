@@ -12,7 +12,7 @@ export function orderConfirmedToJson( orderConfirmed: OrderConfirmed ): Record<s
 	return {
 		id              : orderConfirmed.id.value,
 		created_at   : orderConfirmed.creation_date.value,
-		accountant_email: orderConfirmed.accountant_email?.value
+		accountant_email: orderConfirmed.accountant_email?.value,
 	}
 }
 

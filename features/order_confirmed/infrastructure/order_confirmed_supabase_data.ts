@@ -22,8 +22,11 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 
 	async create( order_confirmed: OrderConfirmed ): Promise<boolean> {
 		const result = await this.client.from( this.tableName )
-		                         .insert(
-			                         orderConfirmedToJson( order_confirmed ) as any )
+		                         .insert( {
+				                         id              : order_confirmed.id.value,
+				                         created_at   : order_confirmed.creation_date.value,
+				                         accountant_email: order_confirmed.accountant_email?.value
+			                         } as any)
 
 		if ( result.error != null ) {
 			console.log( 'result.error' )
@@ -76,7 +79,6 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException() ]
 			}
-
 			const ordersConfirmed: OrderConfirmed[] = []
 
 			for ( const orderConfirmed of result.data ) {
@@ -120,20 +122,6 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 		}
 		catch ( e ) {
 			throw e
-		}
-	}
-
-	async update( id: UUID, order_confirmed: OrderConfirmed ): Promise<boolean> {
-		try {
-			await this.client.from( this.tableName )
-			          .update( orderConfirmedToJson( order_confirmed ) as any )
-			          .eq( 'id', id.value )
-
-			return true
-
-		}
-		catch ( e ) {
-			throw [ new InfrastructureException() ]
 		}
 	}
 }

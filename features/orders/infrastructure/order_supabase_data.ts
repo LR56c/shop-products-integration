@@ -44,7 +44,7 @@ export class OrderSupabaseData implements OrderRepository {
 			if ( error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'order' ) ]
 			}
-			throw [ new InfrastructureException('order') ]
+			throw [ new InfrastructureException( 'order' ) ]
 		}
 
 		const productsJson   = order.products_ids.map( id => ( {
@@ -55,7 +55,7 @@ export class OrderSupabaseData implements OrderRepository {
 		                                 .insert( productsJson )
 
 		if ( productResults.error ) {
-			throw [ new InfrastructureException('products_id') ]
+			throw [ new InfrastructureException( 'products_id' ) ]
 		}
 
 		return true
@@ -88,7 +88,8 @@ export class OrderSupabaseData implements OrderRepository {
 	async getAll( from: ValidInteger, to: ValidInteger,
 		client_email?: Email ): Promise<Order[]> {
 		const result = this.client.from( this.tableName )
-		                   .select( '*, payment:payment_id(*), products(*)' )
+		                   .select(
+			                   '*, payment:payment_id(*), products(*), orders_confirmed(*), item_confirmed(*)' )
 
 		if ( client_email !== undefined ) {
 			result.eq( 'client_email', client_email.value )
@@ -163,9 +164,12 @@ export class OrderSupabaseData implements OrderRepository {
 			          .eq(
 				          'id',
 				          id.value
-			          ).select()
+			          )
+			          .select()
 
-			await this.client.from('orders_products').delete().eq('order_id', id.value)
+			await this.client.from( 'orders_products' )
+			          .delete()
+			          .eq( 'order_id', id.value )
 
 			const productsJson   = order.products_ids.map( p => ( {
 				product_id: p.value,
@@ -175,7 +179,7 @@ export class OrderSupabaseData implements OrderRepository {
 			                                 .insert( productsJson )
 
 			if ( productResults.error ) {
-				throw [ new InfrastructureException('products_id') ]
+				throw [ new InfrastructureException( 'products_id' ) ]
 			}
 
 			return true
