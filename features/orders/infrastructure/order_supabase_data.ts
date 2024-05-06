@@ -2,7 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
 import {
 	orderFromJson,
-	orderToJson
 } from '../application/order_mapper'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { ValidBool } from '../../shared/domain/value_objects/ValidBool'
@@ -77,13 +76,15 @@ export class OrderSupabaseData implements OrderRepository {
 	async getAll( from: ValidInteger, to: ValidInteger,
 		client_email?: Email ): Promise<Order[]> {
 		const result = this.client.from( this.tableName )
-		                   .select('*, payment:payment_id(*)')
+		                   .select('*, payment:payment_id(*), products(*)')
 
 		if ( client_email !== undefined ) {
 			result.eq( 'client_email', client_email.value )
 		}
 
 		const { data, error } = await result.range( from.value, to.value )
+		console.log("data, error")
+		console.log(data, error)
 
 		if ( client_email != undefined && data?.length === 0 ) {
 			throw [ new ParameterNotMatchException( 'client_email' ) ]
@@ -113,7 +114,7 @@ export class OrderSupabaseData implements OrderRepository {
 	async getOrder( id: UUID ): Promise<Order> {
 		try {
 			const result = await this.client.from( this.tableName )
-			                         .select('*, payment:payment_id(*)')
+			                         .select('*, payment:payment_id(*), products(*)')
 			                         .eq( 'id', id.value )
 
 			if ( result.error ) {
@@ -123,6 +124,7 @@ export class OrderSupabaseData implements OrderRepository {
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'order_id' ) ]
 			}
+			console.log(result.data[0])
 
 			const order = orderFromJson( result.data[0] )
 

@@ -1,10 +1,18 @@
+import { itemConfirmedFromJson } from '../../item_confirmed/application/item_confimed_mapper'
+import { ItemConfirmed } from '../../item_confirmed/domain/item_confirmed'
+import { orderConfirmedFromJson } from '../../order_confirmed/application/order_confirmed_mapper'
+import { OrderConfirmed } from '../../order_confirmed/domain/order_confirmed'
+import {
+	productFromJson,
+	productToJson
+} from '../../products/application/product_mapper'
+import { Product } from '../../products/domain/models/product'
 import {
 	paymentFromJson,
 	paymentToJson
 } from '../../payments/application/payment_mapper'
 import { Payment } from '../../payments/domain/models/payment'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { InvalidBooleanException } from '../../shared/domain/exceptions/InvalidBooleanException'
 import { wrapType } from '../../shared/utils/WrapType'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
@@ -13,16 +21,17 @@ import { Order } from '../domain/order'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
-import { ValidBool } from '../../shared/domain/value_objects/ValidBool'
 
 export function orderToJson( order: Order ): Record<string, any> {
 	return {
-		id          : order.id.value,
-		seller_email: order.seller_email.value,
-		client_email: order.client_email.value,
-		created_at  : order.creation_date.value,
-		approved    : order.approved.value,
-		payment  :  paymentToJson(order.payment)
+		id             : order.id.value,
+		client_email   : order.client_email.value,
+		created_at     : order.creation_date.value,
+		payment        : paymentToJson( order.payment ),
+		products       : order.products.map( product => productToJson( product ) ),
+		seller_email   : order.seller_email?.value,
+		order_confirmed: order.order_confirmed?.id.value,
+		item_confirmed : order.item_confirmed?.id.value
 	}
 }
 
@@ -34,13 +43,6 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 
 	if ( id instanceof BaseException ) {
 		errors.push( new InvalidUUIDException() )
-	}
-
-	const seller_email = wrapType<Email, EmailException>(
-		() => Email.from( json.seller_email ) )
-
-	if ( seller_email instanceof BaseException ) {
-		errors.push( new EmailException( 'seller_email' ) )
 	}
 
 	const client_email = wrapType<Email, EmailException>(
@@ -58,18 +60,53 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
-	const approved = wrapType<ValidBool, InvalidBooleanException>(
-		() => ValidBool.from( json.approved ) )
-
-	if ( approved instanceof BaseException ) {
-
-		errors.push( new InvalidBooleanException( 'approved' ) )
-	}
-
 	const payment = paymentFromJson( json.payment )
 
 	if ( payment instanceof BaseException ) {
 		errors.push( payment )
+	}
+
+	const products: Product[] = []
+
+	if ( json.products !== null ) {
+		for ( const product of json.products ) {
+
+			const p = productFromJson( product )
+
+			if ( p instanceof BaseException ) {
+				errors.push( p )
+				break
+			}
+			products.push( p as Product )
+		}
+	}
+
+	const seller_email = wrapType<Email, EmailException>(
+		() => Email.from( json.seller_email ) )
+
+	let itemResult: ItemConfirmed | undefined = undefined
+	if ( json.item_confirmed !== null ) {
+		const item_confirmed = itemConfirmedFromJson( json.item_confirmed )
+
+		if ( item_confirmed instanceof BaseException ) {
+			errors.push( item_confirmed )
+		}
+		else {
+			itemResult = item_confirmed as ItemConfirmed
+		}
+	}
+
+	let orderResult: OrderConfirmed | undefined = undefined
+
+	if ( json.order_confirmed !== null ) {
+		const order_confirmed = orderConfirmedFromJson( json.order_confirmed )
+
+		if ( order_confirmed instanceof BaseException ) {
+			errors.push( order_confirmed )
+		}
+		else {
+			orderResult = order_confirmed as OrderConfirmed
+		}
 	}
 
 	if ( errors.length > 0 ) {
@@ -78,10 +115,12 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 
 	return new Order(
 		id as UUID,
-		seller_email as Email,
 		client_email as Email,
 		created_at as ValidDate,
-		approved as ValidBool,
-		payment as Payment
+		payment as Payment,
+		products,
+		seller_email instanceof BaseException ? undefined : seller_email as Email,
+		orderResult,
+		itemResult
 	)
 }

@@ -93,6 +93,58 @@ export class GetOrderController {
 											example: 'string'
 										}
 									}
+								},
+								products    : {
+									properties: {
+										id          : {
+											type   : 'string',
+											example: 'uuid'
+										},
+										code        : {
+											type   : 'string',
+											example: 'string'
+										},
+										product_code: {
+											type   : 'string',
+											example: 'string'
+										},
+										name        : {
+											type   : 'string',
+											example: 'string'
+										},
+										description : {
+											type   : 'string',
+											example: 'string'
+										},
+										created_at  : {
+											type   : 'string',
+											example: 'date'
+										},
+										brand       : {
+											type   : 'string',
+											example: 'string'
+										},
+										price       : {
+											type   : 'string',
+											example: 'number'
+										},
+										image_url   : {
+											type   : 'string',
+											example: 'url'
+										},
+										stock       : {
+											type   : 'string',
+											example: 'number'
+										},
+										average_rank: {
+											type   : 'string',
+											example: 'decimal'
+										},
+										category    : {
+											type   : 'string',
+											example: 'string'
+										}
+									}
 								}
 							}
 						}
