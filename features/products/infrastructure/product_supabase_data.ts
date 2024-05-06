@@ -10,10 +10,10 @@ import {
 	productFromJson,
 	productToJson
 } from '../application/product_mapper'
-import { Product } from '../domain/models/Product'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { Product } from '../domain/models/product'
 
 
 export class ProductSupabaseData implements ProductRepository {
