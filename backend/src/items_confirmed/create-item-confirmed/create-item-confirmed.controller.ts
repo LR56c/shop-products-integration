@@ -1,34 +1,60 @@
 import {
+	Body,
 	Controller,
-	Get,
 	HttpStatus,
-	Param
+	Post
 } from '@nestjs/common'
 import {
+	ApiBody,
 	ApiOperation,
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { ItemConfirmedDto } from '../shared/item_confirmed_dto'
+import { parseItemConfirmed } from '../shared/parse_item_confirmed'
 import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
+import { HttpResult } from '../../shared/utils/HttpResult'
+import { ItemConfirmed } from '~features/item_confirmed/domain/item_confirmed'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { GetOrderConfirmedService } from './get-order-confirmed.service'
+import { CreateItemConfirmedService } from './create-item-confirmed.service'
 
-@ApiTags( 'orders-confirmed' )
-@Controller( 'orders-confirmed' )
-export class GetOrderConfirmedController {
-	constructor( private readonly getOrderConfirmedService: GetOrderConfirmedService,
+@ApiTags( 'items-confirmed' )
+@Controller( 'items-confirmed' )
+export class CreateItemConfirmedController {
+	constructor( private readonly createItemConfirmedService: CreateItemConfirmedService,
 		private readonly translation: TranslationService )
 	{}
 
-	@Get( ':id' )
+	@Post()
+	@ApiBody( {
+		schema: {
+			type      : 'object',
+			properties: {
+				id               : {
+					type   : 'string',
+					example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
+				},
+				order_id         : {
+					type   : 'string',
+					example: 'cb183faa-40f7-4023-8131-719232e34cf8'
+				},
+				creation_date    : {
+					type   : 'string',
+					example: '2024-04-27'
+				},
+				shop_keeper_email: {
+					type   : 'string',
+					example: 'ac@gmail.com'
+				}
+			}
+		}
+	} )
 	@ApiOperation( {
-		summary    : 'Get order confirmed',
-		description: 'Get order confirmed by id'
+		summary    : 'Create a order confirmed',
+		description: 'Create a order confirmed json data'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -40,23 +66,6 @@ export class GetOrderConfirmedController {
 						statusCode: {
 							type   : 'number',
 							example: 200
-						},
-						data      : {
-							type      : 'object',
-							properties: {
-								id              : {
-									type   : 'string',
-									example: 'uuid'
-								},
-								created_at      : {
-									type   : 'string',
-									example: 'date'
-								},
-								accountant_email: {
-									type   : 'string',
-									example: 'email'
-								}
-							}
 						}
 					}
 				}
@@ -105,22 +114,18 @@ export class GetOrderConfirmedController {
 			}
 		}
 	} )
-	async getOrder(
-		@Param( 'id' ) id: string
-	): Promise<HttpResultData<Record<string, any>>> {
+	async createOrder(
+		@Body() dto: ItemConfirmedDto
+	): Promise<HttpResult> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
 
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
+			const itemConfirmed = parseItemConfirmed( dto )
 
-			const result = await this.getOrderConfirmedService.execute( idResult )
+			await this.createItemConfirmedService.execute( UUID.from(dto.order_id) ,
+				itemConfirmed as ItemConfirmed )
 
 			return {
-				statusCode: HttpStatus.OK,
-				data      : orderConfirmedToJson( result )
+				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {

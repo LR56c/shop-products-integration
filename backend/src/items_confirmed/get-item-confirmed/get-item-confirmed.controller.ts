@@ -9,26 +9,27 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
 import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { GetOrderConfirmedService } from './get-order-confirmed.service'
+import { GetItemConfirmedService } from './get-item-confirmed.service'
 
-@ApiTags( 'orders-confirmed' )
-@Controller( 'orders-confirmed' )
-export class GetOrderConfirmedController {
-	constructor( private readonly getOrderConfirmedService: GetOrderConfirmedService,
+@ApiTags( 'items-confirmed' )
+@Controller( 'items-confirmed' )
+export class GetItemConfirmedController {
+	constructor( private readonly getItemConfirmedService: GetItemConfirmedService,
 		private readonly translation: TranslationService )
 	{}
 
 	@Get( ':id' )
 	@ApiOperation( {
-		summary    : 'Get order confirmed',
-		description: 'Get order confirmed by id'
+		summary    : 'Get item confirmed',
+		description: 'Get item confirmed by id'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -52,7 +53,7 @@ export class GetOrderConfirmedController {
 									type   : 'string',
 									example: 'date'
 								},
-								accountant_email: {
+								shop_keeper_email: {
 									type   : 'string',
 									example: 'email'
 								}
@@ -116,11 +117,11 @@ export class GetOrderConfirmedController {
 				throw [ new InvalidUUIDException( 'id' ) ]
 			}
 
-			const result = await this.getOrderConfirmedService.execute( idResult )
+			const result = await this.getItemConfirmedService.execute( idResult )
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : orderConfirmedToJson( result )
+				data      : itemConfirmedToJson( result )
 			}
 		}
 		catch ( e ) {
