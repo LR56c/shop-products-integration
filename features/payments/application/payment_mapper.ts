@@ -1,4 +1,3 @@
-import { ValidBool } from '../../shared/domain/value_objects/ValidBool'
 import {BaseException} from "../../shared/domain/exceptions/BaseException";
 import {Payment} from "../domain/models/payment";
 import {wrapType} from "../../shared/utils/WrapType";
@@ -17,7 +16,6 @@ import {PaymentMethodException} from "../domain/exceptions/PaymentMethodExceptio
 export function paymentToJson(payment: Payment): Record<string, any> {
     return {
         id: payment.id.value,
-        created_at: payment.creationDate.value,
         approved: payment.approved.value,
         delivery_address: payment.deliveryName.value,
         value: payment.paymentValue.value,
@@ -26,45 +24,43 @@ export function paymentToJson(payment: Payment): Record<string, any> {
 }
 export function paymentFromJson (json: Record<string, any>): Payment | BaseException[] {
     const errors: BaseException[] = []
-    const id = wrapType<UUID, InvalidUUIDException>(
-        () => UUID.from(json.id))
-    if (id instanceof BaseException) {
-        errors.push(new InvalidUUIDException('id'))
-    }
-
-    const creationDate = wrapType<ValidDate, InvalidDateException>(
-        () => ValidDate.from(json.created_at))
-    if (creationDate instanceof BaseException) {
-        errors.push(new InvalidDateException('created_at'))
-    }
-    const approved = wrapType<ValidBool, InvalidBooleanException>(
-        () => ValidBool.from(json.approved))
-    if (approved instanceof BaseException) {
-        errors.push(new InvalidBooleanException('approved'))
-    }
-    const deliveryName = wrapType<ValidString, InvalidStringException>(
-        () => ValidString.from(json.delivery_address))
-    if (deliveryName instanceof BaseException) {
-        errors.push(new InvalidStringException('delivery_address'))
-    }
-    const paymentValue = wrapType<ValidInteger, InvalidIntegerException>(
-        () => ValidInteger.from(json.value))
-    if (paymentValue instanceof BaseException) {
-        errors.push(new InvalidIntegerException('value'))
-    }
-    const paymentMethod = wrapType<PaymentMethod, PaymentMethodException>(
-        () => PaymentMethod.from(json.payment_method))
-    if (paymentMethod instanceof BaseException) {
-        errors.push(new PaymentMethodException('payment_method'))
-    }
+	const id = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from(json.id))
+	if (id instanceof BaseException) {
+		errors.push(new InvalidUUIDException('id'))
+	}
+	const creationDate = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from(json.creationDate))
+	if (creationDate instanceof BaseException) {
+		errors.push(new InvalidDateException('creationDate'))
+	}
+	const approved = wrapType<ValidBool, InvalidBooleanException>(
+		() => ValidBool.from(json.approved))
+	if (approved instanceof BaseException) {
+		errors.push(new InvalidBooleanException('approved'))
+	}
+	const deliveryName = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from(json.deliveryName))
+	if (deliveryName instanceof BaseException) {
+		errors.push(new InvalidStringException('deliveryName'))
+	}
+	const paymentValue = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from(json.paymentValue))
+	if (paymentValue instanceof BaseException) {
+		errors.push(new InvalidIntegerException('paymentValue'))
+	}
+	const paymentMethod = wrapType<PaymentMethod, PaymentMethodException>(
+		() => PaymentMethod.from(json.paymentMethod))
+	if (paymentMethod instanceof BaseException) {
+		errors.push(new PaymentMethodException('paymentMethod'))
+	}
     if (errors.length > 0) {
         throw errors
     }
-
     return new Payment(
         id as UUID,
         creationDate as ValidDate,
-        approved as ValidBool,
+        approved as ValidBoolean,
         deliveryName as ValidString,
         paymentValue as ValidInteger,
         paymentMethod as PaymentMethod)
