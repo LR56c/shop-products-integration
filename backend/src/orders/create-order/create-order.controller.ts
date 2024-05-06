@@ -10,11 +10,13 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
+import { PartialOrder } from '~features/orders/domain/order'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { OrderDto } from '../dto/order_dto'
 import { CreateOrderService } from './create-order.service'
-import { parseCreateOrder } from '../utils/parse-create.order'
+import { parseOrder } from 'src/orders/utils/parse.order'
 
 @ApiTags( 'orders' )
 @Controller( 'orders' )
@@ -28,29 +30,20 @@ export class CreateOrderController {
 		schema: {
 			type      : 'object',
 			properties: {
-				id           : {
-					type   : 'string',
-					example: 'd78c0982-8ddd-46ef-b2d4-41787f150a98'
-				},
-				seller_email : {
-					type   : 'string',
-					example: 'aaaa@gmail.com'
-				},
-				client_email : {
+				client_email: {
 					type   : 'string',
 					example: 'ac@gmail.com'
 				},
-				creation_date: {
-					type   : 'string',
-					example: '2024-04-27'
-				},
-				approved     : {
-					type   : 'boolean',
-					example: 'true'
-				},
-				payment_id   : {
+				payment_id  : {
 					type   : 'string',
 					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
+				},
+				products_ids: {
+					type : 'array',
+					items: {
+						type   : 'string',
+						example: '359b6378-f875-4d31-b415-d3de60a59875'
+					}
 				}
 			}
 		}
@@ -118,20 +111,20 @@ export class CreateOrderController {
 		}
 	} )
 	async createOrder(
-		@Body() dto: OrderDto
+		@Body() dto: PartialOrderDto
 	): Promise<HttpResult> {
 		try {
 
-			const { data} = parseCreateOrder( dto )
+			const order = parseOrder( dto )
 
-			await this.createOrderService.createOrder(
-				data.id,
-				data.seller_email,
-				data.client_email,
-				data.creation_date,
-				data.approved,
-				data.payment_id
-			)
+			if ( !( order instanceof PartialOrder ) ) {
+				return {
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll( order )
+				}
+			}
+
+			await this.createOrderService.createOrder( order )
 
 			return {
 				statusCode: HttpStatus.OK

@@ -37,8 +37,7 @@ export function orderToJson( order: Order ): Record<string, any> {
 
 export function orderFromJson( json: Record<string, any> ): Order | BaseException[] {
 	const errors: BaseException[] = []
-
-	const id = wrapType<UUID, InvalidUUIDException>(
+	const id                      = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.id ) )
 
 	if ( id instanceof BaseException ) {
@@ -81,8 +80,17 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		}
 	}
 
-	const seller_email = wrapType<Email, EmailException>(
-		() => Email.from( json.seller_email ) )
+	let sellerResult: Email | undefined = undefined
+	if ( json.seller_email !== null ) {
+		const seller_email = wrapType<Email, EmailException>(
+			() => Email.from( json.seller_email ) )
+		if ( seller_email instanceof BaseException ) {
+			errors.push( seller_email )
+		}
+		else {
+			sellerResult = seller_email as Email
+		}
+	}
 
 	let itemResult: ItemConfirmed | undefined = undefined
 	if ( json.item_confirmed !== null ) {
@@ -119,7 +127,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		created_at as ValidDate,
 		payment as Payment,
 		products,
-		seller_email instanceof BaseException ? undefined : seller_email as Email,
+		sellerResult,
 		orderResult,
 		itemResult
 	)

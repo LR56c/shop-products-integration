@@ -18,3 +18,14 @@ export class Order{
 				readonly item_confirmed?: ItemConfirmed
 		){}
 }
+
+export class PartialOrder{
+	constructor(
+		readonly client_email: Email,
+		readonly payment_id: UUID,
+		readonly products_ids: UUID[],
+		readonly seller_email?: Email,
+		readonly order_confirmed?: UUID,
+		readonly item_confirmed?: UUID,
+	){}
+}

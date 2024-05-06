@@ -1,26 +1,40 @@
 import {
-	IsBoolean,
+	IsArray,
 	IsDate,
 	IsEmail,
+	IsOptional,
 	IsUUID
 } from 'class-validator'
 
-export class OrderDto{
+export class OrderDto {
 	@IsUUID()
-	id : string
+	id: string
 
 	@IsEmail()
-	seller_email : string
-
-	@IsEmail()
-	client_email : string
+	client_email: string
 
 	@IsDate()
-	creation_date : Date
-
-	@IsBoolean()
-	approved : boolean
+	creation_date: Date
 
 	@IsUUID()
-	payment_id : string
+	payment_id: string
+
+	@IsArray()
+	@IsUUID( '4', {
+		each: true
+	} )
+	products_ids: string[]
+
+	@IsOptional()
+	@IsEmail()
+	seller_email: string
+
+	@IsOptional()
+	@IsUUID()
+	order_confirmed: string
+
+	@IsOptional()
+	@IsUUID()
+	item_confirmed: string
 }
+

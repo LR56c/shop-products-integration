@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
+	Param,
 	Put
 } from '@nestjs/common'
 import {
@@ -10,8 +11,14 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
+import { PartialOrder } from '~features/orders/domain/order'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { OrderDto } from '../dto/order_dto'
-import { parseCreateOrder } from '../utils/parse-create.order'
+import { parseOrder } from 'src/orders/utils/parse.order'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { UpdateOrderService } from './update-order.service'
 
@@ -22,34 +29,25 @@ export class UpdateOrderController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put()
+	@Put( ':id' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
 			properties: {
-				id           : {
-					type   : 'string',
-					example: 'd78c0982-8ddd-46ef-b2d4-41787f150a98'
-				},
-				seller_email : {
-					type   : 'string',
-					example: 'aaaa@gmail.com'
-				},
 				client_email : {
 					type   : 'string',
 					example: 'ac@gmail.com'
 				},
-				creation_date: {
-					type   : 'string',
-					example: '2024-04-27'
-				},
-				approved     : {
-					type   : 'boolean',
-					example: 'true'
-				},
 				payment_id   : {
 					type   : 'string',
 					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
+				},
+				products_ids: {
+					type : 'array',
+					items: {
+						type   : 'string',
+						example: '359b6378-f875-4d31-b415-d3de60a59875'
+					}
 				}
 			}
 		}
@@ -117,21 +115,35 @@ export class UpdateOrderController {
 		}
 	} )
 	async updateOrder(
-		@Body() dto: OrderDto
+		@Param( 'id' ) id: string,
+		@Body() dto: PartialOrderDto
 	)
 	{
 		try {
 
-			const { data } = parseCreateOrder( dto )
+			const errors: BaseException[] = []
 
-			await this.updateOrderService.updateOrder(
-				data.id,
-				data.seller_email,
-				data.client_email,
-				data.creation_date,
-				data.approved,
-				data.payment_id
-			)
+			const order = parseOrder( dto )
+
+			const idResult = wrapType<UUID, InvalidUUIDException>(
+				() => UUID.from( id ) )
+
+			if ( !( order instanceof PartialOrder ) ) {
+				errors.push( ...order )
+			}
+			if ( idResult instanceof BaseException ) {
+				errors.push( new InvalidUUIDException() )
+			}
+
+			if ( errors.length > 0 ) {
+				return {
+					statusCode: HttpStatus.BAD_REQUEST,
+					message   : this.translation.translateAll( errors )
+				}
+			}
+
+			await this.updateOrderService.updateOrder( idResult as UUID,
+				order as PartialOrder )
 
 			return {
 				statusCode: HttpStatus.OK
