@@ -1,23 +1,7 @@
 import {IsBoolean, IsDate, IsEnum, IsInt, IsString, IsUUID} from "class-validator";
 import {PaymentMethodEnum} from "~features/payments/domain/models/payment_method";
+import {PaymentDto} from "../shared/payment_dto";
 
-export class CreatePaymentDto {
-    @IsUUID()
-    id: string
-
-    @IsDate()
-    creationDate: Date
-
-    @IsBoolean()
-    approved: boolean
-
-    @IsString()
-    deliveryName: string
-
-    @IsInt()
-    paymentValue: number
-
-    @IsEnum(PaymentMethodEnum)
-    paymentMethod: string
+export class CreatePaymentDto extends PaymentDto{
 
 }

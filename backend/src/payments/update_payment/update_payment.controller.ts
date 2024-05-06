@@ -1,15 +1,12 @@
 import {Body, Controller, HttpStatus, Param, Put} from '@nestjs/common';
 import { UpdatePaymentService } from './update_payment.service';
 import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {PaymentDto} from "../shared/payment_dto";
 import {HttpResult} from "../../shared/utils/HttpResult";
-import {UUID} from "~features/shared/domain/value_objects/UUID";
-import {wrapType} from "~features/shared/utils/WrapType";
-import {InvalidUUIDException} from "~features/shared/domain/exceptions/InvalidUUIDException";
 import {paymentFromJson} from "~features/payments/application/payment_mapper";
 import {Payment} from "~features/payments/domain/models/payment";
 import {TranslationService} from "../../shared/services/translation/translation.service";
-import {BaseException} from "~features/shared/domain/exceptions/BaseException";
+import {parsePayment} from "../shared/parsePayment";
+import {UpdatePaymentDto} from "./update_payment_dto";
 
 @ApiTags('payments')
 @Controller('payments')
@@ -117,15 +114,23 @@ export class UpdatePaymentController {
     }
   } )
   async updatePayment(
-      @Body('payment') dto: PaymentDto
-  ): Promise<HttpResult> {
+      @Body('payment') dto: UpdatePaymentDto
+): Promise<HttpResult> {
     try {
-      const {errors, data} = dto
+      const {errors, data} = parsePayment(dto)
       if (errors.length > 0) {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
           message: this.translation.translateAll(errors)
         }
+      }
+      await this.updatePaymentService.updatePayment(paymentFromJson(data) as Payment)
+      return {
+        statusCode: HttpStatus.OK
+      }
+    } catch (e) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
       }
     }
   }
