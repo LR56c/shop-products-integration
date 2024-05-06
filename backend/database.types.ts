@@ -56,34 +56,21 @@ export type Database = {
       }
       items_confirmed: {
         Row: {
-          approved: boolean
           created_at: string
           id: string
-          order_id: string
-          shop_keeper_email: string
+          shop_keeper_email: string | null
         }
         Insert: {
-          approved: boolean
           created_at?: string
-          id?: string
-          order_id: string
-          shop_keeper_email: string
+          id: string
+          shop_keeper_email?: string | null
         }
         Update: {
-          approved?: boolean
           created_at?: string
           id?: string
-          order_id?: string
-          shop_keeper_email?: string
+          shop_keeper_email?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "public_item_confirmed_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "public_item_confirmed_shop_keeper_email_fkey"
             columns: ["shop_keeper_email"]
@@ -121,30 +108,47 @@ export type Database = {
       }
       orders: {
         Row: {
-          approved: boolean
           client_email: string
           created_at: string
           id: string
+          item_confirmed: string | null
+          order_confirmed: string | null
           payment_id: string
-          seller_email: string
+          seller_email: string | null
         }
         Insert: {
-          approved?: boolean
           client_email: string
           created_at?: string
           id?: string
+          item_confirmed?: string | null
+          order_confirmed?: string | null
           payment_id: string
-          seller_email: string
+          seller_email?: string | null
         }
         Update: {
-          approved?: boolean
           client_email?: string
           created_at?: string
           id?: string
+          item_confirmed?: string | null
+          order_confirmed?: string | null
           payment_id?: string
-          seller_email?: string
+          seller_email?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "orders_item_confirmed_fkey"
+            columns: ["item_confirmed"]
+            isOneToOne: false
+            referencedRelation: "items_confirmed"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_order_confirmed_fkey"
+            columns: ["order_confirmed"]
+            isOneToOne: false
+            referencedRelation: "orders_confirmed"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_orders_client_email_fkey"
             columns: ["client_email"]
@@ -170,25 +174,19 @@ export type Database = {
       }
       orders_confirmed: {
         Row: {
-          accountant_email: string
-          approved: boolean
+          accountant_email: string | null
           created_at: string
           id: string
-          order_id: string
         }
         Insert: {
-          accountant_email: string
-          approved: boolean
+          accountant_email?: string | null
           created_at?: string
-          id?: string
-          order_id: string
+          id: string
         }
         Update: {
-          accountant_email?: string
-          approved?: boolean
+          accountant_email?: string | null
           created_at?: string
           id?: string
-          order_id?: string
         }
         Relationships: [
           {
@@ -197,13 +195,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["email"]
-          },
-          {
-            foreignKeyName: "public_orders_confirmed_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
           },
         ]
       }

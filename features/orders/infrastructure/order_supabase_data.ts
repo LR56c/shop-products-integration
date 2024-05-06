@@ -15,7 +15,10 @@ import { OrderRepository } from '../domain/order_repository'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { Order } from '../domain/order'
+import {
+	Order,
+	PartialOrder
+} from '../domain/order'
 
 export class OrderSupabaseData implements OrderRepository {
 
@@ -23,30 +26,38 @@ export class OrderSupabaseData implements OrderRepository {
 
 	readonly tableName = 'orders'
 
-	async createOrder( id: UUID,
-		seller_email: Email,
-		client_email: Email,
-		creation_date: ValidDate,
-		approved: ValidBool,
-		payment_id: UUID ): Promise<boolean> {
+	async createOrder( order: PartialOrder ): Promise<boolean> {
 
-		const result = await this.client.from( this.tableName )
-		                         .insert({
-			                         id					: id.value,
-			                         approved			: approved.value,
-			                         client_email: client_email.value,
-			                         created_at: creation_date.value,
-			                         payment_id: payment_id.value,
-			                         seller_email: seller_email.value
-		                         } as any)
+		const { data, error } = await this.client.from( this.tableName )
+		                                  .insert( {
+			                                  client_email   : order.client_email.value,
+			                                  payment_id     : order.payment_id.value,
+			                                  seller_email   : order.seller_email?.value,
+			                                  order_confirmed: order.order_confirmed?.value,
+			                                  item_confirmed : order.item_confirmed?.value
+		                                  } )
+		                                  .select()
 
-		if ( result.error != null ) {
 
-			if ( result.error.code === '23505' ) {
+		if ( error != null ) {
+
+			if ( error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'order' ) ]
 			}
-			throw [ new InfrastructureException() ]
+			throw [ new InfrastructureException('order') ]
 		}
+
+		const productsJson   = order.products_ids.map( id => ( {
+			product_id: id.value,
+			order_id  : data[0].id
+		} ) )
+		const productResults = await this.client.from( 'orders_products' )
+		                                 .insert( productsJson )
+
+		if ( productResults.error ) {
+			throw [ new InfrastructureException('products_id') ]
+		}
+
 		return true
 	}
 
@@ -77,13 +88,15 @@ export class OrderSupabaseData implements OrderRepository {
 	async getAll( from: ValidInteger, to: ValidInteger,
 		client_email?: Email ): Promise<Order[]> {
 		const result = this.client.from( this.tableName )
-		                   .select('*, payment:payment_id(*)')
+		                   .select( '*, payment:payment_id(*), products(*)' )
 
 		if ( client_email !== undefined ) {
 			result.eq( 'client_email', client_email.value )
 		}
 
 		const { data, error } = await result.range( from.value, to.value )
+		console.log( 'data, error' )
+		console.log( data, error )
 
 		if ( client_email != undefined && data?.length === 0 ) {
 			throw [ new ParameterNotMatchException( 'client_email' ) ]
@@ -113,7 +126,8 @@ export class OrderSupabaseData implements OrderRepository {
 	async getOrder( id: UUID ): Promise<Order> {
 		try {
 			const result = await this.client.from( this.tableName )
-			                         .select('*, payment:payment_id(*)')
+			                         .select(
+				                         '*, payment:payment_id(*), products(*)' )
 			                         .eq( 'id', id.value )
 
 			if ( result.error ) {
@@ -123,6 +137,7 @@ export class OrderSupabaseData implements OrderRepository {
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'order_id' ) ]
 			}
+			console.log( result.data[0] )
 
 			const order = orderFromJson( result.data[0] )
 
@@ -138,31 +153,39 @@ export class OrderSupabaseData implements OrderRepository {
 
 	}
 
-	async updateOrder(  id: UUID,
-		seller_email: Email,
-		client_email: Email,
-		creation_date: ValidDate,
-		approved: ValidBool,
-		payment_id: UUID  ): Promise<boolean> {
+	async updateOrder( id: UUID, order: PartialOrder ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
 			          .update( {
-				          seller_email : seller_email.value,
-				          client_email : client_email.value,
-				          created_at: creation_date.value,
-				          approved     : approved.value,
-				          payment_id   : payment_id.value
-			          } as any)
+				          client_email   : order.client_email.value,
+				          payment_id     : order.payment_id.value,
+				          seller_email   : order.seller_email?.value,
+				          order_confirmed: order.order_confirmed?.value,
+				          item_confirmed : order.item_confirmed?.value
+			          } )
 			          .eq(
 				          'id',
 				          id.value
-			          )
+			          ).select()
+
+			await this.client.from('orders_products').delete().eq('order_id', id.value)
+
+			const productsJson   = order.products_ids.map( p => ( {
+				product_id: p.value,
+				order_id  : id.value
+			} ) )
+			const productResults = await this.client.from( 'orders_products' )
+			                                 .insert( productsJson )
+
+			if ( productResults.error ) {
+				throw [ new InfrastructureException('products_id') ]
+			}
+
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException() ]
+			throw e
 		}
 
 	}
-
 }

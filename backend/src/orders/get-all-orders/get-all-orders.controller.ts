@@ -58,7 +58,7 @@ export class GetAllOrdersController {
 										type   : 'string',
 										example: 'uuid'
 									},
-									seller_email        : {
+									seller_email: {
 										type   : 'string',
 										example: 'string'
 									},
@@ -66,26 +66,26 @@ export class GetAllOrdersController {
 										type   : 'string',
 										example: 'string'
 									},
-									created_at        : {
+									created_at  : {
 										type   : 'string',
 										example: 'date'
 									},
-									approved : {
+									approved    : {
 										type   : 'string',
 										example: 'boolean'
 									},
-									payment : {
-										type	 : 'object',
+									payment     : {
+										type      : 'object',
 										properties: {
-											id: {
+											id              : {
 												type   : 'string',
 												example: 'uuid'
 											},
-											created_at: {
+											created_at      : {
 												type   : 'string',
 												example: 'date'
 											},
-											approved: {
+											approved        : {
 												type   : 'string',
 												example: 'boolean'
 											},
@@ -93,14 +93,70 @@ export class GetAllOrdersController {
 												type   : 'string',
 												example: 'string'
 											},
-											value: {
+											value           : {
 												type   : 'string',
 												example: 'integer'
 											},
-											payment_method: {
+											payment_method  : {
 												type   : 'string',
 												example: 'string'
-											},
+											}
+										}
+									},
+									products    : {
+										type : 'array',
+										items: {
+											type      : 'object',
+											properties: {
+												id          : {
+													type   : 'string',
+													example: 'uuid'
+												},
+												code        : {
+													type   : 'string',
+													example: 'string'
+												},
+												product_code: {
+													type   : 'string',
+													example: 'string'
+												},
+												name        : {
+													type   : 'string',
+													example: 'string'
+												},
+												description : {
+													type   : 'string',
+													example: 'string'
+												},
+												created_at  : {
+													type   : 'string',
+													example: 'date'
+												},
+												brand       : {
+													type   : 'string',
+													example: 'string'
+												},
+												price       : {
+													type   : 'string',
+													example: 'number'
+												},
+												image_url   : {
+													type   : 'string',
+													example: 'url'
+												},
+												stock       : {
+													type   : 'string',
+													example: 'number'
+												},
+												average_rank: {
+													type   : 'string',
+													example: 'decimal'
+												},
+												category    : {
+													type   : 'string',
+													example: 'string'
+												}
+											}
 										}
 									}
 								}
