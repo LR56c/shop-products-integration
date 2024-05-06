@@ -1,13 +1,18 @@
 import {Controller, Delete, HttpStatus, Param} from '@nestjs/common';
 import { DeletePaymentService } from './delete_payment.service';
 import {TranslationService} from "../../shared/services/translation/translation.service";
-import {ApiOperation, ApiResponse} from "@nestjs/swagger";
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger'
 import {wrapType} from "~features/shared/utils/WrapType";
 import {UUID} from "~features/shared/domain/value_objects/UUID";
 import {BaseException} from "~features/shared/domain/exceptions/BaseException";
 import {HttpResult} from "../../shared/utils/HttpResult";
 
-@Controller('delete-payment')
+@ApiTags('payments')
+@Controller('payments')
 export class DeletePaymentController {
   constructor(private readonly deletePaymentService: DeletePaymentService,
               private readonly translation: TranslationService) {}

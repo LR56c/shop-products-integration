@@ -6,7 +6,7 @@ import {InvalidUUIDException} from "../../shared/domain/exceptions/InvalidUUIDEx
 import {wrapType} from "../../shared/utils/WrapType";
 import {ValidDate} from "../../shared/domain/value_objects/ValidDate";
 import {InvalidDateException} from "../../shared/domain/exceptions/InvalidDateException";
-import {ValidBoolean} from "../../shared/domain/value_objects/ValidBoolean";
+import {ValidBool} from "../../shared/domain/value_objects/ValidBool";
 import {InvalidBooleanException} from "../../shared/domain/exceptions/InvalidBooleanException";
 import {ValidString} from "../../shared/domain/value_objects/ValidString";
 import {ValidInteger} from "../../shared/domain/value_objects/ValidInteger";
@@ -33,8 +33,8 @@ export const CreatePayment = async (props: {
     if (creationDateResult instanceof BaseException) {
         errors.push(new InvalidDateException('creationDate'))
     }
-    const approvedResult = wrapType<ValidBoolean, InvalidBooleanException>(
-        () => ValidBoolean.from(props.approved))
+    const approvedResult = wrapType<ValidBool, InvalidBooleanException>(
+        () => ValidBool.from(props.approved))
     if (approvedResult instanceof BaseException) {
         errors.push(new InvalidBooleanException('approved'))
     }
@@ -59,7 +59,7 @@ export const CreatePayment = async (props: {
     return new Payment(
         idResult as UUID,
         creationDateResult as ValidDate,
-        approvedResult as ValidBoolean,
+        approvedResult as ValidBool,
         deliveryNameResult as ValidString,
         paymentValueResult as ValidInteger,
         paymentMethodResult as PaymentMethod

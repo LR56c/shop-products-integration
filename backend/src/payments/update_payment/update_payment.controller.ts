@@ -14,7 +14,7 @@ export class UpdatePaymentController {
   constructor(private readonly updatePaymentService: UpdatePaymentService,
               private readonly translation: TranslationService ) {}
 
-  @Put(':id')
+  @Put()
   @ApiBody({
     schema: {
       type: 'object',
@@ -24,9 +24,9 @@ export class UpdatePaymentController {
           properties: {
             id: {
               type: 'string',
-              example: 'AAAA-AAAA-AAAA'
+              example: '668476f7-b08f-40b6-9e02-faa55aca42b1'
             },
-            creationDate: {
+            created_at: {
               type: 'date',
               example: '2021-09-21'
             },
@@ -34,17 +34,17 @@ export class UpdatePaymentController {
               type: 'boolean',
               example: true
             },
-            deliveryName: {
+            delivery_address: {
               type: 'string',
               example: 'John Doe'
             },
-            paymentValue: {
+            value: {
               type: 'integer',
               example: 1000
             },
-            paymentMethod: {
+            payment_method: {
               type: 'string',
-              example: 'Credit'
+              example: 'CREDIT'
             }
           }
         }
@@ -53,7 +53,7 @@ export class UpdatePaymentController {
   })
   @ApiOperation( {
     summary: 'Payment Updated',
-    description: 'Update a payment by id and json data',
+    description: 'Update a payment by  json data',
   } )
   @ApiResponse( {
     status     : 200,
@@ -117,20 +117,16 @@ export class UpdatePaymentController {
       @Body('payment') dto: UpdatePaymentDto
 ): Promise<HttpResult> {
     try {
-      const {errors, data} = parsePayment(dto)
-      if (errors.length > 0) {
-        return {
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: this.translation.translateAll(errors)
-        }
-      }
-      await this.updatePaymentService.updatePayment(paymentFromJson(data) as Payment)
+      const result = parsePayment(dto)
+
+      await this.updatePaymentService.updatePayment(result as Payment)
       return {
         statusCode: HttpStatus.OK
       }
     } catch (e) {
       return {
         statusCode: HttpStatus.BAD_REQUEST,
+        message: this.translation.translateAll(e)
       }
     }
   }

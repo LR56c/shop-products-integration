@@ -1,22 +1,33 @@
-import {IsBoolean, IsDate, IsInt, IsString, IsUUID} from "class-validator";
+import {
+    IsBoolean,
+    IsDate,
+    IsInt,
+    IsString,
+    IsUUID,
+    Min,
+    MinLength
+} from 'class-validator'
 
 export class PaymentDto {
     @IsUUID()
     id: string
 
     @IsDate()
-    creationDate: Date
+    created_at: Date
 
     @IsBoolean()
     approved: boolean
 
+    @MinLength(1)
     @IsString()
-    deliveryName: string
+    delivery_address: string
 
+    @Min(1)
     @IsInt()
-    paymentValue: number
+    value: number
 
+    @MinLength(1)
     @IsString()
-    paymentMethod: string
+    payment_method: string
 
 }

@@ -22,9 +22,9 @@ export class CreatePaymentController {
           properties: {
             id: {
               type   : 'string',
-              example: 'AAAA-AAAA-AAAA'
+              example: '668476f7-b08f-40b6-9e02-faa55aca42b1'
             },
-            creationDate: {
+            created_at: {
               type   : 'date',
               example: '2021-09-21'
             },
@@ -32,17 +32,17 @@ export class CreatePaymentController {
               type   : 'boolean',
               example: true
             },
-            deliveryName: {
+            delivery_address: {
               type   : 'string',
               example: 'John Doe'
             },
-            paymentValue: {
+            value: {
               type   : 'integer',
               example: 1000
             },
-            paymentMethod: {
+            payment_method: {
               type   : 'string',
-              example: 'Credit'
+              example: 'CREDIT'
             }
           }
         }
@@ -117,11 +117,11 @@ export class CreatePaymentController {
     try {
       const paymentResult = await CreatePayment({
         id: dto.id,
-        creationDate: dto.creationDate,
+        creationDate: dto.created_at,
         approved: dto.approved,
-        deliveryName: dto.deliveryName,
-        paymentValue: dto.paymentValue,
-        paymentMethod: dto.paymentMethod
+        deliveryName: dto.delivery_address,
+        paymentValue: dto.value,
+        paymentMethod: dto.payment_method
       })
       await this.createPaymentService.createPayment(paymentResult as Payment)
       return {
