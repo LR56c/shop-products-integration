@@ -21,12 +21,12 @@ export function productToJson( product: Product ): Record<string, any> {
 		product_code: product.product_code.value,
 		name        : product.name.value,
 		description : product.description.value,
-		created_at   : product.created_at.value,
+		created_at  : product.created_at.value,
 		brand       : product.brand.value,
 		price       : product.price.value,
 		image_url   : product.image_url.value,
 		stock       : product.stock.value,
-		average_rank        : product.average_rank.value,
+		average_rank: product.average_rank.value,
 		category    : product.category_name.value
 	}
 }
@@ -108,7 +108,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		() => ValidRank.from( json.average_rank ) )
 
 	if ( rank instanceof BaseException ) {
-		errors.push( new InvalidRankException('average_rank') )
+		errors.push( new InvalidRankException( 'average_rank' ) )
 	}
 
 	const category_name = wrapType<ValidString, InvalidStringException>(

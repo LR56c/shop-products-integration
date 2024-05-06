@@ -1,5 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
+import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import {
 	rankFromJson,
 	rankToJson
@@ -14,43 +16,69 @@ export class RankSupabaseData implements RankRepository {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
+	async updateRank( rank: Rank ): Promise<boolean> {
+		try {
+			const result = await this.client.from( this.tableName )
+			                         .update( rankToJson( rank ) as any )
+			                         .eq( 'product_code', rank.code.value )
+			                         .eq( 'user_email', rank.user_email.value)
+			if ( result.error?.code === '23503' ) {
+				throw [ new DataNotFoundException() ]
+			}
+
+			return true
+		}
+		catch ( e ) {
+			throw e
+		}
+	}
+
 	readonly tableName = 'rank'
 
 	async addRank( rank: Rank ): Promise<boolean> {
 		try {
-			await this.client.from( this.tableName )
-			          .insert( rankToJson( rank ) as any )
+			const result = await this.client.from( this.tableName )
+			                         .insert( rankToJson( rank ) as any )
+			if ( result.error?.code === '23505' ) {
+				throw [ new KeyAlreadyExistException( 'rank' ) ]
+			}
+			if ( result.error?.code === '23503' ) {
+				throw [ new DataNotFoundException() ]
+			}
 			return true
 		}
 		catch ( e ) {
-			console.log( 'supabase unexpected error' )
-			console.log( e )
-			throw [ new InfrastructureException() ]
+			console.log( e)
+			throw e
 		}
 	}
 
 	async getAllRankByCode( code: ValidString ): Promise<Rank[]> {
-		const result = await this.client.from( this.tableName )
-		                         .select()
-		                         .eq( 'product_code', code.value )
+		try {
 
-		if ( result.error ) {
-			console.log( 'supabase unexpected error' )
-			console.log( result.error )
-			throw [ new InfrastructureException() ]
-		}
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'product_code', code.value )
 
-		const ranks: Rank[]     = []
-		for ( const json of result.data ) {
-
-			const product = rankFromJson( json )
-
-			if ( product instanceof BaseException ) {
-				throw product
+			if ( result.error ) {
+				throw [ new InfrastructureException() ]
 			}
-			ranks.push( product as Rank )
-		}
 
-		return ranks
+			const ranks: Rank[] = []
+			for ( const json of result.data ) {
+
+				const product = rankFromJson( json )
+
+				if ( product instanceof BaseException ) {
+					throw product
+				}
+				ranks.push( product as Rank )
+			}
+
+			return ranks
+		}
+		catch ( e ) {
+			throw e
+		}
 	}
 }

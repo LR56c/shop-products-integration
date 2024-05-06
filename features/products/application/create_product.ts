@@ -1,33 +1,29 @@
-import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { ProductRepository } from '../domain/repository/product_repository'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import {
-	wrapType,
-} from '../../shared/utils/WrapType'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
-import { Product } from '../domain/models/Product'
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
+import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
+import { wrapType } from '../../shared/utils/WrapType'
+import { Product } from '../domain/models/Product'
 
-export const CreateProduct = async ( repo: ProductRepository, props: {
-	id: string
+export const CreateProduct = async ( props: {
 	code: string
+	product_code: string
 	name: string
 	description: string
 	brand: string
 	image_url: string
-	rank: string
-	price: string
-	stock: string
+	price: number
+	stock: number
 	category_name: string
-} ): Promise<boolean> => {
+} ): Promise<Product> => {
 
 	const errors: BaseException[] = []
 
@@ -39,7 +35,7 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 	}
 
 	const code_productResult = wrapType<ValidString, InvalidStringException>(
-		() => ValidString.from( props.code ) )
+		() => ValidString.from( props.product_code ) )
 
 	if ( code_productResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'code_product' ) )
@@ -95,7 +91,7 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 	}
 
 	const rankResult = wrapType<ValidRank, InvalidRankException>(
-		() => ValidRank.from( props.rank ) )
+		() => ValidRank.from( 0 ) )
 
 	if ( rankResult instanceof BaseException ) {
 		errors.push( new InvalidRankException( 'rank' ) )
@@ -112,8 +108,8 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 	if ( errors.length > 0 ) {
 		throw errors
 	}
-	const product = new Product(
-		UUID.from( props.id ),
+	return new Product(
+		UUID.create(),
 		codeResult as ValidString,
 		code_productResult as ValidString,
 		nameResult as ValidString,
@@ -122,9 +118,8 @@ export const CreateProduct = async ( repo: ProductRepository, props: {
 		brandResult as ValidString,
 		priceResult as ValidInteger,
 		image_urlResult as ValidURL,
-		rankResult as ValidRank,
 		stockResult as ValidInteger,
+		rankResult as ValidRank,
 		category_nameResult as ValidString
 	)
-	return await repo.createProduct( product as Product )
 }

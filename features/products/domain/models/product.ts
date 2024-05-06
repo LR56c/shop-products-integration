@@ -1,3 +1,4 @@
+import { Sale } from 'features/sales/domain/sale'
 import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
@@ -19,7 +20,9 @@ export class Product {
    readonly image_url: ValidURL,
    readonly stock: ValidInteger,
    readonly average_rank: ValidRank,
-   readonly category_name: ValidString) {}
+   readonly category_name: ValidString,
+   readonly sale?: Sale
+ ) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {
     if ( newQuantity.value > this.stock.value ) {
@@ -38,7 +41,8 @@ export class Product {
       this.image_url,
       newQuantity,
       this.average_rank,
-      this.category_name
+      this.category_name,
+      this.sale
     )
   }
 }

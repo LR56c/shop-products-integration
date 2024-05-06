@@ -11,14 +11,16 @@ import { AverageRankController } from 'src/ranks/average-rank/average-rank.contr
 import { AverageRankService } from 'src/ranks/average-rank/average-rank.service'
 import { GetAllRankByCodeController } from 'src/ranks/get-all-rank-by-code/get-all-rank-by-code.controller'
 import { GetAllRankByCodeService } from 'src/ranks/get-all-rank-by-code/get-all-rank-by-code.service'
+import { UpdateRankController } from 'src/ranks/update-rank/update-rank.controller'
+import { UpdateRankService } from 'src/ranks/update-rank/update-rank.service'
 import { RankRepository } from '~features/ranks/domain/rank_repository'
 import { RankSupabaseData } from '~features/ranks/infrastructure/rank_supabase_data'
 
 @Module( {
-	controllers: [ AddRankController, GetAllRankByCodeController,
+	controllers: [ AddRankController, GetAllRankByCodeController, UpdateRankController,
 		AverageRankController ],
 	imports    : [
-		forwardRef( () => AppModule )
+		forwardRef( () => AppModule ),
 	],
 	providers  : [
 		{
@@ -28,6 +30,6 @@ import { RankSupabaseData } from '~features/ranks/infrastructure/rank_supabase_d
 			},
 			inject    : [ SupabaseClient<Database> ]
 		},
-		AddRankService, GetAllRankByCodeService, AverageRankService ]
+		AddRankService, GetAllRankByCodeService, AverageRankService, UpdateRankService ]
 } )
 export class RanksModule {}
