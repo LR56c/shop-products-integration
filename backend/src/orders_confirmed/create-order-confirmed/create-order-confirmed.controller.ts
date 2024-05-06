@@ -2,8 +2,7 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
-	Param,
-	Put
+	Post
 } from '@nestjs/common'
 import {
 	ApiBody,
@@ -11,51 +10,51 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { PartialOrder } from '~features/orders/domain/order'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { OrderDto } from '../dto/order_dto'
-import { parseOrder } from 'src/orders/utils/parse.order'
+import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
+import { parseOrderConfirmed } from '../shared/parse_order_confirmed'
 import { TranslationService } from '../../shared/services/translation/translation.service'
-import { UpdateOrderService } from './update-order.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
+import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
+import { CreateOrderConfirmedService } from './create-order-confirmed.service'
 
-@ApiTags( 'orders' )
-@Controller( 'orders' )
-export class UpdateOrderController {
-	constructor( private readonly updateOrderService: UpdateOrderService,
+@ApiTags( 'orders-confirmed' )
+@Controller( 'orders-confirmed' )
+export class CreateOrderConfirmedController {
+	constructor( private readonly createOrderConfirmedService: CreateOrderConfirmedService,
 		private readonly translation: TranslationService )
 	{}
 
-	@Put( ':id' )
+	@Post()
 	@ApiBody( {
 		schema: {
 			type      : 'object',
 			properties: {
-				client_email : {
+				id              : {
+					type   : 'string',
+					example: '3643fe52-f496-4d1f-87b9-d81d71ddf61d'
+				},
+				order_id              : {
+					type   : 'string',
+					example: '2e012d65-178a-41dc-b902-46335ee9f3f1'
+				},
+				creation_date   : {
+					type   : 'string',
+					example: '2024-04-27'
+				},
+				accountant_email: {
 					type   : 'string',
 					example: 'ac@gmail.com'
-				},
-				payment_id   : {
-					type   : 'string',
-					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
-				},
-				products_ids: {
-					type : 'array',
-					items: {
-						type   : 'string',
-						example: '359b6378-f875-4d31-b415-d3de60a59875'
-					}
 				}
 			}
 		}
 	} )
 	@ApiOperation( {
-		summary    : 'Update a product',
-		description: 'Update a product by product_code and json data'
+		summary    : 'Create a order confirmed',
+		description: 'Create a order confirmed json data'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -115,36 +114,32 @@ export class UpdateOrderController {
 			}
 		}
 	} )
-	async updateOrder(
-		@Param( 'id' ) id: string,
-		@Body() dto: PartialOrderDto
-	) : Promise<HttpResult>
-	{
+	async createOrder(
+		@Body() dto: OrderConfirmedDto
+	): Promise<HttpResult> {
 		try {
 
 			const errors: BaseException[] = []
 
-			const order = parseOrder( dto )
-
 			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
+				() => UUID.from( dto.order_id ) )
 
-			if ( !( order instanceof PartialOrder ) ) {
-				errors.push( ...order )
-			}
 			if ( idResult instanceof BaseException ) {
-				errors.push( new InvalidUUIDException() )
+				errors.push( new InvalidUUIDException( 'id' ) )
+			}
+
+			const orderConfirmed = parseOrderConfirmed( dto )
+
+			if ( !( orderConfirmed instanceof OrderConfirmed ) ) {
+				errors.push( ...orderConfirmed )
 			}
 
 			if ( errors.length > 0 ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( errors )
-				}
+				throw errors
 			}
 
-			await this.updateOrderService.updateOrder( idResult as UUID,
-				order as PartialOrder )
+			await this.createOrderConfirmedService.execute( idResult as UUID,
+				orderConfirmed as OrderConfirmed )
 
 			return {
 				statusCode: HttpStatus.OK

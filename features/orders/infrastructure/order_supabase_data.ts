@@ -95,8 +95,6 @@ export class OrderSupabaseData implements OrderRepository {
 		}
 
 		const { data, error } = await result.range( from.value, to.value )
-		console.log( 'data, error' )
-		console.log( data, error )
 
 		if ( client_email != undefined && data?.length === 0 ) {
 			throw [ new ParameterNotMatchException( 'client_email' ) ]
@@ -137,7 +135,6 @@ export class OrderSupabaseData implements OrderRepository {
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'order_id' ) ]
 			}
-			console.log( result.data[0] )
 
 			const order = orderFromJson( result.data[0] )
 

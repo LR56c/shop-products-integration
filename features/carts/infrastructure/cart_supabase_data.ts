@@ -10,7 +10,6 @@ import { InfrastructureException } from '../../shared/infrastructure/infrastruct
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	cartFromJson,
-	cartToJson
 } from '../application/cart_mapper'
 import {
 	Cart,

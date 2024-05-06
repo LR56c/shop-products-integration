@@ -4,6 +4,8 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { ApplyItemConfirmedService } from 'src/orders/shared/services/apply-item-confirmed/apply-item-confirmed.service'
+import { ApplyOrderConfirmedService } from 'src/orders/shared/services/apply-order-confirmed/apply-order-confirmed.service'
 import { GetAllOrdersService } from './get-all-orders/get-all-orders.service'
 import { OrderRepository } from '~features/orders/domain/order_repository'
 import { OrderSupabaseData } from '~features/orders/infrastructure/order_supabase_data'
@@ -28,7 +30,7 @@ import { DeleteOrderService } from './delete-order/delete-order.service'
 		},
 		inject    : [ SupabaseClient<Database> ]
 	}, CreateOrderService, DeleteOrderService, GetOrderService,
-		GetAllOrdersService, UpdateOrderService ],
+		GetAllOrdersService, UpdateOrderService, ApplyItemConfirmedService, ApplyOrderConfirmedService ],
 	imports    :
 		[ forwardRef( () => AppModule ) ]
 } )
