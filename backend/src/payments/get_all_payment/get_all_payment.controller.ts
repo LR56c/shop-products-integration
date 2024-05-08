@@ -22,8 +22,18 @@ export class GetAllPaymentController {
   @ApiQuery( {
     name    : 'approved',
     type    : Boolean,
-    required: true
+    required: false
   } )
+  @ApiQuery( {
+    name    : 'from_date',
+    type    : Date,
+    required: false
+  } )
+    @ApiQuery( {
+        name    : 'to_date',
+        type    : Date,
+        required: false
+    } )
   @ApiOperation({
     summary: 'Get all payments',
     description: 'Get all payments from a range of payments, and optionally filter by approved'
@@ -46,27 +56,27 @@ export class GetAllPaymentController {
                 properties: {
                   id          : {
                     type   : 'string',
-                    example: '123e4567-e89b-12d3-a456-426614174000'
+                    example: 'UUID'
                   },
                   creationDate: {
                     type   : 'string',
-                    example: '2021-08-06T14:40:00.000Z'
+                    example: 'date'
                   },
                   approved    : {
-                    type   : 'boolean',
-                    example: true
+                    type   : 'string',
+                    example: 'boolean'
                   },
                   deliveryName: {
                     type   : 'string',
-                    example: 'John Doe'
+                    example: 'string'
                   },
                   paymentValue: {
-                    type   : 'number',
-                    example: 100
+                    type   : 'string',
+                    example: 'number'
                   },
                   paymentMethod: {
                     type   : 'string',
-                    example: 'credit card'
+                    example: 'string'
                   }
                 }
               }
