@@ -27,6 +27,8 @@ export class PromotionSupabaseData implements PromotionRepository {
 		                         .insert( promotionToJson( promotion ) as any )
 
 		if ( result.error != null ) {
+			console.log('log')
+			console.log(result.error)
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException() ]
 			}

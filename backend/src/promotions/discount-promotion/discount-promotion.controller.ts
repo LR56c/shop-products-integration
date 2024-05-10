@@ -65,6 +65,15 @@ export class DiscountPromotionController {
 						statusCode: {
 							type   : 'number',
 							example: 200
+						},
+						data: {
+							type   : 'object',
+							properties:{
+								discount: {
+									type   : 'number',
+									example: 1500
+								}
+							}
 						}
 					}
 				}

@@ -1,15 +1,15 @@
 import {
-  Body,
-  Controller,
-  HttpStatus,
-  Param,
-  Put
+	Body,
+	Controller,
+	HttpStatus,
+	Param,
+	Put
 } from '@nestjs/common'
 import {
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags
+	ApiBody,
+	ApiOperation,
+	ApiResponse,
+	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
@@ -32,65 +32,85 @@ export class UpdatePromotionController {
 
 	@Put( ':id' )
 	@ApiBody( {
-		schema: {
-			type      : 'object',
-			properties: {
-				product: {
-					type      : 'object',
-					properties: {
-						id          : {
-							type   : 'string',
-							example: 'aab298c3-6b7e-4c3e-b6fc-0817bb49837a'
-						},
-						code        : {
-							type   : 'string',
-							example: 'abc'
-						},
-						product_code: {
-							type   : 'string',
-							example: 'abc2'
-						},
-						name        : {
-							type   : 'string',
-							example: 'n'
-						},
-						description : {
-							type   : 'string',
-							example: 'd'
-						},
-						created_at  : {
-							type   : 'string',
-							example: '2024-04-27'
-						},
-						brand       : {
-							type   : 'string',
-							example: 'b'
-						},
-						price       : {
-							type   : 'number',
-							example: 2
-						},
-						image_url   : {
-							type   : 'string',
-							example: 'http://img.com/img.jpg'
-						},
-						stock       : {
-							type   : 'number',
-							example: 2.0
-						},
-						average_rank: {
-							type   : 'number',
-							example: 2
-						},
-						category    : {
-							type   : 'string',
-							example: 'TEST'
+			schema: {
+				type      : 'object',
+				properties: {
+					promotion: {
+						properties: {
+							id        : {
+								type   : 'string',
+								example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
+							},
+							name      : {
+								type   : 'string',
+								example: 'abc'
+							},
+							percentage: {
+								type   : 'number',
+								example: 20
+							},
+							created_at: {
+								type   : 'string',
+								example: '2024-04-27'
+							},
+							end_date  : {
+								type   : 'string',
+								example: '2024-04-27'
+							},
+							start_date: {
+								type   : 'string',
+								example: '2024-04-27'
+							}
+						}
+					},
+					products : {
+						type : 'array',
+						items: {
+							type      : 'object',
+							properties: {
+								code        : {
+									type   : 'string',
+									example: 'abc'
+								},
+								product_code: {
+									type   : 'string',
+									example: 'abc2'
+								},
+								name        : {
+									type   : 'string',
+									example: 'n'
+								},
+								brand       : {
+									type   : 'string',
+									example: 'b'
+								},
+								price       : {
+									type   : 'number',
+									example: 2
+								},
+								image_url   : {
+									type   : 'string',
+									example: 'http://img.com/img.jpg'
+								},
+								stock       : {
+									type   : 'number',
+									example: 2
+								},
+								description : {
+									type   : 'string',
+									example: 'd'
+								},
+								category    : {
+									type   : 'string',
+									example: 'TEST'
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-	} )
+	)
 	@ApiOperation( {
 		summary    : 'Update a promotion',
 		description: 'Update a promotion by id and json data'

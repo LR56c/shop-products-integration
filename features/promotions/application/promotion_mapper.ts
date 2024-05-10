@@ -17,7 +17,7 @@ export function promotionToJson( promotion: Promotion ): Record<string, any> {
 		id           : promotion.id.value,
 		name         : promotion.name.value,
 		percentage   : promotion.percentage.value,
-		creation_date: promotion.creation_date.value,
+		created_at: promotion.creation_date.value,
 		end_date     : promotion.end_date.value,
 		start_date   : promotion.start_date.value
 	}

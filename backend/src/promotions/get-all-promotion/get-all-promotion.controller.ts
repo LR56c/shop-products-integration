@@ -12,15 +12,11 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
-import { paymentToJson } from '~features/payments/application/payment_mapper'
 import { promotionToJson } from '~features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidBooleanException } from '~features/shared/domain/exceptions/InvalidBooleanException'
 import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidBool } from '~features/shared/domain/value_objects/ValidBool'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
@@ -69,19 +65,62 @@ export class GetAllPromotionController {
 						data      : {
 							type : 'array',
 							items: {
-								type      : 'object',
 								properties: {
-									id               : {
+									id        : {
 										type   : 'string',
 										example: 'uuid'
 									},
-									created_at       : {
+									name      : {
+										type   : 'string',
+										example: 'string'
+									},
+									percentage: {
+										type   : 'string',
+										example: 'decimal'
+									},
+									create_at : {
 										type   : 'string',
 										example: 'date'
 									},
-									shop_keeper_email: {
+									end_date  : {
 										type   : 'string',
-										example: 'email'
+										example: 'date'
+									},
+									start_date: {
+										type   : 'string',
+										example: 'date'
+									},
+									products  : {
+										type : 'array',
+										items: {
+											type      : 'object',
+											properties: {
+												id        : {
+													type   : 'string',
+													example: 'uuid'
+												},
+												name      : {
+													type   : 'string',
+													example: 'string'
+												},
+												percentage: {
+													type   : 'string',
+													example: 'decimal'
+												},
+												create_at : {
+													type   : 'string',
+													example: 'date'
+												},
+												end_date  : {
+													type   : 'string',
+													example: 'date'
+												},
+												start_date: {
+													type   : 'string',
+													example: 'date'
+												}
+											}
+										}
 									}
 								}
 							}

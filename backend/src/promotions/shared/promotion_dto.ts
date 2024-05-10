@@ -1,6 +1,6 @@
 import {
 	IsDate,
-	IsDecimal,
+	IsNumber,
 	IsString,
 	IsUUID,
 	Max,
@@ -18,11 +18,11 @@ export class PromotionDto{
 
 	@Min(0)
 	@Max(100)
-	@IsDecimal()
+	@IsNumber()
 	percentage : number
 
 	@IsDate()
-	creation_date : Date
+	created_at : Date
 
 	@IsDate()
 	end_date : Date
