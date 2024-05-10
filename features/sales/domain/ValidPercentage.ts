@@ -1,4 +1,4 @@
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { z } from 'zod'
 
 export class ValidPercentage {

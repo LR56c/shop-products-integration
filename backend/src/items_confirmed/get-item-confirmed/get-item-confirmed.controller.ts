@@ -12,7 +12,6 @@ import {
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
-import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
