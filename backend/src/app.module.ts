@@ -16,8 +16,8 @@ import {
 } from 'nestjs-i18n'
 import { join } from 'node:path'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { CartRepository } from '~features/carts/domain/cart_repository'
-import { CartSupabaseData } from '~features/carts/infrastructure/cart_supabase_data'
+import { AuthRepository } from '~features/auth/domain/auth_repository'
+import { AuthSupabaseData } from '~features/auth/infrastructure/auth_supabase_data'
 import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
 import { DiscountSupabaseData } from '~features/discount_type/infrastructure/discount_supabase_data'
 import { AuthModule } from './auth/auth.module'
@@ -30,11 +30,10 @@ import { OrdersConfirmedModule } from './orders_confirmed/orders_confirmed.modul
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
 import { PromotionsModule } from './promotions/promotions.module'
+import { RanksModule } from './ranks/ranks.module'
 import { ReportsModule } from './reports/reports.module'
-import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
-import { RanksModule } from './ranks/ranks.module'
 
 @Global()
 @Module( {
@@ -51,6 +50,13 @@ import { RanksModule } from './ranks/ranks.module'
 				// const r = await client.from('carts').select('*, product:product_id(*)').eq('user_email', 'aaaa@gmail.com')
 				return client
 			}
+		},
+		{
+			provide   : AuthRepository,
+			useFactory: ( client: SupabaseClient<Database> ) => {
+				return new AuthSupabaseData( client )
+			},
+			inject    : [ SupabaseClient<Database> ]
 		},
 		{
 			provide   : DiscountRepository,
@@ -79,9 +85,9 @@ import { RanksModule } from './ranks/ranks.module'
 		} ),
 		PromotionsModule, NewsLettersModule, OrdersModule,
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
-		ProductsModule, SalesModule,
+		ProductsModule,
 		ReportsModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
-	exports  : [ TranslationService, SupabaseClient<Database>,DiscountRepository ]
+	exports  : [ TranslationService, SupabaseClient<Database>,AuthRepository,DiscountRepository ]
 } )
 export class AppModule {}
