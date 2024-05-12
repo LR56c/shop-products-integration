@@ -1,6 +1,5 @@
 import {ReportType} from "./report_type";
 import {UUID} from "../../../shared/domain/value_objects/UUID";
-import {ValidString} from "../../../shared/domain/value_objects/ValidString";
 import {ValidURL} from "../../../shared/domain/value_objects/ValidURL";
 import {ValidDate} from "../../../shared/domain/value_objects/ValidDate";
 

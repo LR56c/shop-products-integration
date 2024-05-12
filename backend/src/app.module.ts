@@ -23,13 +23,10 @@ import { ItemsConfirmedModule } from './items_confirmed/items_confirmed.module'
 import { NewsLettersModule } from './news_letters/news_letters.module'
 import { OrdersModule } from './orders/orders.module'
 import { OrdersConfirmedModule } from './orders_confirmed/orders_confirmed.module'
-import { PaymentMethodsModule } from './payment_methods/payment_methods.module'
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
 import { PromotionsModule } from './promotions/promotions.module'
 import { ReportsModule } from './reports/reports.module'
-import { ReportsTypesModule } from './reports_types/reports_types.module'
-import { RolesTypesModule } from './roles_types/roles_types.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
@@ -70,9 +67,9 @@ import { RanksModule } from './ranks/ranks.module'
 			inject    : []
 		} ),
 		PromotionsModule, NewsLettersModule, OrdersModule,
-		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule,
-		PaymentMethodsModule, CartsModule, ProductsModule, SalesModule,
-		ReportsModule, ReportsTypesModule, RolesTypesModule, UsersModule,
+		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
+		ProductsModule, SalesModule,
+		ReportsModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
 	exports  : [ TranslationService, SupabaseClient<Database> ]
 } )

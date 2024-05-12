@@ -54,6 +54,33 @@ export type Database = {
         }
         Relationships: []
       }
+      discounts: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          percentage: number
+          start_date: string
+          type: Database["public"]["Enums"]["discount_type"]
+        }
+        Insert: {
+          created_at: string
+          end_date: string
+          id?: string
+          percentage: number
+          start_date: string
+          type: Database["public"]["Enums"]["discount_type"]
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          percentage?: number
+          start_date?: string
+          type?: Database["public"]["Enums"]["discount_type"]
+        }
+        Relationships: []
+      }
       items_confirmed: {
         Row: {
           created_at: string
@@ -159,7 +186,7 @@ export type Database = {
           {
             foreignKeyName: "public_orders_payment_id_fkey"
             columns: ["payment_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "payments"
             referencedColumns: ["id"]
           },
@@ -263,6 +290,7 @@ export type Database = {
           code: string
           created_at: string
           description: string
+          discount: string | null
           id: string
           image_url: string
           name: string
@@ -277,6 +305,7 @@ export type Database = {
           code: string
           created_at?: string
           description: string
+          discount?: string | null
           id?: string
           image_url: string
           name: string
@@ -291,6 +320,7 @@ export type Database = {
           code?: string
           created_at?: string
           description?: string
+          discount?: string | null
           id?: string
           image_url?: string
           name?: string
@@ -299,6 +329,13 @@ export type Database = {
           stock?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "products_discount_fkey"
+            columns: ["discount"]
+            isOneToOne: false
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_products_category_fkey"
             columns: ["category"]
@@ -310,55 +347,41 @@ export type Database = {
       }
       promotions: {
         Row: {
-          created_at: string
-          end_date: string
           id: string
           name: string
-          percentage: number
-          start_date: string
         }
         Insert: {
-          created_at?: string
-          end_date: string
           id?: string
           name: string
-          percentage: number
-          start_date: string
         }
         Update: {
-          created_at?: string
-          end_date?: string
           id?: string
           name?: string
-          percentage?: number
-          start_date?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "promotions_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       promotions_products: {
         Row: {
-          product_code: string
           product_id: string
           promotion_id: string
         }
         Insert: {
-          product_code: string
           product_id: string
           promotion_id: string
         }
         Update: {
-          product_code?: string
           product_id?: string
           promotion_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "public_promotions_products_product_code_fkey"
-            columns: ["product_code"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["product_code"]
-          },
           {
             foreignKeyName: "public_promotions_products_product_id_fkey"
             columns: ["product_id"]
@@ -411,6 +434,32 @@ export type Database = {
           },
         ]
       }
+      report_payments: {
+        Row: {
+          date: string
+          id: string
+          value: number
+        }
+        Insert: {
+          date?: string
+          id?: string
+          value: number
+        }
+        Update: {
+          date?: string
+          id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_payments_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           created_at: string
@@ -434,28 +483,16 @@ export type Database = {
       }
       sales: {
         Row: {
-          created_at: string
-          end_date: string
           id: string
-          percentage: number
           product_id: string
-          start_date: string
         }
         Insert: {
-          created_at?: string
-          end_date: string
           id?: string
-          percentage: number
           product_id: string
-          start_date: string
         }
         Update: {
-          created_at?: string
-          end_date?: string
           id?: string
-          percentage?: number
           product_id?: string
-          start_date?: string
         }
         Relationships: [
           {
@@ -463,6 +500,13 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "discounts"
             referencedColumns: ["id"]
           },
         ]
@@ -508,6 +552,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      discount_type: "SALE" | "PROMOTION"
       payment_method: "TRANSFER" | "DEBT" | "CREDIT"
       report_type: "PERFORMANCE" | "SALE"
       role_type: "ADMIN" | "SHOPKEEPER" | "CLIENT" | "ACCOUNTANT" | "SELLER"

@@ -1,7 +1,6 @@
-import {CreateReportDto} from "../create-report/create_report_dto";
+import { CreateReportDto } from './create_report_dto'
 import {BaseException} from "~features/shared/domain/exceptions/BaseException";
 import {UUID} from "~features/shared/domain/value_objects/UUID";
-import {ValidString} from "~features/shared/domain/value_objects/ValidString";
 import {ReportType} from "~features/report/domain/models/report_type";
 import {ValidDate} from "~features/shared/domain/value_objects/ValidDate";
 import {InvalidUUIDException} from "~features/shared/domain/exceptions/InvalidUUIDException";
