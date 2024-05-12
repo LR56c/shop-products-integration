@@ -21,7 +21,6 @@ export class Order{
 	// agregar update partial
 	// posts, devolver id generado
 	// a valores nulos, mostrar en json que son nulos
-
 }
 
 export class PartialOrder{

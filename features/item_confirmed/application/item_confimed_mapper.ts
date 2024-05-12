@@ -1,6 +1,6 @@
 import { ItemConfirmed } from '../domain/item_confirmed'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from 'features/shared/domain/exceptions/EmailException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '../../shared/domain/value_objects/Email'
@@ -37,6 +37,14 @@ export function itemConfirmedFromJson( json: Record<string, any> ): ItemConfirme
 
 	const shop_keeper_email = wrapType<Email, EmailException>(
 		() => Email.from( json.shop_keeper_email ) )
+
+	if ( shop_keeper_email instanceof BaseException ) {
+		errors.push( new EmailException( 'shop_keeper_email' ) )
+	}
+
+	if ( errors.length > 0 ) {
+		return errors
+	}
 
 	return new ItemConfirmed(
 		id as UUID,

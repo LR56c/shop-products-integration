@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Get,
 	HttpStatus,
 	Post
 } from '@nestjs/common'
@@ -10,22 +11,23 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { ItemConfirmed } from '~features/item_confirmed/domain/item_confirmed'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResult } from '../../shared/utils/HttpResult'
-import { ItemConfirmedDto } from '../shared/item_confirmed_dto'
-import { parseItemConfirmed } from '../shared/parse_item_confirmed'
-import { CreateItemConfirmedService } from './create-item-confirmed.service'
+import { productFromJson } from '~features/products/application/product_mapper'
+import { ProductDto } from '../../products/shared/dto/product_dto'
+import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { HttpResult } from 'src/shared/utils/HttpResult'
+import { Product } from '~features/products/domain/models/product'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { DiscountPromotionService } from './discount-promotion.service'
 
-@ApiTags( 'items-confirmed' )
-@Controller( 'items-confirmed' )
-export class CreateItemConfirmedController {
-	constructor( private readonly createItemConfirmedService: CreateItemConfirmedService,
-		private readonly translation: TranslationService )
+@ApiTags( 'promotions' )
+@Controller( 'promotions' )
+export class DiscountPromotionController {
+	constructor( private readonly discountPromotionService: DiscountPromotionService,
+		private readonly translation: TranslationService
+	)
 	{}
 
-	@Post()
+	@Get( 'discount' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -50,8 +52,8 @@ export class CreateItemConfirmedController {
 		}
 	} )
 	@ApiOperation( {
-		summary    : 'Create a order confirmed',
-		description: 'Create a order confirmed json data'
+		summary    : 'Get discount by products',
+		description: 'Get discount by products json data'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -63,6 +65,15 @@ export class CreateItemConfirmedController {
 						statusCode: {
 							type   : 'number',
 							example: 200
+						},
+						data: {
+							type   : 'object',
+							properties:{
+								discount: {
+									type   : 'number',
+									example: 1500
+								}
+							}
 						}
 					}
 				}
@@ -111,15 +122,25 @@ export class CreateItemConfirmedController {
 			}
 		}
 	} )
-	async createOrder(
-		@Body() dto: ItemConfirmedDto
+	async handle(
+		@Body() dto: ProductDto[]
 	): Promise<HttpResult> {
 		try {
 
-			const itemConfirmed = parseItemConfirmed( dto )
+			const products : Product[] = []
+			for ( const p of dto ) {
+				const product = productFromJson( p )
+				if ( !(product instanceof  Product)) {
+					return {
+						statusCode: HttpStatus.BAD_REQUEST,
+						message   : this.translation.translateAll( product as BaseException[])
+					}
+				}
+				products.push( product )
+			}
 
-			await this.createItemConfirmedService.execute( UUID.from(dto.order_id) ,
-				itemConfirmed as ItemConfirmed )
+
+			await this.discountPromotionService.execute( products )
 
 			return {
 				statusCode: HttpStatus.OK
@@ -132,4 +153,5 @@ export class CreateItemConfirmedController {
 			}
 		}
 	}
+
 }
