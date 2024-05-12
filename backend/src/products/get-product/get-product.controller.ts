@@ -9,7 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { productToJson } from '~features/products/application/product_mapper'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'

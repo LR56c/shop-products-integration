@@ -434,6 +434,32 @@ export type Database = {
           },
         ]
       }
+      report_payments: {
+        Row: {
+          date: string
+          id: string
+          value: number
+        }
+        Insert: {
+          date?: string
+          id?: string
+          value: number
+        }
+        Update: {
+          date?: string
+          id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_payments_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           created_at: string
