@@ -1,4 +1,4 @@
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
+import { InvalidPercentageException } from '../exceptions/InvalidPercentageException'
 import { z } from 'zod'
 
 export class ValidPercentage {
@@ -25,9 +25,4 @@ export class ValidPercentage {
 	}
 }
 
-export class InvalidPercentageException extends BaseException {
-	constructor(readonly field?: string, message?: string, readonly value?: string) {
-		super( `invalid.percentage${message != null ? `.${message}`:''}`, value, field)
-		this.name = "InvalidPercentageException"
-	}
-}
+

@@ -60,13 +60,16 @@ export class PaymentSupabaseData implements PaymentRepository {
 				result.lte( 'date', from_date.value )
 				result.gte( 'date', to_date.value )
 			}
+
 			const { data, error } = await result.range( from.value, to.value )
+
 			if ( error ) {
 				if ( error.code === '22P02' ) {
 					throw [ new ParameterNotMatchException() ]
 				}
 				throw [ new InfrastructureException() ]
 			}
+
 			const payments: Payment[] = []
 			for ( const json of data ) {
 				const payment = paymentFromJson( json )
@@ -91,8 +94,6 @@ export class PaymentSupabaseData implements PaymentRepository {
 			return true
 		}
 		catch ( e ) {
-			console.log( "e")
-			console.log( e)
 			throw [new InfrastructureException()]
 		}
 	}

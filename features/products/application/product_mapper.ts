@@ -27,7 +27,8 @@ export function productToJson( product: Product ): Record<string, any> {
 		image_url   : product.image_url.value,
 		stock       : product.stock.value,
 		average_rank: product.average_rank.value,
-		category    : product.category_name.value
+		category    : product.category_name.value,
+		discount: product.discount?.id.value ?? null
 	}
 }
 
