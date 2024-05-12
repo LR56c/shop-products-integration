@@ -16,6 +16,10 @@ import {
 } from 'nestjs-i18n'
 import { join } from 'node:path'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { CartRepository } from '~features/carts/domain/cart_repository'
+import { CartSupabaseData } from '~features/carts/infrastructure/cart_supabase_data'
+import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
+import { DiscountSupabaseData } from '~features/discount_type/infrastructure/discount_supabase_data'
 import { AuthModule } from './auth/auth.module'
 import { CartsModule } from './carts/carts.module'
 import { CategoriesModule } from './categories/categories.module'
@@ -48,6 +52,13 @@ import { RanksModule } from './ranks/ranks.module'
 				// const r = await client.from('carts').select('*, product:product_id(*)').eq('user_email', 'aaaa@gmail.com')
 				return client
 			}
+		},
+		{
+			provide   : DiscountRepository,
+			useFactory: ( client: SupabaseClient<Database> ) => {
+				return new DiscountSupabaseData( client )
+			},
+			inject    : [ SupabaseClient<Database> ]
 		}
 	],
 	imports  : [
@@ -71,6 +82,6 @@ import { RanksModule } from './ranks/ranks.module'
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule, ProductsModule, SalesModule,
 		ReportsModule, ReportsTypesModule,  UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
-	exports  : [ TranslationService, SupabaseClient<Database> ]
+	exports  : [ TranslationService, SupabaseClient<Database>,DiscountRepository ]
 } )
 export class AppModule {}

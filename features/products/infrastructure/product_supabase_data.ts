@@ -170,7 +170,7 @@ export class ProductSupabaseData implements ProductRepository {
 
 			const parsedQueryProducts: Product[] = []
 
-			console.log( 'json' )
+			console.log( 'json product supa' )
 			for ( const json of categoryQueryProducts.data ) {
 				const p = productFromJson( json )
 

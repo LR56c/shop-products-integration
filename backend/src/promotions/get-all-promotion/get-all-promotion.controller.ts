@@ -12,11 +12,10 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { promotionToJson } from '~features/promotions/application/promotion_mapper'
+import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
@@ -32,11 +31,6 @@ export class GetAllPromotionController {
 	{}
 
 	@Get()
-	@ApiQuery( {
-		name    : 'name',
-		type    : String,
-		required: false
-	} )
 	@ApiQuery( {
 		name    : 'from_date',
 		type    : Date,
@@ -95,29 +89,53 @@ export class GetAllPromotionController {
 										items: {
 											type      : 'object',
 											properties: {
-												id        : {
+												id          : {
 													type   : 'string',
 													example: 'uuid'
 												},
-												name      : {
+												code        : {
 													type   : 'string',
 													example: 'string'
 												},
-												percentage: {
+												product_code: {
+													type   : 'string',
+													example: 'string'
+												},
+												name        : {
+													type   : 'string',
+													example: 'string'
+												},
+												description : {
+													type   : 'string',
+													example: 'string'
+												},
+												created_at  : {
+													type   : 'string',
+													example: 'date'
+												},
+												brand       : {
+													type   : 'string',
+													example: 'string'
+												},
+												price       : {
+													type   : 'string',
+													example: 'integer'
+												},
+												image_url   : {
+													type   : 'string',
+													example: 'string'
+												},
+												stock       : {
+													type   : 'string',
+													example: 'integer'
+												},
+												average_rank: {
 													type   : 'string',
 													example: 'decimal'
 												},
-												create_at : {
+												category    : {
 													type   : 'string',
-													example: 'date'
-												},
-												end_date  : {
-													type   : 'string',
-													example: 'date'
-												},
-												start_date: {
-													type   : 'string',
-													example: 'date'
+													example: 'string'
 												}
 											}
 										}
@@ -248,8 +266,9 @@ export class GetAllPromotionController {
 		if ( to instanceof BaseException ) {
 			errors.push( new InvalidIntegerException( 'to' ) )
 		}
+
 		const name = dto.name === undefined ?
-			undefined : wrapType<ValidString, InvalidStringException>(
+			undefined : wrapType<ValidString, InvalidDateException>(
 				() => ValidString.from( dto.name ?? '' ) )
 
 		const from_date = dto.from_date === undefined ?
@@ -264,7 +283,6 @@ export class GetAllPromotionController {
 			data: {
 				from     : from as ValidInteger,
 				to       : to as ValidInteger,
-				name     : name as ValidString,
 				from_date: from_date as ValidDate,
 				to_date  : to_date as ValidDate
 			},

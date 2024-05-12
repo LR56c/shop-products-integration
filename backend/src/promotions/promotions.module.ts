@@ -4,8 +4,10 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { PromotionRepository } from '~features/promotions/domain/promotion_repository'
-import { PromotionSupabaseData } from '~features/promotions/infrastructure/promotion_supabase_data'
+import { UpdatePromotionController } from './update-promotion/update-promotion.controller'
+import { UpdatePromotionService } from './update-promotion/update-promotion.service'
+import { PromotionRepository } from '~features/discount_type/features/promotions/domain/promotion_repository'
+import { PromotionSupabaseData } from '~features/discount_type/features/promotions/infrastructure/promotion_supabase_data'
 import { AppModule } from '../app.module'
 import { CreatePromotionController } from './create-promotion/create-promotion.controller'
 import { CreatePromotionService } from './create-promotion/create-promotion.service'
@@ -17,13 +19,11 @@ import { GetAllPromotionController } from './get-all-promotion/get-all-promotion
 import { GetAllPromotionService } from './get-all-promotion/get-all-promotion.service'
 import { GetPromotionController } from './get-promotion/get-promotion.controller'
 import { GetPromotionService } from './get-promotion/get-promotion.service'
-import { UpdatePromotionController } from './update-promotion/update-promotion.controller'
-import { UpdatePromotionService } from './update-promotion/update-promotion.service'
 
 @Module( {
 	controllers: [ CreatePromotionController, DeletePromotionController,
-		DiscountPromotionController, GetAllPromotionController,
-		GetPromotionController, UpdatePromotionController ],
+		DiscountPromotionController, GetAllPromotionController, UpdatePromotionController,
+		GetPromotionController ],
 	providers  : [
 		{
 			provide   : PromotionRepository,
@@ -36,7 +36,7 @@ import { UpdatePromotionService } from './update-promotion/update-promotion.serv
 		GetAllPromotionService, GetPromotionService, UpdatePromotionService
 	],
 	imports    : [
-		forwardRef( () => AppModule )
+		forwardRef( () => AppModule ),
 	]
 } )
 export class PromotionsModule {}

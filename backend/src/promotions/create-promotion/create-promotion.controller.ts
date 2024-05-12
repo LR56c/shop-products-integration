@@ -10,12 +10,14 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { ProductDto } from 'src/products/shared/dto/product_dto'
-import { PromotionDto } from 'src/promotions/shared/promotion_dto'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { promotionFromJson } from '~features/promotions/application/promotion_mapper'
-import { Promotion } from '~features/promotions/domain/promotion'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { parsePromotion } from '../shared/parsePromotion'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { wrapType } from '~features/shared/utils/WrapType'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
+import { PromotionDto } from '../shared/promotion_dto'
 import { CreatePromotionService } from './create-promotion.service'
 
 @ApiTags( 'promotions' )
@@ -31,76 +33,38 @@ export class CreatePromotionController {
 			schema: {
 				type      : 'object',
 				properties: {
-					promotion: {
+					promotion   : {
 						properties: {
-							id        : {
+							id         : {
 								type   : 'string',
 								example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
 							},
-							name      : {
+							name       : {
 								type   : 'string',
 								example: 'abc'
 							},
-							percentage: {
+							percentage : {
 								type   : 'number',
 								example: 20
 							},
-							created_at: {
+							created_at : {
 								type   : 'string',
 								example: '2024-04-27'
 							},
-							end_date  : {
+							end_date   : {
 								type   : 'string',
 								example: '2024-04-27'
 							},
-							start_date: {
+							start_date : {
 								type   : 'string',
 								example: '2024-04-27'
 							}
 						}
 					},
-					products     : {
+					products_ids: {
 						type : 'array',
 						items: {
-							type      : 'object',
-							properties: {
-								code        : {
-									type   : 'string',
-									example: 'abc'
-								},
-								product_code: {
-									type   : 'string',
-									example: 'abc2'
-								},
-								name        : {
-									type   : 'string',
-									example: 'n'
-								},
-								brand       : {
-									type   : 'string',
-									example: 'b'
-								},
-								price       : {
-									type   : 'number',
-									example: 2
-								},
-								image_url   : {
-									type   : 'string',
-									example: 'http://img.com/img.jpg'
-								},
-								stock       : {
-									type   : 'number',
-									example: 2
-								},
-								description : {
-									type   : 'string',
-									example: 'd'
-								},
-								category    : {
-									type   : 'string',
-									example: 'TEST'
-								}
-							}
+							example: '359b6378-f875-4d31-b415-d3de60a59875'
 						}
 					}
 				}
@@ -170,16 +134,25 @@ export class CreatePromotionController {
 		}
 	} )
 	async handle(
-		@Body( 'promotion' ) promotionDto: PromotionDto,
-		@Body( 'products' ) products: ProductDto[]
+		@Body(  ) promotionDto: PromotionDto,
 	): Promise<HttpResult> {
 		try {
+			const promotion = parsePromotion( promotionDto )
 
-			console.log( 'create' )
-			console.log( products )
-			const p = promotionFromJson( promotionDto )
+			const products_ids: UUID[] = []
+			for ( const p of promotionDto.products_ids ) {
 
-			await this.createPromotionService.execute( p as Promotion )
+				const id = wrapType<UUID, InvalidUUIDException>(
+					() => UUID.from( p ) )
+
+				if ( id instanceof BaseException ) {
+					throw [ new InvalidUUIDException() ]
+				}
+
+				products_ids.push( id as UUID )
+			}
+
+			await this.createPromotionService.execute( promotion, products_ids )
 
 			return {
 				statusCode: HttpStatus.OK

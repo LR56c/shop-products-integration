@@ -20,7 +20,6 @@ export function userToJson(user: User): Record<string, any> {
 }
 export function userFromJson(json: Record<string, any>): User | BaseException[] {
     const errors: BaseException[] = []
-  console.log('json', json)
 
     const rut = wrapType<RUT, InvalidRUTException>(
         () => RUT.from( json.rut ) )

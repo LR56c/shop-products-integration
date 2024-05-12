@@ -1,4 +1,5 @@
 import {
+	IsArray,
 	IsDate,
 	IsNumber,
 	IsString,
@@ -29,4 +30,10 @@ export class PromotionDto{
 
 	@IsDate()
 	start_date : Date
+
+	@IsArray()
+	@IsUUID( '4', {
+		each: true
+	} )
+	products_ids: string[]
 }
