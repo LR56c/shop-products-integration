@@ -12,11 +12,15 @@ import {DeletePaymentService} from "./delete_payment/delete_payment.service";
 import {GetPaymentService} from "./get_payment/get_payment.service";
 import {UpdatePaymentService} from "./update_payment/update_payment.service";
 import {AppModule} from "../app.module";
+import { GetAllPaymentModule } from './get_all_payment/get_all_payment.module';
+import {GetAllPaymentController} from "./get_all_payment/get_all_payment.controller";
+import {GetAllPaymentService} from "./get_all_payment/get_all_payment.service";
 
 @Module({
     controllers: [
         CreatePaymentController, DeletePaymentController,
-        GetPaymentController, UpdatePaymentController
+        GetPaymentController, UpdatePaymentController,
+        GetAllPaymentController
     ],
     providers: [{
         provide: PaymentRepository,
@@ -26,10 +30,11 @@ import {AppModule} from "../app.module";
         inject: [SupabaseClient<Database>]
     },
         CreatePaymentService, DeletePaymentService,
-        GetPaymentService, UpdatePaymentService
+        GetPaymentService, UpdatePaymentService,
+        GetAllPaymentService
     ],
     imports: [
-        forwardRef(() => AppModule)
+        forwardRef(() => AppModule),
     ],
 })
 export class PaymentsModule {}

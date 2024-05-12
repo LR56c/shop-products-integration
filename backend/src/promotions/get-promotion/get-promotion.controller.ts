@@ -9,26 +9,27 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
+import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { GetItemConfirmedService } from './get-item-confirmed.service'
+import { GetPromotionService } from './get-promotion.service'
 
-@ApiTags( 'items-confirmed' )
-@Controller( 'items-confirmed' )
-export class GetItemConfirmedController {
-	constructor( private readonly getItemConfirmedService: GetItemConfirmedService,
-		private readonly translation: TranslationService )
+@ApiTags( 'promotions' )
+@Controller( 'promotions' )
+export class GetPromotionController {
+	constructor( private readonly getPromotionService: GetPromotionService,
+		private readonly translation: TranslationService
+	)
 	{}
 
 	@Get( ':id' )
 	@ApiOperation( {
-		summary    : 'Get item confirmed',
-		description: 'Get item confirmed by id'
+		summary    : 'Get promotion',
+		description: 'Get promotion by id'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -44,17 +45,61 @@ export class GetItemConfirmedController {
 						data      : {
 							type      : 'object',
 							properties: {
-								id              : {
+								id        : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								created_at      : {
+								name      : {
+									type   : 'string',
+									example: 'string'
+								},
+								percentage: {
+									type   : 'string',
+									example: 'decimal'
+								},
+								create_at : {
 									type   : 'string',
 									example: 'date'
 								},
-								shop_keeper_email: {
+								end_date  : {
 									type   : 'string',
-									example: 'email'
+									example: 'date'
+								},
+								start_date: {
+									type   : 'string',
+									example: 'date'
+								},
+								products  : {
+									type : 'array',
+									items: {
+										type      : 'object',
+										properties: {
+											id        : {
+												type   : 'string',
+												example: 'uuid'
+											},
+											name      : {
+												type   : 'string',
+												example: 'string'
+											},
+											percentage: {
+												type   : 'string',
+												example: 'decimal'
+											},
+											create_at : {
+												type   : 'string',
+												example: 'date'
+											},
+											end_date  : {
+												type   : 'string',
+												example: 'date'
+											},
+											start_date: {
+												type   : 'string',
+												example: 'date'
+											}
+										}
+									}
 								}
 							}
 						}
@@ -116,11 +161,11 @@ export class GetItemConfirmedController {
 				throw [ new InvalidUUIDException( 'id' ) ]
 			}
 
-			const result = await this.getItemConfirmedService.execute( idResult )
+			const result = await this.getPromotionService.execute( idResult )
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : itemConfirmedToJson( result )
+				data      : promotionToJson( result )
 			}
 		}
 		catch ( e ) {
