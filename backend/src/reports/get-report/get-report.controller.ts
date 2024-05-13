@@ -10,7 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { productToJson } from '~features/products/application/product_mapper'
 import { reportToJson } from '~features/report/application/report_mapper'
 import { ReportTypeException } from '~features/report/domain/exception/ReportTypeException'
 import { ReportType } from '~features/report/domain/models/report_type'
@@ -70,6 +69,10 @@ export class GetReportController {
 									id        : {
 										type   : 'string',
 										example: 'uuid'
+									},
+									name       : {
+										type   : 'string',
+										example: 'string'
 									},
 									url       : {
 										type   : 'string',
@@ -149,10 +152,8 @@ export class GetReportController {
 				reportResult.data.to_date
 			)
 
-			const json = report.map( reportToJson )
-
 			return {
-				data      : json,
+				data      : report.map( reportToJson ),
 				statusCode: HttpStatus.OK
 			}
 		}

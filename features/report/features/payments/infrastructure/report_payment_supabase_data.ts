@@ -27,6 +27,8 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 			                         reportPaymentToJson( reportPayment ) as any )
 
 		if ( result.error != null ) {
+			console.log( 'result.error')
+			console.log( result.error)
 
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'reports_payments' ) ]
@@ -65,8 +67,8 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 		                   .select()
 
 		if ( from_date !== undefined && to_date !== undefined ) {
-			result.gte( 'start_date', from_date.value )
-			result.lte( 'end_date', to_date.value )
+			result.gte( 'date', from_date.value.toUTCString() )
+			result.lte( 'date', to_date.value.toUTCString() )
 		}
 
 

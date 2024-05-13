@@ -1,25 +1,24 @@
 import {
 	IsDate,
-	IsDecimal,
-	IsString,
+	IsEnum,
+	IsNumber,
 	IsUUID,
 	Max,
-	Min,
-	MinLength
+	Min
 } from 'class-validator'
+import { DiscountTypeEnum } from '~features/discount_type/domain/discount_type'
 
-export class SaleDto{
+export class DiscountDto{
 	@IsUUID()
 	id : string
 
-	@Max(100)
-	@Min(0)
-	@IsDecimal()
-	percentage : number
+	@IsEnum(DiscountTypeEnum)
+	type: string
 
-	@MinLength(1)
-	@IsString()
-	product_code : string
+	@Min(0)
+	@Max(100)
+	@IsNumber()
+	percentage : number
 
 	@IsDate()
 	creation_date : Date

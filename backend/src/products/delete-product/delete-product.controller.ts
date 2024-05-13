@@ -10,7 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { HttpResult } from '../../shared/utils/HttpResult'
@@ -25,10 +28,10 @@ export class DeleteProductController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Delete( ':product_code' )
+	@Delete( ':id' )
 	@ApiOperation( {
 		summary: 'Delete product',
-		description: 'Delete product by product_code'
+		description: 'Delete product by id'
 	} )
 	@ApiResponse( {
 		status     : 200,
@@ -89,19 +92,19 @@ export class DeleteProductController {
 		}
 	} )
 	async deleteProduct(
-		@Param( 'product_code' ) product_code: string
+		@Param( 'id' ) id: string
 	): Promise<HttpResult> {
 		try {
 
-			const codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( product_code ) )
+			const idResult = wrapType<UUID, InvalidUUIDException>(
+				() => UUID.from( id ) )
 
-			if ( codeResult instanceof InvalidStringException ) {
-				throw [new  InvalidStringException( 'product_code' )]
+			if ( idResult instanceof BaseException) {
+				throw [new  InvalidStringException( 'id' )]
 			}
 
 			await this.deleteProductService.deleteProduct(
-				codeResult as ValidString )
+				idResult as UUID )
 			return {
 				statusCode: HttpStatus.OK
 			}

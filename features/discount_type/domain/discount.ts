@@ -3,7 +3,7 @@ import { ValidPercentage } from 'features/shared/domain/value_objects/ValidPerce
 import { DiscountType } from './discount_type'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 
-export abstract class Discount {
+export class Discount {
 	constructor(
 		readonly id: UUID,
 		readonly type: DiscountType,

@@ -11,18 +11,18 @@ export class CatchPaymentProcessedService {
 	@OnEvent( PaymentProcessedEvent.tag )
 	async handleEvent( payload: PaymentProcessedEvent ) {
 		try {
-
 			const reportPayment = new ReportPayment(
-				payload.id,
-				payload.creationDate,
-				payload.paymentValue,
+				payload.payment.id,
+				payload.payment.creationDate,
+				payload.payment.paymentValue,
 			)
 
 			await this.repo.create( reportPayment )
+			console.log('replicated payment id: ', payload.payment.id.value)
 		}
 		catch ( e ) {
 			console.log(
-				`failed replicate payment id: ${ payload.id.value }` )
+				`failed replicate payment id: ${ payload.payment.id.value }` )
 			console.log( e )
 		}
 	}

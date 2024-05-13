@@ -4,7 +4,8 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { ApplyAverageRankToProductService } from 'src/products/shared/services/calculate-average-rank-product/apply-average-rank-to-product.service'
+import { ApplyDiscountProductService } from './shared/services/apply-discount-product/apply-discount-product.service'
+import { ApplyAverageRankToProductService } from './shared/services/calculate-average-rank-product/apply-average-rank-to-product.service'
 import { DeleteProductService } from './delete-product/delete-product.service'
 import { GetAllProductsService } from 'src/products/get-all-controller/get-all-products.service'
 import { GetProductService } from './get-product/get-product.service'
@@ -35,7 +36,7 @@ import { CreateProductService } from './create-product/create-product.service'
 			},
 			inject    : [ SupabaseClient<Database> ]
 		},
-		ApplyAverageRankToProductService,
+		ApplyAverageRankToProductService, ApplyDiscountProductService,
 		UpdateProductService, RecommendProductService,
 		GetProductService, GetAllProductsService, DeleteProductService,
 		CreateProductService

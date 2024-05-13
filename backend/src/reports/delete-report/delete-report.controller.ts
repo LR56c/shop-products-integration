@@ -88,7 +88,6 @@ export class DeleteReportController {
 			}
 		}
 	} )
-
 	async deleteReport(
 		@Param( 'id' ) id: string
 	): Promise<HttpResult> {

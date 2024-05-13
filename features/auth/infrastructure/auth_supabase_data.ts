@@ -38,6 +38,7 @@ export class AuthSupabaseData implements AuthRepository {
 			if ( id instanceof BaseException ) {
 				errors.push( new InvalidUUIDException() )
 			}
+
 			const t = await this.client.auth.getSession()
 			console.log('t.data.session.access_token')
 			console.log(t.data.session?.access_token)
@@ -65,8 +66,6 @@ export class AuthSupabaseData implements AuthRepository {
 			throw e
 		}
 	}
-
-	//TODO: revisar union report
 
 	async login( email: Email, password: Password ): Promise<Auth> {
 		try {

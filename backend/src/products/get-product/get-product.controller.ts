@@ -9,6 +9,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { productToJson } from '~features/products/application/product_mapper'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
@@ -25,10 +27,10 @@ export class GetProductController {
 	{}
 
 
-	@Get( ':product_code' )
+	@Get( ':id' )
 	@ApiOperation( {
 		summary: 'Get product',
-		description: 'Get product by product_code',
+		description: 'Get product by id',
 	} )
 	@ApiResponse( {
 		status     : 200,
@@ -142,18 +144,18 @@ export class GetProductController {
 		}
 	} )
 	async getProduct(
-		@Param( 'product_code' ) product_code: string
+		@Param( 'id' ) id: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
 
-			const product_codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( product_code ) )
+			const productID = wrapType<UUID, InvalidStringException>(
+				() => UUID.from( id ) )
 
-			if ( product_codeResult instanceof InvalidStringException ) {
+			if ( productID instanceof BaseException ) {
 				throw [new InvalidStringException('product_code')]
 			}
 
-			const product = await this.getProductService.getProduct( product_codeResult as ValidString )
+			const product = await this.getProductService.getProduct( productID as UUID )
 
 			return {
 				data      : productToJson( product ),

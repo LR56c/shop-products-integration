@@ -11,6 +11,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ProductDto } from '../shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
@@ -29,7 +31,7 @@ export class UpdateProductController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put( ':product_code' )
+	@Put( ':id' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -92,7 +94,7 @@ export class UpdateProductController {
 	} )
 	@ApiOperation( {
 		summary: 'Update a product',
-		description: 'Update a product by product_code and json data',
+		description: 'Update a product by id and json data',
 	} )
 	@ApiResponse( {
 		status     : 200,
@@ -153,15 +155,15 @@ export class UpdateProductController {
 		}
 	} )
 	async updateProduct(
-		@Param( 'product_code' ) product_code : string,
+		@Param( 'id' ) id : string,
 		@Body( 'product' ) dto: ProductDto
 	): Promise<HttpResult> {
 		try {
-			const product_codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( product_code ) )
+			const idResult = wrapType<UUID, InvalidUUIDException>(
+				() => UUID.from( id ) )
 
-			if ( product_codeResult instanceof InvalidStringException ) {
-				throw [new InvalidStringException('product_code')]
+			if ( idResult instanceof BaseException ) {
+				throw [new InvalidUUIDException('product_code')]
 			}
 
 			const p = productFromJson( dto )
@@ -173,7 +175,7 @@ export class UpdateProductController {
 				}
 			}
 
-			await this.updateProductService.updateProduct(product_codeResult as ValidString, p as Product )
+			await this.updateProductService.updateProduct(idResult as UUID, p as Product )
 
 			return {
 				statusCode: HttpStatus.OK

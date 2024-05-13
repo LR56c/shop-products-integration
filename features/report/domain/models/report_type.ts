@@ -2,7 +2,7 @@ import {z} from "zod";
 import {ReportTypeException} from "../exception/ReportTypeException";
 
 export enum ReportTypeEnum {
-    perfomance = 'PERFOMANCE',
+    performance = 'PERFORMANCE',
     sale = 'SALE',
 }
 export class ReportType{

@@ -9,10 +9,10 @@ import {
 	ApiOperation,
 	ApiTags
 } from '@nestjs/swagger'
-import { GetRecommendProductDto } from 'src/products/get-recommend-product/get_recommend_product_dto'
-import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
-import { ProductDto } from 'src/products/shared/dto/product_dto'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { GetRecommendProductDto } from './get_recommend_product_dto'
+import { RecommendProductService } from './recommend-product.service'
+import { ProductDto } from '../shared/dto/product_dto'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import {
 	productFromJson,
 	productToJson
@@ -49,91 +49,98 @@ export class RecommendProductController {
 					type   : 'string',
 					example: '2'
 				},
-				products : {
-					type      : 'object',
-					properties: {
-						id          : {
-							type   : 'string',
-							example: '5bddb4cd-effb-4b49-a295-a8ad7dea82f1'
-						},
-						code        : {
-							type   : 'string',
-							example: 'abc'
-						},
-						product_code: {
-							type   : 'string',
-							example: 'abc2'
-						},
-						name        : {
-							type   : 'string',
-							example: 'n'
-						},
-						description : {
-							type   : 'string',
-							example: 'd'
-						},
-						created_at  : {
-							type   : 'string',
-							example: '2024-04-27'
-						},
-						brand       : {
-							type   : 'string',
-							example: 'b'
-						},
-						price       : {
-							type   : 'number',
-							example: 2
-						},
-						image_url   : {
-							type   : 'string',
-							example: 'http://img'
-						},
-						stock       : {
-							type   : 'number',
-							example: 2
-						},
-						rank        : {
-							type   : 'number',
-							example: 2
-						},
-						category    : {
-							type   : 'string',
-							example: 'TEST'
+				products      : {
+					type : 'array',
+					items: {
+						properties: {
+							id          : {
+								type   : 'string',
+								example: 'uuid'
+							},
+							code        : {
+								type   : 'string',
+								example: 'string'
+							},
+							product_code: {
+								type   : 'string',
+								example: 'string'
+							},
+							name        : {
+								type   : 'string',
+								example: 'string'
+							},
+							description : {
+								type   : 'string',
+								example: 'string'
+							},
+							created_at  : {
+								type   : 'string',
+								example: 'date'
+							},
+							brand       : {
+								type   : 'string',
+								example: 'string'
+							},
+							price       : {
+								type   : 'string',
+								example: 'number'
+							},
+							image_url   : {
+								type   : 'string',
+								example: 'url'
+							},
+							stock       : {
+								type   : 'string',
+								example: 'number'
+							},
+							average_rank: {
+								type   : 'string',
+								example: 'decimal'
+							},
+							category    : {
+								type   : 'string',
+								example: 'string'
+							}
 						}
 					}
-				}
+				},
 			}
 		}
 	} )
 	async getRecommendProducts(
 		@Body() dto: GetRecommendProductDto
-	): Promise<HttpResultData<Record<string, any>[]>> {
+	// ): Promise<HttpResultData<Record<string, any>[]>> {
+	){
 		try {
 			console.log( 'dto', dto )
-
-			const { errors, data } = this.parseRecommendProduct( dto )
-
-			if ( errors.length > 0 ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( errors )
-				}
-			}
-
-			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
-				data.threshold, data.products, data.limit )
-
-			let json: Record<string, any[]>[] = []
-
-			productsGroupByCategory.forEach( ( productList, key ) => {
-				const products = productList.map( product => productToJson( product ) )
-				json.push( { [key]: products } )
-			} )
-
 			return {
-				data      : json,
-				statusCode: HttpStatus.OK
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : 'not implemented'
 			}
+
+			// const { errors, data } = this.parseRecommendProduct( dto )
+			//
+			// if ( errors.length > 0 ) {
+			// 	return {
+			// 		statusCode: HttpStatus.BAD_REQUEST,
+			// 		message   : this.translation.translateAll( errors )
+			// 	}
+			// }
+			//
+			// const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
+			// 	data.threshold, data.products, data.limit )
+			//
+			// let json: Record<string, any[]>[] = []
+			//
+			// productsGroupByCategory.forEach( ( productList, key ) => {
+			// 	const products = productList.map( product => productToJson( product ) )
+			// 	json.push( { [key]: products } )
+			// } )
+			//
+			// return {
+			// 	data      : json,
+			// 	statusCode: HttpStatus.OK
+			// }
 		}
 		catch ( e ) {
 			console.log( 'e' )

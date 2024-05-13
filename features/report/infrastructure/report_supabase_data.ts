@@ -25,7 +25,7 @@ export class ReportSupabaseData implements ReportRepository {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
 	readonly tableName        = 'reports'
-	readonly tableRelatedName = 'reports_products'
+	// readonly tableRelatedName = 'reports_products'
 
 	async createReport( type: ReportType, name: ValidString,
 		data: Uint8Array ): Promise<ValidURL> {
@@ -33,14 +33,14 @@ export class ReportSupabaseData implements ReportRepository {
 		                         .upload( name.value, data )
 
 		if ( result.error != null ) {
-			//TODO: revisar errores especificos
-			console.log( 'result.error' )
-			console.log( result.error )
-			throw [ new InfrastructureException() ]
+			throw [ new InfrastructureException('upload') ]
 		}
 
+		const resultPath = this.client.storage.from( this.tableName )
+		                         .getPublicUrl( name.value)
+
 		const pathResult = wrapType<ValidURL, InvalidStringException>(
-			() => ValidURL.from( result.data.path ) )
+			() => ValidURL.from( resultPath.data.publicUrl ) )
 
 		if ( pathResult instanceof BaseException ) {
 			throw [ new InvalidStringException() ]
@@ -48,8 +48,9 @@ export class ReportSupabaseData implements ReportRepository {
 
 		const report = new Report(
 			UUID.create(),
+			name,
+			pathResult as ValidURL,
 			type,
-			pathResult as ReportType,
 			ValidDate.from( new Date() )
 		)
 
@@ -57,8 +58,6 @@ export class ReportSupabaseData implements ReportRepository {
 		                       .insert( reportToJson( report ) as any )
 
 		if ( save.error != null ) {
-			console.log( 'save.error' )
-			console.log( save.error )
 			if ( save.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'report' ) ]
 			}
@@ -70,6 +69,9 @@ export class ReportSupabaseData implements ReportRepository {
 
 	async deleteReport( id: UUID ): Promise<boolean> {
 		try {
+
+
+
 			const result = await this.client.from( this.tableName )
 			                         .select()
 			                         .eq( 'id', id.value )
@@ -77,6 +79,26 @@ export class ReportSupabaseData implements ReportRepository {
 			if ( result.data?.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'report' ) ]
 			}
+
+			const report = reportFromJson( result.data![0] )
+
+			if ( report instanceof BaseException ) {
+				throw report
+			}
+
+			const r = report as Report
+			console.log('r')
+			console.log(r.name.value)
+			const { data, error } = await this.client.storage.from(this.tableName).remove([r.name.value])
+
+			if ( error != null ) {
+				console.log('error')
+				console.log(error)
+				throw [ new InfrastructureException('delete') ]
+			}
+
+			console.log('data')
+			console.log(data)
 
 			await this.client.from( this.tableName )
 			          .delete()
@@ -101,8 +123,8 @@ export class ReportSupabaseData implements ReportRepository {
 		}
 
 		if ( from_date !== undefined && to_date !== undefined ) {
-			result.gte( 'start_date', from_date.value )
-			result.lte( 'end_date', to_date.value )
+			result.gte( 'date', from_date.value )
+			result.lte( 'date', to_date.value )
 		}
 
 
@@ -113,6 +135,8 @@ export class ReportSupabaseData implements ReportRepository {
 		}
 
 		if ( error ) {
+			console.log('error')
+			console.log(error)
 			if ( error.code === 'PGRST103' ) {
 				throw [ new LimitIsNotInRangeException() ]
 			}
@@ -121,6 +145,8 @@ export class ReportSupabaseData implements ReportRepository {
 
 		const reports: Report[] = []
 		for ( const json of data ) {
+			console.log('json')
+			console.log(json)
 
 			const r = reportFromJson( json )
 

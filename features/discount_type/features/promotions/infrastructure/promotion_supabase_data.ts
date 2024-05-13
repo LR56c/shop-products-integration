@@ -64,6 +64,7 @@ export class PromotionSupabaseData implements PromotionRepository {
 		catch ( e ) {
 			throw e
 		}
+
 	}
 
 	async getByID( id: UUID ): Promise<Promotion> {

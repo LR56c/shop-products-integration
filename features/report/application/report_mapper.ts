@@ -1,3 +1,4 @@
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ReportTypeException } from '../domain/exception/ReportTypeException'
 import { ReportType } from '../domain/models/report_type'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -13,10 +14,11 @@ import { Report } from '../domain/models/report'
 
 export function reportToJson( report: Report ): Record<string, any> {
 	return {
-		id        : report.id.value,
-		url       : report.url.value,
-		type      : report.type.value,
-		created_at: report.creationDate.value
+		id         : report.id.value,
+		url        : report.url.value,
+		name       : report.name.value,
+		report_type: report.type.value,
+		created_at : report.creationDate.value
 	}
 }
 
@@ -30,7 +32,14 @@ export function reportFromJson( json: Record<string, any> ): Report | BaseExcept
 		throw [ new InvalidULIDException() ]
 	}
 
-	const url = wrapType<ValidURL, InvalidStringException>(
+	const name = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.name ) )
+
+	if ( name instanceof InvalidStringException ) {
+		errors.push( new InvalidURLException() )
+	}
+
+	const url = wrapType<ValidURL, InvalidURLException>(
 		() => ValidURL.from( json.url ) )
 
 	if ( url instanceof BaseException ) {
@@ -38,7 +47,7 @@ export function reportFromJson( json: Record<string, any> ): Report | BaseExcept
 	}
 
 	const type = wrapType<ReportType, ReportTypeException>(
-		() => ReportType.from( json.type ) )
+		() => ReportType.from( json.report_type ) )
 
 	if ( type instanceof BaseException ) {
 		errors.push( new ReportTypeException() )
@@ -57,6 +66,7 @@ export function reportFromJson( json: Record<string, any> ): Report | BaseExcept
 
 	return new Report(
 		id as UUID,
+		name as ValidString,
 		url as ValidURL,
 		type as ReportType,
 		created_at as ValidDate

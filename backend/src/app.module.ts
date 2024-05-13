@@ -36,6 +36,7 @@ import { RanksModule } from './ranks/ranks.module'
 import { ReportsModule } from './reports/reports.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
+import { SalesModule } from './sales/sales.module';
 
 @Global()
 @Module( {
@@ -96,7 +97,7 @@ import { UsersModule } from './users/users.module'
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
 		ProductsModule,
 		ReportsModule, UsersModule,
-		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
+		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule, SalesModule ],
 	exports  : [ TranslationService, SupabaseClient<Database>, AuthRepository,
 		UserDao, DiscountRepository ]
 } )
