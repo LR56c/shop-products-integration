@@ -9,6 +9,7 @@ import {
 	I18nValidationExceptionFilter,
 	I18nValidationPipe
 } from 'nestjs-i18n'
+import { Password } from '~features/user/domain/models/Password'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -37,14 +38,15 @@ async function bootstrap() {
 	)
 	useContainer( app.select( AppModule ), { fallbackOnErrors: true } )
 
-	// field: message
-	// rut: 'Invalid RUT'
-	// name: 'Invalid name'
 	app.useGlobalPipes(
 		new I18nValidationPipe(),
 	);
 
-	await app.listen( 3000 )
+	const port = process.env.PORT || 3000
+	await app.listen( port,() => {
+		console.log( `Server running on http://localhost:${ port }` )
+		console.log( `Swagger running on http://localhost:${ port }/api` )
+	})
 }
 
 bootstrap()

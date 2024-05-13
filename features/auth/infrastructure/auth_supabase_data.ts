@@ -25,6 +25,8 @@ export class AuthSupabaseData implements AuthRepository {
 				password: password.value
 			} )
 			if ( authResult.error ) {
+				console.log('error')
+				console.log(authResult.error)
 				throw [ new InfrastructureException() ]
 			}
 
@@ -36,7 +38,9 @@ export class AuthSupabaseData implements AuthRepository {
 			if ( id instanceof BaseException ) {
 				errors.push( new InvalidUUIDException() )
 			}
-
+			const t = await this.client.auth.getSession()
+			console.log('t.data.session.access_token')
+			console.log(t.data.session?.access_token)
 			const token = wrapType<ValidString, InvalidStringException>(
 				() => ValidString.from( authResult.data.session?.access_token ?? '' ) )
 
@@ -45,6 +49,8 @@ export class AuthSupabaseData implements AuthRepository {
 			}
 
 			if ( errors.length > 0 ) {
+				console.log( 'errr')
+				console.log( errors)
 				throw errors
 			}
 
@@ -60,7 +66,7 @@ export class AuthSupabaseData implements AuthRepository {
 		}
 	}
 
-	//TODO: decision union auth/user. podria ser al crear usuario se crea auth. y tener un endpoint solo de login. y el resto hacer middleware o pedir token. revisar union report
+	//TODO: revisar union report
 
 	async login( email: Email, password: Password ): Promise<Auth> {
 		try {
@@ -145,15 +151,4 @@ export class AuthSupabaseData implements AuthRepository {
 			throw e
 		}
 	}
-
-	async logout(): Promise<boolean> {
-		try {
-			await this.client.auth.signOut()
-			return true
-		}
-		catch ( e ) {
-			throw [ new InfrastructureException( 'logout' ) ]
-		}
-	}
-
 }

@@ -41,9 +41,9 @@ export class UserSupaBaseData implements UserDao {
 					throw [ new LimitIsNotInRangeException() ]
 				}
 				if ( error.code === '22P02' ) {
-					throw new ParameterNotMatchException()
+					throw [ new ParameterNotMatchException() ]
 				}
-				throw new InfrastructureException()
+				throw [ new InfrastructureException() ]
 			}
 
 			const users: User[] = []
@@ -69,7 +69,7 @@ export class UserSupaBaseData implements UserDao {
 			return true
 		}
 		catch ( e ) {
-			throw new InfrastructureException()
+			throw [ new InfrastructureException() ]
 		}
 	}
 
@@ -81,18 +81,20 @@ export class UserSupaBaseData implements UserDao {
 			return true
 		}
 		catch ( e ) {
-			throw new InfrastructureException()
+			throw [ new InfrastructureException() ]
 		}
 	}
 
 	async createUser( user: User ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
-			                    .insert( userToJson( user ) as any )
+			          .insert( userToJson( user ) as any )
 			return true
 		}
 		catch ( e ) {
-			throw new InfrastructureException()
+			console.log( 'user e' )
+			console.log( e )
+			throw [ new InfrastructureException() ]
 		}
 	}
 }

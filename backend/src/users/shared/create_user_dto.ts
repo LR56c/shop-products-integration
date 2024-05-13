@@ -2,12 +2,16 @@ import {
 	IsEmail,
 	IsEnum,
 	IsString,
+	IsUUID,
 	Matches,
 	MinLength
 } from 'class-validator'
 import { RoleEnum } from '~features/shared/domain/value_objects/Role'
 
 export class CreateUserDto {
+	@IsUUID()
+	auth_id: string
+
 	@IsEmail()
 	email: string
 

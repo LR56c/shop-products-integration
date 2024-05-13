@@ -9,6 +9,4 @@ export abstract class AuthRepository {
 	abstract login( email: Email, password: Password ): Promise<Auth>
 
 	abstract recover( token: ValidString ): Promise<Auth>
-
-	abstract logout(): Promise<boolean>
 }

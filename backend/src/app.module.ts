@@ -20,6 +20,8 @@ import { AuthRepository } from '~features/auth/domain/auth_repository'
 import { AuthSupabaseData } from '~features/auth/infrastructure/auth_supabase_data'
 import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
 import { DiscountSupabaseData } from '~features/discount_type/infrastructure/discount_supabase_data'
+import { UserDao } from '~features/user/domain/dao/UserDao'
+import { UserSupaBaseData } from '~features/user/infrastructure/user_supabase_data'
 import { AuthModule } from './auth/auth.module'
 import { CartsModule } from './carts/carts.module'
 import { CategoriesModule } from './categories/categories.module'
@@ -64,6 +66,13 @@ import { UsersModule } from './users/users.module'
 				return new DiscountSupabaseData( client )
 			},
 			inject    : [ SupabaseClient<Database> ]
+		},
+		{
+			provide   : UserDao,
+			useFactory: ( client: SupabaseClient<Database> ) => {
+				return new UserSupaBaseData( client )
+			},
+			inject    : [ SupabaseClient<Database> ]
 		}
 	],
 	imports  : [
@@ -88,6 +97,7 @@ import { UsersModule } from './users/users.module'
 		ProductsModule,
 		ReportsModule, UsersModule,
 		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
-	exports  : [ TranslationService, SupabaseClient<Database>,AuthRepository,DiscountRepository ]
+	exports  : [ TranslationService, SupabaseClient<Database>, AuthRepository,
+		UserDao, DiscountRepository ]
 } )
 export class AppModule {}

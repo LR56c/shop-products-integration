@@ -10,39 +10,63 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { parseAuth } from 'src/auth/shared/parse_auth'
+import { AuthUserDto } from 'src/auth/register-auth/auth_user_dto'
+import { parseAuthUser } from 'src/auth/shared/parse_auth_user'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { LoginAuthService } from './login-auth.service'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import {
+	wrapType,
+	wrapTypes
+} from '~features/shared/utils/WrapType'
+import { InvalidPasswordException } from '~features/user/domain/exceptions/PasswordException'
+import { Password } from '~features/user/domain/models/Password'
+import { RegisterAuthService } from './register-auth.service'
 
 @ApiTags( 'auth' )
 @Controller( 'auth' )
-export class LoginAuthController {
-	constructor( private readonly loginAuthService: LoginAuthService,
+export class RegisterAuthController {
+	constructor( private readonly registerAuthService: RegisterAuthService,
 		private readonly translation: TranslationService
 	)
 	{}
 
-	@Post( 'login' )
+	@Post( 'register' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
 			properties: {
-				email   : {
-					type   : 'string',
-					example: 'abc@gmail.com'
-				},
 				password: {
 					type   : 'string',
 					example: 'Abcd@1234'
+				},
+				user    : {
+					type      : 'object',
+					properties: {
+						rut  : {
+							type   : 'string',
+							example: '123456789-7'
+						},
+						name : {
+							type   : 'string',
+							example: 'John Doe'
+						},
+						role : {
+							type   : 'string',
+							example: 'CLIENT'
+						},
+						email: {
+							type   : 'string',
+							example: 'abc@gmail.com'
+						}
+					}
 				}
-
 			}
 		}
 	} )
 	@ApiOperation( {
-		summary    : 'Auth Login User',
-		description: 'Authenticates a user with email and password'
+		summary    : 'Auth Register User',
+		description: 'Register a user with email, password and user data'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -97,24 +121,37 @@ export class LoginAuthController {
 			}
 		}
 	} )
-	async login(
-		@Body( 'email' ) email: string,
-		@Body( 'password' ) password: string
+	async register(
+		@Body( 'password' ) password: string,
+		@Body( 'user' ) dto: AuthUserDto
 	): Promise<HttpResultData<string>> {
 		try {
 
-			const data   = parseAuth( {
-				email,
-				password
-			} )
-			const result = await this.loginAuthService.login( data.email,
-				data.password )
+			const passwordResult = wrapTypes<Password, InvalidPasswordException>(
+				() => Password.from( password ) )
+
+			if ( !(passwordResult instanceof  Password) ) {
+				throw password
+			}
+
+			const user = parseAuthUser( dto )
+
+			const result = await this.registerAuthService.register(
+				user.email,
+				passwordResult,
+				user.rut,
+				user.name,
+				user.role
+			)
+
 			return {
 				statusCode: HttpStatus.OK,
-				data      : result.token.value
+				data      : result
 			}
 		}
 		catch ( e ) {
+			console.log( 'e ')
+			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
