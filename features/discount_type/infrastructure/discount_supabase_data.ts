@@ -34,10 +34,14 @@ export class DiscountSupabaseData implements DiscountRepository {
 			throw [ new InfrastructureException() ]
 		}
 
+		console.log('result')
+		console.log(result)
 		if ( discount.type.value === DiscountTypeEnum.PROMOTION ) {
 			const resultPromotion = await this.client.from( this.promotionsTableName )
-			                                  .insert( promotionToJson(
-				                                  discount as Promotion ) as any )
+			                                  .insert( {
+				                                  id        : discount.id.value,
+				                                  name      : (discount as Promotion).name.value,
+			                                  } as any )
 
 			if ( resultPromotion.error != null ) {
 				if ( resultPromotion.error.code === '23505' ) {
@@ -50,9 +54,13 @@ export class DiscountSupabaseData implements DiscountRepository {
 		else if ( discount.type.value === DiscountTypeEnum.SALE ) {
 			const resultSale = await this.client.from( this.salesTableName )
 
-			                             .insert(
-				                             saleToJson( discount as Sale ) as any )
+			                             .insert( {
+				                             id        : discount.id.value,
+				                             product_id: (discount as Sale).product_id.value,
+				                             }as any )
 
+			console.log('resultSale')
+			console.log(resultSale)
 			if ( resultSale.error != null ) {
 				if ( resultSale.error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException() ]

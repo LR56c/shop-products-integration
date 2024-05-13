@@ -13,7 +13,7 @@ import {
 	MinLength,
 	ValidateNested
 } from 'class-validator'
-import { SaleDto } from 'src/products/shared/dto/sale_dto'
+import { DiscountDto } from 'src/shared/dto/discount_dto'
 
 export class ProductDto{
 	@IsUUID()
@@ -64,6 +64,6 @@ export class ProductDto{
 
 	@IsOptional()
 	@ValidateNested()
-	@Type( () => SaleDto )
-	sale : SaleDto
+	@Type( () => DiscountDto )
+	discount : DiscountDto
 }

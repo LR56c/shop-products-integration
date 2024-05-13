@@ -16,10 +16,12 @@ import {
 } from 'nestjs-i18n'
 import { join } from 'node:path'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { CartRepository } from '~features/carts/domain/cart_repository'
-import { CartSupabaseData } from '~features/carts/infrastructure/cart_supabase_data'
+import { AuthRepository } from '~features/auth/domain/auth_repository'
+import { AuthSupabaseData } from '~features/auth/infrastructure/auth_supabase_data'
 import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
 import { DiscountSupabaseData } from '~features/discount_type/infrastructure/discount_supabase_data'
+import { UserDao } from '~features/user/domain/dao/UserDao'
+import { UserSupaBaseData } from '~features/user/infrastructure/user_supabase_data'
 import { AuthModule } from './auth/auth.module'
 import { CartsModule } from './carts/carts.module'
 import { CategoriesModule } from './categories/categories.module'
@@ -30,12 +32,11 @@ import { OrdersConfirmedModule } from './orders_confirmed/orders_confirmed.modul
 import { PaymentsModule } from './payments/payments.module'
 import { ProductsModule } from './products/products.module'
 import { PromotionsModule } from './promotions/promotions.module'
+import { RanksModule } from './ranks/ranks.module'
 import { ReportsModule } from './reports/reports.module'
-import { ReportsTypesModule } from './reports_types/reports_types.module'
-import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
-import { RanksModule } from './ranks/ranks.module'
+import { SalesModule } from './sales/sales.module';
 
 @Global()
 @Module( {
@@ -54,9 +55,23 @@ import { RanksModule } from './ranks/ranks.module'
 			}
 		},
 		{
+			provide   : AuthRepository,
+			useFactory: ( client: SupabaseClient<Database> ) => {
+				return new AuthSupabaseData( client )
+			},
+			inject    : [ SupabaseClient<Database> ]
+		},
+		{
 			provide   : DiscountRepository,
 			useFactory: ( client: SupabaseClient<Database> ) => {
 				return new DiscountSupabaseData( client )
+			},
+			inject    : [ SupabaseClient<Database> ]
+		},
+		{
+			provide   : UserDao,
+			useFactory: ( client: SupabaseClient<Database> ) => {
+				return new UserSupaBaseData( client )
 			},
 			inject    : [ SupabaseClient<Database> ]
 		}
@@ -79,9 +94,11 @@ import { RanksModule } from './ranks/ranks.module'
 			inject    : []
 		} ),
 		PromotionsModule, NewsLettersModule, OrdersModule,
-		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule, ProductsModule, SalesModule,
-		ReportsModule, ReportsTypesModule,  UsersModule,
-		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule ],
-	exports  : [ TranslationService, SupabaseClient<Database>,DiscountRepository ]
+		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
+		ProductsModule,
+		ReportsModule, UsersModule,
+		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule, SalesModule ],
+	exports  : [ TranslationService, SupabaseClient<Database>, AuthRepository,
+		UserDao, DiscountRepository ]
 } )
 export class AppModule {}

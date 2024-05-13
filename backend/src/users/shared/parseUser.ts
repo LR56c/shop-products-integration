@@ -1,26 +1,28 @@
-import { CreateUserDto } from 'src/users/create_user/create_user_dto'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { EmailException } from '~features/shared/domain/exceptions/EmailException'
 import { InvalidRoleException } from '~features/shared/domain/exceptions/InvalidRoleException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '~features/shared/domain/value_objects/Email'
 import { Role } from '~features/shared/domain/value_objects/Role'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { InvalidRUTException } from '~features/user/domain/exceptions/InvalidRUTException'
 import { RUT } from '~features/user/domain/models/RUT'
+import { User } from '~features/user/domain/models/User'
+import { CreateUserDto } from './create_user_dto'
 
-export function parseUser( dto: CreateUserDto ): {
-	errors: BaseException[],
-		data: {
-		rut: RUT,
-			email: Email,
-			name: ValidString,
-			role: Role,
-	}
-}
+export function parseUser( dto: CreateUserDto ): User
 {
 	const errors: BaseException[] = []
+
+	const auth_id = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from( dto.auth_id ) )
+
+	if ( auth_id instanceof BaseException ) {
+		errors.push( auth_id )
+	}
 
 	const rut = wrapType<RUT, InvalidRUTException>(
 		() => RUT.from( dto.rut ) )
@@ -49,13 +51,16 @@ export function parseUser( dto: CreateUserDto ): {
 	if ( role instanceof BaseException ) {
 		errors.push( role )
 	}
-	return {
-		errors,
-		data: {
-			rut  : rut as RUT,
-			email: email as Email,
-			name : name as ValidString,
-			role : role as Role
-		}
+
+	if ( errors.length > 0 ) {
+		throw errors
 	}
+
+	return new User(
+		auth_id as UUID,
+		rut as RUT,
+		name as ValidString,
+		email as Email,
+		role as Role
+	)
 }

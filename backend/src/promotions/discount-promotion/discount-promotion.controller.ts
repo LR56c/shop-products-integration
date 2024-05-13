@@ -30,23 +30,60 @@ export class DiscountPromotionController {
 	@Get( 'discount' )
 	@ApiBody( {
 		schema: {
-			type      : 'object',
+			type      : 'array',
 			properties: {
-				id               : {
-					type   : 'string',
-					example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
-				},
-				order_id         : {
-					type   : 'string',
-					example: 'cb183faa-40f7-4023-8131-719232e34cf8'
-				},
-				creation_date    : {
-					type   : 'string',
-					example: '2024-04-27'
-				},
-				shop_keeper_email: {
-					type   : 'string',
-					example: 'ac@gmail.com'
+				items: {
+					type      : 'object',
+					properties: {
+						id          : {
+							type   : 'string',
+							example: 'uuid'
+						},
+						code        : {
+							type   : 'string',
+							example: 'string'
+						},
+						product_code: {
+							type   : 'string',
+							example: 'string'
+						},
+						name        : {
+							type   : 'string',
+							example: 'string'
+						},
+						description : {
+							type   : 'string',
+							example: 'string'
+						},
+						created_at  : {
+							type   : 'string',
+							example: 'date'
+						},
+						brand       : {
+							type   : 'string',
+							example: 'string'
+						},
+						price       : {
+							type   : 'string',
+							example: 'number'
+						},
+						image_url   : {
+							type   : 'string',
+							example: 'url'
+						},
+						stock       : {
+							type   : 'string',
+							example: 'number'
+						},
+						average_rank: {
+							type   : 'string',
+							example: 'decimal'
+						},
+						category    : {
+							type   : 'string',
+							example: 'string'
+						}
+					}
 				}
 			}
 		}
@@ -66,9 +103,9 @@ export class DiscountPromotionController {
 							type   : 'number',
 							example: 200
 						},
-						data: {
-							type   : 'object',
-							properties:{
+						data      : {
+							type      : 'object',
+							properties: {
 								discount: {
 									type   : 'number',
 									example: 1500
@@ -124,27 +161,35 @@ export class DiscountPromotionController {
 	} )
 	async handle(
 		@Body() dto: ProductDto[]
-	): Promise<HttpResult> {
+		// ): Promise<HttpResult> {
+	)
+	{
 		try {
 
-			const products : Product[] = []
-			for ( const p of dto ) {
-				const product = productFromJson( p )
-				if ( !(product instanceof  Product)) {
-					return {
-						statusCode: HttpStatus.BAD_REQUEST,
-						message   : this.translation.translateAll( product as BaseException[])
-					}
-				}
-				products.push( product )
-			}
-
-
-			await this.discountPromotionService.execute( products )
-
 			return {
-				statusCode: HttpStatus.OK
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : 'not implemented'
 			}
+
+			// const products: Product[] = []
+			// for ( const p of dto ) {
+			// 	const product = productFromJson( p )
+			// 	if ( !( product instanceof Product ) ) {
+			// 		return {
+			// 			statusCode: HttpStatus.BAD_REQUEST,
+			// 			message   : this.translation.translateAll(
+			// 				product as BaseException[] )
+			// 		}
+			// 	}
+			// 	products.push( product )
+			// }
+			//
+			//
+			// await this.discountPromotionService.execute( products )
+			//
+			// return {
+			// 	statusCode: HttpStatus.OK
+			// }
 		}
 		catch ( e ) {
 			return {

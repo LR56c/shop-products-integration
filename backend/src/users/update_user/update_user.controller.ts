@@ -10,9 +10,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { CreateUserDto } from 'src/users/shared/create_user_dto'
 import { parseUser } from 'src/users/shared/parseUser'
-import { UpdateUserDto } from 'src/users/update_user/update_user_dto'
-import { User } from '~features/user/domain/models/User'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { UpdateUserService } from './update_user.service'
@@ -32,6 +31,10 @@ export class UpdateUserController {
 				user: {
 					type      : 'object',
 					properties: {
+						auth_id  : {
+							type   : 'string',
+							example: '668476f7-b08f-40b6-9e02-faa55aca49b1'
+						},
 						rut  : {
 							type   : 'string',
 							example: '123456789-7'
@@ -54,15 +57,15 @@ export class UpdateUserController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Update user',
-		description: 'Update user by json data',
+		summary    : 'Update user',
+		description: 'Update user by json data'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -74,23 +77,23 @@ export class UpdateUserController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -101,39 +104,27 @@ export class UpdateUserController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
 		}
 	} )
 	async updateUser(
-		@Body( 'user' ) dto: UpdateUserDto
+		@Body( 'user' ) dto: CreateUserDto
 	): Promise<HttpResult> {
 		try {
-			const { errors, data } = parseUser(dto)
+			const data = parseUser( dto )
 
-			if ( errors.length > 0 ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message: this.translation.translateAll( errors)
-				}
-			}
-
-			await this.updateUserService.updateUser( data.email, new User(
-				data.rut,
-				data.name,
-				data.email,
-				data.role
-			) )
+			await this.updateUserService.updateUser( data.email, data )
 
 			return {
 				statusCode: HttpStatus.OK
@@ -141,7 +132,8 @@ export class UpdateUserController {
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

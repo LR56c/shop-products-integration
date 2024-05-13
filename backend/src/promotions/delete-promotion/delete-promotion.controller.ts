@@ -87,7 +87,7 @@ export class DeletePromotionController {
       }
     }
   } )
-  async deleteItemConfirmed(
+  async delete(
     @Param( 'id' ) id: string
   ): Promise<HttpResult> {
     try {

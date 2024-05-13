@@ -25,17 +25,19 @@ export class Password {
 	 */
 	static from( value: string ): Password {
 
+		console.log( 'value', value)
 		const parseValue = z.string()
 		                    .min( 8 )
-		                    .regex( RegExp( /^(?=.[a-z]).$/ ),
+		                    .regex( RegExp( /^(?=.*[a-z]).*$/ ),
 			                    { message: 'lowercase' } )
-		                    .regex( RegExp( /^(?=.[A-Z]).$/ ),
+		                    .regex( RegExp( /^(?=.*[A-Z]).*$/ ),
 			                    { message: 'uppercase' } )
-		                    .regex( RegExp( /^(?=.\d).$/ ), { message: 'number' } )
-		                    .regex( RegExp( /^(?=.[$@!?&]).*$/ ),
+		                    .regex( RegExp( /^(?=.*\d).*$/ ), { message: 'number' } )
+		                    .regex( RegExp( /^(?=.*[$@!?&]).*$/ ),
 			                    { message: 'character' } )
 		                    .safeParse( value )
 
+		console.log( 'parseValue', parseValue)
 		if ( parseValue.success === false ) {
 			const errors: BaseException[] = []
 			for ( let e of parseValue.error.errors ) {
