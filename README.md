@@ -7,3 +7,7 @@ npm i
 ```
 npm run start --workspaces=backend
 ```
+- Paso 3: Ingresar a swagger
+```
+http://localhost:3000/api
+```
