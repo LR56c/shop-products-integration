@@ -26,7 +26,7 @@ export class CreatePaymentController {
             },
             created_at: {
               type   : 'date',
-              example: '2021-09-21'
+              example: '2024-05-13'
             },
             approved: {
               type   : 'boolean',

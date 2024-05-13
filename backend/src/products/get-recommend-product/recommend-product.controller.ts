@@ -9,6 +9,7 @@ import {
 	ApiOperation,
 	ApiTags
 } from '@nestjs/swagger'
+import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
 import { GetRecommendProductDto } from './get_recommend_product_dto'
 import { RecommendProductService } from './recommend-product.service'
 import { ProductDto } from '../shared/dto/product_dto'
@@ -34,8 +35,8 @@ export class RecommendProductController {
 
 	@Post( 'recommend' )
 	@ApiOperation( {
-		summary: 'Get recommend products',
-		description: 'Get recommend products by products related, threshold and limit',
+		summary    : 'Get recommend products',
+		description: 'Get recommend products by products related, threshold and limit'
 	} )
 	@ApiBody( {
 		schema: {
@@ -49,7 +50,7 @@ export class RecommendProductController {
 					type   : 'string',
 					example: '2'
 				},
-				products      : {
+				products : {
 					type : 'array',
 					items: {
 						properties: {
@@ -103,19 +104,21 @@ export class RecommendProductController {
 							}
 						}
 					}
-				},
+				}
 			}
 		}
 	} )
 	async getRecommendProducts(
 		@Body() dto: GetRecommendProductDto
-	// ): Promise<HttpResultData<Record<string, any>[]>> {
-	){
+		// ): Promise<HttpResultData<Record<string, any>[]>> {
+	)
+	{
 		try {
 			console.log( 'dto', dto )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
-				message   : 'not implemented'
+				message   : this.translation.translateAll(
+					[ new NotImplementedException() ] )
 			}
 
 			// const { errors, data } = this.parseRecommendProduct( dto )
