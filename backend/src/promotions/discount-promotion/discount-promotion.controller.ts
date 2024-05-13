@@ -12,6 +12,7 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { productFromJson } from '~features/products/application/product_mapper'
+import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
 import { ProductDto } from '../../products/shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
@@ -168,7 +169,8 @@ export class DiscountPromotionController {
 
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
-				message   : 'not implemented'
+				message   : this.translation.translateAll(
+					[ new NotImplementedException() ] )
 			}
 
 			// const products: Product[] = []

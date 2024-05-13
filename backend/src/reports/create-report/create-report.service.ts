@@ -12,13 +12,12 @@ import {
 import { ReportRepository } from '~features/report/domain/repository/report_repository'
 import { ReportPayment } from '~features/report/features/payments/domain/report_payment'
 import { ReportPaymentRepository } from '~features/report/features/payments/domain/report_payment_repository'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
 import { SubTypeNotExistException } from '~features/shared/domain/exceptions/SubTypeNotExistException'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { ValidURL } from '~features/shared/domain/value_objects/ValidURL'
-import { InfrastructureException } from '~features/shared/infrastructure/infrastructure_exception'
 
 @Injectable()
 export class CreateReportService {
@@ -43,7 +42,7 @@ export class CreateReportService {
 			// data           = await generatePDFData( image )
 		}
 		else if ( type.value === ReportTypeEnum.performance ) {
-			throw [ new InfrastructureException( 'Not implemented' ) ]
+			throw [ new NotImplementedException(  ) ]
 		}
 		else {
 			throw [ new SubTypeNotExistException( 'report' ) ]

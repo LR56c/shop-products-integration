@@ -51,6 +51,9 @@ export function manualTranslation( tokens: Map<string, FlatErrors> ): Translatio
 			obj[`${ value.field.length > 0 ? value.field : key }`] =
 				`El campo ${ value.field.length > 0 ? `'`+value.field + `' ` : `` }no es un entero válido`
 		}
+		else if ( tokens.has( 'invalid.notimplemented' ) ) {
+			obj[`${ key }`] = 'Funcionalidad no implementada aun'
+		}
 		else if ( tokens.has( 'unknown' ) ) {
 			obj[`${ key }`] = 'Hubo un error desconocido'
 		}
