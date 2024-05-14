@@ -34,9 +34,9 @@ import { ProductsModule } from './products/products.module'
 import { PromotionsModule } from './promotions/promotions.module'
 import { RanksModule } from './ranks/ranks.module'
 import { ReportsModule } from './reports/reports.module'
+import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
-import { SalesModule } from './sales/sales.module';
 
 @Global()
 @Module( {
@@ -46,8 +46,10 @@ import { SalesModule } from './sales/sales.module';
 			provide   : SupabaseClient<Database>,
 			useFactory: async () => {
 				let client = createClient<Database>(
-					'https://uppjyrysymgslbnkxhaq.supabase.co',
-					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
+					// 'https://uppjyrysymgslbnkxhaq.supabase.co',
+					'https://wqzqxgeilepfytyppfym.supabase.co',
+					// 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwcGp5cnlzeW1nc2xibmt4aGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM2NjMyMTQsImV4cCI6MjAyOTIzOTIxNH0.7_fxI7bfFEAKjFl0mk71H4_KvNRcdjFEhbAdRGGH2Hw' )
+					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxenF4Z2VpbGVwZnl0eXBwZnltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU2MjMyNTQsImV4cCI6MjAzMTE5OTI1NH0.L7bKFkZ5eGffPLbBOKnRujbQTD6vq2FYr114NuNu9Zs' )
 
 				await client.auth.signInAnonymously()
 				// const r = await client.from('carts').select('*, product:product_id(*)').eq('user_email', 'aaaa@gmail.com')

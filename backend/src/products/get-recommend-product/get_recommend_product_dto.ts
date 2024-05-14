@@ -1,11 +1,13 @@
 import { Type } from 'class-transformer'
 import {
 	IsInt,
+	IsString,
+	IsUUID,
 	Max,
 	Min,
+	MinLength,
 	ValidateNested
 } from 'class-validator'
-import { ProductDto } from 'src/products/shared/dto/product_dto'
 
 export class GetRecommendProductDto {
 	@Max(5)
@@ -18,6 +20,15 @@ export class GetRecommendProductDto {
 	limit: number
 
 	@ValidateNested()
-	@Type( () => ProductDto )
-	products: ProductDto[]
+	@Type( () => RecommendedProductDto )
+	products: RecommendedProductDto[]
+}
+
+export class RecommendedProductDto {
+	@IsUUID()
+	id : string
+
+	@MinLength(1)
+	@IsString()
+	category: string
 }

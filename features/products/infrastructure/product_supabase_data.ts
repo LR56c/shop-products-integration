@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { RecommendProduct } from 'features/products/domain/models/recommend_product'
 import { UUID } from 'features/shared/domain/value_objects/UUID'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
@@ -73,7 +74,7 @@ export class ProductSupabaseData implements ProductRepository {
 		return products
 	}
 
-	async getProduct( id : UUID ): Promise<Product> {
+	async getProduct( id: UUID ): Promise<Product> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
@@ -141,54 +142,77 @@ export class ProductSupabaseData implements ProductRepository {
 		}
 	}
 
-	public getRecommendProductsGroupByCategory( threshold: ValidRank,
-		products: Product[],
+	async getRecommendProductsGroupByCategory( threshold: ValidRank,
+		recommendProducts: RecommendProduct[],
 		limit: ValidInteger ): Promise<Map<string, Product[]>> {
 
-		const categoriesSet = new Set(
-			products.map( product => product.category_name.value ) )
+		const productsDatabaseResult = await this.client.from( this.tableName )
+		                                         .select()
+		                                         .gte( 'average_rank',
+			                                         threshold.value )
+		                                         .limit( limit.value )
 
-		const mapResult = new Map<string, Product[]>()
+		if ( productsDatabaseResult.error != null ) {
+			throw [ new InfrastructureException() ]
+		}
 
-		console.log( 'set' )
-		categoriesSet.forEach( async ( category ) => {
-			console.log( 'cat' )
-			const categoryQueryProducts = await this.client.from( this.tableName )
-			                                        .select()
-			                                        .eq( 'category', category )
-			                                        .gte( 'rank', threshold.value )
-			                                        .limit( limit.value )
+		const productsDatabase: Product[] = []
 
-			if ( categoryQueryProducts.error ) {
-				console.log( 'supabase unexpected error' )
-				console.log( categoryQueryProducts.error )
-				throw [ new InfrastructureException() ]
+		for ( const json of productsDatabaseResult.data ) {
+			const product = productFromJson( json )
+			if ( product instanceof BaseException ) {
+				throw product
 			}
+			productsDatabase.push( product as Product )
+		}
 
-			//Map<categoryName, rawProducts]>
+		const databaseProductsMap: Map<string, Map<string, Product>> = new Map()
 
-			const errors: BaseException[] = []
-
-			const parsedQueryProducts: Product[] = []
-
-			console.log( 'json product supa' )
-			for ( const json of categoryQueryProducts.data ) {
-				const p = productFromJson( json )
-
-				if ( p instanceof BaseException ) {
-					errors.push( p )
-					throw errors
-				}
-
-				parsedQueryProducts.push( p as Product )
+		for ( const product of productsDatabase ) {
+			const category = product.category_name.value
+			if ( !databaseProductsMap.has( category ) ) {
+				databaseProductsMap.set( category,
+					new Map<string, Product>().set( product.id.value, product ) )
 			}
+			else {
+				databaseProductsMap.get( category )!.set( product.id.value,
+					product )
+			}
+		}
 
-			// const unMatchedProducts = parsedQueryProducts.filter(
-			// 	bd => !products.some( p => p.product_code === bd.product_code ) )
+		const paramProductsMap: Map<string, Map<string, RecommendProduct>> = new Map()
 
-			mapResult.set( category, parsedQueryProducts )
+		for ( const recommendProduct of recommendProducts ) {
+			const category = recommendProduct.category_name.value
+			if ( !paramProductsMap.has( category ) ) {
+				paramProductsMap.set( category,
+					new Map<string, RecommendProduct>().set( recommendProduct.id.value,
+						recommendProduct ) )
+			}
+			else {
+				paramProductsMap.get( category )!.set(
+					recommendProduct.id.value,
+					recommendProduct )
+			}
+		}
+
+
+		const filteredProductsByCategories: Map<string, Product[]> = new Map()
+		databaseProductsMap.forEach( ( dbCategoryMap, dbCategoryKey ) => {
+			if ( paramProductsMap.has( dbCategoryKey ) ) {
+				const paramMap = paramProductsMap.get( dbCategoryKey )!
+				dbCategoryMap.forEach( ( product, dbProductKey ) => {
+					// si no esta el producto en param map, quiere decir que seria uno nuevo/recomendado
+					if(!paramMap.has(dbProductKey)){
+						if(!filteredProductsByCategories.has(dbCategoryKey)){
+							filteredProductsByCategories.set(dbCategoryKey, [])
+						}
+						filteredProductsByCategories.get(dbCategoryKey)!.push(product)
+					}
+				} )
+			}
 		} )
 
-		return Promise.resolve( mapResult )
+		return filteredProductsByCategories
 	}
 }
