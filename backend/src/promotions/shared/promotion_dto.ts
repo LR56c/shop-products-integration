@@ -37,3 +37,11 @@ export class PromotionDto{
 	} )
 	products_ids: string[]
 }
+
+export class PromotionProductDto {
+	@IsArray()
+	@IsUUID( '4', {
+		each: true
+	} )
+	products_ids: string[]
+}

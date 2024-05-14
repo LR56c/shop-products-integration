@@ -3,7 +3,7 @@ import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { Product } from '../domain/models/product'
 import { ProductRepository } from '../domain/repository/product_repository'
 
-export const GetRecommendProductsGroupByCateogry = async ( repo: ProductRepository,
+export const GetRecommendProductsGroupByCategory = async ( repo: ProductRepository,
 	props: {
 		threshold: ValidInteger,
 		recommendProducts: RecommendProduct[],

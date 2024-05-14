@@ -11,8 +11,18 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { productFromJson } from '~features/products/application/product_mapper'
+import { PromotionProductDto } from 'src/promotions/shared/promotion_dto'
+import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
+import {
+	productFromJson,
+	productToJson
+} from '~features/products/application/product_mapper'
+import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { ProductDto } from '../../products/shared/dto/product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
@@ -28,62 +38,16 @@ export class DiscountPromotionController {
 	)
 	{}
 
-	@Get( 'discount' )
+	@Post( 'discount' )
 	@ApiBody( {
 		schema: {
-			type      : 'array',
+			type      : 'object',
 			properties: {
-				items: {
-					type      : 'object',
-					properties: {
-						id          : {
-							type   : 'string',
-							example: 'uuid'
-						},
-						code        : {
-							type   : 'string',
-							example: 'string'
-						},
-						product_code: {
-							type   : 'string',
-							example: 'string'
-						},
-						name        : {
-							type   : 'string',
-							example: 'string'
-						},
-						description : {
-							type   : 'string',
-							example: 'string'
-						},
-						created_at  : {
-							type   : 'string',
-							example: 'date'
-						},
-						brand       : {
-							type   : 'string',
-							example: 'string'
-						},
-						price       : {
-							type   : 'string',
-							example: 'number'
-						},
-						image_url   : {
-							type   : 'string',
-							example: 'url'
-						},
-						stock       : {
-							type   : 'string',
-							example: 'number'
-						},
-						average_rank: {
-							type   : 'string',
-							example: 'decimal'
-						},
-						category    : {
-							type   : 'string',
-							example: 'string'
-						}
+				products_ids: {
+					type : 'array',
+					items: {
+						type   : 'string',
+						example: '359b6378-f875-4d31-b415-d3de60a59875'
 					}
 				}
 			}
@@ -161,37 +125,29 @@ export class DiscountPromotionController {
 		}
 	} )
 	async handle(
-		@Body() dto: ProductDto[]
-		// ): Promise<HttpResult> {
-	)
-	{
+		@Body() dto: PromotionProductDto
+	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
+			const products_ids_map: Map<string, UUID> = new Map()
+			for ( const id of dto.products_ids ) {
+				const idResult = wrapType<UUID, InvalidUUIDException>(
+					() => UUID.from( id ) )
 
-			return {
-				statusCode: HttpStatus.BAD_REQUEST,
-				message   : this.translation.translateAll(
-					[ new NotImplementedException() ] )
+				if ( idResult instanceof BaseException ) {
+					throw [ new InvalidUUIDException() ]
+				}
+				products_ids_map.set( id, idResult )
 			}
 
-			// const products: Product[] = []
-			// for ( const p of dto ) {
-			// 	const product = productFromJson( p )
-			// 	if ( !( product instanceof Product ) ) {
-			// 		return {
-			// 			statusCode: HttpStatus.BAD_REQUEST,
-			// 			message   : this.translation.translateAll(
-			// 				product as BaseException[] )
-			// 		}
-			// 	}
-			// 	products.push( product )
-			// }
-			//
-			//
-			// await this.discountPromotionService.execute( products )
-			//
-			// return {
-			// 	statusCode: HttpStatus.OK
-			// }
+			const result = await this.discountPromotionService.execute(
+				products_ids_map )
+			const json   = result.map( promotionToJson )
+			// formato alternativo: {promotion, totalProducts, totalPromotion, products[] } []
+
+			return {
+				statusCode: HttpStatus.OK,
+				data      : json
+			}
 		}
 		catch ( e ) {
 			return {

@@ -33,33 +33,29 @@ export class CreatePromotionController {
 			schema: {
 				type      : 'object',
 				properties: {
-					promotion   : {
-						properties: {
-							id         : {
-								type   : 'string',
-								example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
-							},
-							name       : {
-								type   : 'string',
-								example: 'abc'
-							},
-							percentage : {
-								type   : 'number',
-								example: 20
-							},
-							created_at : {
-								type   : 'string',
-								example: '2024-04-27'
-							},
-							end_date   : {
-								type   : 'string',
-								example: '2024-04-27'
-							},
-							start_date : {
-								type   : 'string',
-								example: '2024-04-27'
-							}
-						}
+					id        : {
+						type   : 'string',
+						example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
+					},
+					name      : {
+						type   : 'string',
+						example: 'abc'
+					},
+					percentage: {
+						type   : 'number',
+						example: 20
+					},
+					created_at: {
+						type   : 'string',
+						example: '2024-04-27'
+					},
+					end_date  : {
+						type   : 'string',
+						example: '2024-04-27'
+					},
+					start_date: {
+						type   : 'string',
+						example: '2024-04-27'
 					},
 					products_ids: {
 						type : 'array',
@@ -67,6 +63,7 @@ export class CreatePromotionController {
 							example: '359b6378-f875-4d31-b415-d3de60a59875'
 						}
 					}
+
 				}
 			}
 		}
@@ -134,7 +131,7 @@ export class CreatePromotionController {
 		}
 	} )
 	async handle(
-		@Body(  ) promotionDto: PromotionDto,
+		@Body() promotionDto: PromotionDto
 	): Promise<HttpResult> {
 		try {
 			const promotion = parsePromotion( promotionDto )

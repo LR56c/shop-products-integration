@@ -2,7 +2,6 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
 import { discountFromJson } from '../../../application/discount_mapper'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
-import { Product } from '../../../../products/domain/models/product'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
@@ -128,9 +127,5 @@ export class PromotionSupabaseData implements PromotionRepository {
 			}
 		}
 		return true
-	}
-
-	async discount( products: Product[] ): Promise<boolean> {
-		throw [ new InfrastructureException() ]
 	}
 }
