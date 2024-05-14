@@ -1,7 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { RecommendProduct } from 'features/products/domain/models/recommend_product'
-import { UUID } from 'features/shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
@@ -142,9 +141,8 @@ export class ProductSupabaseData implements ProductRepository {
 		}
 	}
 
-	async getRecommendProductsGroupByCategory( threshold: ValidRank,
-		recommendProducts: RecommendProduct[],
-		limit: ValidInteger ): Promise<Map<string, Product[]>> {
+	async getProductsByRankThreshold( threshold: ValidRank,
+		limit: ValidInteger ): Promise<Product[]> {
 
 		const productsDatabaseResult = await this.client.from( this.tableName )
 		                                         .select()
@@ -165,54 +163,6 @@ export class ProductSupabaseData implements ProductRepository {
 			}
 			productsDatabase.push( product as Product )
 		}
-
-		const databaseProductsMap: Map<string, Map<string, Product>> = new Map()
-
-		for ( const product of productsDatabase ) {
-			const category = product.category_name.value
-			if ( !databaseProductsMap.has( category ) ) {
-				databaseProductsMap.set( category,
-					new Map<string, Product>().set( product.id.value, product ) )
-			}
-			else {
-				databaseProductsMap.get( category )!.set( product.id.value,
-					product )
-			}
-		}
-
-		const paramProductsMap: Map<string, Map<string, RecommendProduct>> = new Map()
-
-		for ( const recommendProduct of recommendProducts ) {
-			const category = recommendProduct.category_name.value
-			if ( !paramProductsMap.has( category ) ) {
-				paramProductsMap.set( category,
-					new Map<string, RecommendProduct>().set( recommendProduct.id.value,
-						recommendProduct ) )
-			}
-			else {
-				paramProductsMap.get( category )!.set(
-					recommendProduct.id.value,
-					recommendProduct )
-			}
-		}
-
-
-		const filteredProductsByCategories: Map<string, Product[]> = new Map()
-		databaseProductsMap.forEach( ( dbCategoryMap, dbCategoryKey ) => {
-			if ( paramProductsMap.has( dbCategoryKey ) ) {
-				const paramMap = paramProductsMap.get( dbCategoryKey )!
-				dbCategoryMap.forEach( ( product, dbProductKey ) => {
-					// si no esta el producto en param map, quiere decir que seria uno nuevo/recomendado
-					if(!paramMap.has(dbProductKey)){
-						if(!filteredProductsByCategories.has(dbCategoryKey)){
-							filteredProductsByCategories.set(dbCategoryKey, [])
-						}
-						filteredProductsByCategories.get(dbCategoryKey)!.push(product)
-					}
-				} )
-			}
-		} )
-
-		return filteredProductsByCategories
+		return productsDatabase
 	}
 }
