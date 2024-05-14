@@ -229,14 +229,17 @@ export type Database = {
         Row: {
           order_id: string
           product_id: string
+          quantity: number
         }
         Insert: {
           order_id: string
           product_id: string
+          quantity: number
         }
         Update: {
           order_id?: string
           product_id?: string
+          quantity?: number
         }
         Relationships: [
           {
@@ -372,14 +375,17 @@ export type Database = {
         Row: {
           product_id: string
           promotion_id: string
+          quantity: number
         }
         Insert: {
           product_id: string
           promotion_id: string
+          quantity: number
         }
         Update: {
           product_id?: string
           promotion_id?: string
+          quantity?: number
         }
         Relationships: [
           {
@@ -464,18 +470,21 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          name: string
           report_type: Database["public"]["Enums"]["report_type"]
           url: string
         }
         Insert: {
           created_at?: string
           id?: string
+          name: string
           report_type: Database["public"]["Enums"]["report_type"]
           url: string
         }
         Update: {
           created_at?: string
           id?: string
+          name?: string
           report_type?: Database["public"]["Enums"]["report_type"]
           url?: string
         }
@@ -525,18 +534,21 @@ export type Database = {
       }
       users: {
         Row: {
+          auth_id: string
           email: string
           name: string | null
           role_type: Database["public"]["Enums"]["role_type"]
           rut: string | null
         }
         Insert: {
+          auth_id?: string
           email: string
           name?: string | null
           role_type: Database["public"]["Enums"]["role_type"]
           rut?: string | null
         }
         Update: {
+          auth_id?: string
           email?: string
           name?: string | null
           role_type?: Database["public"]["Enums"]["role_type"]

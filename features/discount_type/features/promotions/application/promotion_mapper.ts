@@ -1,3 +1,5 @@
+import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
 import {
 	productFromJson,
 	productToJson
@@ -10,9 +12,17 @@ import { InvalidUUIDException } from '../../../../shared/domain/exceptions/Inval
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../../../shared/utils/WrapType'
-import { Promotion } from '../domain/promotion'
+import {
+	Promotion,
+	PromotionProduct
+} from '../domain/promotion'
 
 export function promotionToJson( promotion: Promotion ): Record<string, any> {
+	const jsonProducts = promotion.products.map( p => ( {
+		quantity: p.quantity.value,
+		product : productToJson( p.product )
+	} ) )
+
 	return {
 		id        : promotion.id.value,
 		name      : promotion.name.value,
@@ -20,7 +30,7 @@ export function promotionToJson( promotion: Promotion ): Record<string, any> {
 		created_at: promotion.creation_date.value,
 		end_date  : promotion.end_date.value,
 		start_date: promotion.start_date.value,
-		products  : promotion.products.map( product => productToJson( product ) )
+		products  : jsonProducts
 	}
 }
 
@@ -42,7 +52,7 @@ export function promotionFromJson( parent: DiscountParentProps,
 		errors.push( new InvalidStringException( 'name' ) )
 	}
 
-	const products : Product[] = []
+	const products: PromotionProduct[] = []
 
 	if ( json.products !== undefined ) {
 		for ( const product of json.products ) {
@@ -51,7 +61,18 @@ export function promotionFromJson( parent: DiscountParentProps,
 				errors.push( p )
 				break
 			}
-				products.push( p as Product)
+			const q = wrapType<ValidInteger, InvalidIntegerException>(
+				() => ValidInteger.from( product.quantity ) )
+
+			if ( q instanceof BaseException) {
+				errors.push( q )
+				break
+			}
+
+			products.push( new PromotionProduct(
+				q as ValidInteger,
+				p as Product,
+			) )
 		}
 	}
 

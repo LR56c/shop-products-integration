@@ -10,55 +10,40 @@ import {
   ApiResponse,
   ApiTags
 } from '@nestjs/swagger'
-import { parseSale } from 'src/sales/shared/parse_sale'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { SaleDto } from '../shared/sale_dto'
-import { CreateSaleService } from './create-sale.service'
+import { CartDto } from '../dto/cart_dto'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
+import { UpsertCartService } from './upsert-cart.service';
 
-@ApiTags( 'sales' )
-@Controller( 'sales' )
-export class CreateSaleController {
-  constructor(private readonly createSaleService: CreateSaleService,
-  private readonly translation: TranslationService
-  ) {}
+@ApiTags( 'carts' )
+@Controller( 'carts' )
+export class UpsertCartController {
+  constructor(private readonly upsertCartService: UpsertCartService,
+    private readonly translation: TranslationService ) {}
 
   @Post()
   @ApiBody( {
-      schema: {
-        type      : 'object',
-        properties: {
-          id         : {
-            type   : 'string',
-            example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
-          },
-          product_id       : {
-            type   : 'string',
-            example: 'b8d274ae-2bde-4b51-991d-c4bb108170a8'
-          },
-          percentage : {
-            type   : 'number',
-            example: 20
-          },
-          created_at : {
-            type   : 'string',
-            example: '2024-04-27'
-          },
-          end_date   : {
-            type   : 'string',
-            example: '2024-04-27'
-          },
-          start_date : {
-            type   : 'string',
-            example: '2024-04-27'
-          }
+    schema: {
+      type      : 'object',
+      properties: {
+        user_email: {
+          type   : 'string',
+          example: 'aaaa@gmail.com'
+        },
+        product_id: {
+          type   : 'string',
+          example: '359b6378-f875-4d31-b415-d3de60a59875'
+        },
+        quantity  : {
+          type   : 'number',
+          example: 1
         }
       }
     }
-  )
+  } )
   @ApiOperation( {
-    summary    : 'Create a sale',
-    description: 'Create a sale with json data'
+    summary    : 'Upsert cart',
+    description: 'Upsert cart by json data. If the cart already exists, it will be updated. If it does not exist, it will be created.'
   } )
   @ApiResponse( {
     status : 200,
@@ -118,14 +103,14 @@ export class CreateSaleController {
       }
     }
   } )
-  async handle(
-    @Body(  ) saleDto: SaleDto,
-  ): Promise<HttpResult> {
+  async addCart( @Body() dto: CartDto ): Promise<HttpResult> {
     try {
-      const sale = parseSale( saleDto )
-
-      await this.createSaleService.createSale( sale)
-
+      // const { data } = parseAddCart( dto )
+      await this.upsertCartService.upsertCart(
+        dto.user_email,
+        dto.product_id,
+        dto.quantity
+      )
       return {
         statusCode: HttpStatus.OK
       }

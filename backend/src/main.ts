@@ -9,6 +9,8 @@ import {
 	I18nValidationExceptionFilter,
 	I18nValidationPipe
 } from 'nestjs-i18n'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { wrapTypePartial } from '~features/shared/utils/WrapType'
 import { Password } from '~features/user/domain/models/Password'
 import { AppModule } from './app.module'
 

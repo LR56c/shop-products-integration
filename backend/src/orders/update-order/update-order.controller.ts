@@ -18,8 +18,7 @@ import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { OrderDto } from '../dto/order_dto'
-import { parseOrder } from 'src/orders/utils/parse.order'
+import { parsePartialOrder } from 'src/orders/utils/parsePartialOrder'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { UpdateOrderService } from './update-order.service'
 
@@ -43,11 +42,20 @@ export class UpdateOrderController {
 					type   : 'string',
 					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
 				},
-				products_ids: {
+				products    : {
 					type : 'array',
 					items: {
-						type   : 'string',
-						example: '359b6378-f875-4d31-b415-d3de60a59875'
+						type: 'object',
+						properties: {
+							quantity  : {
+								type   : 'number',
+								example: 1
+							},
+							product_id: {
+								type   : 'string',
+								example: '359b6378-f875-4d31-b415-d3de60a59875'
+							},
+						}
 					}
 				}
 			}
@@ -124,14 +132,11 @@ export class UpdateOrderController {
 
 			const errors: BaseException[] = []
 
-			const order = parseOrder( dto )
+			const order = parsePartialOrder( dto )
 
 			const idResult = wrapType<UUID, InvalidUUIDException>(
 				() => UUID.from( id ) )
 
-			if ( !( order instanceof PartialOrder ) ) {
-				errors.push( ...order )
-			}
 			if ( idResult instanceof BaseException ) {
 				errors.push( new InvalidUUIDException() )
 			}

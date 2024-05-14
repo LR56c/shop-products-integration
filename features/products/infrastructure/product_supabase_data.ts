@@ -31,7 +31,7 @@ export class ProductSupabaseData implements ProductRepository {
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'product' ) ]
 			}
-			throw [ new InfrastructureException() ]
+			throw [ new InfrastructureException('create') ]
 		}
 		return true
 	}
@@ -56,7 +56,7 @@ export class ProductSupabaseData implements ProductRepository {
 			if ( error.code === 'PGRST103' ) {
 				throw [ new LimitIsNotInRangeException() ]
 			}
-			throw [ new InfrastructureException() ]
+			throw [ new InfrastructureException('get all') ]
 		}
 
 		const products: Product[] = []
@@ -80,7 +80,7 @@ export class ProductSupabaseData implements ProductRepository {
 			                         .eq( 'id', id.value )
 
 			if ( result.error ) {
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException('get') ]
 			}
 
 			if ( result.data.length === 0 ) {
@@ -114,7 +114,7 @@ export class ProductSupabaseData implements ProductRepository {
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException() ]
+			throw [ new InfrastructureException('update') ]
 		}
 	}
 

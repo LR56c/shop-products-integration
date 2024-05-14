@@ -1,3 +1,5 @@
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { itemConfirmedFromJson } from '../../item_confirmed/application/item_confimed_mapper'
 import { ItemConfirmed } from '../../item_confirmed/domain/item_confirmed'
 import { orderConfirmedFromJson } from '../../order_confirmed/application/order_confirmed_mapper'
@@ -17,18 +19,25 @@ import { wrapType } from '../../shared/utils/WrapType'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../shared/domain/value_objects/UUID'
-import { Order } from '../domain/order'
+import {
+	Order,
+	OrderProduct
+} from '../domain/order'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 
 export function orderToJson( order: Order ): Record<string, any> {
+	const jsonProducts = order.products.map( p => ( {
+		quantity: p.quantity.value,
+		product : productToJson( p.product )
+	} ) )
 	return {
 		id             : order.id.value,
 		client_email   : order.client_email.value,
 		created_at     : order.creation_date.value,
 		payment        : paymentToJson( order.payment ),
-		products       : order.products.map( product => productToJson( product ) ),
+		products       :jsonProducts,
 		seller_email   : order.seller_email?.value,
 		order_confirmed: order.order_confirmed?.id.value,
 		item_confirmed : order.item_confirmed?.id.value
@@ -65,18 +74,31 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		errors.push( payment )
 	}
 
-	const products: Product[] = []
+	const products: OrderProduct[] = []
 
 	if ( json.products !== null ) {
 		for ( const product of json.products ) {
+			console.log( 'order product json')
+			console.log( product)
 
 			const p = productFromJson( product )
 
-			if ( p instanceof BaseException ) {
+			if ( p instanceof BaseException) {
 				errors.push( p )
 				break
 			}
-			products.push( p as Product )
+
+			const q = wrapType<ValidInteger, InvalidIntegerException>(
+				() => ValidInteger.from( product.quantity ) )
+
+			if ( q instanceof BaseException) {
+				errors.push( q )
+				break
+			}
+			products.push( new OrderProduct(
+				q as ValidInteger,
+				p as Product,
+			) )
 		}
 	}
 

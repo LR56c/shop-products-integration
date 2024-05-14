@@ -1,9 +1,12 @@
+import { Type } from 'class-transformer'
 import {
-	IsArray,
 	IsDate,
 	IsEmail,
+	IsNumber,
 	IsOptional,
-	IsUUID
+	IsUUID,
+	Min,
+	ValidateNested
 } from 'class-validator'
 
 export class OrderDto {
@@ -19,11 +22,9 @@ export class OrderDto {
 	@IsUUID()
 	payment_id: string
 
-	@IsArray()
-	@IsUUID( '4', {
-		each: true
-	} )
-	products_ids: string[]
+	@ValidateNested()
+	@Type( () => OrderProductDto )
+	products: OrderProductDto[]
 
 	@IsOptional()
 	@IsEmail()
@@ -38,3 +39,11 @@ export class OrderDto {
 	item_confirmed: string
 }
 
+export class OrderProductDto{
+	@IsUUID( )
+	product_id: string
+
+	@Min( 1 )
+	@IsNumber()
+	quantity: number
+}

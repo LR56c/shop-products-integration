@@ -1,4 +1,5 @@
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
+import { BaseException } from '../domain/exceptions/BaseException'
+import { Primitive } from 'zod'
 import { UnknownException } from '../domain/exceptions/UnknownException'
 
 export function wrapType<T, Err extends BaseException>( returnFunction: () => T ): T | BaseException {
@@ -15,6 +16,23 @@ export function wrapType<T, Err extends BaseException>( returnFunction: () => T 
 		}
 	}
 }
+
+export function wrapTypePartial<T>( defaultValue: T, returnFunction: (value) => T,
+	updaterValue ?: Primitive ): T {
+	if ( updaterValue !== undefined ) {
+		const result = wrapType( () => returnFunction(updaterValue) )
+		if ( result instanceof BaseException ) {
+			throw result
+		}
+		else {
+			return result
+		}
+	}
+	else {
+		return defaultValue
+	}
+}
+
 
 export function wrapTypes<T, Err extends BaseException>( returnFunction: () => T ): T | BaseException[] {
 	try {

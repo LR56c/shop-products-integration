@@ -10,7 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { PartialPromotionProduct } from '~features/discount_type/features/promotions/domain/promotion'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { parsePromotion } from '../shared/parsePromotion'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
@@ -57,13 +60,22 @@ export class CreatePromotionController {
 						type   : 'string',
 						example: '2024-04-27'
 					},
-					products_ids: {
+					products  : {
 						type : 'array',
 						items: {
-							example: '359b6378-f875-4d31-b415-d3de60a59875'
+							type      : 'object',
+							properties: {
+								quantity  : {
+									type   : 'number',
+									example: 1
+								},
+								product_id: {
+									type   : 'string',
+									example: '359b6378-f875-4d31-b415-d3de60a59875'
+								}
+							}
 						}
 					}
-
 				}
 			}
 		}
@@ -136,20 +148,36 @@ export class CreatePromotionController {
 		try {
 			const promotion = parsePromotion( promotionDto )
 
-			const products_ids: UUID[] = []
-			for ( const p of promotionDto.products_ids ) {
+			const errors: BaseException[]             = []
+			const products: PartialPromotionProduct[] = []
+			for ( const p of promotionDto.products ) {
 
 				const id = wrapType<UUID, InvalidUUIDException>(
-					() => UUID.from( p ) )
+					() => UUID.from( p.product_id ) )
 
 				if ( id instanceof BaseException ) {
-					throw [ new InvalidUUIDException() ]
+					errors.push( id )
 				}
 
-				products_ids.push( id as UUID )
+
+				const q = wrapType<ValidInteger, InvalidIntegerException>(
+					() => ValidInteger.from( p.quantity ) )
+
+				if ( q instanceof BaseException ) {
+					errors.push( q )
+				}
+
+				if ( errors.length > 0 ) {
+					throw errors
+				}
+
+				products.push( new PartialPromotionProduct(
+					q as ValidInteger,
+					id as UUID
+				) )
 			}
 
-			await this.createPromotionService.execute( promotion, products_ids )
+			await this.createPromotionService.execute( promotion, products )
 
 			return {
 				statusCode: HttpStatus.OK

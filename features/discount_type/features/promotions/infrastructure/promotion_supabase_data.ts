@@ -9,7 +9,11 @@ import { ValidString } from '../../../../shared/domain/value_objects/ValidString
 import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../../../shared/infrastructure/parameter_not_match_exception'
-import { Promotion } from '../domain/promotion'
+import {
+	PartialPromotionProduct,
+	Promotion,
+	PromotionProduct
+} from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
 
 export class PromotionSupabaseData implements PromotionRepository {
@@ -39,7 +43,7 @@ export class PromotionSupabaseData implements PromotionRepository {
 				if ( error.code === '22P02' ) {
 					throw [ new ParameterNotMatchException() ]
 				}
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException('get all') ]
 			}
 			const discounts: Promotion[] = []
 			for ( const json of data ) {
@@ -72,10 +76,8 @@ export class PromotionSupabaseData implements PromotionRepository {
 			                         .select( '*, discounts(*),products(*)' )
 			                         .eq( 'id', id.value )
 
-			console.log( 'result')
-			console.log( result)
 			if ( result.error ) {
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException('get') ]
 			}
 
 			if ( result.data.length === 0 ) {
@@ -107,23 +109,22 @@ export class PromotionSupabaseData implements PromotionRepository {
 	}
 
 	async linkProducts( promotion_id: UUID,
-		products_ids: UUID[] ): Promise<boolean> {
+		products: PartialPromotionProduct[] ): Promise<boolean> {
 
-		for ( const id of products_ids ) {
+		for ( const p of products ) {
 
 			const result = await this.client.from( this.tableRelatedName )
 			                         .insert( {
 				                         promotion_id: promotion_id.value,
-				                         product_id  : id.value
+				                         quantity		: p.quantity.value,
+				                         product_id  : p.product_id.value
 			                         } )
 
 			if ( result.error != null ) {
-				console.log( 'link err' )
-				console.log( result.error )
 				if ( result.error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException( 'id' ) ]
 				}
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException('link') ]
 			}
 		}
 		return true

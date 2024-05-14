@@ -11,5 +11,4 @@ export class CreateOrderService {
 	async createOrder(order : PartialOrder): Promise<boolean> {
 		return this.repo.createOrder(order)
 	}
-
 }

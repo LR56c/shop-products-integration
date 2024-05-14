@@ -48,7 +48,6 @@ export class RankSupabaseData implements RankRepository {
 			return true
 		}
 		catch ( e ) {
-			console.log( e)
 			throw e
 		}
 	}

@@ -1,7 +1,6 @@
 import {
 	Body,
 	Controller,
-	Get,
 	HttpStatus,
 	Post
 } from '@nestjs/common'
@@ -11,23 +10,17 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PromotionProductDto } from 'src/promotions/shared/promotion_dto'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { DiscounDto } from '../shared/promotion_dto'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
-import {
-	productFromJson,
-	productToJson
-} from '~features/products/application/product_mapper'
+import { PartialPromotionProduct } from '~features/discount_type/features/promotions/domain/promotion'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { wrapType } from '~features/shared/utils/WrapType'
-import { ProductDto } from '../../products/shared/dto/product_dto'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { Product } from '~features/products/domain/models/product'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { DiscountPromotionService } from './discount-promotion.service'
 
 @ApiTags( 'promotions' )
@@ -43,11 +36,20 @@ export class DiscountPromotionController {
 		schema: {
 			type      : 'object',
 			properties: {
-				products_ids: {
+				products    : {
 					type : 'array',
 					items: {
-						type   : 'string',
-						example: '359b6378-f875-4d31-b415-d3de60a59875'
+						type: 'object',
+						properties: {
+							quantity  : {
+								type   : 'number',
+								example: 1
+							},
+							product_id: {
+								type   : 'string',
+								example: '359b6378-f875-4d31-b415-d3de60a59875'
+							},
+						}
 					}
 				}
 			}
@@ -125,22 +127,40 @@ export class DiscountPromotionController {
 		}
 	} )
 	async handle(
-		@Body() dto: PromotionProductDto
+		@Body() dto: DiscounDto
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const products_ids_map: Map<string, UUID> = new Map()
-			for ( const id of dto.products_ids ) {
+			const errors: BaseException[]                            = []
+			const products_map: Map<string, PartialPromotionProduct> = new Map()
+			for ( const p of dto.products ) {
 				const idResult = wrapType<UUID, InvalidUUIDException>(
-					() => UUID.from( id ) )
+					() => UUID.from( p.product_id ) )
 
 				if ( idResult instanceof BaseException ) {
-					throw [ new InvalidUUIDException() ]
+					errors.push( new InvalidUUIDException() )
 				}
-				products_ids_map.set( id, idResult )
+
+				const q = wrapType<ValidInteger, InvalidIntegerException>(
+					() => ValidInteger.from( p.quantity) )
+
+				if ( q instanceof BaseException ) {
+					errors.push( new InvalidIntegerException() )
+				}
+
+				if ( errors.length > 0 ) {
+					throw errors
+				}
+
+				const qq = q as ValidInteger
+				const id = idResult as UUID
+				products_map.set( id.value, new PartialPromotionProduct(
+					qq,
+					idResult as UUID,
+				) )
 			}
 
 			const result = await this.discountPromotionService.execute(
-				products_ids_map )
+				products_map )
 			const json   = result.map( promotionToJson )
 			// formato alternativo: {promotion, totalProducts, totalPromotion, products[] } []
 

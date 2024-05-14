@@ -27,8 +27,6 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 			                         reportPaymentToJson( reportPayment ) as any )
 
 		if ( result.error != null ) {
-			console.log( 'result.error')
-			console.log( result.error)
 
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'reports_payments' ) ]

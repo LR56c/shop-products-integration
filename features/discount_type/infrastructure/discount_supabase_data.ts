@@ -34,8 +34,6 @@ export class DiscountSupabaseData implements DiscountRepository {
 			throw [ new InfrastructureException() ]
 		}
 
-		console.log('result')
-		console.log(result)
 		if ( discount.type.value === DiscountTypeEnum.PROMOTION ) {
 			const resultPromotion = await this.client.from( this.promotionsTableName )
 			                                  .insert( {
@@ -59,8 +57,6 @@ export class DiscountSupabaseData implements DiscountRepository {
 				                             product_id: (discount as Sale).product_id.value,
 				                             }as any )
 
-			console.log('resultSale')
-			console.log(resultSale)
 			if ( resultSale.error != null ) {
 				if ( resultSale.error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException() ]

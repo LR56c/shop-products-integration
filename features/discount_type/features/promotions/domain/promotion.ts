@@ -1,4 +1,5 @@
 import { Product } from 'features/products/domain/models/product'
+import { ValidInteger } from 'features/shared/domain/value_objects/ValidInteger'
 import { Discount } from '../../../domain/discount'
 import {
 	DiscountType,
@@ -17,11 +18,35 @@ export class Promotion extends Discount {
 		readonly creation_date: ValidDate,
 		readonly end_date: ValidDate,
 		readonly start_date: ValidDate,
-		readonly products: Product[]
+		readonly products: PromotionProduct[]
 	)
 	{
 		super( id, DiscountType.from( DiscountTypeEnum.PROMOTION ),
 			percentage, creation_date, start_date, end_date
 		)
 	}
+}
+export class PromotionProduct{
+	constructor(
+		readonly quantity: ValidInteger,
+		readonly product : Product
+	){}
+}
+
+export class PartialPromotion{
+	constructor(
+		readonly name: ValidString,
+		readonly percentage: ValidPercentage,
+		readonly creation_date: ValidDate,
+		readonly end_date: ValidDate,
+		readonly start_date: ValidDate,
+		readonly products: PartialPromotionProduct[],
+	){}
+}
+
+export class PartialPromotionProduct{
+	constructor(
+		readonly quantity: ValidInteger,
+		readonly product_id: UUID,
+	){}
 }

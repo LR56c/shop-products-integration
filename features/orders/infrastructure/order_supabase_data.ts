@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
@@ -33,17 +34,19 @@ export class OrderSupabaseData implements OrderRepository {
 		                                  } )
 		                                  .select()
 
-
 		if ( error != null ) {
-
+			if ( error.code === '23503' ) {
+				throw [ new DataNotFoundException() ]
+			}
 			if ( error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'order' ) ]
 			}
 			throw [ new InfrastructureException( 'order' ) ]
 		}
 
-		const productsJson   = order.products_ids.map( id => ( {
-			product_id: id.value,
+		const productsJson   = order.products.map( op => ( {
+			quantity  : op.quantity.value,
+			product_id: op.product_id.value,
 			order_id  : data[0].id
 		} ) )
 		const productResults = await this.client.from( 'orders_products' )
@@ -166,8 +169,9 @@ export class OrderSupabaseData implements OrderRepository {
 			          .delete()
 			          .eq( 'order_id', id.value )
 
-			const productsJson   = order.products_ids.map( p => ( {
-				product_id: p.value,
+			const productsJson   = order.products.map( op => ( {
+				quantity  : op.quantity.value,
+				product_id: op.product_id.value,
 				order_id  : id.value
 			} ) )
 			const productResults = await this.client.from( 'orders_products' )

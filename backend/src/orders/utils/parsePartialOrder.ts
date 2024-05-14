@@ -1,5 +1,9 @@
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { PartialOrderDto } from '../dto/partial_order_dto'
-import { PartialOrder } from '~features/orders/domain/order'
+import {
+	PartialOrder,
+	PartialOrderProduct
+} from '~features/orders/domain/order'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { EmailException } from '~features/shared/domain/exceptions/EmailException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
@@ -7,7 +11,7 @@ import { Email } from '~features/shared/domain/value_objects/Email'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
 
-export function parseOrder( dto: PartialOrderDto ): PartialOrder | BaseException[]
+export function parsePartialOrder( dto: PartialOrderDto ): PartialOrder
 {
 	const errors: BaseException[] = []
 
@@ -62,20 +66,30 @@ export function parseOrder( dto: PartialOrderDto ): PartialOrder | BaseException
 		}
 	}
 
-	const products: UUID[] = []
+	const products: PartialOrderProduct[] = []
 
-	for ( const product of dto.products_ids ) {
+	for ( const product of dto.products ) {
 		const p = wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( product ) )
+			() => UUID.from( product.product_id ) )
+
 		if ( p instanceof BaseException ) {
 			errors.push( p )
 			break
 		}
-		products.push( p )
+
+		const q = wrapType<ValidInteger, BaseException>(
+			() => ValidInteger.from( product.quantity ) )
+
+		if ( q instanceof BaseException ) {
+			errors.push( q )
+			break
+		}
+
+		products.push( new PartialOrderProduct( q, p ) )
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		throw errors
 	}
 
 	return new PartialOrder(
