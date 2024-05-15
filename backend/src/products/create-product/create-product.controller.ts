@@ -140,7 +140,7 @@ export class CreateProductController {
 	): Promise<HttpResult> {
 		try {
 
-			const productResult = await CreateProduct( {
+			await this.createProductService.createProduct( {
 				code         : dto.code,
 				product_code : dto.product_code,
 				name         : dto.name,
@@ -150,9 +150,7 @@ export class CreateProductController {
 				price        : dto.price,
 				stock        : dto.stock,
 				category_name: dto.category
-			} )
-
-			await this.createProductService.createProduct( productResult as Product )
+			})
 
 			return {
 				statusCode: HttpStatus.OK

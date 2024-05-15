@@ -11,7 +11,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
+import { CreateOrderDto } from 'src/orders/dto/create_order_dto'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { PartialOrder } from '~features/orders/domain/order'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
@@ -125,7 +125,7 @@ export class UpdateOrderController {
 	} )
 	async updateOrder(
 		@Param( 'id' ) id: string,
-		@Body() dto: PartialOrderDto
+		@Body() dto: CreateOrderDto
 	) : Promise<HttpResult>
 	{
 		try {

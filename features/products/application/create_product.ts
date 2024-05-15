@@ -1,3 +1,4 @@
+import { ProductRepository } from 'features/products/domain/repository/product_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
@@ -11,9 +12,11 @@ import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
 import { wrapType } from '../../shared/utils/WrapType'
-import { Product } from '../domain/models/Product'
+import { Product } from '../domain/models/product'
 
-export const CreateProduct = async ( props: {
+export const CreateProduct = async (
+	repo : ProductRepository,
+	props: {
 	code: string
 	product_code: string
 	name: string
@@ -23,7 +26,7 @@ export const CreateProduct = async ( props: {
 	price: number
 	stock: number
 	category_name: string
-} ): Promise<Product> => {
+} ): Promise<boolean> => {
 
 	const errors: BaseException[] = []
 
@@ -108,7 +111,8 @@ export const CreateProduct = async ( props: {
 	if ( errors.length > 0 ) {
 		throw errors
 	}
-	return new Product(
+
+	const p = new Product(
 		UUID.create(),
 		codeResult as ValidString,
 		code_productResult as ValidString,
@@ -122,4 +126,7 @@ export const CreateProduct = async ( props: {
 		rankResult as ValidRank,
 		category_nameResult as ValidString
 	)
+
+	await repo.createProduct( p )
+	return true
 }

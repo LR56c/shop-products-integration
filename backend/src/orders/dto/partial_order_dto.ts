@@ -1,6 +1,4 @@
-import { OmitType } from '@nestjs/mapped-types'
-import { OrderDto } from './order_dto'
+import { PartialType } from '@nestjs/mapped-types'
+import { OrderDto } from 'src/orders/dto/order_dto'
 
-export class PartialOrderDto extends OmitType( OrderDto,
-	[ 'id', 'creation_date' ] as const )
-{}
+export class PartialOrderDto extends PartialType(OrderDto){}

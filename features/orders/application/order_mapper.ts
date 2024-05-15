@@ -1,3 +1,7 @@
+import {
+	OrderProductResponse,
+	OrderResponse
+} from 'features/orders/domain/order_response'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { itemConfirmedFromJson } from '../../item_confirmed/application/item_confimed_mapper'
@@ -30,6 +34,134 @@ import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDate
 export function orderToJson( order: Order ): Record<string, any> {
 	const jsonProducts = order.products.map( p => ( {
 		quantity: p.quantity.value,
+		product_id : p.product
+	} ) )
+	return {
+		id             : order.id.value,
+		client_email   : order.client_email.value,
+		created_at     : order.creation_date.value,
+		payment        : order.payment.value,
+		products       :jsonProducts,
+		seller_email   : order.seller_email?.value ?? null,
+		order_confirmed: order.order_confirmed?.value ?? null,
+		item_confirmed : order.item_confirmed?.value ?? null
+	}
+}
+
+export function orderFromJson( json: Record<string, any> ): Order | BaseException[] {
+	const errors: BaseException[] = []
+	const id                      = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from( json.id ) )
+
+	if ( id instanceof BaseException ) {
+		errors.push( new InvalidUUIDException() )
+	}
+
+	const client_email = wrapType<Email, EmailException>(
+		() => Email.from( json.client_email ) )
+
+	if ( client_email instanceof BaseException ) {
+		errors.push( new EmailException( 'client_email' ) )
+	}
+
+	const created_at = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from( json.created_at ) )
+
+	if ( created_at instanceof BaseException ) {
+
+		errors.push( new InvalidDateException( 'created_at' ) )
+	}
+
+	const payment                      = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from( json.payment ) )
+
+	if ( id instanceof BaseException ) {
+		errors.push( new InvalidUUIDException() )
+	}
+
+	const products: OrderProduct[] = []
+
+	if ( json.products !== null ) {
+		for ( const product of json.products ) {
+			const p                      = wrapType<UUID, InvalidUUIDException>(
+				() => UUID.from( json.product_id ) )
+
+			if ( p instanceof BaseException ) {
+				errors.push( new InvalidUUIDException() )
+			}
+
+			const q = wrapType<ValidInteger, InvalidIntegerException>(
+				() => ValidInteger.from( product.quantity ) )
+
+			if ( q instanceof BaseException) {
+				errors.push( q )
+				break
+			}
+			products.push( new OrderProduct(
+				q as ValidInteger,
+				p as UUID,
+			) )
+		}
+	}
+
+	let sellerResult: Email | undefined = undefined
+	if ( json.seller_email !== null ) {
+		const seller_email = wrapType<Email, EmailException>(
+			() => Email.from( json.seller_email ) )
+		if ( seller_email instanceof BaseException ) {
+			errors.push( seller_email )
+		}
+		else {
+			sellerResult = seller_email as Email
+		}
+	}
+
+	let itemResult: UUID | undefined = undefined
+	if ( json.item_confirmed !== null ) {
+		const item                      = wrapType<UUID, InvalidUUIDException>(
+			() => UUID.from( json.item_confirmed ) )
+
+		if ( item instanceof BaseException ) {
+			errors.push( new InvalidUUIDException() )
+		}
+		else {
+			itemResult = item as UUID
+		}
+	}
+
+	let orderResult: UUID | undefined = undefined
+	if ( json.orders_confirmed !== null ) {
+		const order                      = wrapType<UUID, InvalidUUIDException>(
+			() => UUID.from( json.orders_confirmed ) )
+
+		if ( order instanceof BaseException ) {
+			errors.push( new InvalidUUIDException() )
+		}
+		else {
+			orderResult = order as UUID
+		}
+	}
+
+	if ( errors.length > 0 ) {
+		throw errors
+	}
+
+	return new Order(
+		id as UUID,
+		client_email as Email,
+		created_at as ValidDate,
+		payment as UUID,
+		products,
+		sellerResult,
+		orderResult,
+		itemResult
+	)
+}
+
+
+export function orderResponseToJson( order: OrderResponse ): Record<string, any> {
+	const jsonProducts = order.products.map( p => ( {
+		quantity: p.quantity.value,
 		product : productToJson( p.product )
 	} ) )
 	return {
@@ -38,13 +170,14 @@ export function orderToJson( order: Order ): Record<string, any> {
 		created_at     : order.creation_date.value,
 		payment        : paymentToJson( order.payment ),
 		products       :jsonProducts,
-		seller_email   : order.seller_email?.value,
-		order_confirmed: order.order_confirmed?.id.value,
-		item_confirmed : order.item_confirmed?.id.value
+		seller_email   : order.seller_email?.value ?? null,
+		order_confirmed: order.order_confirmed?.id.value ?? null,
+		item_confirmed : order.item_confirmed?.id.value ?? null
 	}
 }
 
-export function orderFromJson( json: Record<string, any> ): Order | BaseException[] {
+
+export function orderResponseFromJson( json: Record<string, any> ): OrderResponse | BaseException[] {
 	const errors: BaseException[] = []
 	const id                      = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.id ) )
@@ -74,12 +207,10 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		errors.push( payment )
 	}
 
-	const products: OrderProduct[] = []
+	const products: OrderProductResponse[] = []
 
 	if ( json.products !== null ) {
 		for ( const product of json.products ) {
-			console.log( 'order product json')
-			console.log( product)
 
 			const p = productFromJson( product )
 
@@ -95,7 +226,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 				errors.push( q )
 				break
 			}
-			products.push( new OrderProduct(
+			products.push( new OrderProductResponse(
 				q as ValidInteger,
 				p as Product,
 			) )
@@ -139,10 +270,10 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return errors
 	}
 
-	return new Order(
+	return new OrderResponse(
 		id as UUID,
 		client_email as Email,
 		created_at as ValidDate,
@@ -150,6 +281,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		products,
 		sellerResult,
 		orderResult,
+
 		itemResult
 	)
 }

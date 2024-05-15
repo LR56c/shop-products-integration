@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Product } from '~features/products/domain/models/product'
-import { ProductRepository } from '~features/products/domain/repository/product_repository';
+import { Injectable } from '@nestjs/common'
+import { CreateProduct } from '~features/products/application/create_product'
+import { PartialProductProps } from '~features/products/domain/models/product'
+import { ProductRepository } from '~features/products/domain/repository/product_repository'
 
 @Injectable()
 export class CreateProductService {
-    constructor( private repository: ProductRepository) {}
+	constructor( private repository: ProductRepository ) {}
 
-    async createProduct(product : Product): Promise<boolean> {
-        return this.repository.createProduct(product)
-    }
+	async createProduct( props : PartialProductProps): Promise<boolean> {
+		return CreateProduct( this.repository, props)
+	}
 }

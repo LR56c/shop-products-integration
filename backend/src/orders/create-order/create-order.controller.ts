@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
+import { CreateOrderDto } from 'src/orders/dto/create_order_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateOrderService } from './create-order.service'
@@ -118,7 +118,7 @@ export class CreateOrderController {
 		}
 	} )
 	async createOrder(
-		@Body() dto: PartialOrderDto
+		@Body() dto: CreateOrderDto
 	): Promise<HttpResult> {
 		try {
 			const order = parsePartialOrder( dto )

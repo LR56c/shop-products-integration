@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { OrderResponse } from 'features/orders/domain/order_response'
 import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Email } from '../../shared/domain/value_objects/Email'
@@ -9,10 +10,13 @@ import { InfrastructureException } from '../../shared/infrastructure/infrastruct
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { orderFromJson } from '../application/order_mapper'
+import {
+	orderFromJson,
+	orderResponseFromJson,
+	orderToJson
+} from '../application/order_mapper'
 import {
 	Order,
-	PartialOrder
 } from '../domain/order'
 import { OrderRepository } from '../domain/order_repository'
 
@@ -22,16 +26,12 @@ export class OrderSupabaseData implements OrderRepository {
 
 	readonly tableName = 'orders'
 
-	async createOrder( order: PartialOrder ): Promise<boolean> {
+	async createOrder( order: Order ): Promise<boolean> {
 
+		const jsonOrder = orderToJson(order)
+		delete jsonOrder.products
 		const { data, error } = await this.client.from( this.tableName )
-		                                  .insert( {
-			                                  client_email   : order.client_email.value,
-			                                  payment_id     : order.payment_id.value,
-			                                  seller_email   : order.seller_email?.value,
-			                                  order_confirmed: order.order_confirmed?.value,
-			                                  item_confirmed : order.item_confirmed?.value
-		                                  } )
+		                                  .insert(  jsonOrder as any)
 		                                  .select()
 
 		if ( error != null ) {
@@ -44,13 +44,13 @@ export class OrderSupabaseData implements OrderRepository {
 			throw [ new InfrastructureException( 'order' ) ]
 		}
 
-		const productsJson   = order.products.map( op => ( {
+		const jsonProducts   = order.products.map( op => ( {
 			quantity  : op.quantity.value,
-			product_id: op.product_id.value,
+			product_id: op.product.value,
 			order_id  : data[0].id
 		} ) )
 		const productResults = await this.client.from( 'orders_products' )
-		                                 .insert( productsJson )
+		                                 .insert( jsonProducts )
 
 		if ( productResults.error ) {
 			throw [ new InfrastructureException( 'products_id' ) ]
@@ -84,7 +84,7 @@ export class OrderSupabaseData implements OrderRepository {
 	}
 
 	async getAll( from: ValidInteger, to: ValidInteger,
-		client_email?: Email ): Promise<Order[]> {
+		client_email?: Email ): Promise<OrderResponse[]> {
 		const result = this.client.from( this.tableName )
 		                   .select(
 			                   '*, payment:payment_id(*), products(*), orders_confirmed(*), item_confirmed(*)' )
@@ -106,21 +106,21 @@ export class OrderSupabaseData implements OrderRepository {
 			throw [ new InfrastructureException() ]
 		}
 
-		const orders: Order[] = []
+		const orders: OrderResponse[] = []
 		for ( const json of data ) {
 
-			const o = orderFromJson( json )
+			const o = orderResponseFromJson( json )
 
 			if ( o instanceof BaseException ) {
 				throw o
 			}
-			orders.push( o as Order )
+			orders.push( o as OrderResponse )
 		}
 
 		return orders
 	}
 
-	async getOrder( id: UUID ): Promise<Order> {
+	async getOrder( id: UUID ): Promise<OrderResponse> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select(
@@ -135,13 +135,13 @@ export class OrderSupabaseData implements OrderRepository {
 				throw [ new ParameterNotMatchException( 'order_id' ) ]
 			}
 
-			const order = orderFromJson( result.data[0] )
+			const order = orderResponseFromJson( result.data[0] )
 
 			if ( order instanceof BaseException ) {
 				throw order
 			}
 
-			return order as Order
+			return order as OrderResponse
 		}
 		catch ( e ) {
 			throw e
@@ -149,12 +149,12 @@ export class OrderSupabaseData implements OrderRepository {
 
 	}
 
-	async updateOrder( id: UUID, order: PartialOrder ): Promise<boolean> {
+	async updateOrder( id: UUID, order: Order ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
 			          .update( {
 				          client_email   : order.client_email.value,
-				          payment_id     : order.payment_id.value,
+				          payment_id     : order.payment.value,
 				          seller_email   : order.seller_email?.value,
 				          order_confirmed: order.order_confirmed?.value,
 				          item_confirmed : order.item_confirmed?.value
@@ -171,7 +171,7 @@ export class OrderSupabaseData implements OrderRepository {
 
 			const productsJson   = order.products.map( op => ( {
 				quantity  : op.quantity.value,
-				product_id: op.product_id.value,
+				product_id: op.product.value,
 				order_id  : id.value
 			} ) )
 			const productResults = await this.client.from( 'orders_products' )

@@ -7,6 +7,18 @@ import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
 
+export interface PartialProductProps {
+  code: string,
+  product_code: string,
+  name: string,
+  description: string,
+  brand: string,
+  image_url: string,
+  price: number,
+  stock: number,
+  category_name: string
+}
+
 export class Product {
  constructor(
    readonly id: UUID,

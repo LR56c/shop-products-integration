@@ -1,5 +1,5 @@
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { PartialOrderDto } from '../dto/partial_order_dto'
+import { CreateOrderDto } from 'src/orders/dto/create_order_dto'
 import {
 	PartialOrder,
 	PartialOrderProduct
@@ -11,7 +11,7 @@ import { Email } from '~features/shared/domain/value_objects/Email'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
 
-export function parsePartialOrder( dto: PartialOrderDto ): PartialOrder
+export function parsePartialOrder( dto: CreateOrderDto ): PartialOrder
 {
 	const errors: BaseException[] = []
 

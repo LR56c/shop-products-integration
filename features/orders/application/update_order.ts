@@ -1,8 +1,8 @@
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import {
-	PartialOrder,
-	PartialOrderProduct
+	Order,
+	OrderProduct
 } from '../domain/order'
 import { OrderRepository } from '../domain/order_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
@@ -16,7 +16,7 @@ import {
 
 export const UpdateOrder = async ( repo: OrderRepository,
 	orderID: UUID,
-	order: PartialOrder,
+	order: Order,
 	props: {
 		client_email?: string,
 		payment_id?: string,
@@ -43,7 +43,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 	const paymentIdResult = props.payment_id !== undefined
 		? wrapType<UUID, InvalidUUIDException>(
 			() => UUID.from( props.payment_id ?? '' ) )
-		: order.payment_id
+		: order.payment
 
 	if ( paymentIdResult instanceof BaseException ) {
 		errors.push( paymentIdResult )
@@ -82,8 +82,10 @@ export const UpdateOrder = async ( repo: OrderRepository,
 	if ( errors.length > 0 ) {
 		throw errors
 	}
-	const newOrder = new PartialOrder(
+	const newOrder = new Order(
+		order.id,
 		clientEmailResult as Email,
+		order.creation_date,
 		paymentIdResult as UUID,
 		products,
 		sellerEmailResult as Email,
@@ -96,7 +98,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 function validatePartialOrderProduct( product: {
 	quantity: number,
 	product_id: string,
-} ): PartialOrderProduct {
+} ): OrderProduct {
 	const errors: BaseException[] = []
 
 	const quantity = wrapType<ValidInteger, InvalidIntegerException>(
@@ -117,7 +119,7 @@ function validatePartialOrderProduct( product: {
 		throw errors
 	}
 
-	return new PartialOrderProduct(
+	return new OrderProduct(
 		quantity as ValidInteger,
 		productID as UUID
 	)

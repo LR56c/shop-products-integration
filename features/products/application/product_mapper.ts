@@ -1,3 +1,4 @@
+import { Product } from '../domain/models/product'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
@@ -12,7 +13,6 @@ import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
 import { wrapType } from '../../shared/utils/WrapType'
-import { Product } from '../domain/models/Product'
 
 export function productToJson( product: Product ): Record<string, any> {
 	return {
