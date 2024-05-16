@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { discountFromJson } from '../../../application/discount_mapper'
 import { SaleRepository } from '../domain/sale_repository'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
@@ -9,6 +8,7 @@ import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
 import { Sale } from '../domain/sale'
+import { saleFromJson } from '../application/sale_mapper'
 
 export class SaleSupabaseData implements SaleRepository {
 
@@ -36,7 +36,7 @@ export class SaleSupabaseData implements SaleRepository {
 			}
 			const discounts: Sale[] = []
 			for ( const json of data ) {
-				const d = discountFromJson( {
+				const d = saleFromJson( {
 						...json.discounts,
 						sales: {
 							id        : json.id,
@@ -71,7 +71,7 @@ export class SaleSupabaseData implements SaleRepository {
 			}
 
 			const json = result.data[0]
-			const discount = discountFromJson( {
+			const discount = saleFromJson( {
 					...json.discounts,
 				sales: {
 					id        : json.id,

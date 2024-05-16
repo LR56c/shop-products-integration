@@ -1,3 +1,4 @@
+
 import {
 	Controller,
 	Get,
@@ -11,7 +12,10 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
+import {
+	promotionResponseToJson,
+	promotionToJson
+} from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
@@ -154,18 +158,12 @@ export class GetPromotionController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
 
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-
-			const result = await this.getPromotionService.execute( idResult )
+			const result = await this.getPromotionService.execute( id )
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : promotionToJson( result )
+				data      : promotionResponseToJson( result )
 			}
 		}
 		catch ( e ) {

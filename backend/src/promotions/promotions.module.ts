@@ -4,8 +4,6 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { UpdatePromotionController } from './update-promotion/update-promotion.controller'
-import { UpdatePromotionService } from './update-promotion/update-promotion.service'
 import { PromotionRepository } from '~features/discount_type/features/promotions/domain/promotion_repository'
 import { PromotionSupabaseData } from '~features/discount_type/features/promotions/infrastructure/promotion_supabase_data'
 import { AppModule } from '../app.module'
@@ -22,7 +20,7 @@ import { GetPromotionService } from './get-promotion/get-promotion.service'
 
 @Module( {
 	controllers: [ CreatePromotionController, DeletePromotionController,
-		DiscountPromotionController, GetAllPromotionController, UpdatePromotionController,
+		DiscountPromotionController, GetAllPromotionController,
 		GetPromotionController ],
 	providers  : [
 		{
@@ -33,7 +31,7 @@ import { GetPromotionService } from './get-promotion/get-promotion.service'
 			inject    : [ SupabaseClient<Database> ]
 		},
 		CreatePromotionService, DeletePromotionService, DiscountPromotionService,
-		GetAllPromotionService, GetPromotionService, UpdatePromotionService
+		GetAllPromotionService, GetPromotionService
 	],
 	imports    : [
 		forwardRef( () => AppModule ),

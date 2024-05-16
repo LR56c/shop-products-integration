@@ -1,4 +1,3 @@
-import { Discount } from 'features/discount_type/domain/discount'
 import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
@@ -20,8 +19,8 @@ export class Product {
    readonly image_url: ValidURL,
    readonly stock: ValidInteger,
    readonly average_rank: ValidRank,
-   readonly category_name: ValidString,
-   readonly discount?: Discount
+   readonly category: ValidString,
+   readonly discount?: UUID
  ) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {
@@ -41,9 +40,8 @@ export class Product {
       this.image_url,
       newQuantity,
       this.average_rank,
-      this.category_name,
+      this.category,
       this.discount
     )
   }
 }
-

@@ -1,7 +1,5 @@
-import { Type } from 'class-transformer'
 import {
 	IsDate,
-	IsDecimal,
 	IsInt,
 	IsNumber,
 	IsOptional,
@@ -10,12 +8,11 @@ import {
 	IsUUID,
 	Max,
 	Min,
-	MinLength,
-	ValidateNested
+	MinLength
 } from 'class-validator'
-import { DiscountDto } from 'src/shared/dto/discount_dto'
 
 export class ProductDto{
+	@IsOptional()
 	@IsUUID()
 	id : string
 
@@ -63,7 +60,6 @@ export class ProductDto{
 	category : string
 
 	@IsOptional()
-	@ValidateNested()
-	@Type( () => DiscountDto )
-	discount : DiscountDto
+	@IsUUID()
+	discount : string
 }

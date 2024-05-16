@@ -174,7 +174,7 @@ export class GetCategoriesController {
       : wrapType<ValidString, InvalidStringException>(
         () => ValidString.from( dto.name ?? '' ) )
 
-    if ( name != undefined && name instanceof
+    if ( name !== undefined && name instanceof
       InvalidStringException )
     {
       throw [ new InvalidStringException( 'name' ) ]

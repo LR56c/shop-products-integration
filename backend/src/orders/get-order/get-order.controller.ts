@@ -9,13 +9,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { orderResponseToJson } from '~features/orders/application/order_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { orderToJson } from '~features/orders/application/order_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { GetOrderService } from './get-order.service'
 
 @ApiTags( 'orders' )
@@ -204,18 +200,11 @@ export class GetOrderController {
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
 
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'order_id' ) ]
-			}
-
-			const result = await this.getOrderService.getOrder( idResult )
+			const result = await this.getOrderService.getOrder( id )
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : orderToJson( result )
+				data      : orderResponseToJson( result )
 			}
 		}
 		catch ( e ) {

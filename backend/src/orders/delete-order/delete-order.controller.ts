@@ -11,10 +11,6 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { DeleteOrderService } from './delete-order.service'
 
 @ApiTags( 'orders' )
@@ -91,15 +87,7 @@ export class DeleteOrderController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResult> {
 		try {
-
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'order_id' ) ]
-			}
-
-			await this.deleteOrderService.deleteOrder( idResult )
+			await this.deleteOrderService.deleteOrder( id )
 			return {
 				statusCode: HttpStatus.OK
 			}

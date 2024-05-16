@@ -1,10 +1,8 @@
 import {
 	IsEmail,
 	IsNumber,
-	IsString,
 	IsUUID,
 	Min,
-	MinLength
 } from 'class-validator'
 
 export class CartDto {
@@ -14,7 +12,6 @@ export class CartDto {
 	@IsUUID()
 	product_id : string
 
-	@Min(1)
 	@IsNumber()
 	quantity : number
 }

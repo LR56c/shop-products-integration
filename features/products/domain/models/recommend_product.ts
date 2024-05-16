@@ -7,5 +7,4 @@ export class RecommendProduct {
 		readonly category_name: ValidString
 	)
 	{}
-
 }

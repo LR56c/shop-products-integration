@@ -25,7 +25,6 @@ export class Password {
 	 */
 	static from( value: string ): Password {
 
-		console.log( 'value', value)
 		const parseValue = z.string()
 		                    .min( 8 )
 		                    .regex( RegExp( /^(?=.*[a-z]).*$/ ),
@@ -37,7 +36,6 @@ export class Password {
 			                    { message: 'character' } )
 		                    .safeParse( value )
 
-		console.log( 'parseValue', parseValue)
 		if ( parseValue.success === false ) {
 			const errors: BaseException[] = []
 			for ( let e of parseValue.error.errors ) {

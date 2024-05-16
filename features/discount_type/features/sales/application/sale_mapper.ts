@@ -1,4 +1,7 @@
-import { DiscountParentProps } from '../../../domain/discount'
+import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
+import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
+import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
@@ -17,8 +20,7 @@ export function saleToJson( sale: Sale ): Record<string, any> {
 	}
 }
 
-export function saleFromJson( parent: DiscountParentProps,
-	json: Record<string, any> ): Sale | BaseException[] {
+export function saleFromJson( json: Record<string, any> ): Sale | BaseException[] {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -26,6 +28,34 @@ export function saleFromJson( parent: DiscountParentProps,
 
 	if ( id instanceof BaseException ) {
 		errors.push( new InvalidUUIDException() )
+	}
+
+	const percentage = wrapType<ValidPercentage, InvalidPercentageException>(
+		() => ValidPercentage.from( json.percentage ) )
+
+	if ( percentage instanceof BaseException ) {
+		errors.push( new InvalidPercentageException( 'percentage' ) )
+	}
+
+	const creation_date = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from( json.created_at ) )
+
+	if ( creation_date instanceof BaseException ) {
+		errors.push( new InvalidDateException( 'created_at' ) )
+	}
+
+	const start_date = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from( json.start_date ) )
+
+	if ( start_date instanceof BaseException ) {
+		errors.push( new InvalidDateException( 'start_date' ) )
+	}
+
+	const end_date = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from( json.end_date ) )
+
+	if ( end_date instanceof BaseException ) {
+		errors.push( new InvalidDateException( 'end_date' ) )
 	}
 
 	const product_id = wrapType<UUID, InvalidUUIDException>(
@@ -42,9 +72,9 @@ export function saleFromJson( parent: DiscountParentProps,
 	return new Sale(
 		id as UUID,
 		product_id as UUID,
-		parent.percentage,
-		parent.creation_date,
-		parent.start_date,
-		parent.end_date
+		percentage as ValidPercentage,
+		creation_date as ValidDate,
+		start_date as ValidDate,
+		end_date as ValidDate
 	)
 }

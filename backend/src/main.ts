@@ -9,11 +9,11 @@ import {
 	I18nValidationExceptionFilter,
 	I18nValidationPipe
 } from 'nestjs-i18n'
-import { Password } from '~features/user/domain/models/Password'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
 	const app = await NestFactory.create( AppModule )
+	app.enableCors()
 	const config   = new DocumentBuilder()
 		.setTitle( 'Shop API' )
 		.setVersion( '0.1' )

@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common'
-import { Promotion } from '~features/discount_type/features/promotions/domain/promotion'
+import { GetAllPromotions } from '~features/discount_type/features/promotions/application/get_all_promotions'
 import { PromotionRepository } from '~features/discount_type/features/promotions/domain/promotion_repository'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { PromotionResponse } from '~features/discount_type/features/promotions/domain/promotion_response'
 
 @Injectable()
 export class GetAllPromotionService {
 	constructor( private readonly repo: PromotionRepository ) {}
 
-	async execute( from: ValidInteger, to: ValidInteger, name?: ValidString,
-		from_date?: ValidDate, to_date?: ValidDate ): Promise<Promotion[]> {
-		return await this.repo.getAll( from, to,
-			name, from_date,
-			to_date ) as Promotion[]
+	async execute( from: number, to: number, name?: string,
+		from_date?: string, to_date?: string ): Promise<PromotionResponse[]> {
+		return await GetAllPromotions( this.repo, {
+			from,
+			to,
+			name,
+			from_date,
+			to_date,
+		})
 	}
 }

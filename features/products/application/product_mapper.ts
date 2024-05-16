@@ -1,3 +1,14 @@
+import {
+	discountFromJson,
+	discountToJson
+} from '../../discount_type/application/discount_mapper'
+import { Discount } from '../../discount_type/domain/discount'
+import {
+	categoryFromJson,
+} from '../../categories/application/category_mapper'
+import { Category } from '../../categories/domain/category'
+import { ProductResponse } from '../domain/models/product_response'
+import { Product } from '../domain/models/product'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
@@ -12,7 +23,6 @@ import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
 import { wrapType } from '../../shared/utils/WrapType'
-import { Product } from '../domain/models/product'
 
 export function productToJson( product: Product ): Record<string, any> {
 	return {
@@ -27,8 +37,8 @@ export function productToJson( product: Product ): Record<string, any> {
 		image_url   : product.image_url.value,
 		stock       : product.stock.value,
 		average_rank: product.average_rank.value,
-		category    : product.category_name.value,
-		discount: product.discount?.id.value ?? null
+		category    : product.category.value,
+		discount    : product.discount === undefined ? null : product.discount.value
 	}
 }
 
@@ -112,15 +122,28 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		errors.push( new InvalidRankException( 'average_rank' ) )
 	}
 
-	const category_name = wrapType<ValidString, InvalidStringException>(
+	const category = wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( json.category ) )
 
-	if ( category_name instanceof BaseException ) {
+	if ( category instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'category' ) )
 	}
 
+	let discountResult: UUID | undefined = undefined
+	if ( json.discounts !== null ) {
+		const discount = wrapType<UUID, InvalidUUIDException>(
+			() => UUID.from( json.discounts ) )
+
+		if ( discount instanceof BaseException ) {
+			errors.push( new InvalidUUIDException() )
+		}
+		else {
+			discountResult = discount as UUID
+		}
+	}
+
 	if ( errors.length > 0 ) {
-		throw errors
+		return errors
 	}
 
 	return new Product(
@@ -135,6 +158,143 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 		image_url as ValidURL,
 		stock as ValidInteger,
 		rank as ValidRank,
-		category_name as ValidString
+		category as ValidString,
+		discountResult
+	)
+}
+
+export function productResponseToJson( product: ProductResponse ): Record<string, any> {
+	return {
+		id          : product.id.value,
+		code        : product.code.value,
+		product_code: product.product_code.value,
+		name        : product.name.value,
+		description : product.description.value,
+		created_at  : product.created_at.value,
+		brand       : product.brand.value,
+		price       : product.price.value,
+		image_url   : product.image_url.value,
+		stock       : product.stock.value,
+		average_rank: product.average_rank.value,
+		category    : product.category.name.value,
+		discount    : product.discount === undefined ?  null : discountToJson( product.discount )
+	}
+}
+
+export function productResponseFromJson( json: Record<string, any> ): ProductResponse | BaseException[] {
+	const errors: BaseException[] = []
+
+	const id = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from( json.id ) )
+
+	if ( id instanceof BaseException ) {
+		errors.push( new InvalidUUIDException() )
+	}
+
+	const code = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.code ) )
+
+	if ( code instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'code' ) )
+	}
+
+	const product_code = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.product_code ) )
+
+	if ( product_code instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'product_code' ) )
+	}
+
+	const name = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.name ) )
+
+	if ( name instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'name' ) )
+	}
+
+	const description = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.description ) )
+
+	if ( description instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'description' ) )
+	}
+
+	const create_at = wrapType<ValidDate, InvalidDateException>(
+		() => ValidDate.from( json.created_at ) )
+
+	if ( create_at instanceof BaseException ) {
+		errors.push( new InvalidDateException( 'created_at' ) )
+	}
+
+	const brand = wrapType<ValidString, InvalidStringException>(
+		() => ValidString.from( json.brand ) )
+
+	if ( brand instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'brand' ) )
+	}
+
+	const price = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from( json.price ) )
+
+	if ( price instanceof BaseException ) {
+		errors.push( new InvalidIntegerException( 'price' ) )
+	}
+
+	const image_url = wrapType<ValidURL, InvalidURLException>(
+		() => ValidURL.from( json.image_url ) )
+
+	if ( image_url instanceof BaseException ) {
+		errors.push( new InvalidURLException( 'image' ) )
+	}
+
+	const stock = wrapType<ValidInteger, InvalidIntegerException>(
+		() => ValidInteger.from( json.stock ) )
+
+	if ( stock instanceof BaseException ) {
+		errors.push( new InvalidIntegerException( 'stock' ) )
+	}
+
+	const rank = wrapType<ValidRank, InvalidRankException>(
+		() => ValidRank.from( json.average_rank ) )
+
+	if ( rank instanceof BaseException ) {
+		errors.push( new InvalidRankException( 'average_rank' ) )
+	}
+
+	const category = categoryFromJson( json.categories )
+
+	if ( category instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'category' ) )
+	}
+
+	let discountResult: Discount | undefined = undefined
+	if ( json.discounts !== null ) {
+		const discount = discountFromJson( json.discounts)
+		if ( discount instanceof BaseException ) {
+			errors.push( discount )
+		}
+		else {
+			discountResult = discount as Discount
+		}
+	}
+
+	if ( errors.length > 0 ) {
+		return errors
+	}
+
+	return new ProductResponse(
+		id as UUID,
+		code as ValidString,
+		product_code as ValidString,
+		name as ValidString,
+		description as ValidString,
+		create_at as ValidDate,
+		brand as ValidString,
+		price as ValidInteger,
+		image_url as ValidURL,
+		stock as ValidInteger,
+		rank as ValidRank,
+		category as Category,
+		discountResult
 	)
 }

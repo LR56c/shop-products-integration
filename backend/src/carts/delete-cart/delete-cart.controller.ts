@@ -13,6 +13,7 @@ import {
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { EmailException } from '~features/shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '~features/shared/domain/value_objects/Email'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
@@ -145,11 +146,11 @@ export class DeleteCartController {
       errors.push( new EmailException() )
     }
 
-    const product_id = wrapType<UUID, InvalidIntegerException>(
+    const product_id = wrapType<UUID, InvalidUUIDException>(
         () => UUID.from( dto.product_id ) )
 
-    if ( product_id instanceof InvalidIntegerException ) {
-      errors.push( new InvalidIntegerException() )
+    if ( product_id instanceof BaseException ) {
+      errors.push( new InvalidUUIDException() )
     }
 
     if ( errors.length > 0 ) {
