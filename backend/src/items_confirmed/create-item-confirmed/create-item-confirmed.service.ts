@@ -12,8 +12,6 @@ export class CreateItemConfirmedService {
 	{}
 
 	async execute( id: UUID, order: ItemConfirmed ): Promise<boolean> {
-		console.log( "order ")
-		console.log( order )
 		this.eventEmitter.emit( ItemConfirmedEvent.tag, {
 			order_id    : id,
 			confirmed_id: order.id

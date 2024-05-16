@@ -10,12 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialOrderDto } from 'src/orders/dto/partial_order_dto'
-import { PartialOrder } from '~features/orders/domain/order'
+import { CreateOrderDto } from 'src/orders/shared/dto/create_order_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateOrderService } from './create-order.service'
-import { parseOrder } from 'src/orders/utils/parse.order'
 
 @ApiTags( 'orders' )
 @Controller( 'orders' )
@@ -37,11 +35,20 @@ export class CreateOrderController {
 					type   : 'string',
 					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
 				},
-				products_ids: {
+				products    : {
 					type : 'array',
 					items: {
-						type   : 'string',
-						example: '359b6378-f875-4d31-b415-d3de60a59875'
+						type: 'object',
+						properties: {
+							quantity  : {
+								type   : 'number',
+								example: 1
+							},
+							product_id: {
+								type   : 'string',
+								example: '359b6378-f875-4d31-b415-d3de60a59875'
+							},
+						}
 					}
 				}
 			}
@@ -110,20 +117,10 @@ export class CreateOrderController {
 		}
 	} )
 	async createOrder(
-		@Body() dto: PartialOrderDto
+		@Body() dto: CreateOrderDto
 	): Promise<HttpResult> {
 		try {
-
-			const order = parseOrder( dto )
-
-			if ( !( order instanceof PartialOrder ) ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( order )
-				}
-			}
-
-			await this.createOrderService.createOrder( order )
+			await this.createOrderService.createOrder( dto )
 
 			return {
 				statusCode: HttpStatus.OK

@@ -5,7 +5,7 @@ export class ItemConfirmedEvent {
 
 	constructor(
 		public readonly order_id: UUID,
-		public readonly confirmed_id: UUID
+		public readonly item_confirmed_id: UUID
 	)
 	{}
 }

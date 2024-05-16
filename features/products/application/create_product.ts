@@ -1,3 +1,5 @@
+import { ProductRepository } from '../domain/repository/product_repository'
+import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
@@ -11,21 +13,33 @@ import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
 import { wrapType } from '../../shared/utils/WrapType'
-import { Product } from '../domain/models/Product'
+import { Product } from '../domain/models/product'
 
-export const CreateProduct = async ( props: {
-	code: string
-	product_code: string
-	name: string
-	description: string
-	brand: string
-	image_url: string
-	price: number
-	stock: number
-	category_name: string
-} ): Promise<Product> => {
+export const CreateProduct = async (
+	repo: ProductRepository,
+	props: {
+		id?: string
+		code: string
+		product_code: string
+		name: string
+		description: string
+		brand: string
+		image_url: string
+		price: number
+		stock: number
+		category_name: string
+	} ): Promise<boolean> => {
 
 	const errors: BaseException[] = []
+
+	const idResult = props.id === undefined
+		? UUID.create()
+		: wrapType<UUID, InvalidUUIDException>(
+			() => UUID.from( props.id! ) )
+
+	if ( idResult instanceof BaseException ) {
+		errors.push( idResult)
+	}
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( props.code ) )
@@ -97,10 +111,10 @@ export const CreateProduct = async ( props: {
 		errors.push( new InvalidRankException( 'rank' ) )
 	}
 
-	const category_nameResult = wrapType<ValidString, InvalidStringException>(
+	const categoryResult = wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( props.category_name ) )
 
-	if ( category_nameResult instanceof BaseException ) {
+	if ( categoryResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'category' ) )
 	}
 
@@ -108,8 +122,9 @@ export const CreateProduct = async ( props: {
 	if ( errors.length > 0 ) {
 		throw errors
 	}
-	return new Product(
-		UUID.create(),
+
+	const p = new Product(
+		idResult as UUID,
 		codeResult as ValidString,
 		code_productResult as ValidString,
 		nameResult as ValidString,
@@ -120,6 +135,9 @@ export const CreateProduct = async ( props: {
 		image_urlResult as ValidURL,
 		stockResult as ValidInteger,
 		rankResult as ValidRank,
-		category_nameResult as ValidString
+		categoryResult as ValidString
 	)
+
+	await repo.createProduct( p )
+	return true
 }

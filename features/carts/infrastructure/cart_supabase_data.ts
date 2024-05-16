@@ -9,7 +9,7 @@ import { Email } from '../../shared/domain/value_objects/Email'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
-	cartFromJson,
+	cartFromJson
 } from '../application/cart_mapper'
 import {
 	Cart,
@@ -24,10 +24,36 @@ export class CartSupabaseData implements CartRepository {
 
 	readonly tableName = 'carts'
 
+	async upsert( user_email: Email, product_id: UUID,
+		quantity: ValidInteger ): Promise<boolean> {
+		try {
+
+			const { data, error } = await this.client.from( this.tableName )
+			                                  .upsert( {
+				                                  user_email: user_email.value,
+				                                  product_id: product_id.value,
+				                                  quantity  : quantity.value
+			                                  } )
+
+
+			if ( error != null ) {
+				if ( error.code === '23505' ) {
+					throw [ new KeyAlreadyExistException() ]
+				}
+
+				throw [ new InfrastructureException() ]
+			}
+			return true
+		}
+		catch ( e ) {
+			throw e
+		}
+
+	}
+
 	async getAll( from: ValidInteger, to: ValidInteger,
 		email?: Email ): Promise<Cart[]> {
 		try {
-
 			const result = this.client.from( this.tableName )
 			                   .select( '*, product:product_id(*)' )
 
@@ -58,31 +84,6 @@ export class CartSupabaseData implements CartRepository {
 			}
 
 			return carts
-		}
-		catch ( e ) {
-			throw e
-		}
-	}
-
-	async add( user_email: Email, product_id: UUID,
-		quantity: ValidInteger ): Promise<boolean> {
-		try {
-
-			const result = await this.client.from( this.tableName )
-			                         .insert( {
-				                         user_email: user_email.value,
-				                         product_id: product_id.value,
-				                         quantity  : quantity.value
-			                         } )
-
-			if ( result.error != null ) {
-				if ( result.error.code === '23505' ) {
-					throw [ new KeyAlreadyExistException() ]
-				}
-
-				throw [ new InfrastructureException() ]
-			}
-			return true
 		}
 		catch ( e ) {
 			throw e
@@ -133,26 +134,6 @@ export class CartSupabaseData implements CartRepository {
 		}
 	}
 
-	async update( user_email: Email, product_id: UUID,
-		quantity: ValidInteger ): Promise<boolean> {
-		try {
-			await this.client.from( this.tableName )
-			          .update( {
-				          user_email: user_email.value,
-				          product_id: product_id.value,
-				          quantity  : quantity.value
-			          } )
-			          .eq( 'user_email', user_email.value )
-			          .eq( 'product_id', product_id.value )
-
-			return true
-
-		}
-		catch ( e ) {
-			throw [ new InfrastructureException() ]
-		}
-	}
-
 	async getByUserEmail( email: Email ): Promise<CartUser> {
 		try {
 			const result = await this.client.from( this.tableName )
@@ -161,10 +142,6 @@ export class CartSupabaseData implements CartRepository {
 
 			if ( result.error ) {
 				throw [ new InfrastructureException() ]
-			}
-
-			if ( result.data.length === 0 ) {
-				throw [ new ParameterNotMatchException( 'user_email' ) ]
 			}
 
 			const cartProducts: CartProduct[] = []
@@ -188,5 +165,4 @@ export class CartSupabaseData implements CartRepository {
 			throw e
 		}
 	}
-
 }

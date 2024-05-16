@@ -87,18 +87,11 @@ export class ReportSupabaseData implements ReportRepository {
 			}
 
 			const r = report as Report
-			console.log('r')
-			console.log(r.name.value)
 			const { data, error } = await this.client.storage.from(this.tableName).remove([r.name.value])
 
 			if ( error != null ) {
-				console.log('error')
-				console.log(error)
 				throw [ new InfrastructureException('delete') ]
 			}
-
-			console.log('data')
-			console.log(data)
 
 			await this.client.from( this.tableName )
 			          .delete()
@@ -135,8 +128,6 @@ export class ReportSupabaseData implements ReportRepository {
 		}
 
 		if ( error ) {
-			console.log('error')
-			console.log(error)
 			if ( error.code === 'PGRST103' ) {
 				throw [ new LimitIsNotInRangeException() ]
 			}
@@ -145,8 +136,6 @@ export class ReportSupabaseData implements ReportRepository {
 
 		const reports: Report[] = []
 		for ( const json of data ) {
-			console.log('json')
-			console.log(json)
 
 			const r = reportFromJson( json )
 

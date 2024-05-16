@@ -1,5 +1,4 @@
 import {
-	Body,
 	Controller,
 	Delete,
 	HttpStatus,
@@ -10,14 +9,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { HttpResult } from '../../shared/utils/HttpResult'
 import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteProductService } from './delete-product.service'
 
 
@@ -96,15 +89,7 @@ export class DeleteProductController {
 	): Promise<HttpResult> {
 		try {
 
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException) {
-				throw [new  InvalidStringException( 'id' )]
-			}
-
-			await this.deleteProductService.deleteProduct(
-				idResult as UUID )
+			await this.deleteProductService.deleteProduct(id )
 			return {
 				statusCode: HttpStatus.OK
 			}

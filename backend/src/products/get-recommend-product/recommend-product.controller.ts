@@ -7,24 +7,27 @@ import {
 import {
 	ApiBody,
 	ApiOperation,
+	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
-import { GetRecommendProductDto } from './get_recommend_product_dto'
-import { RecommendProductService } from './recommend-product.service'
-import { ProductDto } from '../shared/dto/product_dto'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
 import {
-	productFromJson,
+	productResponseToJson,
 	productToJson
 } from '~features/products/application/product_mapper'
-import { Product } from '~features/products/domain/models/product'
+import { RecommendProduct } from '~features/products/domain/models/recommend_product'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
+import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
+import { RecommendProductService } from './recommend-product.service'
+import { GetRecommendProductDto } from '../shared/dto/get_recommend_product_dto'
 
 @ApiTags( 'products' )
 @Controller( 'products' )
@@ -54,54 +57,136 @@ export class RecommendProductController {
 					type : 'array',
 					items: {
 						properties: {
-							id          : {
+							id      : {
 								type   : 'string',
-								example: 'uuid'
+								example: 'a032cf85-f26b-4e6d-b5a6-778303992614'
 							},
-							code        : {
+							category: {
 								type   : 'string',
-								example: 'string'
-							},
-							product_code: {
-								type   : 'string',
-								example: 'string'
-							},
-							name        : {
-								type   : 'string',
-								example: 'string'
-							},
-							description : {
-								type   : 'string',
-								example: 'string'
-							},
-							created_at  : {
-								type   : 'string',
-								example: 'date'
-							},
-							brand       : {
-								type   : 'string',
-								example: 'string'
-							},
-							price       : {
-								type   : 'string',
-								example: 'number'
-							},
-							image_url   : {
-								type   : 'string',
-								example: 'url'
-							},
-							stock       : {
-								type   : 'string',
-								example: 'number'
-							},
-							average_rank: {
-								type   : 'string',
-								example: 'decimal'
-							},
-							category    : {
-								type   : 'string',
-								example: 'string'
+								example: 'TEST'
 							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status : 200,
+		content: {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 200
+						},
+						data      : {
+							type : 'array',
+							items: {
+								type      : 'object',
+								properties: {
+									category_name_of_products: {
+										type : 'array',
+										items: {
+											type      : 'object',
+											properties: {
+												id          : {
+													type   : 'string',
+													example: 'uuid'
+												},
+												code        : {
+													type   : 'string',
+													example: 'string'
+												},
+												product_code: {
+													type   : 'string',
+													example: 'string'
+												},
+												name        : {
+													type   : 'string',
+													example: 'string'
+												},
+												description : {
+													type   : 'string',
+													example: 'string'
+												},
+												created_at  : {
+													type   : 'string',
+													example: 'date'
+												},
+												brand       : {
+													type   : 'string',
+													example: 'string'
+												},
+												price       : {
+													type   : 'string',
+													example: 'number'
+												},
+												image_url   : {
+													type   : 'string',
+													example: 'url'
+												},
+												stock       : {
+													type   : 'string',
+													example: 'number'
+												},
+												average_rank: {
+													type   : 'string',
+													example: 'decimal'
+												},
+												category    : {
+													type   : 'string',
+													example: 'string'
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status : 400,
+		content: {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 400
+						},
+						message   : {
+							type      : 'object',
+							properties: {
+								code_error: {
+									type   : 'string',
+									example: 'error translation'
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} )
+	@ApiResponse( {
+		status     : 500,
+		description: 'Internal server error by external operations',
+		content    : {
+			'application/json': {
+				schema: {
+					type      : 'object',
+					properties: {
+						statusCode: {
+							type   : 'number',
+							example: 500
 						}
 					}
 				}
@@ -110,92 +195,26 @@ export class RecommendProductController {
 	} )
 	async getRecommendProducts(
 		@Body() dto: GetRecommendProductDto
-		// ): Promise<HttpResultData<Record<string, any>[]>> {
-	)
-	{
+	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			console.log( 'dto', dto )
-			return {
-				statusCode: HttpStatus.BAD_REQUEST,
-				message   : this.translation.translateAll(
-					[ new NotImplementedException() ] )
-			}
+			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry( dto)
 
-			// const { errors, data } = this.parseRecommendProduct( dto )
-			//
-			// if ( errors.length > 0 ) {
-			// 	return {
-			// 		statusCode: HttpStatus.BAD_REQUEST,
-			// 		message   : this.translation.translateAll( errors )
-			// 	}
-			// }
-			//
-			// const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
-			// 	data.threshold, data.products, data.limit )
-			//
-			// let json: Record<string, any[]>[] = []
-			//
-			// productsGroupByCategory.forEach( ( productList, key ) => {
-			// 	const products = productList.map( product => productToJson( product ) )
-			// 	json.push( { [key]: products } )
-			// } )
-			//
-			// return {
-			// 	data      : json,
-			// 	statusCode: HttpStatus.OK
-			// }
+			let json: Record<string, any[]>[] = []
+
+			productsGroupByCategory.forEach( ( productList, key ) => {
+				const products = productList.map( product => productResponseToJson( product ) )
+				json.push( { [key]: products } )
+			} )
+
+			return {
+				data      : json,
+				statusCode: HttpStatus.OK
+			}
 		}
 		catch ( e ) {
-			console.log( 'e' )
-			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
-			}
-		}
-	}
-
-	parseRecommendProduct( dto: {
-		threshold: number, products: ProductDto[], limit: number
-	} ): {
-		errors: BaseException[],
-		data: {
-			threshold: ValidRank, products: Product[], limit: ValidInteger
-		}
-	}
-	{
-		const errors: BaseException[]      = []
-		const productResultList: Product[] = []
-
-		for ( const product of dto.products ) {
-			const p = productFromJson( product )
-			if ( !( p instanceof Product ) ) {
-				errors.push( ...p )
-				break
-			}
-			productResultList.push( p as Product )
-		}
-
-		const limit = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.limit ) )
-
-		if ( limit instanceof InvalidIntegerException ) {
-			errors.push( limit )
-		}
-
-		const threshold = wrapType<ValidRank, InvalidIntegerException>(
-			() => ValidRank.from( dto.threshold ) )
-
-		if ( threshold instanceof InvalidIntegerException ) {
-			errors.push( threshold )
-		}
-
-		return {
-			errors,
-			data: {
-				threshold: threshold as ValidRank,
-				products : productResultList,
-				limit    : limit as ValidInteger
 			}
 		}
 	}

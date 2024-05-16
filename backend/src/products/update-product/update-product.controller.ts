@@ -11,17 +11,16 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ProductDto } from '../shared/dto/product_dto'
+import { PartialProductDto } from 'src/products/shared/dto/partial_product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { productFromJson } from '~features/products/application/product_mapper'
 import { Product } from '~features/products/domain/models/product'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
+import { ProductDto } from '../shared/dto/product_dto'
 import { UpdateProductService } from './update-product.service'
 
 @ApiTags( 'products' )
@@ -39,10 +38,6 @@ export class UpdateProductController {
 				product: {
 					type      : 'object',
 					properties: {
-						id           : {
-							type   : 'string',
-							example: 'aab298c3-6b7e-4c3e-b6fc-0817bb49837a'
-						},
 						code         : {
 							type   : 'string',
 							example: 'abc'
@@ -156,26 +151,10 @@ export class UpdateProductController {
 	} )
 	async updateProduct(
 		@Param( 'id' ) id : string,
-		@Body( 'product' ) dto: ProductDto
+		@Body( 'product' ) dto: PartialProductDto
 	): Promise<HttpResult> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [new InvalidUUIDException('product_code')]
-			}
-
-			const p = productFromJson( dto )
-
-			if ( !( p instanceof Product ) ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( p as BaseException[] )
-				}
-			}
-
-			await this.updateProductService.updateProduct(idResult as UUID, p as Product )
+			await this.updateProductService.updateProduct(id, dto)
 
 			return {
 				statusCode: HttpStatus.OK
@@ -183,7 +162,8 @@ export class UpdateProductController {
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

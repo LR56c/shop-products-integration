@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Order } from '~features/orders/domain/order'
+import { GetAllOrders } from '~features/orders/application/get_all_orders'
 import { OrderRepository } from '~features/orders/domain/order_repository'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { OrderResponse } from '~features/orders/domain/order_response'
 
 @Injectable()
 export class GetAllOrdersService {
 	constructor(private readonly repo : OrderRepository) {}
 
-	async getAllOrders( from: ValidInteger, to: ValidInteger,
-		client_email ?: Email ): Promise<Order[]> {
-		return this.repo.getAll(from, to, client_email)
+	async getAllOrders( from: number, to: number,
+		email ?: string ): Promise<OrderResponse[]> {
+		return GetAllOrders(this.repo, { from, to, email })
 	}
 }

@@ -28,9 +28,9 @@ export class AverageRankController {
 		schema: {
 			type      : 'object',
 			properties: {
-				product_code: {
+				product_id: {
 					type   : 'string',
-					example: 'abc2'
+					example: 'f9f2c7b5-29af-48b0-afbf-66106599f5e0'
 				}
 			}
 		}
@@ -97,18 +97,9 @@ export class AverageRankController {
 			}
 		}
 	} )
-	async handle( @Body( 'product_code' ) product_code: string ): Promise<HttpResult> {
+	async handle( @Body( 'product_code' ) id: string ): Promise<HttpResult> {
 		try {
-
-			const product_codeResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( product_code ) )
-
-			if ( product_codeResult instanceof InvalidStringException) {
-				throw [new InvalidStringException('product_code')]
-
-			}
-
-			await this.averageRankService.execute( product_codeResult as ValidString )
+			await this.averageRankService.execute( id)
 
 			return {
 				statusCode: HttpStatus.OK

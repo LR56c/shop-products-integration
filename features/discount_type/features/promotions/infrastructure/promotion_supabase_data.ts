@@ -1,8 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { discountFromJson } from '../../../application/discount_mapper'
+import { promotionResponseFromJson } from '../application/promotion_mapper'
+import { PromotionResponse } from '../domain/promotion_response'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
-import { Product } from '../../../../products/domain/models/product'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
@@ -10,8 +10,37 @@ import { ValidString } from '../../../../shared/domain/value_objects/ValidString
 import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../../../shared/infrastructure/parameter_not_match_exception'
-import { Promotion } from '../domain/promotion'
+import {
+	PromotionProduct
+} from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
+
+function cleanProducts( products, promotions_products ): Record<string, any>[] {
+
+	const productsMap: Map<string, any> = new Map()
+	for ( const product of products ) {
+		productsMap.set( product.id, product )
+	}
+
+	const promotionsProductMap: Map<string, any> = new Map()
+	for ( const promotionProduct of promotions_products ) {
+		promotionsProductMap.set( promotionProduct.product_id, promotionProduct )
+	}
+
+	const json: Record<string, any>[] = []
+	productsMap.forEach( ( value, key ) => {
+		if ( promotionsProductMap.has( key ) ) {
+			json.push( {
+				...value,
+				discounts: value.discount,
+				quantity : promotionsProductMap.get( key ).quantity
+			} )
+		}
+	} )
+
+	return json
+}
+
 
 export class PromotionSupabaseData implements PromotionRepository {
 
@@ -21,10 +50,11 @@ export class PromotionSupabaseData implements PromotionRepository {
 	readonly tableRelatedName = 'promotions_products'
 
 	async getAll( from: ValidInteger, to: ValidInteger, name?: ValidString,
-		from_date?: ValidDate, to_date?: ValidDate ): Promise<Promotion[]> {
+		from_date?: ValidDate, to_date?: ValidDate ): Promise<PromotionResponse[]> {
 		try {
 			const result = this.client.from( this.tableName )
-			                   .select( '*, discounts(*),products(*)' )
+			                   .select(
+				                   '*, promotions_products(*), discounts(*),products(*)' )
 
 			if ( name !== undefined ) {
 				result.like( 'name', `%${ name.value }%` )
@@ -40,24 +70,24 @@ export class PromotionSupabaseData implements PromotionRepository {
 				if ( error.code === '22P02' ) {
 					throw [ new ParameterNotMatchException() ]
 				}
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException( 'get all' ) ]
 			}
-			const discounts: Promotion[] = []
+			const discounts: PromotionResponse[] = []
 			for ( const json of data ) {
-				const d = discountFromJson( {
-						id: json.id,
-						...json.discounts,
-						promotions: {
-							id      : json.id,
-							name    : json.name,
-							products: json.products
-						}
-					}
-				)
+				const productsClean = cleanProducts( json.products,
+					json.promotions_products )
+
+				const jsonClear = {
+					...json,
+					...json.discounts,
+					products: productsClean
+				}
+
+				const d = promotionResponseFromJson( jsonClear )
 				if ( d instanceof BaseException ) {
 					throw d
 				}
-				discounts.push( d as Promotion )
+				discounts.push( d as PromotionResponse )
 			}
 			return discounts
 		}
@@ -67,16 +97,15 @@ export class PromotionSupabaseData implements PromotionRepository {
 
 	}
 
-	async getByID( id: UUID ): Promise<Promotion> {
+	async getByID( id: UUID ): Promise<PromotionResponse> {
 		try {
 			const result = await this.client.from( this.tableName )
-			                         .select( '*, discounts(*),products(*)' )
+			                         .select(
+				                         '*, promotions_products(*), discounts(*),products(*)' )
 			                         .eq( 'id', id.value )
 
-			console.log( 'result')
-			console.log( result)
 			if ( result.error ) {
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException( 'get' ) ]
 			}
 
 			if ( result.data.length === 0 ) {
@@ -84,22 +113,23 @@ export class PromotionSupabaseData implements PromotionRepository {
 			}
 
 			const json = result.data[0]
-			const discount = discountFromJson( {
-					id: json.id,
-					...json.discounts,
-					promotions: {
-						id      : json.id,
-						name    : json.name,
-						products: json.products
-					}
-				}
-			)
+
+			const productsClean = cleanProducts( json.products,
+				json.promotions_products )
+
+			const jsonClear = {
+				...json,
+				...json.discounts,
+				products: productsClean
+			}
+
+			const discount = promotionResponseFromJson( jsonClear )
 
 			if ( discount instanceof BaseException ) {
 				throw discount
 			}
 
-			return discount as Promotion
+			return discount as PromotionResponse
 
 		}
 		catch ( e ) {
@@ -108,29 +138,24 @@ export class PromotionSupabaseData implements PromotionRepository {
 	}
 
 	async linkProducts( promotion_id: UUID,
-		products_ids: UUID[] ): Promise<boolean> {
+		products: PromotionProduct[] ): Promise<boolean> {
 
-		for ( const id of products_ids ) {
+		for ( const p of products ) {
 
 			const result = await this.client.from( this.tableRelatedName )
 			                         .insert( {
 				                         promotion_id: promotion_id.value,
-				                         product_id  : id.value
+				                         quantity    : p.quantity.value,
+				                         product_id  : p.product.value
 			                         } )
 
 			if ( result.error != null ) {
-				console.log( 'link err' )
-				console.log( result.error )
 				if ( result.error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException( 'id' ) ]
 				}
-				throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException( 'link' ) ]
 			}
 		}
 		return true
-	}
-
-	async discount( products: Product[] ): Promise<boolean> {
-		throw [ new InfrastructureException() ]
 	}
 }

@@ -1,7 +1,6 @@
 import {
 	Body,
 	Controller,
-	Get,
 	HttpStatus,
 	Post
 } from '@nestjs/common'
@@ -11,13 +10,19 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { productFromJson } from '~features/products/application/product_mapper'
-import { NotImplementedException } from '~features/shared/domain/exceptions/NotImplementedException'
-import { ProductDto } from '../../products/shared/dto/product_dto'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { Product } from '~features/products/domain/models/product'
+import { DiscounDto } from '../shared/promotion_dto'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
+import {
+	promotionResponseToJson,
+	promotionToJson
+} from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
+import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { DiscountPromotionService } from './discount-promotion.service'
 
 @ApiTags( 'promotions' )
@@ -28,61 +33,24 @@ export class DiscountPromotionController {
 	)
 	{}
 
-	@Get( 'discount' )
+	@Post( 'discount' )
 	@ApiBody( {
 		schema: {
-			type      : 'array',
+			type      : 'object',
 			properties: {
-				items: {
-					type      : 'object',
-					properties: {
-						id          : {
-							type   : 'string',
-							example: 'uuid'
-						},
-						code        : {
-							type   : 'string',
-							example: 'string'
-						},
-						product_code: {
-							type   : 'string',
-							example: 'string'
-						},
-						name        : {
-							type   : 'string',
-							example: 'string'
-						},
-						description : {
-							type   : 'string',
-							example: 'string'
-						},
-						created_at  : {
-							type   : 'string',
-							example: 'date'
-						},
-						brand       : {
-							type   : 'string',
-							example: 'string'
-						},
-						price       : {
-							type   : 'string',
-							example: 'number'
-						},
-						image_url   : {
-							type   : 'string',
-							example: 'url'
-						},
-						stock       : {
-							type   : 'string',
-							example: 'number'
-						},
-						average_rank: {
-							type   : 'string',
-							example: 'decimal'
-						},
-						category    : {
-							type   : 'string',
-							example: 'string'
+				products    : {
+					type : 'array',
+					items: {
+						type: 'object',
+						properties: {
+							quantity  : {
+								type   : 'number',
+								example: 1
+							},
+							product_id: {
+								type   : 'string',
+								example: '359b6378-f875-4d31-b415-d3de60a59875'
+							},
 						}
 					}
 				}
@@ -161,37 +129,20 @@ export class DiscountPromotionController {
 		}
 	} )
 	async handle(
-		@Body() dto: ProductDto[]
-		// ): Promise<HttpResult> {
-	)
-	{
+		@Body() dto: DiscounDto
+	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			return {
-				statusCode: HttpStatus.BAD_REQUEST,
-				message   : this.translation.translateAll(
-					[ new NotImplementedException() ] )
-			}
 
-			// const products: Product[] = []
-			// for ( const p of dto ) {
-			// 	const product = productFromJson( p )
-			// 	if ( !( product instanceof Product ) ) {
-			// 		return {
-			// 			statusCode: HttpStatus.BAD_REQUEST,
-			// 			message   : this.translation.translateAll(
-			// 				product as BaseException[] )
-			// 		}
-			// 	}
-			// 	products.push( product )
-			// }
-			//
-			//
-			// await this.discountPromotionService.execute( products )
-			//
-			// return {
-			// 	statusCode: HttpStatus.OK
-			// }
+			const result = await this.discountPromotionService.execute(dto)
+
+			const json   = result.map( promotionResponseToJson )
+			// formato alternativo: {promotion, totalProducts, totalPromotion, products[] } []
+
+			return {
+				statusCode: HttpStatus.OK,
+				data      : json
+			}
 		}
 		catch ( e ) {
 			return {

@@ -1,15 +1,18 @@
+import { Type } from 'class-transformer'
 import {
-	IsArray,
 	IsDate,
 	IsNumber,
+	IsOptional,
 	IsString,
 	IsUUID,
 	Max,
 	Min,
-	MinLength
+	MinLength,
+	ValidateNested
 } from 'class-validator'
 
 export class PromotionDto{
+	@IsOptional()
 	@IsUUID()
 	id : string
 
@@ -31,9 +34,22 @@ export class PromotionDto{
 	@IsDate()
 	start_date : Date
 
-	@IsArray()
-	@IsUUID( '4', {
-		each: true
-	} )
-	products_ids: string[]
+	@ValidateNested()
+	@Type( () => PromotionProductDto )
+	products: PromotionProductDto[]
+}
+
+export class DiscounDto{
+	@ValidateNested()
+	@Type( () => PromotionProductDto )
+	products: PromotionProductDto[]
+}
+
+export class PromotionProductDto {
+	@IsUUID( )
+	product_id: string
+
+	@Min( 1 )
+	@IsNumber()
+	quantity: number
 }

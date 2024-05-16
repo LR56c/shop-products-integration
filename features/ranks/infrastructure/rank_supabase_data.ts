@@ -48,12 +48,11 @@ export class RankSupabaseData implements RankRepository {
 			return true
 		}
 		catch ( e ) {
-			console.log( e)
 			throw e
 		}
 	}
 
-	async getAllRankByCode( code: ValidString ): Promise<Rank[]> {
+	async getAllRankByProductID( code: ValidString ): Promise<Rank[]> {
 		try {
 
 			const result = await this.client.from( this.tableName )

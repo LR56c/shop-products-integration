@@ -2,12 +2,8 @@ import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDate
 import { InvalidPercentageException } from '../../shared/domain/exceptions/InvalidPercentageException'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { ValidPercentage } from '../../shared/domain/value_objects/ValidPercentage'
-import { promotionFromJson } from '../features/promotions/application/promotion_mapper'
-import { saleFromJson } from '../features/sales/application/sale_mapper'
-import { SubTypeNotExistException } from '../../shared/domain/exceptions/SubTypeNotExistException'
 import {
 	DiscountType,
-	DiscountTypeEnum
 } from '../domain/discount_type'
 import { InvalidDiscountTypeException } from '../domain/invalid_discount_type_exception'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
@@ -75,28 +71,13 @@ export function discountFromJson( json: Record<string, any> ): Discount | BaseEx
 	if ( type instanceof BaseException || errors.length > 0 ) {
 		return errors
 	}
-	else if ( json.sales != null && type.value === DiscountTypeEnum.SALE ) {
-		return saleFromJson( {
-			id           : id as UUID,
-			percentage   : percentage as ValidPercentage,
-			type         : type as DiscountType,
-			start_date   : start_date as ValidDate,
-			end_date     : end_date as ValidDate,
-			creation_date: creation_date as ValidDate
-		}, json.sales )
-	}
-	else if ( json.promotions && type.value === DiscountTypeEnum.PROMOTION ) {
-		return promotionFromJson( {
-			id           : id as UUID,
-			percentage   : percentage as ValidPercentage,
-			type         : type as DiscountType,
-			start_date   : start_date as ValidDate,
-			end_date     : end_date as ValidDate,
-			creation_date: creation_date as ValidDate
-		}, json.promotions )
-	}
-	else {
-		errors.push( new SubTypeNotExistException( 'discount' ) )
-		return errors
-	}
+
+	return new Discount(
+		id as UUID,
+		type as DiscountType,
+		percentage as ValidPercentage,
+		creation_date as ValidDate,
+		start_date as ValidDate,
+		end_date as ValidDate
+	)
 }
