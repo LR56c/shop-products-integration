@@ -14,10 +14,7 @@ export class Order{
 				readonly order_confirmed?: UUID,
 				readonly item_confirmed?: UUID
 		){}
-	//TODO: se podria agregar status.
-	// agregar update partial
-	// posts, devolver id generado
-	// a valores nulos, mostrar en json que son nulos
+	//TODO: se podria agregar status
 }
 
 export class OrderProduct {

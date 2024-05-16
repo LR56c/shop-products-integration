@@ -1,14 +1,14 @@
-import { Product } from '@features/products/domain/models/Product'
+import { ProductResponse } from '@features/products/domain/models/product_response.ts'
 import { create } from 'zustand'
 
 export interface ProductState {
-	products: Product[]
-	setProducts: ( products : Product[] ) => void
+	products: ProductResponse[]
+	setProducts: ( products : ProductResponse[] ) => void
 }
 
 export const useProductStore = create<ProductState>( ( setState ) => ( {
 	products   : [],
-	setProducts: ( products : Product[] ) => {
+	setProducts: ( products : ProductResponse[] ) => {
 		setState( {
 			products: products
 		} )
