@@ -1,4 +1,3 @@
-import { Discount } from 'features/discount_type/domain/discount'
 import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
@@ -6,18 +5,6 @@ import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
-
-export interface PartialProductProps {
-  code: string,
-  product_code: string,
-  name: string,
-  description: string,
-  brand: string,
-  image_url: string,
-  price: number,
-  stock: number,
-  category_name: string
-}
 
 export class Product {
  constructor(
@@ -32,8 +19,8 @@ export class Product {
    readonly image_url: ValidURL,
    readonly stock: ValidInteger,
    readonly average_rank: ValidRank,
-   readonly category_name: ValidString,
-   readonly discount?: Discount
+   readonly category: ValidString,
+   readonly discount?: UUID
  ) {}
 
   subtractStock( newQuantity: ValidInteger ): Product {
@@ -53,9 +40,8 @@ export class Product {
       this.image_url,
       newQuantity,
       this.average_rank,
-      this.category_name,
+      this.category,
       this.discount
     )
   }
 }
-

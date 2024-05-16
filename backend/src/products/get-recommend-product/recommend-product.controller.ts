@@ -11,10 +11,9 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import {
-	productFromJson,
+	productResponseToJson,
 	productToJson
 } from '~features/products/application/product_mapper'
-import { Product } from '~features/products/domain/models/product'
 import { RecommendProduct } from '~features/products/domain/models/recommend_product'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
@@ -27,12 +26,8 @@ import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { ProductDto } from '../shared/dto/product_dto'
-import {
-	GetRecommendProductDto,
-	RecommendedProductDto
-} from './get_recommend_product_dto'
 import { RecommendProductService } from './recommend-product.service'
+import { GetRecommendProductDto } from '../shared/dto/get_recommend_product_dto'
 
 @ApiTags( 'products' )
 @Controller( 'products' )
@@ -202,14 +197,12 @@ export class RecommendProductController {
 		@Body() dto: GetRecommendProductDto
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const data                    = this.parseRecommendProduct( dto )
-			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
-				data.threshold, data.products, data.limit )
+			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry( dto)
 
 			let json: Record<string, any[]>[] = []
 
 			productsGroupByCategory.forEach( ( productList, key ) => {
-				const products = productList.map( product => productToJson( product ) )
+				const products = productList.map( product => productResponseToJson( product ) )
 				json.push( { [key]: products } )
 			} )
 
@@ -223,66 +216,6 @@ export class RecommendProductController {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
 			}
-		}
-	}
-
-	parseRecommendProduct( dto: {
-		threshold: number, products: RecommendedProductDto[], limit: number
-	} ): {
-
-		threshold: ValidRank, products: RecommendProduct[], limit: ValidInteger
-	}
-	{
-		const errors: BaseException[]               = []
-		const productResultList: RecommendProduct[] = []
-
-		for ( const product of dto.products ) {
-			const id = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( product.id ) )
-
-			if ( id instanceof BaseException ) {
-				errors.push( id )
-			}
-
-			const category = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( product.category ) )
-
-			if ( category instanceof BaseException ) {
-				errors.push( category )
-			}
-
-			if ( errors.length > 0 ) {
-				throw errors
-			}
-
-			const productResult = new RecommendProduct(
-				id as UUID, category as ValidString )
-
-			productResultList.push( productResult )
-		}
-
-		const limit = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.limit ) )
-
-		if ( limit instanceof BaseException ) {
-			errors.push( limit )
-		}
-
-		const threshold = wrapType<ValidRank, InvalidIntegerException>(
-			() => ValidRank.from( dto.threshold ) )
-
-		if ( threshold instanceof BaseException ) {
-			errors.push( threshold )
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			threshold: threshold as ValidRank,
-			products : productResultList,
-			limit    : limit as ValidInteger
 		}
 	}
 }

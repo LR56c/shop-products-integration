@@ -1,5 +1,5 @@
-import { ProductRepository } from 'features/products/domain/repository/product_repository'
-import { wrapType } from 'features/shared/utils/WrapType'
+import { ProductRepository } from '../domain/repository/product_repository'
+import { wrapType } from '../../shared/utils/WrapType'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'

@@ -29,24 +29,7 @@ export class Promotion extends Discount {
 export class PromotionProduct{
 	constructor(
 		readonly quantity: ValidInteger,
-		readonly product : Product
+		readonly product : UUID
 	){}
 }
 
-export class PartialPromotion{
-	constructor(
-		readonly name: ValidString,
-		readonly percentage: ValidPercentage,
-		readonly creation_date: ValidDate,
-		readonly end_date: ValidDate,
-		readonly start_date: ValidDate,
-		readonly products: PartialPromotionProduct[],
-	){}
-}
-
-export class PartialPromotionProduct{
-	constructor(
-		readonly quantity: ValidInteger,
-		readonly product_id: UUID,
-	){}
-}

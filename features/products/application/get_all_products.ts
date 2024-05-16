@@ -1,9 +1,9 @@
-import { Product } from 'features/products/domain/models/product'
-import { ProductRepository } from 'features/products/domain/repository/product_repository'
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
-import { InvalidStringException } from 'features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from 'features/shared/domain/value_objects/ValidString'
-import { wrapType } from 'features/shared/utils/WrapType'
+import { ProductResponse } from '../domain/models/product_response'
+import { ProductRepository } from '../domain/repository/product_repository'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { wrapType } from '../../shared/utils/WrapType'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 
@@ -13,7 +13,7 @@ export const GetAllProducts = async (
 		from: number,
 		to: number,
 		name?: string
-	} ): Promise<Product[]> => {
+	} ): Promise<ProductResponse[]> => {
 
 	const errors: BaseException[] = []
 
@@ -46,5 +46,5 @@ export const GetAllProducts = async (
 		throw errors
 	}
 
-	return repo.getAll( fromResult as ValidInteger, toResult as ValidInteger, name! as ValidString)
+	return repo.getAll( fromResult as ValidInteger, toResult as ValidInteger, name as ValidString)
 }

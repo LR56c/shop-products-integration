@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { ProductResponse } from '../domain/models/product_response'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
@@ -8,7 +9,7 @@ import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import {
-	productFromJson,
+	productResponseFromJson,
 	productToJson
 } from '../application/product_mapper'
 import { ProductRepository } from '../domain/repository/product_repository'
@@ -31,16 +32,16 @@ export class ProductSupabaseData implements ProductRepository {
 			if ( result.error.code === '23505' ) {
 				throw [ new KeyAlreadyExistException( 'product' ) ]
 			}
-			throw [ new InfrastructureException('create') ]
+			throw [ new InfrastructureException( 'create' ) ]
 		}
 		return true
 	}
 
 	async getAll( from: ValidInteger, to: ValidInteger,
-		name?: ValidString ): Promise<Product[]> {
+		name?: ValidString ): Promise<ProductResponse[]> {
 
 		const result = this.client.from( this.tableName )
-		                   .select()
+		                   .select( '*, categories(*), discounts(*)' )
 
 		if ( name !== undefined ) {
 			result.eq( 'name', name.value )
@@ -56,44 +57,44 @@ export class ProductSupabaseData implements ProductRepository {
 			if ( error.code === 'PGRST103' ) {
 				throw [ new LimitIsNotInRangeException() ]
 			}
-			throw [ new InfrastructureException('get all') ]
+			throw [ new InfrastructureException( 'get all' ) ]
 		}
 
-		const products: Product[] = []
+		const products: ProductResponse[] = []
 		for ( const json of data ) {
 
-			const product = productFromJson( json )
+			const product = productResponseFromJson( json )
 
 			if ( product instanceof BaseException ) {
 				throw product
 			}
-			products.push( product as Product )
+			products.push( product as ProductResponse )
 		}
 
 		return products
 	}
 
-	async getProduct( id: UUID ): Promise<Product> {
+	async getProduct( id: UUID ): Promise<ProductResponse> {
 		try {
 			const result = await this.client.from( this.tableName )
-			                         .select()
+			                         .select( '*, categories(*), discounts(*)' )
 			                         .eq( 'id', id.value )
 
 			if ( result.error ) {
-				throw [ new InfrastructureException('get') ]
+				throw [ new InfrastructureException( 'get' ) ]
 			}
 
 			if ( result.data.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'id' ) ]
 			}
 
-			const product = productFromJson( result.data[0] )
+			const product = productResponseFromJson( result.data[0] )
 
 			if ( product instanceof BaseException ) {
 				throw product
 			}
 
-			return product as Product
+			return product as ProductResponse
 		}
 		catch ( e ) {
 			throw e
@@ -105,16 +106,23 @@ export class ProductSupabaseData implements ProductRepository {
 		product: Product
 	): Promise<boolean> {
 		try {
-			await this.client.from( this.tableName )
-			          .update( productToJson( product ) as any )
-			          .eq(
-				          'id',
-				          id.value
-			          )
+			const result = await this.client.from( this.tableName )
+			                         .update( productToJson( product ) as any )
+			                         .eq(
+				                         'id',
+				                         id.value
+			                         )
+			if ( result.error != null ) {
+				if ( result.error.code === '23505' ) {
+					throw [ new KeyAlreadyExistException() ]
+				}
+
+				throw [ new InfrastructureException() ]
+			}
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException('update') ]
+			throw e
 		}
 	}
 
@@ -142,10 +150,10 @@ export class ProductSupabaseData implements ProductRepository {
 	}
 
 	async getProductsByRankThreshold( threshold: ValidRank,
-		limit: ValidInteger ): Promise<Product[]> {
+		limit: ValidInteger ): Promise<ProductResponse[]> {
 
 		const productsDatabaseResult = await this.client.from( this.tableName )
-		                                         .select()
+		                                         .select( '*, categories(*), discounts(*)' )
 		                                         .gte( 'average_rank',
 			                                         threshold.value )
 		                                         .limit( limit.value )
@@ -154,14 +162,14 @@ export class ProductSupabaseData implements ProductRepository {
 			throw [ new InfrastructureException() ]
 		}
 
-		const productsDatabase: Product[] = []
+		const productsDatabase: ProductResponse[] = []
 
 		for ( const json of productsDatabaseResult.data ) {
-			const product = productFromJson( json )
+			const product = productResponseFromJson( json )
 			if ( product instanceof BaseException ) {
 				throw product
 			}
-			productsDatabase.push( product as Product )
+			productsDatabase.push( product as ProductResponse )
 		}
 		return productsDatabase
 	}

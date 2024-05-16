@@ -25,7 +25,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 		item_confirmed_id?: string,
 	} ): Promise<boolean> => {
 
-	const errors : BaseException[] = []
+	const errors: BaseException[] = []
 
 	const client_email = wrapType<Email, EmailException>(
 		() => Email.from( props.client_email ) )
@@ -44,7 +44,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 	let sellerResult: Email | undefined = undefined
 	if ( props.seller_email !== undefined ) {
 		const seller_email = wrapType<Email, EmailException>(
-			() => Email.from( props.seller_email ) )
+			() => Email.from( props.seller_email! ) )
 		if ( seller_email instanceof BaseException ) {
 			errors.push( seller_email )
 		}
@@ -57,7 +57,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 
 	if ( props.order_confirmed_id !== undefined ) {
 		const order_confirmed = wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.order_confirmed_id ) )
+			() => UUID.from( props.order_confirmed_id! ) )
 		if ( order_confirmed instanceof BaseException ) {
 			errors.push( order_confirmed )
 		}
@@ -69,7 +69,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 	let itemResult: UUID | undefined = undefined
 	if ( props.item_confirmed_id !== undefined ) {
 		const item_confirmed = wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.item_confirmed_id ) )
+			() => UUID.from( props.item_confirmed_id! ) )
 		if ( item_confirmed instanceof BaseException ) {
 			errors.push( item_confirmed )
 		}
@@ -88,32 +88,34 @@ export const CreateOrder = async ( repo: OrderRepository,
 	const idResult = props.id === undefined
 		? UUID.create()
 		: wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.id ) )
+			() => UUID.from( props.id! ) )
 
 	if ( idResult instanceof BaseException ) {
-		errors.push( idResult)
+		errors.push( idResult )
 	}
 
 	const products: OrderProduct[] = []
 
-	for ( const product of props.products ) {
-		const p = wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( product.product_id ) )
+	if ( props.products !== undefined ) {
+		for ( const product of props.products ) {
+			const p = wrapType<UUID, InvalidUUIDException>(
+				() => UUID.from( product.product_id ) )
 
-		if ( p instanceof BaseException ) {
-			errors.push( p )
-			break
+			if ( p instanceof BaseException ) {
+				errors.push( p )
+				break
+			}
+
+			const q = wrapType<ValidInteger, BaseException>(
+				() => ValidInteger.from( product.quantity ) )
+
+			if ( q instanceof BaseException ) {
+				errors.push( q )
+				break
+			}
+
+			products.push( new OrderProduct( q, p ) )
 		}
-
-		const q = wrapType<ValidInteger, BaseException>(
-			() => ValidInteger.from( product.quantity ) )
-
-		if ( q instanceof BaseException ) {
-			errors.push( q )
-			break
-		}
-
-		products.push( new OrderProduct( q, p ) )
 	}
 
 	if ( errors.length > 0 ) {
@@ -129,7 +131,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 			products,
 			sellerResult,
 			orderResult,
-			itemResult,
+			itemResult
 		)
 	)
 }

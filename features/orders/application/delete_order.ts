@@ -1,6 +1,6 @@
-import { OrderRepository } from 'features/orders/domain/order_repository'
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
-import { wrapType } from 'features/shared/utils/WrapType'
+import { OrderRepository } from '../domain/order_repository'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { wrapType } from '../../shared/utils/WrapType'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 

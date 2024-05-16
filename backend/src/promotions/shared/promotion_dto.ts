@@ -2,6 +2,7 @@ import { Type } from 'class-transformer'
 import {
 	IsDate,
 	IsNumber,
+	IsOptional,
 	IsString,
 	IsUUID,
 	Max,
@@ -11,6 +12,7 @@ import {
 } from 'class-validator'
 
 export class PromotionDto{
+	@IsOptional()
 	@IsUUID()
 	id : string
 

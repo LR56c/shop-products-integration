@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Promotion } from '~features/discount_type/features/promotions/domain/promotion'
+import { GetPromotion } from '~features/discount_type/features/promotions/application/get_promotion'
 import { PromotionRepository } from '~features/discount_type/features/promotions/domain/promotion_repository'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { PromotionResponse } from '~features/discount_type/features/promotions/domain/promotion_response'
 
 @Injectable()
 export class GetPromotionService {
 	constructor( private readonly repo: PromotionRepository ) {}
 
-	async execute( id: UUID ): Promise<Promotion> {
-		return await this.repo.getByID( id ) as Promotion
+	async execute( id: string ): Promise<PromotionResponse> {
+		return GetPromotion( this.repo, id )
 	}
 }

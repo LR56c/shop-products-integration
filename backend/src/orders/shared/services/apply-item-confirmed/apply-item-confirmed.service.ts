@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
+import { GetOrder } from '~features/orders/application/get_order'
 import { UpdateOrder } from '~features/orders/application/update_order'
-import {
-	PartialOrder,
-	PartialOrderProduct
-} from '~features/orders/domain/order'
 import { OrderRepository } from '~features/orders/domain/order_repository'
 import { ItemConfirmedEvent } from '~features/shared/domain/events/item_confirmed_event'
 
@@ -15,21 +12,9 @@ export class ApplyItemConfirmedService {
 	@OnEvent( ItemConfirmedEvent.tag )
 	async handleEvent( payload: ItemConfirmedEvent ) {
 		try {
-			const order = await this.repo.getOrder( payload.order_id )
+			const order = await GetOrder( this.repo, payload.order_id.value )
 
-			const o = new PartialOrder(
-				order.client_email,
-				order.payment.id,
-				order.products.map( ( op ) => ( new PartialOrderProduct(
-					op.quantity,
-					op.product.id
-				))),
-				order.seller_email,
-				order.order_confirmed?.id,
-				order.item_confirmed?.id
-			)
-
-			await UpdateOrder( this.repo, payload.order_id, o, {
+			await UpdateOrder( this.repo, payload.order_id, order, {
 				order_confirmed_id: payload.item_confirmed_id.value,
 			} )
 

@@ -10,6 +10,7 @@ import {
 } from 'class-validator'
 
 export class OrderDto {
+	@IsOptional()
 	@IsUUID()
 	id: string
 
@@ -32,11 +33,11 @@ export class OrderDto {
 
 	@IsOptional()
 	@IsUUID()
-	order_confirmed: string
+	order_confirmed_id: string
 
 	@IsOptional()
 	@IsUUID()
-	item_confirmed: string
+	item_confirmed_id: string
 }
 
 export class OrderProductDto{

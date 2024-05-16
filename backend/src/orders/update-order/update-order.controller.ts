@@ -11,14 +11,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreateOrderDto } from 'src/orders/dto/create_order_dto'
+import { PartialOrderDto } from 'src/orders/shared/dto/partial_order_dto'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { PartialOrder } from '~features/orders/domain/order'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { parsePartialOrder } from 'src/orders/utils/parsePartialOrder'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { UpdateOrderService } from './update-order.service'
 
@@ -125,31 +119,12 @@ export class UpdateOrderController {
 	} )
 	async updateOrder(
 		@Param( 'id' ) id: string,
-		@Body() dto: CreateOrderDto
+		@Body() dto: PartialOrderDto
 	) : Promise<HttpResult>
 	{
 		try {
 
-			const errors: BaseException[] = []
-
-			const order = parsePartialOrder( dto )
-
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				errors.push( new InvalidUUIDException() )
-			}
-
-			if ( errors.length > 0 ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( errors )
-				}
-			}
-
-			await this.updateOrderService.updateOrder( idResult as UUID,
-				order as PartialOrder )
+			await this.updateOrderService.updateOrder( id, dto )
 
 			return {
 				statusCode: HttpStatus.OK

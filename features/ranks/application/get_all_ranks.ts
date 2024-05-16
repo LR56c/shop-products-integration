@@ -21,5 +21,5 @@ export const GetAllRanks = async ( repo: RankRepository, props: {
 		throw errors
 	}
 
-	return await repo.getAllRankByCode( codeResult as ValidString )
+	return await repo.getAllRankByProductID( codeResult as ValidString )
 }

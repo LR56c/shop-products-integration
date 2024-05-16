@@ -13,8 +13,10 @@ import {
 import { DiscounDto } from '../shared/promotion_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { promotionToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
-import { PartialPromotionProduct } from '~features/discount_type/features/promotions/domain/promotion'
+import {
+	promotionResponseToJson,
+	promotionToJson
+} from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
@@ -130,38 +132,11 @@ export class DiscountPromotionController {
 		@Body() dto: DiscounDto
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const errors: BaseException[]                            = []
-			const products_map: Map<string, PartialPromotionProduct> = new Map()
-			for ( const p of dto.products ) {
-				const idResult = wrapType<UUID, InvalidUUIDException>(
-					() => UUID.from( p.product_id ) )
 
-				if ( idResult instanceof BaseException ) {
-					errors.push( new InvalidUUIDException() )
-				}
 
-				const q = wrapType<ValidInteger, InvalidIntegerException>(
-					() => ValidInteger.from( p.quantity) )
+			const result = await this.discountPromotionService.execute(dto)
 
-				if ( q instanceof BaseException ) {
-					errors.push( new InvalidIntegerException() )
-				}
-
-				if ( errors.length > 0 ) {
-					throw errors
-				}
-
-				const qq = q as ValidInteger
-				const id = idResult as UUID
-				products_map.set( id.value, new PartialPromotionProduct(
-					qq,
-					idResult as UUID,
-				) )
-			}
-
-			const result = await this.discountPromotionService.execute(
-				products_map )
-			const json   = result.map( promotionToJson )
+			const json   = result.map( promotionResponseToJson )
 			// formato alternativo: {promotion, totalProducts, totalPromotion, products[] } []
 
 			return {

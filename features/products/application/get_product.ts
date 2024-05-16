@@ -1,4 +1,4 @@
-import { Product } from '../domain/models/product'
+import { ProductResponse } from '../domain/models/product_response'
 import { ProductRepository } from '../domain/repository/product_repository'
 import { wrapType } from '../../shared/utils/WrapType'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
@@ -7,7 +7,7 @@ import { UUID } from '../../shared/domain/value_objects/UUID'
 
 export const GetProduct = async (
 	repo: ProductRepository,
-	id : string ): Promise<Product> => {
+	id : string ): Promise<ProductResponse> => {
 
 	const idResult = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( id ) )

@@ -91,15 +91,7 @@ export class DeletePromotionController {
     @Param( 'id' ) id: string
   ): Promise<HttpResult> {
     try {
-
-      const idResult = wrapType<UUID, InvalidUUIDException>(
-        () => UUID.from( id ) )
-
-      if ( idResult instanceof BaseException ) {
-        throw [ new InvalidUUIDException( 'id' ) ]
-      }
-
-      await this.deletePromotionService.execute( idResult)
+      await this.deletePromotionService.execute( id)
       return {
         statusCode: HttpStatus.OK
       }

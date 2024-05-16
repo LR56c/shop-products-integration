@@ -20,8 +20,6 @@ export const UpsertCart = async ( repo: CartRepository, props: {
 	if ( emailResult instanceof BaseException ) {
 		errors.push( new EmailException() )
 	}
-	console.log( 'emailResult' )
-	console.log( emailResult )
 
 	const productIDResult = wrapType<UUID, BaseException>(
 		() => UUID.from( props.product_id ) )

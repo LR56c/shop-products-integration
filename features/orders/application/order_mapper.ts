@@ -1,7 +1,7 @@
 import {
 	OrderProductResponse,
 	OrderResponse
-} from 'features/orders/domain/order_response'
+} from '../domain/order_response'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { itemConfirmedFromJson } from '../../item_confirmed/application/item_confimed_mapper'
@@ -40,7 +40,7 @@ export function orderToJson( order: Order ): Record<string, any> {
 		id             : order.id.value,
 		client_email   : order.client_email.value,
 		created_at     : order.creation_date.value,
-		payment        : order.payment.value,
+		payment_id        : order.payment.value,
 		products       :jsonProducts,
 		seller_email   : order.seller_email?.value ?? null,
 		order_confirmed: order.order_confirmed?.value ?? null,
@@ -170,9 +170,9 @@ export function orderResponseToJson( order: OrderResponse ): Record<string, any>
 		created_at     : order.creation_date.value,
 		payment        : paymentToJson( order.payment ),
 		products       :jsonProducts,
-		seller_email   : order.seller_email?.value ?? null,
-		order_confirmed: order.order_confirmed?.id.value ?? null,
-		item_confirmed : order.item_confirmed?.id.value ?? null
+		seller_email   : order.seller_email === undefined ? null : order.seller_email.value,
+		order_confirmed: order.order_confirmed === undefined ? null : order.order_confirmed.id.value,
+		item_confirmed : order.item_confirmed === undefined ? null : order.item_confirmed.id.value
 	}
 }
 
@@ -201,7 +201,7 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
-	const payment = paymentFromJson( json.payment )
+	const payment = paymentFromJson( json.payments )
 
 	if ( payment instanceof BaseException ) {
 		errors.push( payment )

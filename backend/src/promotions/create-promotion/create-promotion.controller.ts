@@ -10,14 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialPromotionProduct } from '~features/discount_type/features/promotions/domain/promotion'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { parsePromotion } from '../shared/parsePromotion'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { PromotionDto } from '../shared/promotion_dto'
@@ -36,10 +28,6 @@ export class CreatePromotionController {
 			schema: {
 				type      : 'object',
 				properties: {
-					id        : {
-						type   : 'string',
-						example: '3643fe52-f496-4d1f-87b9-d81d71ddf62d'
-					},
 					name      : {
 						type   : 'string',
 						example: 'abc'
@@ -146,38 +134,8 @@ export class CreatePromotionController {
 		@Body() promotionDto: PromotionDto
 	): Promise<HttpResult> {
 		try {
-			const promotion = parsePromotion( promotionDto )
 
-			const errors: BaseException[]             = []
-			const products: PartialPromotionProduct[] = []
-			for ( const p of promotionDto.products ) {
-
-				const id = wrapType<UUID, InvalidUUIDException>(
-					() => UUID.from( p.product_id ) )
-
-				if ( id instanceof BaseException ) {
-					errors.push( id )
-				}
-
-
-				const q = wrapType<ValidInteger, InvalidIntegerException>(
-					() => ValidInteger.from( p.quantity ) )
-
-				if ( q instanceof BaseException ) {
-					errors.push( q )
-				}
-
-				if ( errors.length > 0 ) {
-					throw errors
-				}
-
-				products.push( new PartialPromotionProduct(
-					q as ValidInteger,
-					id as UUID
-				) )
-			}
-
-			await this.createPromotionService.execute( promotion, products )
+			await this.createPromotionService.execute(promotionDto)
 
 			return {
 				statusCode: HttpStatus.OK

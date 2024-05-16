@@ -1,7 +1,9 @@
 import {
-	productFromJson,
+	productResponseFromJson,
 	productToJson
 } from 'features/products/application/product_mapper'
+import { Product } from 'features/products/domain/models/product'
+import { ProductResponse } from 'features/products/domain/models/product_response'
 import { ProductRepository } from 'features/products/domain/repository/product_repository'
 import { BaseException } from 'features/shared/domain/exceptions/BaseException'
 import { InfrastructureException } from 'features/shared/infrastructure/infrastructure_exception'
@@ -9,7 +11,6 @@ import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { Product } from '../domain/models/Product'
 
 export class ProductApiData implements ProductRepository {
 
@@ -48,7 +49,7 @@ export class ProductApiData implements ProductRepository {
 	}
 
 	async getAll( from: ValidInteger, to: ValidInteger,
-		name?: ValidString ): Promise<Product[]> {
+		name?: ValidString ): Promise<ProductResponse[]> {
 		try {
 			const params = new URLSearchParams()
 			params.append( 'from', from.value.toString() )
@@ -64,15 +65,15 @@ export class ProductApiData implements ProductRepository {
 
 			if ( response.statusCode === 200 ) {
 
-				const products: Product[] = []
+				const products: ProductResponse[] = []
 
 				for ( const d of response.data ) {
-					const product = productFromJson( d )
+					const product = productResponseFromJson( d )
 					if ( product instanceof BaseException ) {
 						throw product
 					}
 
-					products.push( product as Product)
+					products.push( product as ProductResponse)
 				}
 
 				return products
@@ -86,7 +87,7 @@ export class ProductApiData implements ProductRepository {
 		}
 	}
 
-	async getProduct( id: UUID ): Promise<Product> {
+	async getProduct( id: UUID ): Promise<ProductResponse> {
 		try {
 			const response = await fetch( `${ this.host }/${ id.value }`, {
 				method: 'GET'
@@ -102,7 +103,7 @@ export class ProductApiData implements ProductRepository {
 	}
 
 	async getProductsByRankThreshold( threshold: ValidRank,
-		limit: ValidInteger ): Promise<Product[]> {
+		limit: ValidInteger ): Promise<ProductResponse[]> {
 		try {
 			const response = await fetch( `${ this.host }/recommend`, {
 				method: 'POST',

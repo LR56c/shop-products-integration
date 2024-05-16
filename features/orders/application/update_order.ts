@@ -1,3 +1,4 @@
+import { OrderResponse } from '../domain/order_response'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import {
@@ -16,7 +17,7 @@ import {
 
 export const UpdateOrder = async ( repo: OrderRepository,
 	orderID: UUID,
-	order: Order,
+	order: OrderResponse,
 	props: {
 		client_email?: string,
 		payment_id?: string,
@@ -43,7 +44,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 	const paymentIdResult = props.payment_id !== undefined
 		? wrapType<UUID, InvalidUUIDException>(
 			() => UUID.from( props.payment_id ?? '' ) )
-		: order.payment
+		: order.payment.id
 
 	if ( paymentIdResult instanceof BaseException ) {
 		errors.push( paymentIdResult )
@@ -51,8 +52,8 @@ export const UpdateOrder = async ( repo: OrderRepository,
 
 	const sellerEmailResult = props.seller_email !== undefined
 		? wrapType<Email, EmailException>(
-			() => Email.from( props.seller_email ?? '' ) )
-		: order.seller_email
+			() => Email.from( props.seller_email!) )
+		: order.seller_email ?? undefined
 
 	if ( sellerEmailResult instanceof BaseException ) {
 		errors.push( sellerEmailResult )
@@ -60,24 +61,24 @@ export const UpdateOrder = async ( repo: OrderRepository,
 
 	const orderConfirmedResult = props.order_confirmed_id !== undefined
 		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.order_confirmed_id ?? '') )
-		: order.order_confirmed
+			() => UUID.from( props.order_confirmed_id!) )
+		: order.order_confirmed?.id ?? undefined
 
-	if ( orderConfirmedResult instanceof BaseException ) {
+	if ( orderConfirmedResult !== undefined && orderConfirmedResult instanceof BaseException ) {
 		errors.push( orderConfirmedResult )
 	}
 
 	const itemConfirmedResult = props.item_confirmed_id !== undefined
 		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.item_confirmed_id ?? '' ) )
-		: order.item_confirmed
+			() => UUID.from( props.item_confirmed_id! ) )
+		: order.item_confirmed?.id ?? undefined
 
 	if ( itemConfirmedResult instanceof BaseException ) {
 		errors.push( itemConfirmedResult )
 	}
 
 	const products = props.products !== undefined ? props.products.map(
-		validatePartialOrderProduct ) : order.products
+		validateOrderProduct ) : order.products.map( p => new OrderProduct( p.quantity, p.product.id ))
 
 	if ( errors.length > 0 ) {
 		throw errors
@@ -95,7 +96,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 	return repo.updateOrder( orderID, newOrder )
 }
 
-function validatePartialOrderProduct( product: {
+function validateOrderProduct( product: {
 	quantity: number,
 	product_id: string,
 } ): OrderProduct {

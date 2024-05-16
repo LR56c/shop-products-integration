@@ -1,8 +1,4 @@
 import { CreateProduct } from '@features/products/application/create_product.ts'
-import {
-	PartialProductProps,
-	Product
-} from '@features/products/domain/models/product.ts'
 import { ProductRepository } from '@features/products/domain/repository/product_repository.ts'
 import { ProductApiData } from '@features/products/infrastructure/product_api_data.ts'
 import { UUID } from '@features/shared/domain/value_objects/UUID.ts'
@@ -11,6 +7,7 @@ import { ValidString } from '@features/shared/domain/value_objects/ValidString.t
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useProductStore } from '../state/product_store'
+import { PartialProductProps } from '../../presentation/products/models/partial_product'
 
 export const productRepository: ProductRepository = new ProductApiData()
 

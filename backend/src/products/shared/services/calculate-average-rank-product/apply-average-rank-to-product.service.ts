@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { Product } from '~features/products/domain/models/product'
+import { GetProduct } from '~features/products/application/get_product'
+import { UpdateProduct } from '~features/products/application/update_product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
 import { ProductRankUpdateEvent } from '~features/shared/domain/events/product_rank_update_event'
 
@@ -13,33 +14,18 @@ export class ApplyAverageRankToProductService {
 	@OnEvent( ProductRankUpdateEvent.tag )
 	async handleEvent( payload: ProductRankUpdateEvent ) {
 		try {
-			const productResult = await this.repository.getProduct(
-				payload.product_code )
+			const productResult = await GetProduct( this.repository, payload.product_id.value)
 
-
-			const newProduct = new Product(
-				productResult.id,
-				productResult.code,
-				productResult.product_code,
-				productResult.name,
-				productResult.description,
-				productResult.created_at,
-				productResult.brand,
-				productResult.price,
-				productResult.image_url,
-				productResult.stock,
-				payload.average_value,
-				productResult.category_name
-			)
-
-			await this.repository.updateProduct( payload.product_code, newProduct )
+			await UpdateProduct( this.repository, payload.product_id, productResult, {
+				average_rank: payload.average_value.value
+			})
 
 			console.log(
-				`success updated average rank of product ${ payload.product_code.value }` )
+				`success updated average rank of product ${ payload.product_id.value }` )
 		}
 		catch ( e ) {
 			console.log(
-				`failed updated average rank of product ${ payload.product_code.value }` )
+				`failed updated average rank of product ${ payload.product_id.value }` )
 			console.log( e )
 		}
 	}

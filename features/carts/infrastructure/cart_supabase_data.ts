@@ -37,16 +37,12 @@ export class CartSupabaseData implements CartRepository {
 
 
 			if ( error != null ) {
-				console.log( 'error' )
-				console.log( error )
 				if ( error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException() ]
 				}
 
 				throw [ new InfrastructureException() ]
 			}
-			console.log( 'data' )
-			console.log( data )
 			return true
 		}
 		catch ( e ) {
@@ -101,8 +97,6 @@ export class CartSupabaseData implements CartRepository {
 			                         .eq( 'user_email', email.value )
 			                         .eq( 'product_id', product_id.value )
 
-			console.log( 'result remove' )
-			console.log( result )
 			if ( result.data?.length === 0 ) {
 				throw [ new ParameterNotMatchException() ]
 			}

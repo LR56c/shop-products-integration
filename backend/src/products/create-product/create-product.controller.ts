@@ -10,10 +10,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreateProductDto } from './create_product_dto'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { CreateProduct } from '~features/products/application/create_product'
-import { Product } from '~features/products/domain/models/product'
+import { CreateProductDto } from 'src/products/shared/dto/create_product_dto'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateProductService } from './create-product.service'
 
@@ -140,17 +138,7 @@ export class CreateProductController {
 	): Promise<HttpResult> {
 		try {
 
-			await this.createProductService.createProduct( {
-				code         : dto.code,
-				product_code : dto.product_code,
-				name         : dto.name,
-				description  : dto.description,
-				brand        : dto.brand,
-				image_url    : dto.image_url,
-				price        : dto.price,
-				stock        : dto.stock,
-				category_name: dto.category
-			})
+			await this.createProductService.createProduct(dto)
 
 			return {
 				statusCode: HttpStatus.OK

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from '~features/products/domain/models/product';
+import { GetProduct } from '~features/products/application/get_product'
+import { ProductResponse } from '~features/products/domain/models/product_response'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
 
 @Injectable()
 export class GetProductService {
     constructor (private repository: ProductRepository) {
     }
-    getProduct(id : UUID) : Promise<Product> {
-        return this.repository.getProduct(id)
+    getProduct(id : string) : Promise<ProductResponse> {
+        return GetProduct(this.repository, id)
     }
 }

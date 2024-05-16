@@ -10,15 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { orderResponseToJson } from '~features/orders/application/order_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { orderToJson } from '~features/orders/application/order_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { GetAllOrdersService } from './get-all-orders.service'
 
 @ApiTags( 'orders' )
@@ -54,15 +48,15 @@ export class GetAllOrdersController {
 							items: {
 								type      : 'object',
 								properties: {
-									id          : {
+									id             : {
 										type   : 'string',
 										example: 'uuid'
 									},
-									seller_email: {
+									seller_email   : {
 										type   : 'string',
 										example: 'string'
 									},
-									client_email: {
+									client_email   : {
 										type   : 'string',
 										example: 'string'
 									},
@@ -70,15 +64,15 @@ export class GetAllOrdersController {
 										type   : 'string',
 										example: 'uuid'
 									},
-									item_confirmed: {
+									item_confirmed : {
 										type   : 'string',
 										example: 'uuid'
 									},
-									created_at  : {
+									created_at     : {
 										type   : 'string',
 										example: 'date'
 									},
-									payment     : {
+									payment        : {
 										type      : 'object',
 										properties: {
 											id              : {
@@ -107,7 +101,7 @@ export class GetAllOrdersController {
 											}
 										}
 									},
-									products    : {
+									products       : {
 										type : 'array',
 										items: {
 											type      : 'object',
@@ -220,14 +214,12 @@ export class GetAllOrdersController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllOrders( { from, to, client_email } )
-
-			const orders = await this.getAllOrdersService.getAllOrders( data.from,
-				data.to, data.client_email )
+			const orders = await this.getAllOrdersService.getAllOrders( from,
+				to, client_email )
 
 			let json: Record<string, any>[] = []
 			for ( const order of orders ) {
-				json.push( orderToJson( order ) )
+				json.push( orderResponseToJson( order ) )
 			}
 
 			return {
@@ -242,55 +234,4 @@ export class GetAllOrdersController {
 			}
 		}
 	}
-
-	parseGetAllOrders( dto: {
-		from: number,
-		to: number,
-		client_email?: string,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			client_email?: Email
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		const client_email = dto.client_email === undefined
-			? undefined
-			: wrapType<Email, EmailException>(
-				() => Email.from( dto.client_email ?? '' ) )
-
-		if ( client_email != undefined && client_email instanceof BaseException ) {
-			errors.push( new EmailException( 'client_email' ) )
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from        : from as ValidInteger,
-				to          : to as ValidInteger,
-				client_email: client_email as Email
-			}
-		}
-	}
-
 }
