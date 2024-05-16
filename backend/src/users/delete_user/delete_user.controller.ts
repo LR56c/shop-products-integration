@@ -10,9 +10,6 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteUserService } from './delete_user.service'
 
@@ -89,24 +86,15 @@ export class DeleteUserController {
 		@Param('email') email: string
 	): Promise<HttpResult> {
 		try {
-			const emailResult = wrapType<Email, BaseException>(
-				() => Email.from( email ) )
-
-			if ( emailResult instanceof BaseException ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message: this.translation.translateAll( [emailResult])
-				}
-			}
-
-			await this.deleteUserService.deleteUser( emailResult )
+			await this.deleteUserService.deleteUser( email )
 			return {
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+				statusCode: HttpStatus.BAD_REQUEST,
+				message: this.translation.translateAll( e )
 			}
 		}
 	}

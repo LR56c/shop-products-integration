@@ -134,14 +134,9 @@ export class RegisterAuthController {
 				throw password
 			}
 
-			const user = parseAuthUser( dto )
-
 			const result = await this.registerAuthService.register(
-				user.email,
-				passwordResult,
-				user.rut,
-				user.name,
-				user.role
+				dto,
+				password
 			)
 
 			return {

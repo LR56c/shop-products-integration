@@ -9,6 +9,7 @@ import { GetUserController } from './get_user/get_user.controller'
 import { GetUserService } from './get_user/get_user.service'
 import { UpdateUserController } from './update_user/update_user.controller'
 import { UpdateUserService } from './update_user/update_user.service'
+import { GetOneUserModule } from './get_one_user/get_one_user.module';
 
 @Module( {
 	controllers: [
@@ -18,7 +19,8 @@ import { UpdateUserService } from './update_user/update_user.service'
 		GetUserService, UpdateUserService, DeleteUserService
 	],
 	imports    : [
-		forwardRef( () => AppModule )
+		forwardRef( () => AppModule ),
+		GetOneUserModule
 	]
 } )
 export class UsersModule {}
