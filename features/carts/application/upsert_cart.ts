@@ -35,7 +35,7 @@ export const UpsertCart = async ( repo: CartRepository, props: {
 	const existCartsUser = await repo.getByUserEmail( emailResult as Email )
 	let checkedQuantity  = 0
 
-	const existCart = existCartsUser.products.find(
+	const existCart = existCartsUser.find(
 		p => p.product.id.value === productIDResult.value )
 
 	if ( existCart !== undefined ) {

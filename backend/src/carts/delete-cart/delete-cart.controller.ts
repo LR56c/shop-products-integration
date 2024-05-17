@@ -10,13 +10,6 @@ import {
   ApiResponse,
   ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteCartService } from './delete-cart.service'
@@ -111,9 +104,7 @@ export class DeleteCartController {
   ): Promise<HttpResult> {
     try {
 
-      const { data } = this.parseDeleteCart( { user_email, product_id } )
-
-      await this.deleteCartService.deleteCart( data.user_email, data.product_id )
+      await this.deleteCartService.deleteCart( user_email, product_id )
 
       return {
         statusCode: HttpStatus.OK
@@ -126,43 +117,4 @@ export class DeleteCartController {
       }
     }
   }
-
-  parseDeleteCart( dto: {
-    user_email: string,
-    product_id: string,
-  } ): {
-    data: {
-      user_email: Email
-      product_id: UUID
-    }
-  }
-  {
-    const errors: BaseException[] = []
-
-    const user_email = wrapType<Email, EmailException>(
-        () => Email.from( dto.user_email ) )
-
-    if ( user_email instanceof EmailException ) {
-      errors.push( new EmailException() )
-    }
-
-    const product_id = wrapType<UUID, InvalidUUIDException>(
-        () => UUID.from( dto.product_id ) )
-
-    if ( product_id instanceof BaseException ) {
-      errors.push( new InvalidUUIDException() )
-    }
-
-    if ( errors.length > 0 ) {
-      throw errors
-    }
-
-    return {
-      data: {
-        user_email: user_email as Email,
-        product_id: product_id as UUID
-      }
-    }
-  }
-
 }

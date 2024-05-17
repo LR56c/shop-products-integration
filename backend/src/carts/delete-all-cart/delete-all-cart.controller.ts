@@ -103,14 +103,7 @@ export class DeleteAllCartController {
 		'user_email' ) user_email: string ): Promise<HttpResult> {
 		try {
 
-			const email = wrapType<Email, EmailException>(
-				() => Email.from( user_email ) )
-
-			if ( email instanceof BaseException ) {
-				throw email
-			}
-
-			await this.deleteAllCartService.deleteAllCart( email as Email )
+			await this.deleteAllCartService.deleteAllCart( user_email )
 
 			return {
 				statusCode: HttpStatus.OK
