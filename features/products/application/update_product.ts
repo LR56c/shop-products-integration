@@ -34,7 +34,8 @@ export const UpdateProduct = async (
 
 	const errors : BaseException[] = []
 
-	const codeResult = props.code !== undefined ? wrapType<ValidString, InvalidStringException>(
+	const codeResult = props.code !== undefined
+		? wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( props.code! ) ) : product.code
 
 	if ( codeResult instanceof BaseException ) {

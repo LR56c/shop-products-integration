@@ -1,3 +1,4 @@
+import { Email } from '../../shared/domain/value_objects/Email'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { UserDao } from '../domain/dao/UserDao'
@@ -16,6 +17,33 @@ import { BaseException } from '../../shared/domain/exceptions/BaseException'
 
 export class UserSupaBaseData implements UserDao {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
+
+	async getOneUser( email: Email ): Promise<User> {
+		try {
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'email', email.value )
+
+			if ( result.error ) {
+				throw [ new InfrastructureException() ]
+			}
+
+			if ( result.data.length === 0 ) {
+				throw [ new ParameterNotMatchException( 'email' ) ]
+			}
+
+			const user = userFromJson( result.data[0] )
+
+			if ( user instanceof BaseException ) {
+				throw user
+			}
+
+			return user as User
+		}
+		catch ( e ) {
+			throw e
+		}
+	}
 
 	readonly tableName = 'users'
 
@@ -75,13 +103,21 @@ export class UserSupaBaseData implements UserDao {
 
 	async deleteUser( email: ValidString ): Promise<boolean> {
 		try {
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'email', email.value )
+
+			if ( result.data?.length === 0 ) {
+				throw [ new ParameterNotMatchException() ]
+			}
+
 			await this.client.from( this.tableName )
 			          .delete()
 			          .eq( 'email', email.value )
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException() ]
+			throw e
 		}
 	}
 
