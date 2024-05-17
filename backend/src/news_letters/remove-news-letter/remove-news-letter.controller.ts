@@ -94,14 +94,8 @@ export class RemoveNewsLetterController {
 		'email' ) email: string ): Promise<HttpResult> {
 		try {
 
-			const emailResult = wrapType<Email, EmailException>(
-				() => Email.from( email ) )
 
-			if ( emailResult instanceof BaseException ) {
-				throw [ new EmailException( 'email' ) ]
-			}
-
-			await this.removeNewsLetterService.remove( emailResult as Email )
+			await this.removeNewsLetterService.remove( email )
 
 			return {
 				statusCode: HttpStatus.OK

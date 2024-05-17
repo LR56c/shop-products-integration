@@ -109,9 +109,8 @@ export class AddNewsLetterController {
 	async addNewsLetter( @Body() dto: NewsLetterDto ): Promise<HttpResult> {
 		try {
 
-			const newsLetter = newsLetterFromJson( dto )
+			await this.addNewsLetterService.addNewsLetter( dto )
 
-			await this.addNewsLetterService.addNewsLetter( newsLetter as NewsLetter )
 			return {
 				statusCode: HttpStatus.OK
 			}

@@ -16,6 +16,7 @@ import { EmailException } from '~features/shared/domain/exceptions/EmailExceptio
 import { Email } from '~features/shared/domain/value_objects/Email'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { CheckNewsLetterService } from './check-news-letter.service'
+import {HttpResultData} from "../../shared/utils/HttpResultData";
 
 @ApiTags( 'news-letters' )
 @Controller( 'news-letters' )
@@ -88,19 +89,12 @@ export class CheckNewsLetterController {
 		}
 	} )
 	async checkNewsLetter( @Param(
-		'email' ) email: string ): Promise<HttpResult> {
+		'email' ) email: string ): Promise<HttpResultData<boolean>> {
 		try {
 
-			const emailResult = wrapType<Email, EmailException>(
-				() => Email.from( email ) )
-
-			if ( emailResult instanceof BaseException ) {
-				throw [ new EmailException() ]
-			}
-
-			const checkNewsLetterResult = await this.checkNewsLetterService.checkNewsLetter(
-				emailResult as Email )
+			const newsLetter = await this.checkNewsLetterService.checkNewsLetter( email )
 			return {
+				data      : newsLetter,
 				statusCode: HttpStatus.OK
 			}
 		}

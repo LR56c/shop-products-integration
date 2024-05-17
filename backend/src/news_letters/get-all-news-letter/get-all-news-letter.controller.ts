@@ -124,21 +124,15 @@ export class GetAllNewsLetterController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllNewsLetter( {
-				from,
-				to,
-				name
-			} )
 
 			const newsLetters = await this.getAllNewsLetterService.getAllNewsLetter(
-				data.from,
-				data.to,
-				data.name
-			)
+				from, to, name)
 
-			const json = newsLetters.map(
-				newsLetter => newsLetterToJson( newsLetter ) )
-
+			let json: Record<string, any>[] = []
+			for ( const newsLetter of newsLetters ) {
+				json.push( newsLetterToJson( newsLetter ) )
+			}
+			
 			return {
 				data      : json,
 				statusCode: HttpStatus.OK
@@ -152,53 +146,4 @@ export class GetAllNewsLetterController {
 		}
 	}
 
-	parseGetAllNewsLetter( dto: {
-		from: number,
-		to: number,
-		name?: string,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			name?: ValidString
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		const name = dto.name === undefined
-			? undefined
-			: wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( dto.name ?? '' ) )
-
-		if ( name != undefined && name instanceof InvalidStringException ) {
-			errors.push( new InvalidStringException( 'name' ) )
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from: from as ValidInteger,
-				to  : to as ValidInteger,
-				name: name as ValidString
-			}
-		}
-	}
 }
