@@ -21,6 +21,7 @@ import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { GetAllCartService } from './get-all-cart.service'
+import {cartResponseToJson} from "~features/carts/application/cart_mapper";
 
 @ApiTags( 'carts' )
 @Controller( 'carts' )
@@ -176,26 +177,12 @@ export class GetAllCartController {
 	{
 		try {
 
-			const { data } = this.parseGetAllCarts( {
-				from,
-				to,
-				user_email
-			} )
+			const carts = await this.getAllCartService.getAllCart( from, to, user_email )
 
-			const result = await this.getAllCartService.getAllCart(
-				data.from,
-				data.to,
-				data.user_email
-			)
-
-			const json = result.map( cart => {
-				return {
-					user_email: cart.userEmail.value,
-					quantity: cart.quantity.value,
-					product: productToJson( cart.product )
-				}
-			} )
-
+			let json: Record<string, any>[] = []
+			for ( const cart of carts ) {
+				json.push(cartResponseToJson( cart ))
+			}
 			return {
 				data      : json,
 				statusCode: HttpStatus.OK
@@ -205,56 +192,6 @@ export class GetAllCartController {
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
-			}
-		}
-	}
-
-	parseGetAllCarts( dto: {
-		from: number,
-		to: number,
-		user_email?: string,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			user_email?: Email
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		const user_email = dto.user_email === undefined
-			? undefined
-			: wrapType<Email, EmailException>(
-				() => Email.from( dto.user_email ?? '' ) )
-
-		if ( user_email != undefined && user_email instanceof EmailException ) {
-			errors.push( new EmailException() )
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from      : from as ValidInteger,
-				to        : to as ValidInteger,
-				user_email: user_email as ValidString
 			}
 		}
 	}

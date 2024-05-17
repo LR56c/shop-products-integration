@@ -18,6 +18,7 @@ import { EmailException } from '~features/shared/domain/exceptions/EmailExceptio
 import { Email } from '~features/shared/domain/value_objects/Email'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { GetCartByUserEmailService } from './get-cart-by-user-email.service'
+import {cartResponseToJson} from "~features/carts/application/cart_mapper";
 
 @ApiTags( 'carts' )
 @Controller( 'carts' )
@@ -172,29 +173,14 @@ export class GetCartByUserEmailController {
 		: Promise<HttpResultData<Record<string, any>>>{
 		try {
 
-			const email = wrapType<Email, EmailException>(
-				() => Email.from( user_email ) )
+			const cart = await this.getCartByUserEmailService.getCartByUserEmail( user_email )
 
-			if ( email instanceof BaseException ) {
-				throw email
-			}
-
-			const result = await this.getCartByUserEmailService.getCartByUserEmail( email as Email )
-
-			const jsonProducts = result.products.map( (c)=>{
-				return {
-					quantity: c.quantity.value,
-					product : productToJson(c.product)
-				}
-
-			} )
 			return {
 				statusCode: HttpStatus.OK,
-				data			: {
-					user_email: result.userEmail.value,
-					products  : jsonProducts
-				}
+				data      : cartResponseToJson( cart)
+
 			}
+
 		}
 		catch ( e ) {
 			return {

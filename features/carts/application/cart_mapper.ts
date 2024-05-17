@@ -7,35 +7,30 @@ import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { wrapType } from '../../shared/utils/WrapType'
 import {
 	Cart,
-	CartUser
 } from '../domain/cart'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import {CartResponse} from "../domain/cart_response";
+import {UUID} from "../../shared/domain/value_objects/UUID";
+import {InvalidUUIDException} from "../../shared/domain/exceptions/InvalidUUIDException";
 
 export function cartToJson( cart: Cart ): Record<string, any> {
 	return {
 		user_email: cart.userEmail.value,
 		quantity  : cart.quantity.value,
-		product_id: cart.product.product_code.value
+		product_id: cart.product.value
 	}
-}
-
-export function cartUserToCartToJson( cart: CartUser ): Record<string, any>[] {
-	return cart.products.map( product => {
-		return {
-			user_email: cart.userEmail.value,
-			quantity  : product.quantity.value,
-			product_id: product.product.product_code.value
-		}
-	} )
 }
 
 export function cartFromJson( json: Record<string, any> ): Cart | BaseException[] {
 
 	const errors: BaseException[] = []
 
-	const product = productFromJson( json.product )
+	const product = wrapType<UUID, InvalidUUIDException>(
+		() => UUID.from( json.product_id ) )
+
 	if ( product instanceof BaseException ) {
-		errors.push( product )
+		errors.push( new InvalidUUIDException( 'product_id' ) )
+
 	}
 
 	const userEmail = wrapType<Email, EmailException>(
@@ -58,7 +53,17 @@ export function cartFromJson( json: Record<string, any> ): Cart | BaseException[
 
 	return new Cart(
 		userEmail as Email,
-		product as Product,
+		product as UUID,
 		quantity as ValidInteger
 	)
+}
+
+export function cartResponseToJson( cart: CartResponse ): Record<string, any>[] {
+	return cart.products.map( product => {
+		return {
+			user_email: cart.userEmail.value,
+			quantity  : product.quantity.value,
+			product_id: product.product.product_code.value
+		}
+	} )
 }
