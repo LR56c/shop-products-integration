@@ -10,13 +10,8 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { CheckNewsLetterService } from './check-news-letter.service'
-import {HttpResultData} from "../../shared/utils/HttpResultData";
 
 @ApiTags( 'news-letters' )
 @Controller( 'news-letters' )

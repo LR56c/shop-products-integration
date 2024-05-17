@@ -13,12 +13,6 @@ import {
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { newsLetterToJson } from '~features/news_letter/application/news_letter_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { GetAllNewsLetterService } from './get-all-news-letter.service'
 
 @ApiTags( 'news-letters' )
@@ -132,7 +126,7 @@ export class GetAllNewsLetterController {
 			for ( const newsLetter of newsLetters ) {
 				json.push( newsLetterToJson( newsLetter ) )
 			}
-			
+
 			return {
 				data      : json,
 				statusCode: HttpStatus.OK

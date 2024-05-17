@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
+import { DeleteNewsLetter } from '~features/news_letter/application/delete_news_letter'
 import { NewsLetterRepository } from '~features/news_letter/domain/news_letter_repository'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import {DeleteNewsLetter} from "~features/news_letter/application/delete_news_letter";
 
 @Injectable()
 export class RemoveNewsLetterService {

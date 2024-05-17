@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { NewsLetter } from '~features/news_letter/domain/news_letter'
 import { NewsLetterRepository } from '~features/news_letter/domain/news_letter_repository'
 import {NewsLetterDto} from "../dto/news_letter_dto";
 import {AddNewsLetter} from "~features/news_letter/application/add_news_letter";

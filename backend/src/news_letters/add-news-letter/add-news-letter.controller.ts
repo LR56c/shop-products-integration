@@ -10,12 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { newsLetterFromJson } from '~features/news_letter/application/news_letter_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { AddNewsLetterService } from './add-news-letter.service'
 import { NewsLetterDto } from '../dto/news_letter_dto'
-import { NewsLetter } from '~features/news_letter/domain/news_letter'
+import { AddNewsLetterService } from './add-news-letter.service'
 
 @ApiTags( 'news-letters' )
 @Controller( 'news-letters' )
