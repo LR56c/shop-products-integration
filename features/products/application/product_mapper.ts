@@ -4,7 +4,7 @@ import {
 } from '../../discount_type/application/discount_mapper'
 import { Discount } from '../../discount_type/domain/discount'
 import {
-	categoryFromJson,
+	categoryFromJson
 } from '../../categories/application/category_mapper'
 import { Category } from '../../categories/domain/category'
 import { ProductResponse } from '../domain/models/product_response'
@@ -177,7 +177,8 @@ export function productResponseToJson( product: ProductResponse ): Record<string
 		stock       : product.stock.value,
 		average_rank: product.average_rank.value,
 		category    : product.category.name.value,
-		discount    : product.discount === undefined ?  null : discountToJson( product.discount )
+		discount    : product.discount === undefined ? null : discountToJson(
+			product.discount )
 	}
 }
 
@@ -269,7 +270,7 @@ export function productResponseFromJson( json: Record<string, any> ): ProductRes
 
 	let discountResult: Discount | undefined = undefined
 	if ( json.discounts !== null ) {
-		const discount = discountFromJson( json.discounts)
+		const discount = discountFromJson( json.discounts )
 		if ( discount instanceof BaseException ) {
 			errors.push( discount )
 		}

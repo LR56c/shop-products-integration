@@ -1,5 +1,4 @@
 import {
-	Body,
 	Controller,
 	Get,
 	HttpStatus,
@@ -10,15 +9,13 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import {
+	cartProductResponseFromJson,
+	cartProductResponseToJson
+} from '~features/carts/application/cart_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { productToJson } from '~features/products/application/product_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { GetCartByUserEmailService } from './get-cart-by-user-email.service'
-import {cartResponseToJson} from "~features/carts/application/cart_mapper";
 
 @ApiTags( 'carts' )
 @Controller( 'carts' )
@@ -172,17 +169,16 @@ export class GetCartByUserEmailController {
 	async getCartByUserEmail( @Param( 'user_email' ) user_email: string )
 		: Promise<HttpResultData<Record<string, any>>>{
 		try {
-
 			const cart = await this.getCartByUserEmailService.getCartByUserEmail( user_email )
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : cartResponseToJson( cart)
-
+				data      : cart.map( cartProductResponseToJson )
 			}
-
 		}
 		catch ( e ) {
+			console.log('e')
+			console.log(e)
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
