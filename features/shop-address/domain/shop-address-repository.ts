@@ -4,6 +4,9 @@ import { ShopAddress } from './shop-address'
 
 export abstract class ShopAddressRepository {
 	abstract createShopAddress( shopAddress: ShopAddress ): Promise<boolean>
+
 	abstract deleteShopAddress( shopAddress: ShopAddress ): Promise<boolean>
-	abstract getShopAddress( from : ValidInteger, to : ValidInteger, name?: ValidString ): Promise<ShopAddress[]>
+
+	abstract getShopAddress( from: ValidInteger, to: ValidInteger,
+		name?: ValidString ): Promise<ShopAddress[]>
 }

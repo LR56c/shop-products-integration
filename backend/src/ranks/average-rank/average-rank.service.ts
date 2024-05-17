@@ -23,10 +23,11 @@ export class AverageRankService {
 			throw [ idResult ]
 		}
 
-		const result = await CalculateAverageRankByCode( this.repo, idResult as UUID)
+		const result = await CalculateAverageRankByCode( this.repo,
+			idResult as UUID )
 
 		this.eventEmitter.emit( ProductRankUpdateEvent.tag, {
-			product_id : idResult,
+			product_id   : idResult,
 			average_value: result
 		} )
 

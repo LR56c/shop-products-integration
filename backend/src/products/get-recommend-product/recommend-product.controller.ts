@@ -10,24 +10,11 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import {
-	productResponseToJson,
-	productToJson
-} from '~features/products/application/product_mapper'
-import { RecommendProduct } from '~features/products/domain/models/recommend_product'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '~features/shared/domain/value_objects/ValidRank'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { productResponseToJson } from '~features/products/application/product_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { RecommendProductService } from './recommend-product.service'
 import { GetRecommendProductDto } from '../shared/dto/get_recommend_product_dto'
+import { RecommendProductService } from './recommend-product.service'
 
 @ApiTags( 'products' )
 @Controller( 'products' )
@@ -197,12 +184,14 @@ export class RecommendProductController {
 		@Body() dto: GetRecommendProductDto
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry( dto)
+			const productsGroupByCategory = await this.getRecommendProductService.recommendProductsGroupByCateogry(
+				dto )
 
 			let json: Record<string, any[]>[] = []
 
 			productsGroupByCategory.forEach( ( productList, key ) => {
-				const products = productList.map( product => productResponseToJson( product ) )
+				const products = productList.map(
+					product => productResponseToJson( product ) )
 				json.push( { [key]: products } )
 			} )
 

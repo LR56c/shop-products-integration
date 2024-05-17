@@ -8,6 +8,6 @@ export class DeleteProductService {
 	}
 
 	async deleteProduct( id: string ): Promise<boolean> {
-		return DeleteProduct( this.repository, id  )
+		return DeleteProduct( this.repository, id )
 	}
 }

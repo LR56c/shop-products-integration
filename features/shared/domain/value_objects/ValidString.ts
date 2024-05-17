@@ -13,7 +13,9 @@ export class ValidString {
 	 * @throws {InvalidStringException} - if string is invalid
 	 */
 	static from( value: string ): ValidString {
-		const result = z.string().min(1).safeParse( value )
+		const result = z.string()
+		                .min( 1 )
+		                .safeParse( value )
 		if ( result.success === false ) {
 			throw new InvalidStringException()
 		}

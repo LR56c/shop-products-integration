@@ -1,7 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { promotionResponseFromJson } from '../application/promotion_mapper'
-import { PromotionResponse } from '../domain/promotion_response'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
@@ -10,10 +8,10 @@ import { ValidString } from '../../../../shared/domain/value_objects/ValidString
 import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../../../shared/infrastructure/parameter_not_match_exception'
-import {
-	PromotionProduct
-} from '../domain/promotion'
+import { promotionResponseFromJson } from '../application/promotion_mapper'
+import { PromotionProduct } from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
+import { PromotionResponse } from '../domain/promotion_response'
 
 function cleanProducts( products, promotions_products ): Record<string, any>[] {
 

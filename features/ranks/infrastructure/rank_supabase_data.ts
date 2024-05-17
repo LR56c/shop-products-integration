@@ -21,7 +21,7 @@ export class RankSupabaseData implements RankRepository {
 			const result = await this.client.from( this.tableName )
 			                         .update( rankToJson( rank ) as any )
 			                         .eq( 'product_code', rank.code.value )
-			                         .eq( 'user_email', rank.user_email.value)
+			                         .eq( 'user_email', rank.user_email.value )
 			if ( result.error?.code === '23503' ) {
 				throw [ new DataNotFoundException() ]
 			}

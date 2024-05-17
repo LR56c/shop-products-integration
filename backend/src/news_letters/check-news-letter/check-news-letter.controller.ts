@@ -87,7 +87,8 @@ export class CheckNewsLetterController {
 		'email' ) email: string ): Promise<HttpResultData<boolean>> {
 		try {
 
-			const newsLetter = await this.checkNewsLetterService.checkNewsLetter( email )
+			const newsLetter = await this.checkNewsLetterService.checkNewsLetter(
+				email )
 			return {
 				data      : newsLetter,
 				statusCode: HttpStatus.OK

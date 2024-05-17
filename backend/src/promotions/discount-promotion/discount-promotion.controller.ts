@@ -10,19 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { DiscounDto } from '../shared/promotion_dto'
+import { promotionResponseToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import {
-	promotionResponseToJson,
-	promotionToJson
-} from '~features/discount_type/features/promotions/application/promotion_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { DiscounDto } from '../shared/promotion_dto'
 import { DiscountPromotionService } from './discount-promotion.service'
 
 @ApiTags( 'promotions' )
@@ -38,10 +29,10 @@ export class DiscountPromotionController {
 		schema: {
 			type      : 'object',
 			properties: {
-				products    : {
+				products: {
 					type : 'array',
 					items: {
-						type: 'object',
+						type      : 'object',
 						properties: {
 							quantity  : {
 								type   : 'number',
@@ -50,7 +41,7 @@ export class DiscountPromotionController {
 							product_id: {
 								type   : 'string',
 								example: '359b6378-f875-4d31-b415-d3de60a59875'
-							},
+							}
 						}
 					}
 				}
@@ -134,9 +125,9 @@ export class DiscountPromotionController {
 		try {
 
 
-			const result = await this.discountPromotionService.execute(dto)
+			const result = await this.discountPromotionService.execute( dto )
 
-			const json   = result.map( promotionResponseToJson )
+			const json = result.map( promotionResponseToJson )
 			// formato alternativo: {promotion, totalProducts, totalPromotion, products[] } []
 
 			return {

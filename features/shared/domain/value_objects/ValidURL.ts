@@ -13,7 +13,9 @@ export class ValidURL {
 	 * @throws {InvalidURLException} - if url is invalid
 	 */
 	static from( value: string ): ValidURL {
-		const result = z.string().url().safeParse(value)
+		const result = z.string()
+		                .url()
+		                .safeParse( value )
 		if ( result.success === false ) {
 			throw new InvalidURLException()
 		}

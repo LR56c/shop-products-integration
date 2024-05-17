@@ -1,30 +1,28 @@
-import { DiscountType } from '../../../domain/discount_type'
-import { InvalidDiscountTypeException } from '../../../domain/invalid_discount_type_exception'
-import {
-	PromotionProductResponse,
-	PromotionResponse
-} from '../domain/promotion_response'
-import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
-import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
-import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
-import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
 import {
 	productFromJson,
 	productToJson
 } from '../../../../products/application/product_mapper'
 import { Product } from '../../../../products/domain/models/product'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
+import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
 import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
+import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
+import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
 import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../../../shared/utils/WrapType'
 import {
 	Promotion,
 	PromotionProduct
 } from '../domain/promotion'
+import {
+	PromotionProductResponse,
+	PromotionResponse
+} from '../domain/promotion_response'
 
 export function promotionToJson( promotion: Promotion ): Record<string, any> {
 	const jsonProducts = promotion.products.map( p => ( {
@@ -101,14 +99,14 @@ export function promotionFromJson( json: Record<string, any> ): Promotion | Base
 			const q = wrapType<ValidInteger, InvalidIntegerException>(
 				() => ValidInteger.from( product.quantity ) )
 
-			if ( q instanceof BaseException) {
+			if ( q instanceof BaseException ) {
 				errors.push( q )
 				break
 			}
 
 			products.push( new PromotionProduct(
 				q as ValidInteger,
-				p as UUID,
+				p as UUID
 			) )
 		}
 	}
@@ -202,14 +200,14 @@ export function promotionResponseFromJson( json: Record<string, any> ): Promotio
 			const q = wrapType<ValidInteger, InvalidIntegerException>(
 				() => ValidInteger.from( product.quantity ) )
 
-			if ( q instanceof BaseException) {
+			if ( q instanceof BaseException ) {
 				errors.push( q )
 				break
 			}
 
 			products.push( new PromotionProductResponse(
 				q as ValidInteger,
-				p as Product,
+				p as Product
 			) )
 		}
 	}

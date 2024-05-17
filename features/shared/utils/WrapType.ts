@@ -17,10 +17,11 @@ export function wrapType<T, Err extends BaseException>( returnFunction: () => T 
 	}
 }
 
-export function wrapTypePartial<T>( defaultValue: T, returnFunction: (value ?: Primitive) => T,
+export function wrapTypePartial<T>( defaultValue: T,
+	returnFunction: ( value ?: Primitive ) => T,
 	updaterValue ?: Primitive ): T {
 	if ( updaterValue !== undefined ) {
-		const result = wrapType( () => returnFunction(updaterValue) )
+		const result = wrapType( () => returnFunction( updaterValue ) )
 		if ( result instanceof BaseException ) {
 			throw result
 		}

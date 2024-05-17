@@ -27,15 +27,15 @@ export class AddNewsLetterController {
 		schema: {
 			type      : 'object',
 			properties: {
-				email          : {
+				email     : {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
-				name          : {
+				name      : {
 					type   : 'string',
 					example: 'John'
 				},
-				created_at  : {
+				created_at: {
 					type   : 'string',
 					example: '2024-04-27'
 				}
@@ -43,15 +43,15 @@ export class AddNewsLetterController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Create a news letter',
-		description: 'Create a news letter by json data',
+		summary    : 'Create a news letter',
+		description: 'Create a news letter by json data'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -63,23 +63,23 @@ export class AddNewsLetterController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -90,15 +90,15 @@ export class AddNewsLetterController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}

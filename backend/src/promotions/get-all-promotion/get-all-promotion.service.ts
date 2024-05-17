@@ -14,7 +14,7 @@ export class GetAllPromotionService {
 			to,
 			name,
 			from_date,
-			to_date,
-		})
+			to_date
+		} )
 	}
 }

@@ -14,7 +14,7 @@ export const GetAllSales = async ( repo: SaleRepository,
 		from_date?: Date,
 		to_date?: Date,
 	} ): Promise<Sale[]> => {
-	const errors : BaseException[] = []
+	const errors: BaseException[] = []
 
 	const fromResult = wrapType<ValidInteger, InvalidIntegerException>(
 		() => ValidInteger.from( props.from ) )
@@ -30,15 +30,19 @@ export const GetAllSales = async ( repo: SaleRepository,
 		errors.push( toResult )
 	}
 
-	const fromDateResult = props.from_date === undefined ? undefined : wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( props.from_date ) )
+	const fromDateResult = props.from_date === undefined
+		? undefined
+		: wrapType<ValidDate, InvalidDateException>(
+			() => ValidDate.from( props.from_date ) )
 
 	if ( fromDateResult instanceof BaseException ) {
 		errors.push( fromDateResult )
 	}
 
-	const toDateResult = props.to_date === undefined ? undefined : wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( props.to_date ) )
+	const toDateResult = props.to_date === undefined
+		? undefined
+		: wrapType<ValidDate, InvalidDateException>(
+			() => ValidDate.from( props.to_date ) )
 
 	if ( toDateResult instanceof BaseException ) {
 		errors.push( toDateResult )

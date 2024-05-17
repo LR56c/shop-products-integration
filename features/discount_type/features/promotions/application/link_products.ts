@@ -1,11 +1,11 @@
-import { PromotionProduct } from '../domain/promotion'
-import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
-import { PromotionRepository } from '../domain/promotion_repository'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
+import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
 import { wrapType } from '../../../../shared/utils/WrapType'
+import { PromotionProduct } from '../domain/promotion'
+import { PromotionRepository } from '../domain/promotion_repository'
 
 export const LinkProducts = async ( repo: PromotionRepository,
 	props: {

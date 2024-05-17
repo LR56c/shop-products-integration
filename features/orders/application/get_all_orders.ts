@@ -30,8 +30,10 @@ export const GetAllOrders = async ( repo: OrderRepository,
 		errors.push( toResult )
 	}
 
-	const emailResult = props.email === undefined ? undefined : wrapType<Email, EmailException>(
-		() => Email.from( props.email! ) )
+	const emailResult = props.email === undefined
+		? undefined
+		: wrapType<Email, EmailException>(
+			() => Email.from( props.email! ) )
 
 	if ( emailResult !== undefined && emailResult instanceof BaseException ) {
 		errors.push( emailResult )

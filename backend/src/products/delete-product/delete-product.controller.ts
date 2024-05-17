@@ -23,15 +23,15 @@ export class DeleteProductController {
 
 	@Delete( ':id' )
 	@ApiOperation( {
-		summary: 'Delete product',
+		summary    : 'Delete product',
 		description: 'Delete product by id'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -43,23 +43,23 @@ export class DeleteProductController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -70,15 +70,15 @@ export class DeleteProductController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -89,7 +89,7 @@ export class DeleteProductController {
 	): Promise<HttpResult> {
 		try {
 
-			await this.deleteProductService.deleteProduct(id )
+			await this.deleteProductService.deleteProduct( id )
 			return {
 				statusCode: HttpStatus.OK
 			}

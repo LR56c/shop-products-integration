@@ -1,14 +1,13 @@
-import { Product } from 'features/products/domain/models/product'
 import { ValidInteger } from 'features/shared/domain/value_objects/ValidInteger'
+import { UUID } from '../../../../shared/domain/value_objects/UUID'
+import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
+import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
 import { Discount } from '../../../domain/discount'
 import {
 	DiscountType,
 	DiscountTypeEnum
 } from '../../../domain/discount_type'
-import { UUID } from '../../../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
-import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
 
 export class Promotion extends Discount {
 	constructor(
@@ -26,10 +25,12 @@ export class Promotion extends Discount {
 		)
 	}
 }
-export class PromotionProduct{
+
+export class PromotionProduct {
 	constructor(
 		readonly quantity: ValidInteger,
-		readonly product : UUID
-	){}
+		readonly product: UUID
+	)
+	{}
 }
 

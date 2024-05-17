@@ -1,4 +1,3 @@
-import { OrderConfirmed } from '../domain/order_confirmed'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -7,12 +6,13 @@ import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { wrapType } from '../../shared/utils/WrapType'
+import { OrderConfirmed } from '../domain/order_confirmed'
 
 export function orderConfirmedToJson( orderConfirmed: OrderConfirmed ): Record<string, any> {
 	return {
 		id              : orderConfirmed.id.value,
-		created_at   : orderConfirmed.creation_date.value,
-		accountant_email: orderConfirmed.accountant_email?.value,
+		created_at      : orderConfirmed.creation_date.value,
+		accountant_email: orderConfirmed.accountant_email?.value
 	}
 }
 

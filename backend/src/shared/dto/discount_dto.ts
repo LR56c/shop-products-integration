@@ -8,24 +8,24 @@ import {
 } from 'class-validator'
 import { DiscountTypeEnum } from '~features/discount_type/domain/discount_type'
 
-export class DiscountDto{
+export class DiscountDto {
 	@IsUUID()
-	id : string
+	id: string
 
-	@IsEnum(DiscountTypeEnum)
+	@IsEnum( DiscountTypeEnum )
 	type: string
 
-	@Min(0)
-	@Max(100)
+	@Min( 0 )
+	@Max( 100 )
 	@IsNumber()
-	percentage : number
+	percentage: number
 
 	@IsDate()
-	creation_date : Date
+	creation_date: Date
 
 	@IsDate()
-	start_date : Date
+	start_date: Date
 
 	@IsDate()
-	end_date : Date
+	end_date: Date
 }

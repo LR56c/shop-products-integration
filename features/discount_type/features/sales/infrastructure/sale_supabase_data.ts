@@ -1,14 +1,14 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { SaleRepository } from '../domain/sale_repository'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
-import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
-import { ParameterNotMatchException } from '../../../../shared/infrastructure/parameter_not_match_exception'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
-import { Sale } from '../domain/sale'
+import { InfrastructureException } from '../../../../shared/infrastructure/infrastructure_exception'
+import { ParameterNotMatchException } from '../../../../shared/infrastructure/parameter_not_match_exception'
 import { saleFromJson } from '../application/sale_mapper'
+import { Sale } from '../domain/sale'
+import { SaleRepository } from '../domain/sale_repository'
 
 export class SaleSupabaseData implements SaleRepository {
 
@@ -70,13 +70,13 @@ export class SaleSupabaseData implements SaleRepository {
 				throw [ new ParameterNotMatchException() ]
 			}
 
-			const json = result.data[0]
+			const json     = result.data[0]
 			const discount = saleFromJson( {
 					...json.discounts,
-				sales: {
-					id        : json.id,
-					product_id: json.product_id
-				}
+					sales: {
+						id        : json.id,
+						product_id: json.product_id
+					}
 				}
 			)
 

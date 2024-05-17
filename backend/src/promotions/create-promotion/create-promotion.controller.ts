@@ -135,7 +135,7 @@ export class CreatePromotionController {
 	): Promise<HttpResult> {
 		try {
 
-			await this.createPromotionService.execute(promotionDto)
+			await this.createPromotionService.execute( promotionDto )
 
 			return {
 				statusCode: HttpStatus.OK

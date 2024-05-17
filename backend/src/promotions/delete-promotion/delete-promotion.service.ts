@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 import { RemoveDiscount } from '~features/discount_type/application/remove_discount'
 import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
 

@@ -11,55 +11,55 @@ import {
 	MinLength
 } from 'class-validator'
 
-export class ProductDto{
+export class ProductDto {
 	@IsOptional()
 	@IsUUID()
-	id : string
+	id: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	code : string
+	code: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	product_code : string
+	product_code: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	name : string
+	name: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	description : string
+	description: string
 
 	@IsDate()
-	created_at : Date
+	created_at: Date
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	brand : string
+	brand: string
 
-	@Min(0)
+	@Min( 0 )
 	@IsInt()
-	price : number
+	price: number
 
 	@IsUrl()
-	image_url : string
+	image_url: string
 
-	@Min(0)
+	@Min( 0 )
 	@IsInt()
-	stock : number
+	stock: number
 
-	@Min(0)
-	@Max(5)
+	@Min( 0 )
+	@Max( 5 )
 	@IsNumber()
-	average_rank : number
+	average_rank: number
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	category : string
+	category: string
 
 	@IsOptional()
 	@IsUUID()
-	discount : string
+	discount: string
 }

@@ -17,19 +17,20 @@ import { DeleteUserService } from './delete_user.service'
 @Controller( 'users' )
 export class DeleteUserController {
 	constructor( private readonly deleteUserService: DeleteUserService,
-		private readonly translation: TranslationService) {}
+		private readonly translation: TranslationService )
+	{}
 
 	@Delete( ':email' )
 	@ApiOperation( {
-		summary: 'Delete user',
-		description: 'Delete user by email',
+		summary    : 'Delete user',
+		description: 'Delete user by email'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -41,23 +42,23 @@ export class DeleteUserController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -68,22 +69,22 @@ export class DeleteUserController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
 		}
 	} )
 	async deleteUser(
-		@Param('email') email: string
+		@Param( 'email' ) email: string
 	): Promise<HttpResult> {
 		try {
 			await this.deleteUserService.deleteUser( email )
@@ -94,7 +95,7 @@ export class DeleteUserController {
 		catch ( e ) {
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
-				message: this.translation.translateAll( e )
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

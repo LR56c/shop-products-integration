@@ -10,12 +10,12 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
-import { HttpResult } from '../../shared/utils/HttpResult'
 import { Category } from '~features/categories/domain/category'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteCategoriesService } from './delete-categories.service'
 
 @ApiTags( 'categories' )

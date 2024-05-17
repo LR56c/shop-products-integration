@@ -12,7 +12,7 @@ import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUID
 import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import {
-	wrapType,
+	wrapType
 } from '../../shared/utils/WrapType'
 
 export const UpdateOrder = async ( repo: OrderRepository,
@@ -52,7 +52,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 
 	const sellerEmailResult = props.seller_email !== undefined
 		? wrapType<Email, EmailException>(
-			() => Email.from( props.seller_email!) )
+			() => Email.from( props.seller_email! ) )
 		: order.seller_email ?? undefined
 
 	if ( sellerEmailResult instanceof BaseException ) {
@@ -61,10 +61,12 @@ export const UpdateOrder = async ( repo: OrderRepository,
 
 	const orderConfirmedResult = props.order_confirmed_id !== undefined
 		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.order_confirmed_id!) )
+			() => UUID.from( props.order_confirmed_id! ) )
 		: order.order_confirmed?.id ?? undefined
 
-	if ( orderConfirmedResult !== undefined && orderConfirmedResult instanceof BaseException ) {
+	if ( orderConfirmedResult !== undefined && orderConfirmedResult instanceof
+		BaseException )
+	{
 		errors.push( orderConfirmedResult )
 	}
 
@@ -78,7 +80,8 @@ export const UpdateOrder = async ( repo: OrderRepository,
 	}
 
 	const products = props.products !== undefined ? props.products.map(
-		validateOrderProduct ) : order.products.map( p => new OrderProduct( p.quantity, p.product.id ))
+		validateOrderProduct ) : order.products.map(
+		p => new OrderProduct( p.quantity, p.product.id ) )
 
 	if ( errors.length > 0 ) {
 		throw errors

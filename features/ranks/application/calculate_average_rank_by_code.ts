@@ -7,7 +7,7 @@ import { wrapType } from '../../shared/utils/WrapType'
 import { RankRepository } from '../domain/rank_repository'
 
 export const CalculateAverageRankByCode = async ( repo: RankRepository,
-	id : UUID ): Promise<ValidRank> => {
+	id: UUID ): Promise<ValidRank> => {
 
 
 	const ranks = await repo.getAllRankByProductID( id )

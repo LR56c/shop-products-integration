@@ -10,7 +10,7 @@ import { NewsLetter } from '../domain/news_letter'
 
 export function newsLetterToJson( news_letter: NewsLetter ): Record<string, any> {
 	return {
-		email: news_letter.userEmail.value,
+		email     : news_letter.userEmail.value,
 		name      : news_letter.name.value,
 		created_at: news_letter.createdAt.value
 	}

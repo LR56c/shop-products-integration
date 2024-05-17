@@ -21,12 +21,14 @@ export class ProductResponse {
 		readonly average_rank: ValidRank,
 		readonly category: ProductCategory,
 		readonly discount?: Discount
-	) {}
+	)
+	{}
 }
 
 
 export class ProductCategory {
 	constructor(
 		readonly name: ValidString
-	) {}
+	)
+	{}
 }

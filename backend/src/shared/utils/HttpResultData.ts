@@ -1,4 +1,4 @@
-import { Translation } from "../services/translation/utils/translation_model";
+import { Translation } from '../services/translation/utils/translation_model'
 
 export interface HttpResultData<T> {
 	data?: T;

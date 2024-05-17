@@ -1,4 +1,3 @@
-import { SaleDto } from './sale_dto'
 import { Sale } from '~features/discount_type/features/sales/domain/sale'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
@@ -8,8 +7,8 @@ import { InvalidUUIDException } from '~features/shared/domain/exceptions/Invalid
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { ValidPercentage } from '~features/shared/domain/value_objects/ValidPercentage'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
+import { SaleDto } from './sale_dto'
 
 export function parseSale( dto: SaleDto ): Sale
 {
@@ -67,6 +66,6 @@ export function parseSale( dto: SaleDto ): Sale
 		percentage as ValidPercentage,
 		creationDate as ValidDate,
 		startDate as ValidDate,
-		endDate as ValidDate,
+		endDate as ValidDate
 	)
 }

@@ -38,7 +38,7 @@ export class CreateOrderController {
 				products    : {
 					type : 'array',
 					items: {
-						type: 'object',
+						type      : 'object',
 						properties: {
 							quantity  : {
 								type   : 'number',
@@ -47,7 +47,7 @@ export class CreateOrderController {
 							product_id: {
 								type   : 'string',
 								example: '359b6378-f875-4d31-b415-d3de60a59875'
-							},
+							}
 						}
 					}
 				}

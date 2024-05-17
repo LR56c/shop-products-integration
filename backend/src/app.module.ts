@@ -99,7 +99,8 @@ import { UsersModule } from './users/users.module'
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
 		ProductsModule,
 		ReportsModule, UsersModule,
-		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule, SalesModule ],
+		ShopsAddressModule, CategoriesModule, AuthModule, RanksModule,
+		SalesModule ],
 	exports  : [ TranslationService, SupabaseClient<Database>, AuthRepository,
 		UserDao, DiscountRepository ]
 } )

@@ -1,19 +1,15 @@
 import { Injectable } from '@nestjs/common'
-import { DiscounDto } from '../shared/promotion_dto'
 import { GetDiscountPromotions } from '~features/discount_type/features/promotions/application/discount_promotion'
-import {
-	PromotionProduct
-} from '~features/discount_type/features/promotions/domain/promotion'
+import { PromotionProduct } from '~features/discount_type/features/promotions/domain/promotion'
 import { PromotionRepository } from '~features/discount_type/features/promotions/domain/promotion_repository'
-import {
-	PromotionResponse
-} from '~features/discount_type/features/promotions/domain/promotion_response'
+import { PromotionResponse } from '~features/discount_type/features/promotions/domain/promotion_response'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
 import { wrapType } from '~features/shared/utils/WrapType'
+import { DiscounDto } from '../shared/promotion_dto'
 
 @Injectable()
 export class DiscountPromotionService {

@@ -32,11 +32,11 @@ export class AddRankController {
 					type   : 'string',
 					example: 'abc2'
 				},
-				user_email: {
+				user_email  : {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
-				rank: {
+				rank        : {
 					type   : 'number',
 					example: 2
 				}
@@ -44,14 +44,14 @@ export class AddRankController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Add rank',
+		summary: 'Add rank'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -63,23 +63,23 @@ export class AddRankController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -90,15 +90,15 @@ export class AddRankController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -123,8 +123,8 @@ export class AddRankController {
 		}
 		catch ( e ) {
 			return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll(e)
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

@@ -65,7 +65,7 @@ export class ShopAddressSupabaseData implements ShopAddressRepository {
 			                   .select()
 
 			if ( name !== undefined ) {
-				result.like( 'name', `%${name.value}%` )
+				result.like( 'name', `%${ name.value }%` )
 			}
 
 			const { data, error } = await result.range( from.value, to.value )

@@ -39,7 +39,7 @@ export class DeleteShopAddressController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Delete shop address',
+		summary    : 'Delete shop address',
 		description: 'Delete shop address by name'
 	} )
 	@ApiResponse( {

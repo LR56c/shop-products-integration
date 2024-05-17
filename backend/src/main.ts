@@ -39,15 +39,15 @@ async function bootstrap() {
 	useContainer( app.select( AppModule ), { fallbackOnErrors: true } )
 
 	app.useGlobalPipes(
-		new I18nValidationPipe(),
-	);
+		new I18nValidationPipe()
+	)
 
 
 	const port = process.env.PORT || 3000
-	await app.listen( port,() => {
+	await app.listen( port, () => {
 		console.log( `Server running on http://localhost:${ port }` )
 		console.log( `Swagger running on http://localhost:${ port }/api` )
-	})
+	} )
 }
 
 bootstrap()
@@ -64,7 +64,7 @@ function formatValidation( errors: ValidationError[],
 				//passengers.0.preferences.0
 				//si es un array
 				formattedErrors[error.property] = error.children.map( ( child ) =>
-				// @ts-ignore
+					// @ts-ignore
 					formatValidation( child.children, isArray )
 				)
 			}

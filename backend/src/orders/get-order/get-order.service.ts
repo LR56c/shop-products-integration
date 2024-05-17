@@ -7,7 +7,7 @@ import { OrderResponse } from '~features/orders/domain/order_response'
 export class GetOrderService {
 	constructor( private readonly repo: OrderRepository ) {}
 
-	async getOrder( id : string ): Promise<OrderResponse> {
-		return GetOrder( this.repo, id  )
+	async getOrder( id: string ): Promise<OrderResponse> {
+		return GetOrder( this.repo, id )
 	}
 }

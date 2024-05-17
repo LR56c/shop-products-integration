@@ -10,13 +10,13 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { HttpResult } from '../../shared/utils/HttpResult'
+import { Category } from '~features/categories/domain/category'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateCategoriesService } from './create-categories.service'
-import { Category } from '~features/categories/domain/category'
 
 @ApiTags( 'categories' )
 @Controller( 'categories' )
@@ -100,7 +100,7 @@ export class CreateCategoriesController {
 		}
 	} )
 	async handle(
-		@Body('name') name: string
+		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
 

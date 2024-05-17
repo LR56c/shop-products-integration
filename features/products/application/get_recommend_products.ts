@@ -65,7 +65,7 @@ export const GetRecommendProductsGroupByCategory = async ( repo: ProductReposito
 		errors.push( new InvalidIntegerException( 'limit' ) )
 	}
 
-	if(errors.length > 0) {
+	if ( errors.length > 0 ) {
 		throw errors
 	}
 

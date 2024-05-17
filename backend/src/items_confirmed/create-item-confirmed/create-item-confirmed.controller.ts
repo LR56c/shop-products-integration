@@ -118,7 +118,7 @@ export class CreateItemConfirmedController {
 
 			const itemConfirmed = parseItemConfirmed( dto )
 
-			await this.createItemConfirmedService.execute( UUID.from(dto.order_id) ,
+			await this.createItemConfirmedService.execute( UUID.from( dto.order_id ),
 				itemConfirmed as ItemConfirmed )
 
 			return {

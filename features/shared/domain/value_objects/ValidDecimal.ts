@@ -13,7 +13,8 @@ export class ValidDecimal {
 	 * @throws {InvalidDecimalException} - if number is invalid
 	 */
 	static from( value: number ): ValidDecimal {
-		const result = z.number().safeParse(value)
+		const result = z.number()
+		                .safeParse( value )
 		if ( result.success === false ) {
 			throw new InvalidDecimalException()
 		}

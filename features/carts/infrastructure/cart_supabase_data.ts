@@ -102,12 +102,12 @@ export class CartSupabaseData implements CartRepository {
 
 			for ( const c of result.data ) {
 
-				const discount = c.products?.discount ?? null
-				const json = {
+				const discount   = c.products?.discount ?? null
+				const json       = {
 					...c,
 					products: {
 						...c.products,
-						discounts : discount
+						discounts: discount
 					}
 				}
 				const cartResult = cartProductResponseFromJson( json )
@@ -115,7 +115,7 @@ export class CartSupabaseData implements CartRepository {
 					throw cartResult
 				}
 
-				cartProducts.push( cartResult as CartProductResponse)
+				cartProducts.push( cartResult as CartProductResponse )
 			}
 
 			return cartProducts

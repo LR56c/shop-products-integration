@@ -1,4 +1,3 @@
-import { ItemConfirmedDto } from './item_confirmed_dto'
 import { ItemConfirmed } from '~features/item_confirmed/domain/item_confirmed'
 import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
@@ -9,6 +8,7 @@ import { Email } from '~features/shared/domain/value_objects/Email'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { wrapType } from '~features/shared/utils/WrapType'
+import { ItemConfirmedDto } from './item_confirmed_dto'
 
 export function parseItemConfirmed( dto: ItemConfirmedDto ): ItemConfirmed | BaseException[]
 {

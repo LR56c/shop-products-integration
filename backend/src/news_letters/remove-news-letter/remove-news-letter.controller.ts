@@ -23,15 +23,15 @@ export class RemoveNewsLetterController {
 
 	@Delete( ':email' )
 	@ApiOperation( {
-		summary: 'Delete news letter',
+		summary    : 'Delete news letter',
 		description: 'Delete news letter by user email'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -43,23 +43,23 @@ export class RemoveNewsLetterController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -70,15 +70,15 @@ export class RemoveNewsLetterController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}

@@ -1,28 +1,26 @@
+import { categoryFromJson } from '../../categories/application/category_mapper'
+import { Category } from '../../categories/domain/category'
 import {
 	discountFromJson,
 	discountToJson
 } from '../../discount_type/application/discount_mapper'
 import { Discount } from '../../discount_type/domain/discount'
-import {
-	categoryFromJson
-} from '../../categories/application/category_mapper'
-import { Category } from '../../categories/domain/category'
-import { ProductResponse } from '../domain/models/product_response'
-import { Product } from '../domain/models/product'
-import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
 import { wrapType } from '../../shared/utils/WrapType'
+import { Product } from '../domain/models/product'
+import { ProductResponse } from '../domain/models/product_response'
 
 export function productToJson( product: Product ): Record<string, any> {
 	return {

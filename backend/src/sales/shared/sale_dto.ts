@@ -1,32 +1,30 @@
 import {
 	IsDate,
 	IsNumber,
-	IsString,
 	IsUUID,
 	Max,
-	Min,
-	MinLength
+	Min
 } from 'class-validator'
 
-export class SaleDto{
+export class SaleDto {
 	@IsUUID()
-	id : string
+	id: string
 
 	@IsUUID()
-	product_id : string
+	product_id: string
 
-	@Min(0)
-	@Max(100)
+	@Min( 0 )
+	@Max( 100 )
 	@IsNumber()
-	percentage : number
+	percentage: number
 
 	@IsDate()
-	created_at : Date
+	created_at: Date
 
 	@IsDate()
-	end_date : Date
+	end_date: Date
 
 	@IsDate()
-	start_date : Date
+	start_date: Date
 
 }

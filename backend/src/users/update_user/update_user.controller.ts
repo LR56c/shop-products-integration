@@ -31,23 +31,23 @@ export class UpdateUserController {
 				user: {
 					type      : 'object',
 					properties: {
-						auth_id  : {
+						auth_id: {
 							type   : 'string',
 							example: '668476f7-b08f-40b6-9e02-faa55aca49b1'
 						},
-						rut  : {
+						rut    : {
 							type   : 'string',
 							example: '123456789-7'
 						},
-						name : {
+						name   : {
 							type   : 'string',
 							example: 'John Doe'
 						},
-						role : {
+						role   : {
 							type   : 'string',
 							example: 'CLIENT'
 						},
-						email: {
+						email  : {
 							type   : 'string',
 							example: 'abc@gmail.com'
 						}

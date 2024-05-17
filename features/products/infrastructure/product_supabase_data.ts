@@ -1,21 +1,21 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { ProductResponse } from '../domain/models/product_response'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
-import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
+import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	productResponseFromJson,
 	productToJson
 } from '../application/product_mapper'
-import { ProductRepository } from '../domain/repository/product_repository'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { Product } from '../domain/models/product'
+import { ProductResponse } from '../domain/models/product_response'
+import { ProductRepository } from '../domain/repository/product_repository'
 
 
 export class ProductSupabaseData implements ProductRepository {
@@ -153,7 +153,8 @@ export class ProductSupabaseData implements ProductRepository {
 		limit: ValidInteger ): Promise<ProductResponse[]> {
 
 		const productsDatabaseResult = await this.client.from( this.tableName )
-		                                         .select( '*, categories(*), discounts(*)' )
+		                                         .select(
+			                                         '*, categories(*), discounts(*)' )
 		                                         .gte( 'average_rank',
 			                                         threshold.value )
 		                                         .limit( limit.value )

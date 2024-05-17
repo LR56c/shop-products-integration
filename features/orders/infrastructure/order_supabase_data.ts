@@ -211,7 +211,7 @@ export class OrderSupabaseData implements OrderRepository {
 				if ( result.error.code === '23505' ) {
 					throw [ new KeyAlreadyExistException() ]
 				}
-					throw [ new InfrastructureException() ]
+				throw [ new InfrastructureException() ]
 			}
 
 			await this.client.from( 'orders_products' )

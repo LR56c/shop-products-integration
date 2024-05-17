@@ -31,7 +31,8 @@ export class Password {
 			                    { message: 'lowercase' } )
 		                    .regex( RegExp( /^(?=.*[A-Z]).*$/ ),
 			                    { message: 'uppercase' } )
-		                    .regex( RegExp( /^(?=.*\d).*$/ ), { message: 'number' } )
+		                    .regex( RegExp( /^(?=.*\d).*$/ ),
+			                    { message: 'number' } )
 		                    .regex( RegExp( /^(?=.*[$@!?&]).*$/ ),
 			                    { message: 'character' } )
 		                    .safeParse( value )

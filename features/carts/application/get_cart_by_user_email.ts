@@ -1,6 +1,6 @@
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import {
-	CartProductResponse,
+	CartProductResponse
 } from '../domain/cart_response'
 import { CartRepository } from '../domain/cart_repository'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'

@@ -9,10 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import {
-	cartProductResponseFromJson,
-	cartProductResponseToJson
-} from '~features/carts/application/cart_mapper'
+import { cartProductResponseToJson } from '~features/carts/application/cart_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetCartByUserEmailService } from './get-cart-by-user-email.service'
@@ -167,9 +164,10 @@ export class GetCartByUserEmailController {
 		}
 	} )
 	async getCartByUserEmail( @Param( 'user_email' ) user_email: string )
-		: Promise<HttpResultData<Record<string, any>>>{
+		: Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const cart = await this.getCartByUserEmailService.getCartByUserEmail( user_email )
+			const cart = await this.getCartByUserEmailService.getCartByUserEmail(
+				user_email )
 
 			return {
 				statusCode: HttpStatus.OK,
@@ -177,8 +175,8 @@ export class GetCartByUserEmailController {
 			}
 		}
 		catch ( e ) {
-			console.log('e')
-			console.log(e)
+			console.log( 'e' )
+			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )

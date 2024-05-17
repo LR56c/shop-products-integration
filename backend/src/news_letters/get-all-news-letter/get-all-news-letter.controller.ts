@@ -49,18 +49,18 @@ export class GetAllNewsLetterController {
 							items: {
 								type      : 'object',
 								properties: {
-									email          : {
+									email     : {
 										type   : 'string',
 										example: 'string'
 									},
-									name          : {
+									name      : {
 										type   : 'string',
 										example: 'string'
 									},
-									created_at          : {
+									created_at: {
 										type   : 'string',
 										example: 'date'
-									},
+									}
 								}
 							}
 						}
@@ -120,7 +120,7 @@ export class GetAllNewsLetterController {
 
 
 			const newsLetters = await this.getAllNewsLetterService.getAllNewsLetter(
-				from, to, name)
+				from, to, name )
 
 			let json: Record<string, any>[] = []
 			for ( const newsLetter of newsLetters ) {

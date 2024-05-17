@@ -12,17 +12,7 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import {
-	promotionResponseToJson,
-	promotionToJson
-} from '~features/discount_type/features/promotions/application/promotion_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { promotionResponseToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
 import { GetAllPromotionService } from './get-all-promotion.service'
 
 @ApiTags( 'promotions' )
@@ -206,7 +196,8 @@ export class GetAllPromotionController {
 		@Query( 'to_date' ) to_date?: string
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const promotions                = await this.getAllPromotionService.execute( from, to, name, from_date, to_date )
+			const promotions                = await this.getAllPromotionService.execute(
+				from, to, name, from_date, to_date )
 			let json: Record<string, any>[] = []
 			for ( const p of promotions ) {
 				json.push( promotionResponseToJson( p ) )

@@ -4,11 +4,11 @@ import {
 	MinLength
 } from 'class-validator'
 
-export class AuthDto{
+export class AuthDto {
 	@IsUUID()
 	id: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
 	token: string
 }

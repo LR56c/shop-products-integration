@@ -7,13 +7,13 @@ import { UUID } from '../../shared/domain/value_objects/UUID'
 
 export const GetProduct = async (
 	repo: ProductRepository,
-	id : string ): Promise<ProductResponse> => {
+	id: string ): Promise<ProductResponse> => {
 
 	const idResult = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( id ) )
 
 	if ( idResult instanceof BaseException ) {
-		throw [ new InvalidUUIDException( 'id' )]
+		throw [ new InvalidUUIDException( 'id' ) ]
 	}
 
 	return repo.getProduct( idResult )

@@ -1,4 +1,3 @@
-
 import {
 	Controller,
 	Get,
@@ -10,16 +9,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import {
-	promotionResponseToJson,
-	promotionToJson
-} from '~features/discount_type/features/promotions/application/promotion_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { promotionResponseToJson } from '~features/discount_type/features/promotions/application/promotion_mapper'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 import { GetPromotionService } from './get-promotion.service'
 
 @ApiTags( 'promotions' )

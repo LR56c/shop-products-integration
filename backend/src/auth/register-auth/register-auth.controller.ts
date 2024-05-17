@@ -11,14 +11,9 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { AuthUserDto } from 'src/auth/register-auth/auth_user_dto'
-import { parseAuthUser } from 'src/auth/shared/parse_auth_user'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import {
-	wrapType,
-	wrapTypes
-} from '~features/shared/utils/WrapType'
+import { wrapTypes } from '~features/shared/utils/WrapType'
 import { InvalidPasswordException } from '~features/user/domain/exceptions/PasswordException'
 import { Password } from '~features/user/domain/models/Password'
 import { RegisterAuthService } from './register-auth.service'
@@ -130,7 +125,7 @@ export class RegisterAuthController {
 			const passwordResult = wrapTypes<Password, InvalidPasswordException>(
 				() => Password.from( password ) )
 
-			if ( !(passwordResult instanceof  Password) ) {
+			if ( !( passwordResult instanceof Password ) ) {
 				throw password
 			}
 
@@ -145,7 +140,7 @@ export class RegisterAuthController {
 			}
 		}
 		catch ( e ) {
-			console.log( 'e ')
+			console.log( 'e ' )
 			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,

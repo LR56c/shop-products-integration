@@ -10,9 +10,9 @@ import { ReportPayment } from '../domain/report_payment'
 
 export function reportPaymentToJson( report: ReportPayment ): Record<string, any> {
 	return {
-		id        : report.id.value,
-		date      : report.date.value,
-		value     : report.value.value
+		id   : report.id.value,
+		date : report.date.value,
+		value: report.value.value
 	}
 }
 
@@ -47,5 +47,5 @@ export function reportPaymentFromJson( json: Record<string, any> ): ReportPaymen
 	return new ReportPayment(
 		id as UUID,
 		date as ValidDate,
-		value as ValidInteger)
+		value as ValidInteger )
 }

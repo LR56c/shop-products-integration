@@ -1,17 +1,17 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	categoryFromJson,
 	categoryToJson
 } from '../application/category_mapper'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
-import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { CategoryRepository } from '../domain/category_repository'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { Category } from '../domain/category'
+import { CategoryRepository } from '../domain/category_repository'
 
 export class CategorySupabaseData implements CategoryRepository {
 	constructor( private readonly client: SupabaseClient<Database> ) {}

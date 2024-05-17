@@ -13,8 +13,11 @@ export class ValidInteger {
 	 * @throws {InvalidIntegerException} - if number is invalid
 	 */
 	static from( value: number ): ValidInteger {
-		const n = Number(value)
-		const result = z.number().min(0).int().safeParse(n)
+		const n      = Number( value )
+		const result = z.number()
+		                .min( 0 )
+		                .int()
+		                .safeParse( n )
 		if ( result.success === false ) {
 			throw new InvalidIntegerException()
 		}

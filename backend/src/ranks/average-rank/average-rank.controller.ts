@@ -10,18 +10,16 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 import { AverageRankService } from './average-rank.service'
 
 @ApiTags( 'ranks' )
 @Controller( 'ranks' )
 export class AverageRankController {
 	constructor( private readonly averageRankService: AverageRankService,
-		private readonly translation: TranslationService, ) {}
+		private readonly translation: TranslationService )
+	{}
 
 	@Post( 'average' )
 	@ApiBody( {
@@ -36,15 +34,15 @@ export class AverageRankController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Calculate average rank',
-		description: 'Calculate average rank by product_code',
+		summary    : 'Calculate average rank',
+		description: 'Calculate average rank by product_code'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -56,23 +54,23 @@ export class AverageRankController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -83,15 +81,15 @@ export class AverageRankController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -99,7 +97,7 @@ export class AverageRankController {
 	} )
 	async handle( @Body( 'product_code' ) id: string ): Promise<HttpResult> {
 		try {
-			await this.averageRankService.execute( id)
+			await this.averageRankService.execute( id )
 
 			return {
 				statusCode: HttpStatus.OK

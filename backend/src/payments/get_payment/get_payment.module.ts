@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { GetPaymentService } from './get_payment.service';
-import { GetPaymentController } from './get_payment.controller';
+import { Module } from '@nestjs/common'
+import { GetPaymentController } from './get_payment.controller'
+import { GetPaymentService } from './get_payment.service'
 
-@Module({
-  controllers: [GetPaymentController],
-  providers: [GetPaymentService],
-})
+@Module( {
+	controllers: [ GetPaymentController ],
+	providers  : [ GetPaymentService ]
+} )
 export class GetPaymentModule {}

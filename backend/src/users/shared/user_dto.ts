@@ -1,21 +1,25 @@
-import { IsString, IsUUID, MinLength} from "class-validator";
+import {
+	IsString,
+	IsUUID,
+	MinLength
+} from 'class-validator'
 
 export class UserDto {
 
-    @IsUUID()
-    auth_id: string
+	@IsUUID()
+	auth_id: string
 
-    @IsString()
-    rut: string
+	@IsString()
+	rut: string
 
-    @MinLength(1)
-    @IsString()
-    name: string
+	@MinLength( 1 )
+	@IsString()
+	name: string
 
-    @IsString()
-    email: string
+	@IsString()
+	email: string
 
-    @IsString()
-    role: string
+	@IsString()
+	role: string
 
 }

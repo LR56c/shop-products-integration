@@ -11,7 +11,7 @@ import { wrapType } from '~features/shared/utils/WrapType'
 export class UpdateOrderService {
 	constructor( private readonly repo: OrderRepository ) {}
 
-	async updateOrder(id: string, order : PartialOrderDto): Promise<boolean> {
+	async updateOrder( id: string, order: PartialOrderDto ): Promise<boolean> {
 
 		const idResult = wrapType<UUID, InvalidUUIDException>(
 			() => UUID.from( id ) )
@@ -23,12 +23,12 @@ export class UpdateOrderService {
 		const orderSaved = await this.repo.getOrder( idResult as UUID )
 
 		return UpdateOrder( this.repo, idResult as UUID, orderSaved, {
-			client_email: order.client_email,
-			payment_id: order.payment_id,
-			products: order.products,
-			seller_email: order.seller_email,
+			client_email      : order.client_email,
+			payment_id        : order.payment_id,
+			products          : order.products,
+			seller_email      : order.seller_email,
 			order_confirmed_id: order.order_confirmed_id,
-			item_confirmed_id: order.item_confirmed_id,
-		})
+			item_confirmed_id : order.item_confirmed_id
+		} )
 	}
 }

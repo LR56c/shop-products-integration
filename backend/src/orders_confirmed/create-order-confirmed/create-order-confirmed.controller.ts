@@ -37,7 +37,7 @@ export class CreateOrderConfirmedController {
 					type   : 'string',
 					example: '3643fe52-f496-4d1f-87b9-d81d71ddf61d'
 				},
-				order_id              : {
+				order_id        : {
 					type   : 'string',
 					example: '2e012d65-178a-41dc-b902-46335ee9f3f1'
 				},

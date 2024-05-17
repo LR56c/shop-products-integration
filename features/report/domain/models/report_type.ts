@@ -1,23 +1,25 @@
-import {z} from "zod";
-import {ReportTypeException} from "../exception/ReportTypeException";
+import { z } from 'zod'
+import { ReportTypeException } from '../exception/ReportTypeException'
 
 export enum ReportTypeEnum {
-    performance = 'PERFORMANCE',
-    sale = 'SALE',
+	performance = 'PERFORMANCE',
+	sale        = 'SALE',
 }
-export class ReportType{
 
-    readonly value : ReportTypeEnum
+export class ReportType {
 
-    private constructor(value : ReportTypeEnum) {
-        this.value = value
-    }
+	readonly value: ReportTypeEnum
 
-    static from(value : string): ReportType {
-        const result =  z.nativeEnum( ReportTypeEnum ).safeParse( value )
-        if ( result.success === false ) {
-            throw new ReportTypeException()
-        }
-        return new ReportType( result.data )
-    }
+	private constructor( value: ReportTypeEnum ) {
+		this.value = value
+	}
+
+	static from( value: string ): ReportType {
+		const result = z.nativeEnum( ReportTypeEnum )
+		                .safeParse( value )
+		if ( result.success === false ) {
+			throw new ReportTypeException()
+		}
+		return new ReportType( result.data )
+	}
 }

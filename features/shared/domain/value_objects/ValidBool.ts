@@ -13,7 +13,8 @@ export class ValidBool {
 	 * @throws {InvalidBooleanException} - if number is invalid
 	 */
 	static from( value: boolean ): ValidBool {
-		const result = z.boolean().safeParse(value)
+		const result = z.boolean()
+		                .safeParse( value )
 		if ( result.success === false ) {
 			throw new InvalidBooleanException()
 		}

@@ -11,17 +11,6 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidRoleException } from '~features/shared/domain/exceptions/InvalidRoleException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import {
-	Role,
-	RoleEnum
-} from '~features/shared/domain/value_objects/Role'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { userToJson } from '~features/user/application/user_mapper'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetUserService } from './get_user.service'
@@ -65,22 +54,22 @@ export class GetUserController {
 							items: {
 								type      : 'object',
 								properties: {
-									rut          : {
+									rut      : {
 										type   : 'string',
 										example: 'string'
 									},
-									name          : {
+									name     : {
 										type   : 'string',
 										example: 'string'
 									},
-									email          : {
+									email    : {
 										type   : 'string',
 										example: 'string'
 									},
-									role_type          : {
+									role_type: {
 										type   : 'string',
 										example: 'string'
-									},
+									}
 								}
 							}
 						}

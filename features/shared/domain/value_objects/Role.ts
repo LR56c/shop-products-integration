@@ -9,7 +9,7 @@ export enum RoleEnum {
 	SELLER      = 'SELLER',
 }
 
-const RoleSchema = z.nativeEnum(RoleEnum)
+const RoleSchema = z.nativeEnum( RoleEnum )
 
 export class Role {
 	readonly value: RoleEnum

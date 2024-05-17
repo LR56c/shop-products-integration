@@ -5,9 +5,9 @@ import { NewsLetterRepository } from '~features/news_letter/domain/news_letter_r
 @Injectable()
 export class RemoveNewsLetterService {
 
-	constructor(private readonly repo : NewsLetterRepository) {}
+	constructor( private readonly repo: NewsLetterRepository ) {}
 
-	 async remove( email: string ): Promise<boolean> {
+	async remove( email: string ): Promise<boolean> {
 		return DeleteNewsLetter( this.repo, email )
 	}
 }

@@ -59,7 +59,7 @@ export function cartFromJson( json: Record<string, any> ): Cart | BaseException[
 	)
 }
 
-export function cartProductResponseFromJson( json: Record<string, any> ): CartProductResponse | BaseException[]{
+export function cartProductResponseFromJson( json: Record<string, any> ): CartProductResponse | BaseException[] {
 
 	const errors: BaseException[] = []
 
@@ -88,8 +88,8 @@ export function cartProductResponseFromJson( json: Record<string, any> ): CartPr
 
 
 export function cartProductResponseToJson( cart: CartProductResponse ): Record<string, any> {
-		return {
-			quantity  : cart.quantity.value,
-			product: productToJson(cart.product)
-		}
+	return {
+		quantity: cart.quantity.value,
+		product : productToJson( cart.product )
+	}
 }

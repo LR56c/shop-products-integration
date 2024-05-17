@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ApplyItemConfirmedService } from './apply-item-confirmed.service';
+import {
+	Test,
+	TestingModule
+} from '@nestjs/testing'
+import { ApplyItemConfirmedService } from './apply-item-confirmed.service'
 
-describe('ApplyItemConfirmedService', () => {
-  let service: ApplyItemConfirmedService;
+describe( 'ApplyItemConfirmedService', () => {
+	let service: ApplyItemConfirmedService
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ApplyItemConfirmedService],
-    }).compile();
+	beforeEach( async () => {
+		const module: TestingModule = await Test.createTestingModule( {
+			providers: [ ApplyItemConfirmedService ]
+		} )
+		                                        .compile()
 
-    service = module.get<ApplyItemConfirmedService>(ApplyItemConfirmedService);
-  });
+		service =
+			module.get<ApplyItemConfirmedService>( ApplyItemConfirmedService )
+	} )
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+	it( 'should be defined', () => {
+		expect( service )
+			.toBeDefined()
+	} )
+} )

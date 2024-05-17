@@ -73,13 +73,13 @@ export class ProductApiData implements ProductRepository {
 						throw product
 					}
 
-					products.push( product as ProductResponse)
+					products.push( product as ProductResponse )
 				}
 
 				return products
 			}
 			else {
-				throw [ new InfrastructureException('get all products')]
+				throw [ new InfrastructureException( 'get all products' ) ]
 			}
 		}
 		catch ( e ) {

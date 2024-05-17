@@ -31,8 +31,8 @@ export class GetAllProductsController {
 		required: false
 	} )
 	@ApiOperation( {
-		summary: 'Get all products',
-		description: 'Get all products from a range of products, and optionally filter by name',
+		summary    : 'Get all products',
+		description: 'Get all products from a range of products, and optionally filter by name'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -155,7 +155,8 @@ export class GetAllProductsController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const products = await this.getAllControllerService.getAll( from, to, name )
+			const products = await this.getAllControllerService.getAll( from, to,
+				name )
 
 			let json: Record<string, any>[] = []
 			for ( const product of products ) {
