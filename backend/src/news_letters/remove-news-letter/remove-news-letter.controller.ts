@@ -10,12 +10,6 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { RemoveNewsLetterService } from './remove-news-letter.service'
 
@@ -94,14 +88,8 @@ export class RemoveNewsLetterController {
 		'email' ) email: string ): Promise<HttpResult> {
 		try {
 
-			const emailResult = wrapType<Email, EmailException>(
-				() => Email.from( email ) )
 
-			if ( emailResult instanceof BaseException ) {
-				throw [ new EmailException( 'email' ) ]
-			}
-
-			await this.removeNewsLetterService.remove( emailResult as Email )
+			await this.removeNewsLetterService.remove( email )
 
 			return {
 				statusCode: HttpStatus.OK
