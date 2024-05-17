@@ -1,7 +1,8 @@
 import {
 	Body,
 	Controller,
-	HttpStatus, Param,
+	HttpStatus,
+	Param,
 	Put
 } from '@nestjs/common'
 import {
@@ -10,13 +11,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreateUserDto } from 'src/users/shared/create_user_dto'
-import { parseUser } from 'src/users/shared/parseUser'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
+import { PartialUserDto } from '../shared/partial_user_dto'
 import { UpdateUserService } from './update_user.service'
-import {PartialProductDto} from "../../products/shared/dto/partial_product_dto";
-import {PartialUserDto} from "../shared/partial_user_dto";
 
 @ApiTags( 'users' )
 @Controller( 'users' )
