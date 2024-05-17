@@ -18,7 +18,6 @@ import { InvalidDateException } from '~features/shared/domain/exceptions/Invalid
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { GetAllSaleService } from './get-all-sale.service'
 
@@ -64,7 +63,7 @@ export class GetAllSaleController {
 										type   : 'string',
 										example: 'uuid'
 									},
-									product_id      : {
+									product_id: {
 										type   : 'string',
 										example: 'uuid'
 									},
@@ -83,7 +82,7 @@ export class GetAllSaleController {
 									start_date: {
 										type   : 'string',
 										example: 'date'
-									},
+									}
 								}
 							}
 						}

@@ -1,4 +1,3 @@
-import { ItemConfirmed } from '../domain/item_confirmed'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -7,6 +6,7 @@ import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { wrapType } from '../../shared/utils/WrapType'
+import { ItemConfirmed } from '../domain/item_confirmed'
 
 export function itemConfirmedToJson( itemConfirmed: ItemConfirmed ): Record<string, any> {
 	return {

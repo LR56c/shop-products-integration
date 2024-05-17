@@ -7,7 +7,7 @@ import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 
-export class OrderResponse{
+export class OrderResponse {
 	constructor(
 		readonly id: UUID,
 		readonly client_email: Email,
@@ -17,12 +17,14 @@ export class OrderResponse{
 		readonly seller_email?: Email,
 		readonly order_confirmed?: OrderConfirmed,
 		readonly item_confirmed?: ItemConfirmed
-	){}
+	)
+	{}
 }
 
 export class OrderProductResponse {
 	constructor(
 		readonly quantity: ValidInteger,
-		readonly product: Product,
-	){}
+		readonly product: Product
+	)
+	{}
 }

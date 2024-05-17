@@ -30,39 +30,39 @@ export class CreateProductController {
 				product: {
 					type      : 'object',
 					properties: {
-						code         : {
+						code        : {
 							type   : 'string',
 							example: 'abc'
 						},
-						product_code : {
+						product_code: {
 							type   : 'string',
 							example: 'abc2'
 						},
-						name         : {
+						name        : {
 							type   : 'string',
 							example: 'n'
 						},
-						brand        : {
+						brand       : {
 							type   : 'string',
 							example: 'b'
 						},
-						price        : {
+						price       : {
 							type   : 'number',
 							example: 2
 						},
-						image_url    : {
+						image_url   : {
 							type   : 'string',
 							example: 'http://img.com/img.jpg'
 						},
-						stock        : {
+						stock       : {
 							type   : 'number',
 							example: 2
 						},
-						description  : {
+						description : {
 							type   : 'string',
 							example: 'd'
 						},
-						category: {
+						category    : {
 							type   : 'string',
 							example: 'TEST'
 						}
@@ -72,15 +72,15 @@ export class CreateProductController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Create a product',
-		description: 'Create a product by json data. Category must exist. product_code & code must be unique',
+		summary    : 'Create a product',
+		description: 'Create a product by json data. Category must exist. product_code & code must be unique'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -92,23 +92,23 @@ export class CreateProductController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -119,15 +119,15 @@ export class CreateProductController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -138,7 +138,7 @@ export class CreateProductController {
 	): Promise<HttpResult> {
 		try {
 
-			await this.createProductService.createProduct(dto)
+			await this.createProductService.createProduct( dto )
 
 			return {
 				statusCode: HttpStatus.OK

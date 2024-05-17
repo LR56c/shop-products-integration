@@ -7,7 +7,8 @@ import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger
 export class GetAllItemConfirmedService {
 	constructor( private readonly repo: ItemConfirmedRepository ) {}
 
-	async execute( from: ValidInteger, to: ValidInteger ): Promise<ItemConfirmed[]> {
+	async execute( from: ValidInteger,
+		to: ValidInteger ): Promise<ItemConfirmed[]> {
 		return this.repo.getAll( from, to )
 	}
 }

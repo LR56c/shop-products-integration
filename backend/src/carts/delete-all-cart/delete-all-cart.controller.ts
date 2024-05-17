@@ -12,10 +12,6 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { DeleteAllCartService } from './delete-all-cart.service'
 
 @ApiTags( 'carts' )
@@ -25,7 +21,7 @@ export class DeleteAllCartController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Delete('all')
+	@Delete( 'all' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -33,7 +29,7 @@ export class DeleteAllCartController {
 				user_email: {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
-				},
+				}
 			}
 		}
 	} )
@@ -103,14 +99,7 @@ export class DeleteAllCartController {
 		'user_email' ) user_email: string ): Promise<HttpResult> {
 		try {
 
-			const email = wrapType<Email, EmailException>(
-				() => Email.from( user_email ) )
-
-			if ( email instanceof BaseException ) {
-				throw email
-			}
-
-			await this.deleteAllCartService.deleteAllCart( email as Email )
+			await this.deleteAllCartService.deleteAllCart( user_email )
 
 			return {
 				statusCode: HttpStatus.OK

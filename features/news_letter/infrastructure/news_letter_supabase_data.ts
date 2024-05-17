@@ -1,18 +1,18 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
+import { Email } from '../../shared/domain/value_objects/Email'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { Email } from '../../shared/domain/value_objects/Email'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	newsLetterFromJson,
 	newsLetterToJson
 } from '../application/news_letter_mapper'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { NewsLetterRepository } from '../domain/news_letter_repository'
 import { NewsLetter } from '../domain/news_letter'
+import { NewsLetterRepository } from '../domain/news_letter_repository'
 
 export class NewsLetterSupabaseData implements NewsLetterRepository {
 
@@ -23,13 +23,13 @@ export class NewsLetterSupabaseData implements NewsLetterRepository {
 	async add( newsLetter: NewsLetter ): Promise<boolean> {
 		try {
 
-		const result = await this.client.from( this.tableName )
-		                         .insert( newsLetterToJson( newsLetter ) as any )
+			const result = await this.client.from( this.tableName )
+			                         .insert( newsLetterToJson( newsLetter ) as any )
 
-		if ( result.error != null ) {
-			throw [ new InfrastructureException() ]
-		}
-		return true
+			if ( result.error != null ) {
+				throw [ new InfrastructureException() ]
+			}
+			return true
 		}
 		catch ( e ) {
 			throw e

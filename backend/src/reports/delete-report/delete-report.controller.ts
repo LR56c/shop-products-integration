@@ -10,12 +10,12 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { DeleteReportService } from './delete-report.service'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
+import { DeleteReportService } from './delete-report.service'
 
 @ApiTags( 'reports' )
 @Controller( 'reports' )

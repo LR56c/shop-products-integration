@@ -5,7 +5,7 @@ import {
 	MinLength
 } from 'class-validator'
 
-export class NewsLetterDto{
+export class NewsLetterDto {
 	@IsEmail()
 	email: string
 

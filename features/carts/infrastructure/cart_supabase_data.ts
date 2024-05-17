@@ -1,21 +1,14 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { CartProductResponse } from 'features/carts/domain/cart_response'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Email } from '../../shared/domain/value_objects/Email'
+import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import {
-	cartFromJson
-} from '../application/cart_mapper'
-import {
-	Cart,
-	CartProduct,
-	CartUser
-} from '../domain/cart'
+import { cartProductResponseFromJson } from '../application/cart_mapper'
 import { CartRepository } from '../domain/cart_repository'
 
 export class CartSupabaseData implements CartRepository {
@@ -49,45 +42,6 @@ export class CartSupabaseData implements CartRepository {
 			throw e
 		}
 
-	}
-
-	async getAll( from: ValidInteger, to: ValidInteger,
-		email?: Email ): Promise<Cart[]> {
-		try {
-			const result = this.client.from( this.tableName )
-			                   .select( '*, product:product_id(*)' )
-
-			if ( email !== undefined ) {
-				result.eq( 'user_email', email.value )
-			}
-
-			const { data, error } = await result.range( from.value, to.value )
-
-			if ( email != undefined && data?.length === 0 ) {
-				throw [ new ParameterNotMatchException( 'user_email' ) ]
-			}
-
-			if ( error ) {
-				if ( error.code === 'PGRST103' ) {
-					throw [ new LimitIsNotInRangeException() ]
-				}
-				throw [ new InfrastructureException() ]
-			}
-
-			const carts: Cart[] = []
-			for ( const json of data ) {
-				const cart = cartFromJson( json )
-				if ( cart instanceof BaseException ) {
-					throw [ cart ]
-				}
-				carts.push( cart as Cart )
-			}
-
-			return carts
-		}
-		catch ( e ) {
-			throw e
-		}
 	}
 
 	async remove( email: Email, product_id: UUID ): Promise<boolean> {
@@ -134,32 +88,37 @@ export class CartSupabaseData implements CartRepository {
 		}
 	}
 
-	async getByUserEmail( email: Email ): Promise<CartUser> {
+	async getByUserEmail( email: Email ): Promise<CartProductResponse[]> {
 		try {
 			const result = await this.client.from( this.tableName )
-			                         .select( '*, product:product_id(*)' )
+			                         .select( '*, products(*)' )
 			                         .eq( 'user_email', email.value )
 
 			if ( result.error ) {
 				throw [ new InfrastructureException() ]
 			}
 
-			const cartProducts: CartProduct[] = []
+			const cartProducts: CartProductResponse[] = []
 
 			for ( const c of result.data ) {
-				const cartResult = cartFromJson( c )
+
+				const discount   = c.products?.discount ?? null
+				const json       = {
+					...c,
+					products: {
+						...c.products,
+						discounts: discount
+					}
+				}
+				const cartResult = cartProductResponseFromJson( json )
 				if ( cartResult instanceof BaseException ) {
 					throw cartResult
 				}
 
-				const cart = cartResult as Cart
-				cartProducts.push( new CartProduct(
-					cart.quantity,
-					cart.product
-				) )
+				cartProducts.push( cartResult as CartProductResponse )
 			}
 
-			return new CartUser( email, cartProducts )
+			return cartProducts
 		}
 		catch ( e ) {
 			throw e

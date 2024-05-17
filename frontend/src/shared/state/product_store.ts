@@ -3,12 +3,12 @@ import { create } from 'zustand'
 
 export interface ProductState {
 	products: ProductResponse[]
-	setProducts: ( products : ProductResponse[] ) => void
+	setProducts: ( products: ProductResponse[] ) => void
 }
 
 export const useProductStore = create<ProductState>( ( setState ) => ( {
 	products   : [],
-	setProducts: ( products : ProductResponse[] ) => {
+	setProducts: ( products: ProductResponse[] ) => {
 		setState( {
 			products: products
 		} )

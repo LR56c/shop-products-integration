@@ -10,12 +10,12 @@ import {
 } from 'class-validator'
 
 export class GetRecommendProductDto {
-	@Max(5)
-	@Min(0)
+	@Max( 5 )
+	@Min( 0 )
 	@IsInt()
 	threshold: number
 
-	@Min(0)
+	@Min( 0 )
 	@IsInt()
 	limit: number
 
@@ -26,9 +26,9 @@ export class GetRecommendProductDto {
 
 export class RecommendedProductDto {
 	@IsUUID()
-	id : string
+	id: string
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
 	category: string
 }

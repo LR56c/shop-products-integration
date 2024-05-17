@@ -10,11 +10,7 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { CheckNewsLetterService } from './check-news-letter.service'
 
 @ApiTags( 'news-letters' )
@@ -88,19 +84,13 @@ export class CheckNewsLetterController {
 		}
 	} )
 	async checkNewsLetter( @Param(
-		'email' ) email: string ): Promise<HttpResult> {
+		'email' ) email: string ): Promise<HttpResultData<boolean>> {
 		try {
 
-			const emailResult = wrapType<Email, EmailException>(
-				() => Email.from( email ) )
-
-			if ( emailResult instanceof BaseException ) {
-				throw [ new EmailException() ]
-			}
-
-			const checkNewsLetterResult = await this.checkNewsLetterService.checkNewsLetter(
-				emailResult as Email )
+			const newsLetter = await this.checkNewsLetterService.checkNewsLetter(
+				email )
 			return {
+				data      : newsLetter,
 				statusCode: HttpStatus.OK
 			}
 		}

@@ -44,11 +44,11 @@ export class GetItemConfirmedController {
 						data      : {
 							type      : 'object',
 							properties: {
-								id              : {
+								id               : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								created_at      : {
+								created_at       : {
 									type   : 'string',
 									example: 'date'
 								},

@@ -70,7 +70,7 @@ export class GetReportController {
 										type   : 'string',
 										example: 'uuid'
 									},
-									name       : {
+									name      : {
 										type   : 'string',
 										example: 'string'
 									},

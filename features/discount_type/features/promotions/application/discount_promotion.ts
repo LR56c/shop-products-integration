@@ -1,10 +1,10 @@
-import { PromotionResponse } from '../domain/promotion_response'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
-import { wrapType } from '../../../../shared/utils/WrapType'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
+import { wrapType } from '../../../../shared/utils/WrapType'
 import { PromotionProduct } from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
+import { PromotionResponse } from '../domain/promotion_response'
 
 //TODO: como mejora, se podria agregar category a promotionProduct que llegan, y a clase discount, para comparar solo los productos de la misma categoria
 export const GetDiscountPromotions = async ( repo: PromotionRepository,
@@ -57,8 +57,9 @@ export const GetDiscountPromotions = async ( repo: PromotionRepository,
 						promotions.push( db_promotion )
 					}
 					else {
-						const newProduct = new PromotionProduct( ValidInteger.from(remaining), paramProduct.product )
-						products_map.set( paramProduct.product.value, newProduct)
+						const newProduct = new PromotionProduct(
+							ValidInteger.from( remaining ), paramProduct.product )
+						products_map.set( paramProduct.product.value, newProduct )
 					}
 					validProductCount++
 				}

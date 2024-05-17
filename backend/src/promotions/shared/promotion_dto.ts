@@ -11,42 +11,42 @@ import {
 	ValidateNested
 } from 'class-validator'
 
-export class PromotionDto{
+export class PromotionDto {
 	@IsOptional()
 	@IsUUID()
-	id : string
+	id: string
 
 	@MinLength( 1 )
 	@IsString()
-	name : string
+	name: string
 
-	@Min(0)
-	@Max(100)
+	@Min( 0 )
+	@Max( 100 )
 	@IsNumber()
-	percentage : number
+	percentage: number
 
 	@IsDate()
-	created_at : Date
+	created_at: Date
 
 	@IsDate()
-	end_date : Date
+	end_date: Date
 
 	@IsDate()
-	start_date : Date
+	start_date: Date
 
 	@ValidateNested()
 	@Type( () => PromotionProductDto )
 	products: PromotionProductDto[]
 }
 
-export class DiscounDto{
+export class DiscounDto {
 	@ValidateNested()
 	@Type( () => PromotionProductDto )
 	products: PromotionProductDto[]
 }
 
 export class PromotionProductDto {
-	@IsUUID( )
+	@IsUUID()
 	product_id: string
 
 	@Min( 1 )

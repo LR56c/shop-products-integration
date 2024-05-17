@@ -8,14 +8,15 @@ import { Product } from '../models/product'
 export abstract class ProductRepository {
 	abstract createProduct( product: Product ): Promise<boolean>
 
-	abstract deleteProduct( id : UUID ): Promise<boolean>
+	abstract deleteProduct( id: UUID ): Promise<boolean>
 
 	abstract getAll( from: ValidInteger, to: ValidInteger,
 		name ?: ValidString ): Promise<ProductResponse[]>
 
-	abstract getProduct( id : UUID ): Promise<ProductResponse>
+	abstract getProduct( id: UUID ): Promise<ProductResponse>
 
-	abstract getProductsByRankThreshold( threshold: ValidRank, limit: ValidInteger ): Promise<ProductResponse[]>
+	abstract getProductsByRankThreshold( threshold: ValidRank,
+		limit: ValidInteger ): Promise<ProductResponse[]>
 
-	abstract updateProduct(id: UUID, product: Product ): Promise<boolean>
+	abstract updateProduct( id: UUID, product: Product ): Promise<boolean>
 }

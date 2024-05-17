@@ -97,7 +97,7 @@ export class CreateReportController {
 	} )
 	async createReport(
 		@Body( 'type' ) type: string
-		): Promise<HttpResultData<string>> {
+	): Promise<HttpResultData<string>> {
 		try {
 			const typeResult = wrapType<ReportType, ReportTypeException>(
 				() => ReportType.from( type ) )
@@ -105,7 +105,8 @@ export class CreateReportController {
 				throw typeResult
 			}
 
-			const result = await this.createReportService.createReport( typeResult as ReportType )
+			const result = await this.createReportService.createReport(
+				typeResult as ReportType )
 
 			return {
 				statusCode: HttpStatus.OK,

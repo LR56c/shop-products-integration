@@ -1,18 +1,15 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { OrderConfirmedRepository } from '../domain/order_confirmed_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import {
-	orderConfirmedFromJson,
-	orderConfirmedToJson
-} from '../application/order_confirmed_mapper'
+import { orderConfirmedFromJson } from '../application/order_confirmed_mapper'
 import { OrderConfirmed } from '../domain/order_confirmed'
+import { OrderConfirmedRepository } from '../domain/order_confirmed_repository'
 
 export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 
@@ -23,10 +20,10 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 	async create( order_confirmed: OrderConfirmed ): Promise<boolean> {
 		const result = await this.client.from( this.tableName )
 		                         .insert( {
-				                         id              : order_confirmed.id.value,
-				                         created_at   : order_confirmed.creation_date.value,
-				                         accountant_email: order_confirmed.accountant_email?.value
-			                         } as any)
+			                         id              : order_confirmed.id.value,
+			                         created_at      : order_confirmed.creation_date.value,
+			                         accountant_email: order_confirmed.accountant_email?.value
+		                         } as any )
 
 		if ( result.error != null ) {
 			if ( result.error.code === '23505' ) {

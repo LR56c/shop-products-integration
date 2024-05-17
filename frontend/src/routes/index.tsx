@@ -1,9 +1,10 @@
 import { useForm } from '@tanstack/react-form'
-import {
-	createFileRoute,
-} from '@tanstack/react-router'
-import { TextField, TextFieldValidation } from '../shared/ui_component/TextField'
+import { createFileRoute } from '@tanstack/react-router'
 import { useProducts } from '../shared/hooks/useProducts'
+import {
+	TextField,
+	TextFieldValidation
+} from '../shared/ui_component/TextField'
 
 export const Route = createFileRoute( '/' )( {
 	component: Index
@@ -14,7 +15,7 @@ function Index() {
 
 	const { Field, handleSubmit } = useForm( {
 		defaultValues: {
-			password : '',
+			password: '',
 			isChecked: false
 		},
 		onSubmit     : async ( { value } ) => {
@@ -27,7 +28,7 @@ function Index() {
 	return (
 		<>
 			<div>hola</div>
-			<div>data: {products.length}</div>
+			<div>data: { products.length }</div>
 			<form onSubmit={ ( e ) => {
 				e.preventDefault()
 				handleSubmit()

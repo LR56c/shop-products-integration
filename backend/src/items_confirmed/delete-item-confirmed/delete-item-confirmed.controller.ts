@@ -99,7 +99,7 @@ export class DeleteItemConfirmedController {
 				throw [ new InvalidUUIDException( 'id' ) ]
 			}
 
-			await this.deleteItemConfirmedService.execute( idResult)
+			await this.deleteItemConfirmedService.execute( idResult )
 			return {
 				statusCode: HttpStatus.OK
 			}

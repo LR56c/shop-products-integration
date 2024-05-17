@@ -1,4 +1,4 @@
-import {PaymentDto} from "../shared/payment_dto";
+import { PaymentDto } from '../shared/payment_dto'
 
 export class UpdatePaymentDto extends PaymentDto {
 

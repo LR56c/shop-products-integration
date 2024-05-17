@@ -10,8 +10,8 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { rankToJson } from '~features/ranks/application/rank_mapper'
-import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetAllRankByCodeService } from './get-all-rank-by-code.service'
 
 @ApiTags( 'ranks' )
@@ -23,8 +23,8 @@ export class GetAllRankByCodeController {
 
 	@Get( ':product_code' )
 	@ApiOperation( {
-		summary: 'Get all rank',
-		description: 'Get all rank by code',
+		summary    : 'Get all rank',
+		description: 'Get all rank by code'
 	} )
 	@ApiResponse( {
 		status : 200,
@@ -46,18 +46,18 @@ export class GetAllRankByCodeController {
 										type   : 'string',
 										example: 'uuid'
 									},
-									created_at          : {
+									created_at  : {
 										type   : 'string',
 										example: 'date'
 									},
-									value          : {
+									value       : {
 										type   : 'string',
 										example: 'integer'
 									},
-									product_code          : {
+									product_code: {
 										type   : 'string',
 										example: 'string'
-									},
+									}
 								}
 							}
 						}
@@ -67,23 +67,23 @@ export class GetAllRankByCodeController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -94,15 +94,15 @@ export class GetAllRankByCodeController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}

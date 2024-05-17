@@ -1,9 +1,9 @@
-import { PromotionRepository } from '../domain/promotion_repository'
-import { PromotionResponse } from '../domain/promotion_response'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { wrapType } from '../../../../shared/utils/WrapType'
+import { PromotionRepository } from '../domain/promotion_repository'
+import { PromotionResponse } from '../domain/promotion_response'
 
 export const GetPromotion = async ( repo: PromotionRepository,
 	id: string ): Promise<PromotionResponse> => {

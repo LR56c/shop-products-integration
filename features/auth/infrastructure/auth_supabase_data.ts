@@ -25,8 +25,8 @@ export class AuthSupabaseData implements AuthRepository {
 				password: password.value
 			} )
 			if ( authResult.error ) {
-				console.log('error')
-				console.log(authResult.error)
+				console.log( 'error' )
+				console.log( authResult.error )
 				throw [ new InfrastructureException() ]
 			}
 
@@ -40,8 +40,8 @@ export class AuthSupabaseData implements AuthRepository {
 			}
 
 			const t = await this.client.auth.getSession()
-			console.log('t.data.session.access_token')
-			console.log(t.data.session?.access_token)
+			console.log( 't.data.session.access_token' )
+			console.log( t.data.session?.access_token )
 			const token = wrapType<ValidString, InvalidStringException>(
 				() => ValidString.from( authResult.data.session?.access_token ?? '' ) )
 
@@ -50,8 +50,8 @@ export class AuthSupabaseData implements AuthRepository {
 			}
 
 			if ( errors.length > 0 ) {
-				console.log( 'errr')
-				console.log( errors)
+				console.log( 'errr' )
+				console.log( errors )
 				throw errors
 			}
 

@@ -9,14 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import {
-	productResponseToJson,
-	productToJson
-} from '~features/products/application/product_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { productResponseToJson } from '~features/products/application/product_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetProductService } from './get-product.service'
@@ -31,71 +24,71 @@ export class GetProductController {
 
 	@Get( ':id' )
 	@ApiOperation( {
-		summary: 'Get product',
-		description: 'Get product by id',
+		summary    : 'Get product',
+		description: 'Get product by id'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 200
 						},
-						data			: {
-							type: 'object',
+						data      : {
+							type      : 'object',
 							properties: {
-								id           : {
+								id          : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								code         : {
+								code        : {
 									type   : 'string',
 									example: 'string'
 								},
-								product_code         : {
+								product_code: {
 									type   : 'string',
 									example: 'string'
 								},
-								name         : {
+								name        : {
 									type   : 'string',
 									example: 'string'
 								},
-								description  : {
+								description : {
 									type   : 'string',
 									example: 'string'
 								},
-								created_at    : {
+								created_at  : {
 									type   : 'string',
 									example: 'date'
 								},
-								brand  : {
+								brand       : {
 									type   : 'string',
 									example: 'string'
 								},
-								price  : {
+								price       : {
 									type   : 'string',
 									example: 'number'
 								},
-								image_url  : {
+								image_url   : {
 									type   : 'string',
 									example: 'url'
 								},
-								stock  : {
+								stock       : {
 									type   : 'string',
 									example: 'number'
 								},
-								average_rank  : {
+								average_rank: {
 									type   : 'string',
 									example: 'decimal'
 								},
-								category  : {
+								category    : {
 									type   : 'string',
 									example: 'string'
-								},
+								}
 							}
 						}
 					}
@@ -104,23 +97,23 @@ export class GetProductController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -131,15 +124,15 @@ export class GetProductController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -150,7 +143,7 @@ export class GetProductController {
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
 
-			const product = await this.getProductService.getProduct( id)
+			const product = await this.getProductService.getProduct( id )
 
 			return {
 				data      : productResponseToJson( product ),

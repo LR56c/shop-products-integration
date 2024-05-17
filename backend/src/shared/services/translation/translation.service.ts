@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { I18nService } from 'nestjs-i18n'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { flatErrors } from './utils/flat_errors'
 import { manualTranslation } from './utils/manual_translation'
 
 import { Translation } from './utils/translation_model'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 
 @Injectable()
 export class TranslationService {

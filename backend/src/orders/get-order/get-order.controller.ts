@@ -40,15 +40,15 @@ export class GetOrderController {
 						data      : {
 							type      : 'object',
 							properties: {
-								id          : {
+								id             : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								seller_email: {
+								seller_email   : {
 									type   : 'string',
 									example: 'string'
 								},
-								client_email: {
+								client_email   : {
 									type   : 'string',
 									example: 'string'
 								},
@@ -56,15 +56,15 @@ export class GetOrderController {
 									type   : 'string',
 									example: 'uuid'
 								},
-								item_confirmed: {
+								item_confirmed : {
 									type   : 'string',
 									example: 'uuid'
 								},
-								created_at  : {
+								created_at     : {
 									type   : 'string',
 									example: 'date'
 								},
-								payment     : {
+								payment        : {
 									type      : 'object',
 									properties: {
 										id              : {
@@ -93,7 +93,7 @@ export class GetOrderController {
 										}
 									}
 								},
-								products    : {
+								products       : {
 									properties: {
 										id          : {
 											type   : 'string',

@@ -33,15 +33,15 @@ import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDate
 
 export function orderToJson( order: Order ): Record<string, any> {
 	const jsonProducts = order.products.map( p => ( {
-		quantity: p.quantity.value,
-		product_id : p.product
+		quantity  : p.quantity.value,
+		product_id: p.product
 	} ) )
 	return {
 		id             : order.id.value,
 		client_email   : order.client_email.value,
 		created_at     : order.creation_date.value,
-		payment_id        : order.payment.value,
-		products       :jsonProducts,
+		payment_id     : order.payment.value,
+		products       : jsonProducts,
 		seller_email   : order.seller_email?.value ?? null,
 		order_confirmed: order.order_confirmed?.value ?? null,
 		item_confirmed : order.item_confirmed?.value ?? null
@@ -72,7 +72,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
-	const payment                      = wrapType<UUID, InvalidUUIDException>(
+	const payment = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.payment ) )
 
 	if ( id instanceof BaseException ) {
@@ -83,7 +83,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 
 	if ( json.products !== null ) {
 		for ( const product of json.products ) {
-			const p                      = wrapType<UUID, InvalidUUIDException>(
+			const p = wrapType<UUID, InvalidUUIDException>(
 				() => UUID.from( json.product_id ) )
 
 			if ( p instanceof BaseException ) {
@@ -93,13 +93,13 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 			const q = wrapType<ValidInteger, InvalidIntegerException>(
 				() => ValidInteger.from( product.quantity ) )
 
-			if ( q instanceof BaseException) {
+			if ( q instanceof BaseException ) {
 				errors.push( q )
 				break
 			}
 			products.push( new OrderProduct(
 				q as ValidInteger,
-				p as UUID,
+				p as UUID
 			) )
 		}
 	}
@@ -118,7 +118,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 
 	let itemResult: UUID | undefined = undefined
 	if ( json.item_confirmed !== null ) {
-		const item                      = wrapType<UUID, InvalidUUIDException>(
+		const item = wrapType<UUID, InvalidUUIDException>(
 			() => UUID.from( json.item_confirmed ) )
 
 		if ( item instanceof BaseException ) {
@@ -131,7 +131,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 
 	let orderResult: UUID | undefined = undefined
 	if ( json.orders_confirmed !== null ) {
-		const order                      = wrapType<UUID, InvalidUUIDException>(
+		const order = wrapType<UUID, InvalidUUIDException>(
 			() => UUID.from( json.orders_confirmed ) )
 
 		if ( order instanceof BaseException ) {
@@ -169,10 +169,16 @@ export function orderResponseToJson( order: OrderResponse ): Record<string, any>
 		client_email   : order.client_email.value,
 		created_at     : order.creation_date.value,
 		payment        : paymentToJson( order.payment ),
-		products       :jsonProducts,
-		seller_email   : order.seller_email === undefined ? null : order.seller_email.value,
-		order_confirmed: order.order_confirmed === undefined ? null : order.order_confirmed.id.value,
-		item_confirmed : order.item_confirmed === undefined ? null : order.item_confirmed.id.value
+		products       : jsonProducts,
+		seller_email   : order.seller_email === undefined
+			? null
+			: order.seller_email.value,
+		order_confirmed: order.order_confirmed === undefined
+			? null
+			: order.order_confirmed.id.value,
+		item_confirmed : order.item_confirmed === undefined
+			? null
+			: order.item_confirmed.id.value
 	}
 }
 
@@ -214,7 +220,7 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 
 			const p = productFromJson( product )
 
-			if ( p instanceof BaseException) {
+			if ( p instanceof BaseException ) {
 				errors.push( p )
 				break
 			}
@@ -222,13 +228,13 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 			const q = wrapType<ValidInteger, InvalidIntegerException>(
 				() => ValidInteger.from( product.quantity ) )
 
-			if ( q instanceof BaseException) {
+			if ( q instanceof BaseException ) {
 				errors.push( q )
 				break
 			}
 			products.push( new OrderProductResponse(
 				q as ValidInteger,
-				p as Product,
+				p as Product
 			) )
 		}
 	}

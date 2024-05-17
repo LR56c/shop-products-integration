@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
+	Param,
 	Put
 } from '@nestjs/common'
 import {
@@ -10,10 +11,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreateUserDto } from 'src/users/shared/create_user_dto'
-import { parseUser } from 'src/users/shared/parseUser'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
+import { PartialUserDto } from '../shared/partial_user_dto'
 import { UpdateUserService } from './update_user.service'
 
 @ApiTags( 'users' )
@@ -31,23 +31,23 @@ export class UpdateUserController {
 				user: {
 					type      : 'object',
 					properties: {
-						auth_id  : {
+						auth_id: {
 							type   : 'string',
 							example: '668476f7-b08f-40b6-9e02-faa55aca49b1'
 						},
-						rut  : {
+						rut    : {
 							type   : 'string',
 							example: '123456789-7'
 						},
-						name : {
+						name   : {
 							type   : 'string',
 							example: 'John Doe'
 						},
-						role : {
+						role   : {
 							type   : 'string',
 							example: 'CLIENT'
 						},
-						email: {
+						email  : {
 							type   : 'string',
 							example: 'abc@gmail.com'
 						}
@@ -119,12 +119,12 @@ export class UpdateUserController {
 		}
 	} )
 	async updateUser(
-		@Body( 'user' ) dto: CreateUserDto
+		@Param( 'email' ) email: string,
+		@Body( 'user' ) dto: PartialUserDto
 	): Promise<HttpResult> {
 		try {
-			const data = parseUser( dto )
 
-			await this.updateUserService.updateUser( data.email, data )
+			await this.updateUserService.updateUser( email, dto )
 
 			return {
 				statusCode: HttpStatus.OK

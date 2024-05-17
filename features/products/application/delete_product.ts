@@ -11,7 +11,7 @@ export const DeleteProduct = async (
 		() => UUID.from( id ) )
 
 	if ( idResult instanceof BaseException ) {
-		throw [ new InvalidUUIDException( 'id' )]
+		throw [ new InvalidUUIDException( 'id' ) ]
 	}
 
 	return repo.deleteProduct( idResult )

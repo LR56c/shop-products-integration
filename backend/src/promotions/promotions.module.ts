@@ -34,7 +34,7 @@ import { GetPromotionService } from './get-promotion/get-promotion.service'
 		GetAllPromotionService, GetPromotionService
 	],
 	imports    : [
-		forwardRef( () => AppModule ),
+		forwardRef( () => AppModule )
 	]
 } )
 export class PromotionsModule {}

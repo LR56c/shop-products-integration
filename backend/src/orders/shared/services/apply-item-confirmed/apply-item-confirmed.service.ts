@@ -15,7 +15,7 @@ export class ApplyItemConfirmedService {
 			const order = await GetOrder( this.repo, payload.order_id.value )
 
 			await UpdateOrder( this.repo, payload.order_id, order, {
-				order_confirmed_id: payload.item_confirmed_id.value,
+				order_confirmed_id: payload.item_confirmed_id.value
 			} )
 
 			console.log(

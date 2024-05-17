@@ -10,8 +10,9 @@ export class Discount {
 		readonly percentage: ValidPercentage,
 		readonly creation_date: ValidDate,
 		readonly start_date: ValidDate,
-		readonly end_date: ValidDate,
-	) {}
+		readonly end_date: ValidDate
+	)
+	{}
 }
 
 export type DiscountParentProps = {

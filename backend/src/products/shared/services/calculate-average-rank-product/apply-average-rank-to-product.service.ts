@@ -14,11 +14,12 @@ export class ApplyAverageRankToProductService {
 	@OnEvent( ProductRankUpdateEvent.tag )
 	async handleEvent( payload: ProductRankUpdateEvent ) {
 		try {
-			const productResult = await GetProduct( this.repository, payload.product_id.value)
+			const productResult = await GetProduct( this.repository,
+				payload.product_id.value )
 
 			await UpdateProduct( this.repository, payload.product_id, productResult, {
 				average_rank: payload.average_value.value
-			})
+			} )
 
 			console.log(
 				`success updated average rank of product ${ payload.product_id.value }` )

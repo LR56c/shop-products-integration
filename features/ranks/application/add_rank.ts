@@ -10,7 +10,7 @@ import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../shared/utils/WrapType'
 
-export const AddRank = async (props: {
+export const AddRank = async ( props: {
 	code: string
 	user_email: string
 	rank: number

@@ -89,12 +89,12 @@ export class PaymentSupabaseData implements PaymentRepository {
 	async updatePayment( payment: Payment ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
-			                         .update( paymentToJson( payment ) as any )
-			                         .eq( 'id', payment.id.value )
+			          .update( paymentToJson( payment ) as any )
+			          .eq( 'id', payment.id.value )
 			return true
 		}
 		catch ( e ) {
-			throw [new InfrastructureException()]
+			throw [ new InfrastructureException() ]
 		}
 	}
 

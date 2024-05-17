@@ -15,7 +15,6 @@ import { TranslationService } from 'src/shared/services/translation/translation.
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { rankFromJson } from '~features/ranks/application/rank_mapper'
 import { Rank } from '~features/ranks/domain/rank'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { UpdateRankService } from './update-rank.service'
 
 @ApiTags( 'ranks' )
@@ -35,7 +34,7 @@ export class UpdateRankController {
 					type   : 'string',
 					example: 'a27a730c-3050-4d26-80b9-74163a3590fa'
 				},
-				user_email: {
+				user_email  : {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
@@ -117,13 +116,13 @@ export class UpdateRankController {
 		}
 	} )
 	async handle(
-		@Body(  ) rank: RankDto
+		@Body() rank: RankDto
 	): Promise<HttpResult>
 	{
 		try {
 			const r = rankFromJson( rank )
 
-			await this.updateRankService.updateRank( r as Rank)
+			await this.updateRankService.updateRank( r as Rank )
 			return {
 				statusCode: HttpStatus.OK
 			}
@@ -131,7 +130,7 @@ export class UpdateRankController {
 		catch ( e ) {
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll(e)
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

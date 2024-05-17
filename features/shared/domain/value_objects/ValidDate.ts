@@ -18,7 +18,8 @@ export class ValidDate {
 
 		const parsedDate = new Date( value )
 
-		const result     = z.date().safeParse( parsedDate )
+		const result = z.date()
+		                .safeParse( parsedDate )
 
 		if ( result.success === false ) {
 			throw new InvalidDateException()

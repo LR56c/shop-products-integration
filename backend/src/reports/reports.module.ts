@@ -36,7 +36,8 @@ import { GetReportService } from './get-report/get-report.service'
 			},
 			inject    : [ SupabaseClient<Database> ]
 		},
-		CreateReportService, DeleteReportService, GetReportService, CatchPaymentProcessedService
+		CreateReportService, DeleteReportService, GetReportService,
+		CatchPaymentProcessedService
 	],
 	imports    : [
 		forwardRef( () => AppModule )

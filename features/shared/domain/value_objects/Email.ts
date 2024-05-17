@@ -13,8 +13,9 @@ export class Email {
 	 * @throws {EmailException} - if string is invalid
 	 */
 	static from( value: string ): Email {
-		const parseValue = z.string().email()
-		           .safeParse( value )
+		const parseValue = z.string()
+		                    .email()
+		                    .safeParse( value )
 		if ( !parseValue.success ) {
 			throw new EmailException()
 		}

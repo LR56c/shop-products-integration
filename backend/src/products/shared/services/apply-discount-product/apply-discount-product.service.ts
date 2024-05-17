@@ -16,9 +16,10 @@ export class ApplyDiscountProductService {
 			const product = await GetProduct( this.repo, payload.product_id )
 
 
-			await UpdateProduct( this.repo, UUID.from(payload.product_id), product, {
-				discount: payload.discount_id
-			})
+			await UpdateProduct( this.repo, UUID.from( payload.product_id ), product,
+				{
+					discount: payload.discount_id
+				} )
 
 			console.log(
 				`success updated discount to product id: ${ payload.product_id }` )

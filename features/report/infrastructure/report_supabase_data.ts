@@ -24,7 +24,8 @@ export class ReportSupabaseData implements ReportRepository {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
-	readonly tableName        = 'reports'
+	readonly tableName = 'reports'
+
 	// readonly tableRelatedName = 'reports_products'
 
 	async createReport( type: ReportType, name: ValidString,
@@ -33,11 +34,11 @@ export class ReportSupabaseData implements ReportRepository {
 		                         .upload( name.value, data )
 
 		if ( result.error != null ) {
-			throw [ new InfrastructureException('upload') ]
+			throw [ new InfrastructureException( 'upload' ) ]
 		}
 
 		const resultPath = this.client.storage.from( this.tableName )
-		                         .getPublicUrl( name.value)
+		                       .getPublicUrl( name.value )
 
 		const pathResult = wrapType<ValidURL, InvalidStringException>(
 			() => ValidURL.from( resultPath.data.publicUrl ) )
@@ -71,7 +72,6 @@ export class ReportSupabaseData implements ReportRepository {
 		try {
 
 
-
 			const result = await this.client.from( this.tableName )
 			                         .select()
 			                         .eq( 'id', id.value )
@@ -86,11 +86,12 @@ export class ReportSupabaseData implements ReportRepository {
 				throw report
 			}
 
-			const r = report as Report
-			const { data, error } = await this.client.storage.from(this.tableName).remove([r.name.value])
+			const r               = report as Report
+			const { data, error } = await this.client.storage.from( this.tableName )
+			                                  .remove( [ r.name.value ] )
 
 			if ( error != null ) {
-				throw [ new InfrastructureException('delete') ]
+				throw [ new InfrastructureException( 'delete' ) ]
 			}
 
 			await this.client.from( this.tableName )

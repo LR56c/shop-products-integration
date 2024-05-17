@@ -1,17 +1,20 @@
-import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
-import { DiscountRepository } from '../../../domain/discount_repository'
-import { Promotion, PromotionProduct } from '../domain/promotion'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
+import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
 import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
+import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../../../shared/utils/WrapType'
+import { DiscountRepository } from '../../../domain/discount_repository'
+import {
+	Promotion,
+	PromotionProduct
+} from '../domain/promotion'
 
 export const CreatePromotion = async ( repo: DiscountRepository,
 	props: {
@@ -21,13 +24,13 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 		creation_date: Date,
 		start_date: Date,
 		end_date: Date,
-		products :{
+		products: {
 			quantity: number,
 			product_id: string
 		}[]
 	} ): Promise<Promotion> => {
 
-	const errors : BaseException[] = []
+	const errors: BaseException[] = []
 
 	const idResult = props.id === undefined
 		? UUID.create()
@@ -46,7 +49,7 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 	}
 
 	const percentageResult = wrapType<ValidPercentage, InvalidPercentageException>(
-		() => ValidPercentage.from(props.percentage) )
+		() => ValidPercentage.from( props.percentage ) )
 
 	if ( percentageResult instanceof BaseException ) {
 		errors.push( percentageResult )
@@ -73,11 +76,11 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 		errors.push( endDateResult )
 	}
 
-	const products : PromotionProduct[] = []
+	const products: PromotionProduct[] = []
 
 	for ( const product of props.products ) {
 		const quantity = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from(product.quantity) )
+			() => ValidInteger.from( product.quantity ) )
 
 		if ( quantity instanceof BaseException ) {
 			errors.push( quantity )
@@ -90,7 +93,8 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 			errors.push( product_id )
 		}
 
-		products.push( new PromotionProduct( quantity as ValidPercentage, product_id as UUID ) )
+		products.push(
+			new PromotionProduct( quantity as ValidPercentage, product_id as UUID ) )
 	}
 
 	if ( errors.length > 0 ) {
@@ -107,7 +111,7 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 		products
 	)
 
-	await repo.create(promotion)
+	await repo.create( promotion )
 
 	return promotion
 }

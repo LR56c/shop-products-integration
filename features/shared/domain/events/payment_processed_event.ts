@@ -4,7 +4,7 @@ export class PaymentProcessedEvent {
 	static tag = 'PaymentProcessedEvent'
 
 	constructor(
-		readonly payment: Payment,
+		readonly payment: Payment
 	)
 	{}
 }

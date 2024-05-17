@@ -1,7 +1,4 @@
-import {
-	Injectable,
-	Post
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Auth } from '~features/auth/domain/auth'
 import { AuthRepository } from '~features/auth/domain/auth_repository'
 import { Email } from '~features/shared/domain/value_objects/Email'

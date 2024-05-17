@@ -9,9 +9,9 @@ import { ProductApiData } from '@features/products/infrastructure/product_api_da
 import { UUID } from '@features/shared/domain/value_objects/UUID.ts'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { useProductStore } from '../state/product_store'
 import { CreateProductProps } from '../../presentation/products/models/partial_product'
 import { PartialProductProps } from '../../presentation/products/models/partial_product_props'
+import { useProductStore } from '../state/product_store'
 
 export const productRepository: ProductRepository = new ProductApiData()
 
@@ -67,7 +67,8 @@ export const useProducts = () => {
 		} )
 	}
 
-	const update = ( id: UUID, product : ProductResponse,  props: PartialProductProps ) => {
+	const update = ( id: UUID, product: ProductResponse,
+		props: PartialProductProps ) => {
 		return useQuery( {
 			queryKey: [ `product-update-${ props.product_code }-create-repo-data` ],
 

@@ -28,18 +28,18 @@ export class UpdateOrderController {
 		schema: {
 			type      : 'object',
 			properties: {
-				client_email : {
+				client_email: {
 					type   : 'string',
 					example: 'ac@gmail.com'
 				},
-				payment_id   : {
+				payment_id  : {
 					type   : 'string',
 					example: 'd78c0982-8ddd-46ef-b2d4-41887f150a98'
 				},
 				products    : {
 					type : 'array',
 					items: {
-						type: 'object',
+						type      : 'object',
 						properties: {
 							quantity  : {
 								type   : 'number',
@@ -48,7 +48,7 @@ export class UpdateOrderController {
 							product_id: {
 								type   : 'string',
 								example: '359b6378-f875-4d31-b415-d3de60a59875'
-							},
+							}
 						}
 					}
 				}
@@ -120,7 +120,7 @@ export class UpdateOrderController {
 	async updateOrder(
 		@Param( 'id' ) id: string,
 		@Body() dto: PartialOrderDto
-	) : Promise<HttpResult>
+	): Promise<HttpResult>
 	{
 		try {
 

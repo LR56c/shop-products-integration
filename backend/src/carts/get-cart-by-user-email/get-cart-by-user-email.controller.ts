@@ -1,5 +1,4 @@
 import {
-	Body,
 	Controller,
 	Get,
 	HttpStatus,
@@ -10,13 +9,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { cartProductResponseToJson } from '~features/carts/application/cart_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { productToJson } from '~features/products/application/product_mapper'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { GetCartByUserEmailService } from './get-cart-by-user-email.service'
 
 @ApiTags( 'carts' )
@@ -169,34 +164,19 @@ export class GetCartByUserEmailController {
 		}
 	} )
 	async getCartByUserEmail( @Param( 'user_email' ) user_email: string )
-		: Promise<HttpResultData<Record<string, any>>>{
+		: Promise<HttpResultData<Record<string, any>>> {
 		try {
+			const cart = await this.getCartByUserEmailService.getCartByUserEmail(
+				user_email )
 
-			const email = wrapType<Email, EmailException>(
-				() => Email.from( user_email ) )
-
-			if ( email instanceof BaseException ) {
-				throw email
-			}
-
-			const result = await this.getCartByUserEmailService.getCartByUserEmail( email as Email )
-
-			const jsonProducts = result.products.map( (c)=>{
-				return {
-					quantity: c.quantity.value,
-					product : productToJson(c.product)
-				}
-
-			} )
 			return {
 				statusCode: HttpStatus.OK,
-				data			: {
-					user_email: result.userEmail.value,
-					products  : jsonProducts
-				}
+				data      : cart.map( cartProductResponseToJson )
 			}
 		}
 		catch ( e ) {
+			console.log( 'e' )
+			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )

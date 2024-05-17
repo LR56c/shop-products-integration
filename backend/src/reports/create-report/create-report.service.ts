@@ -1,7 +1,4 @@
-import {
-	HttpStatus,
-	Injectable
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { ChartConfiguration } from 'chart.js'
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
 import { PDFDocument } from 'pdf-lib'
@@ -31,24 +28,25 @@ export class CreateReportService {
 		let data: Uint8Array = new Uint8Array()
 		let name: string     = ''
 		if ( type.value === ReportTypeEnum.sale ) {
-			const from = ValidDate.from( '2024-05-01' )
-			const to = ValidDate.from( '2024-05-31' )
+			const from     = ValidDate.from( '2024-05-01' )
+			const to       = ValidDate.from( '2024-05-31' )
 			const payments = await this.reportPaymentRepository.get(
 				ValidInteger.from( 0 ), ValidInteger.from( 10000 ),
 				from, to )
 			name           = 'Sales May'
-			data=  await generateGraph( name, payments )
+			data           = await generateGraph( name, payments )
 			// const image    = await generateGraph( name, payments )
 			// data           = await generatePDFData( image )
 		}
 		else if ( type.value === ReportTypeEnum.performance ) {
-			throw [ new NotImplementedException(  ) ]
+			throw [ new NotImplementedException() ]
 		}
 		else {
 			throw [ new SubTypeNotExistException( 'report' ) ]
 		}
 
-		return this.repo.createReport( type, ValidString.from( `${new Date().toUTCString()}-${name.toLowerCase()}.png` ), data )
+		return this.repo.createReport( type, ValidString.from(
+			`${ new Date().toUTCString() }-${ name.toLowerCase() }.png` ), data )
 	}
 }
 

@@ -31,11 +31,11 @@ export class ULID {
 		return new ULID( result.data )
 	}
 
-	static toTime(value : string): number {
-		return decodeTime(value)
+	static toTime( value: string ): number {
+		return decodeTime( value )
 	}
 
-	static fromTime(value : number): string {
-		return ulid(value)
+	static fromTime( value: number ): string {
+		return ulid( value )
 	}
 }

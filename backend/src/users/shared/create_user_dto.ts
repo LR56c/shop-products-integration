@@ -15,7 +15,7 @@ export class CreateUserDto {
 	@IsEmail()
 	email: string
 
-	@IsEnum(RoleEnum)
+	@IsEnum( RoleEnum )
 	role: string
 
 	@Matches( /\b[0-9|.]{1,10}-{1}[K|k|0-9]{1}$/ )

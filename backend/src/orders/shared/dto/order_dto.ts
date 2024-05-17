@@ -40,8 +40,8 @@ export class OrderDto {
 	item_confirmed_id: string
 }
 
-export class OrderProductDto{
-	@IsUUID( )
+export class OrderProductDto {
+	@IsUUID()
 	product_id: string
 
 	@Min( 1 )

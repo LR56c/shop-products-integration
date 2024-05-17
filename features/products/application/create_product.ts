@@ -38,7 +38,7 @@ export const CreateProduct = async (
 			() => UUID.from( props.id! ) )
 
 	if ( idResult instanceof BaseException ) {
-		errors.push( idResult)
+		errors.push( idResult )
 	}
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(

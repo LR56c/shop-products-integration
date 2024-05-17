@@ -10,12 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { newsLetterFromJson } from '~features/news_letter/application/news_letter_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { AddNewsLetterService } from './add-news-letter.service'
 import { NewsLetterDto } from '../dto/news_letter_dto'
-import { NewsLetter } from '~features/news_letter/domain/news_letter'
+import { AddNewsLetterService } from './add-news-letter.service'
 
 @ApiTags( 'news-letters' )
 @Controller( 'news-letters' )
@@ -29,15 +27,15 @@ export class AddNewsLetterController {
 		schema: {
 			type      : 'object',
 			properties: {
-				email          : {
+				email     : {
 					type   : 'string',
 					example: 'aaaa@gmail.com'
 				},
-				name          : {
+				name      : {
 					type   : 'string',
 					example: 'John'
 				},
-				created_at  : {
+				created_at: {
 					type   : 'string',
 					example: '2024-04-27'
 				}
@@ -45,15 +43,15 @@ export class AddNewsLetterController {
 		}
 	} )
 	@ApiOperation( {
-		summary: 'Create a news letter',
-		description: 'Create a news letter by json data',
+		summary    : 'Create a news letter',
+		description: 'Create a news letter by json data'
 	} )
 	@ApiResponse( {
-		status     : 200,
+		status : 200,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
@@ -65,23 +63,23 @@ export class AddNewsLetterController {
 		}
 	} )
 	@ApiResponse( {
-		status     : 400,
+		status : 400,
 		content: {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 400
 						},
-						message: {
+						message   : {
 							type      : 'object',
 							properties: {
-								code_error   : {
+								code_error: {
 									type   : 'string',
 									example: 'error translation'
-								},
+								}
 							}
 						}
 					}
@@ -92,15 +90,15 @@ export class AddNewsLetterController {
 	@ApiResponse( {
 		status     : 500,
 		description: 'Internal server error by external operations',
-		content: {
+		content    : {
 			'application/json': {
 				schema: {
-					type: 'object',
+					type      : 'object',
 					properties: {
 						statusCode: {
 							type   : 'number',
 							example: 500
-						},
+						}
 					}
 				}
 			}
@@ -109,9 +107,8 @@ export class AddNewsLetterController {
 	async addNewsLetter( @Body() dto: NewsLetterDto ): Promise<HttpResult> {
 		try {
 
-			const newsLetter = newsLetterFromJson( dto )
+			await this.addNewsLetterService.addNewsLetter( dto )
 
-			await this.addNewsLetterService.addNewsLetter( newsLetter as NewsLetter )
 			return {
 				statusCode: HttpStatus.OK
 			}

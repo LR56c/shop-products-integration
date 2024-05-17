@@ -9,9 +9,7 @@ import { discountToJson } from '../application/discount_mapper'
 import { Discount } from '../domain/discount'
 import { DiscountRepository } from '../domain/discount_repository'
 import { DiscountTypeEnum } from '../domain/discount_type'
-import { promotionToJson } from '../features/promotions/application/promotion_mapper'
 import { Promotion } from '../features/promotions/domain/promotion'
-import { saleToJson } from '../features/sales/application/sale_mapper'
 import { Sale } from '../features/sales/domain/sale'
 
 export class DiscountSupabaseData implements DiscountRepository {
@@ -37,8 +35,8 @@ export class DiscountSupabaseData implements DiscountRepository {
 		if ( discount.type.value === DiscountTypeEnum.PROMOTION ) {
 			const resultPromotion = await this.client.from( this.promotionsTableName )
 			                                  .insert( {
-				                                  id        : discount.id.value,
-				                                  name      : (discount as Promotion).name.value,
+				                                  id  : discount.id.value,
+				                                  name: ( discount as Promotion ).name.value
 			                                  } as any )
 
 			if ( resultPromotion.error != null ) {
@@ -54,8 +52,8 @@ export class DiscountSupabaseData implements DiscountRepository {
 
 			                             .insert( {
 				                             id        : discount.id.value,
-				                             product_id: (discount as Sale).product_id.value,
-				                             }as any )
+				                             product_id: ( discount as Sale ).product_id.value
+			                             } as any )
 
 			if ( resultSale.error != null ) {
 				if ( resultSale.error.code === '23505' ) {

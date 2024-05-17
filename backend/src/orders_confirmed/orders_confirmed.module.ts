@@ -4,6 +4,8 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { OrderConfirmedRepository } from '~features/order_confirmed/domain/order_confirmed_repository'
+import { OrderConfirmedSupabaseData } from '~features/order_confirmed/infrastructure/order_confirmed_supabase_data'
 import { AppModule } from '../app.module'
 import { CreateOrderConfirmedController } from './create-order-confirmed/create-order-confirmed.controller'
 import { CreateOrderConfirmedService } from './create-order-confirmed/create-order-confirmed.service'
@@ -13,8 +15,6 @@ import { GetAllOrderConfirmedController } from './get-all-order-confirmed/get-al
 import { GetAllOrderConfirmedService } from './get-all-order-confirmed/get-all-order-confirmed.service'
 import { GetOrderConfirmedController } from './get-order-confirmed/get-order-confirmed.controller'
 import { GetOrderConfirmedService } from './get-order-confirmed/get-order-confirmed.service'
-import { OrderConfirmedRepository } from '~features/order_confirmed/domain/order_confirmed_repository'
-import { OrderConfirmedSupabaseData } from '~features/order_confirmed/infrastructure/order_confirmed_supabase_data'
 
 @Module( {
 	controllers: [ CreateOrderConfirmedController, DeleteOrderConfirmedController,

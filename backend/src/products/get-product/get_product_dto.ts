@@ -5,7 +5,7 @@ import {
 
 export class GetProductDto {
 
-	@MinLength(1)
+	@MinLength( 1 )
 	@IsString()
-	product_code : string
+	product_code: string
 }
