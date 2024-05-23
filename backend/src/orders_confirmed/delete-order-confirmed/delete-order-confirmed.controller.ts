@@ -92,14 +92,7 @@ export class DeleteOrderConfirmedController {
 	): Promise<HttpResult> {
 		try {
 
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-
-			await this.deleteOrderConfirmedService.execute( idResult )
+			await this.deleteOrderConfirmedService.execute( id )
 			return {
 				statusCode: HttpStatus.OK
 			}

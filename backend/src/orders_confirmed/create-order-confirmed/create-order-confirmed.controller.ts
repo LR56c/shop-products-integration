@@ -10,15 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
-import { parseOrderConfirmed } from '../shared/parse_order_confirmed'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
 import { CreateOrderConfirmedService } from './create-order-confirmed.service'
 
 @ApiTags( 'orders-confirmed' )
@@ -115,31 +109,11 @@ export class CreateOrderConfirmedController {
 		}
 	} )
 	async createOrder(
-		@Body() dto: OrderConfirmedDto
+		@Body() dto: OrderConfirmedDto,
+		@Body() id: string
 	): Promise<HttpResult> {
 		try {
-
-			const errors: BaseException[] = []
-
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( dto.order_id ) )
-
-			if ( idResult instanceof BaseException ) {
-				errors.push( new InvalidUUIDException( 'id' ) )
-			}
-
-			const orderConfirmed = parseOrderConfirmed( dto )
-
-			if ( !( orderConfirmed instanceof OrderConfirmed ) ) {
-				errors.push( ...orderConfirmed )
-			}
-
-			if ( errors.length > 0 ) {
-				throw errors
-			}
-
-			await this.createOrderConfirmedService.execute( idResult as UUID,
-				orderConfirmed as OrderConfirmed )
+			await this.createOrderConfirmedService.execute(id, dto )
 
 			return {
 				statusCode: HttpStatus.OK

@@ -114,11 +114,7 @@ export class GetAllOrderConfirmedController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllOrdersConfirmed( { from, to } )
-
-			const ordersConfirmed = await this.getAllOrderConfirmedService.execute(
-				data.from,
-				data.to )
+			const ordersConfirmed = await this.getAllOrderConfirmedService.execute(from, to )
 
 			let json: Record<string, any>[] = []
 			for ( const o of ordersConfirmed ) {
@@ -137,43 +133,4 @@ export class GetAllOrderConfirmedController {
 			}
 		}
 	}
-
-	parseGetAllOrdersConfirmed( dto: {
-		from: number,
-		to: number,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from: from as ValidInteger,
-				to  : to as ValidInteger
-			}
-		}
-	}
-
 }
