@@ -10,10 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { Category } from '~features/categories/domain/category'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteCategoriesService } from './delete-categories.service'
@@ -104,17 +100,7 @@ export class DeleteCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
-
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.deleteCategoriesService.deleteCategory(
-				new Category( nameResult as ValidString )
-			)
+			await this.deleteCategoriesService.deleteCategory(name)
 			return {
 				statusCode: HttpStatus.OK
 			}

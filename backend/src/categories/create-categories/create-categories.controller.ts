@@ -103,17 +103,7 @@ export class CreateCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
-
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.createCategoriesService.createCategory(
-				new Category( nameResult as ValidString )
-			)
+			await this.createCategoriesService.createCategory(name)
 			return {
 				statusCode: HttpStatus.OK
 			}

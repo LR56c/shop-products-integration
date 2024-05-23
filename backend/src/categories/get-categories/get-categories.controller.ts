@@ -116,22 +116,14 @@ export class GetCategoriesController {
 		@Query( 'name' ) name?: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-
-			const { data } = this.parseGetCategories( {
+			const result = await this.getCategoriesService.getCategories(
 				from,
 				to,
 				name
-			} )
-
-			const result = await this.getCategoriesService.getCategories(
-				data.from,
-				data.to,
-				data.name
 			)
 			return {
 				statusCode: HttpStatus.OK,
-				data      : result.map(
-					( shopAddress ) => categoryToJson( shopAddress ) )
+				data      : result.map(( shopAddress ) => categoryToJson( shopAddress ) )
 			}
 		}
 		catch ( e ) {
@@ -140,59 +132,5 @@ export class GetCategoriesController {
 				message   : this.translation.translateAll( e )
 			}
 		}
-
 	}
-
-	parseGetCategories( dto: {
-		from: number,
-		to: number,
-		name?: string,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			name?: ValidString
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		const name = dto.name === undefined
-			? undefined
-			: wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( dto.name ?? '' ) )
-
-		if ( name !== undefined && name instanceof
-			InvalidStringException )
-		{
-			throw [ new InvalidStringException( 'name' ) ]
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from: from as ValidInteger,
-				to  : to as ValidInteger,
-				name: name as ValidString
-			}
-		}
-	}
-
 }
