@@ -8,10 +8,7 @@ import { Password } from '~features/user/domain/models/Password'
 export class LoginAuthService {
 	constructor( private readonly repo: AuthRepository ) {}
 
-	async login(
-		email: Email,
-		password: Password
-	): Promise<Auth> {
-		return this.repo.login( email, password )
+	async login( email: string, password: string ): Promise<Auth> {
+		return this.repo.login( Email.from( email ), Password.from( password ) )
 	}
 }

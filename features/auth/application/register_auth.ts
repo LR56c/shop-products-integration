@@ -1,13 +1,13 @@
 import {AuthRepository} from "../domain/auth_repository";
 import {Auth} from "../domain/auth";
-import {BaseException} from "../../shared/domain/exceptions/BaseException";
+import {EmailException} from "../../shared/domain/exceptions/EmailException";
 import {wrapType, wrapTypes} from "../../shared/utils/WrapType";
 import {Email} from "../../shared/domain/value_objects/Email";
-import {EmailException} from "../../shared/domain/exceptions/EmailException";
+import {BaseException} from "../../shared/domain/exceptions/BaseException";
 import {Password} from "../../user/domain/models/Password";
 import {InvalidPasswordException} from "../../user/domain/exceptions/PasswordException";
 
-export const LoginAuth = async (
+export const RegisterAuth = async (
     repo: AuthRepository,
     props: {
         email: string,
@@ -22,6 +22,7 @@ export const LoginAuth = async (
     if (emailResult instanceof BaseException) {
         errors.push(new EmailException('email'))
     }
+
     const passwordResult = wrapTypes<Password, InvalidPasswordException>(
         () => Password.from(props.password))
 
@@ -33,5 +34,5 @@ export const LoginAuth = async (
         throw errors
     }
 
-    return repo.login(emailResult as Email, passwordResult as Password)
+    return repo.register(emailResult as Email, passwordResult as Password)
 }

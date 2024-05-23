@@ -102,13 +102,8 @@ export class LoginAuthController {
 		@Body( 'password' ) password: string
 	): Promise<HttpResultData<string>> {
 		try {
+			const result = await this.loginAuthService.login( email, password )
 
-			const data   = parseAuth( {
-				email,
-				password
-			} )
-			const result = await this.loginAuthService.login( data.email,
-				data.password )
 			return {
 				statusCode: HttpStatus.OK,
 				data      : result.token.value

@@ -16,7 +16,7 @@ export class RegisterAuthService {
 		// ): Promise<Auth> {
 	): Promise<string> {
 
-		// const auth = await this.repo.register( email, password )
+		/*const auth = await this.repo.register( email, password )*/
 		const tempID = UUID.create()
 
 		const user = await CreateUser( this.userRepo, {

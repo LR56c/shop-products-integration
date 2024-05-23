@@ -105,14 +105,7 @@ export class RefreshAuthController {
 	): Promise<HttpResultData<string>> {
 		try {
 
-			const tokenResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( token ) )
-
-			if ( tokenResult instanceof BaseException ) {
-				throw tokenResult
-			}
-
-			const result = await this.refreshAuthService.refresh( tokenResult )
+			const result = await this.refreshAuthService.refresh( token )
 
 			return {
 				statusCode: HttpStatus.OK,
