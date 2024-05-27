@@ -16,6 +16,7 @@ import { HttpResult } from 'src/shared/utils/HttpResult'
 import { rankFromJson } from '~features/ranks/application/rank_mapper'
 import { Rank } from '~features/ranks/domain/rank'
 import { UpdateRankService } from './update-rank.service'
+import {UpdateRankDto} from "./update_rank_dto";
 
 @ApiTags( 'ranks' )
 @Controller( 'ranks' )
@@ -116,13 +117,11 @@ export class UpdateRankController {
 		}
 	} )
 	async handle(
-		@Body() rank: RankDto
+		@Body() dto: UpdateRankDto
 	): Promise<HttpResult>
 	{
 		try {
-			const r = rankFromJson( rank )
-
-			await this.updateRankService.updateRank( r as Rank )
+			await this.updateRankService.updateRank( dto )
 			return {
 				statusCode: HttpStatus.OK
 			}

@@ -23,5 +23,11 @@ export class RankDto {
 	@MinLength( 0 )
 	@IsString()
 	product_code: string
+
+	@IsString()
+	code: string
+
+	@IsNumber()
+	rank: number
 }
 

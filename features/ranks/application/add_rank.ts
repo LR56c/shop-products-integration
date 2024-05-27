@@ -9,12 +9,15 @@ import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../shared/utils/WrapType'
+import {RankRepository} from "../domain/rank_repository";
 
-export const AddRank = async ( props: {
-	code: string
-	user_email: string
-	rank: number
-} ): Promise<Rank> => {
+export const AddRank = async (
+	repo: RankRepository,
+	props: {
+		code: string
+		user_email: string
+		rank: number
+} ): Promise<boolean> => {
 	const errors: BaseException[] = []
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(
@@ -49,10 +52,12 @@ export const AddRank = async ( props: {
 		throw errors
 	}
 
-	return new Rank(
+	const r = new Rank(
 		email as Email,
 		dateResult as ValidDate,
 		rankResult as ValidRank,
 		codeResult as ValidString
 	)
+	await repo.addRank( r )
+	return true
 }
