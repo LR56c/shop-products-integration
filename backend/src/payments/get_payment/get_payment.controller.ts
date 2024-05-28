@@ -120,13 +120,9 @@ export class GetPaymentController {
 	async getPayment( @Param(
 		'id' ) id: string ): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const paymentIdResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-			if ( paymentIdResult instanceof InvalidUUIDException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-			const payment = await this.getPaymentService.getPayment(
-				paymentIdResult as UUID )
+
+			const payment = await this.getPaymentService.getPayment(id)
+
 			return {
 				data      : paymentToJson( payment ),
 				statusCode: HttpStatus.OK

@@ -1,18 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { Payment } from '~features/payments/domain/models/payment'
 import { PaymentRepository } from '~features/payments/domain/repository/payment_repository'
-import { ValidBool } from '~features/shared/domain/value_objects/ValidBool'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import {GetAllPayments} from "~features/payments/application/get_all_payments";
 
 @Injectable()
 export class GetAllPaymentService {
 	constructor( private repository: PaymentRepository ) {}
 
-	async getAll( from: ValidInteger, to: ValidInteger, approved?: ValidBool,
-		from_date?: ValidDate,
-		to_date?: ValidDate ): Promise<Payment[]> {
-		return this.repository.getAllPayment( from, to, approved, from_date,
-			to_date )
+	async getAll( from: number, to: number, approved?: boolean,
+		from_date?: string, to_date?: string ): Promise<Payment[]> {
+		return GetAllPayments( this.repository, { from, to, approved, from_date, to_date } )
 	}
 }

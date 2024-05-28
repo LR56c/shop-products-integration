@@ -9,9 +9,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeletePaymentService } from './delete_payment.service'
@@ -20,7 +17,7 @@ import { DeletePaymentService } from './delete_payment.service'
 @Controller( 'payments' )
 export class DeletePaymentController {
 	constructor( private readonly deletePaymentService: DeletePaymentService,
-		private readonly translation: TranslationService )
+				 private readonly translation: TranslationService )
 	{}
 
 	@Delete( ':id' )
@@ -90,22 +87,17 @@ export class DeletePaymentController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResult> {
 		try {
-			const idResult = wrapType<UUID, BaseException>(
-				() => UUID.from( id ) )
-			if ( idResult instanceof BaseException ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( [ idResult ] )
-				}
-			}
-			await this.deletePaymentService.deletePayment( idResult )
+
+			await this.deletePaymentService.deletePayment( id )
+
 			return {
 				statusCode: HttpStatus.OK
 			}
 		}
 		catch ( e ) {
 			return {
-				statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+				statusCode: HttpStatus.BAD_REQUEST,
+				message   : this.translation.translateAll( e )
 			}
 		}
 	}

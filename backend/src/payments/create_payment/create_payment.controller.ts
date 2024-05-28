@@ -127,15 +127,7 @@ export class CreatePaymentController {
 		@Body( 'payment' ) dto: CreatePaymentDto
 	): Promise<HttpResult> {
 		try {
-			const paymentResult = await CreatePayment( {
-				id           : dto.id,
-				creationDate : dto.created_at,
-				approved     : dto.approved,
-				deliveryName : dto.delivery_address,
-				paymentValue : dto.value,
-				paymentMethod: dto.payment_method
-			} )
-			await this.createPaymentService.createPayment( paymentResult as Payment )
+			await this.createPaymentService.createPayment( dto )
 			return {
 				statusCode: HttpStatus.OK
 			}

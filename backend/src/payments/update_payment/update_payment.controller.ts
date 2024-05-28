@@ -127,9 +127,7 @@ export class UpdatePaymentController {
 		@Body( 'payment' ) dto: UpdatePaymentDto
 	): Promise<HttpResult> {
 		try {
-			const result = parsePayment( dto )
-
-			await this.updatePaymentService.updatePayment( result as Payment )
+			await this.updatePaymentService.updatePayment( dto )
 			return {
 				statusCode: HttpStatus.OK
 			}

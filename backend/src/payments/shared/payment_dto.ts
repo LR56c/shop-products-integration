@@ -13,21 +13,21 @@ export class PaymentDto {
 	id: string
 
 	@IsDate()
-	created_at: Date
+	creationDate: string
 
 	@IsBoolean()
 	approved: boolean
 
 	@MinLength( 1 )
 	@IsString()
-	delivery_address: string
+	deliveryName: string
 
 	@Min( 1 )
 	@IsInt()
-	value: number
+	paymentValue: number
 
 	@MinLength( 1 )
 	@IsString()
-	payment_method: string
+	paymentMethod: string
 
 }
