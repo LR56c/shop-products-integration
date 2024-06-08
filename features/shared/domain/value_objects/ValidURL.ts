@@ -1,5 +1,5 @@
-import { InvalidURLException } from '../exceptions/InvalidURLException'
 import { z } from 'zod'
+import { InvalidURLException } from '../exceptions/InvalidURLException'
 
 export class ValidURL {
 	readonly value: string

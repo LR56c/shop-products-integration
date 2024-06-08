@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
+import { UpdateRankDto } from 'src/ranks/dto/update_rank_dto'
+import { UpdateRank } from '~features/ranks/application/update_rank'
 import { RankRepository } from '~features/ranks/domain/rank_repository'
-import {UpdateRankDto} from "./update_rank_dto";
-import {UpdateRank} from "~features/ranks/application/update_rank";
 
 @Injectable()
 export class UpdateRankService {
@@ -11,7 +11,7 @@ export class UpdateRankService {
 		return UpdateRank( this.repo, {
 			code      : props.code,
 			user_email: props.user_email,
-			rank      : props.rank,
+			rank      : props.rank
 		} )
 	}
 }

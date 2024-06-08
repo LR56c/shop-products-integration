@@ -1,15 +1,15 @@
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { Rank } from '../domain/rank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { Email } from '../../shared/domain/value_objects/Email'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
 import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { wrapType } from '../../shared/utils/WrapType'
-import {RankRepository} from "../domain/rank_repository";
+import { Rank } from '../domain/rank'
+import { RankRepository } from '../domain/rank_repository'
 
 export const AddRank = async (
 	repo: RankRepository,
@@ -17,7 +17,7 @@ export const AddRank = async (
 		code: string
 		user_email: string
 		rank: number
-} ): Promise<boolean> => {
+	} ): Promise<boolean> => {
 	const errors: BaseException[] = []
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(

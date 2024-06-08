@@ -1,7 +1,6 @@
-import { Product } from '../../products/domain/models/product'
 import { Email } from '../../shared/domain/value_objects/Email'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 
 export class Cart {
 	constructor(

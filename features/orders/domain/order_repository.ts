@@ -1,10 +1,8 @@
-import { OrderResponse } from './order_response'
-import {
-	Order
-} from './order'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { Order } from './order'
+import { OrderResponse } from './order_response'
 
 export abstract class OrderRepository {
 	abstract createOrder( order: Order ): Promise<boolean>

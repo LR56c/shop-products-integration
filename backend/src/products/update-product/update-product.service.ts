@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { UpdateProduct } from '~features/products/application/update_product'
+import { ProductRepository } from '~features/products/domain/repository/product_repository'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '~features/shared/domain/value_objects/UUID'
 import { wrapType } from '~features/shared/utils/WrapType'
 import { PartialProductDto } from '../shared/dto/partial_product_dto'
-import { ProductRepository } from '~features/products/domain/repository/product_repository'
 
 @Injectable()
 export class UpdateProductService {

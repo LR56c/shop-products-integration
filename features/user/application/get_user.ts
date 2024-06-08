@@ -1,12 +1,12 @@
-import { UserDao } from '../domain/dao/UserDao'
-import { User } from '../domain/models/User'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { wrapType } from '../../shared/utils/WrapType'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Role } from '../../shared/domain/value_objects/Role'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { wrapType } from '../../shared/utils/WrapType'
+import { UserDao } from '../domain/dao/UserDao'
+import { User } from '../domain/models/User'
 
 export const GetUser = async (
 	repo: UserDao,

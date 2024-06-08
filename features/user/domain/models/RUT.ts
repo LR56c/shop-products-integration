@@ -1,5 +1,5 @@
-import { InvalidRUTException } from '../exceptions/InvalidRUTException'
 import { z } from 'zod'
+import { InvalidRUTException } from '../exceptions/InvalidRUTException'
 
 export class RUT {
 	readonly value: string

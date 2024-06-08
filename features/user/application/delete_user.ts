@@ -1,8 +1,8 @@
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Email } from '../../shared/domain/value_objects/Email'
-import { UserDao } from '../domain/dao/UserDao'
 import { wrapType } from '../../shared/utils/WrapType'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { UserDao } from '../domain/dao/UserDao'
 
 export const DeleteUser = async (
 	repo: UserDao,

@@ -1,6 +1,6 @@
 import {
-  Test,
-  TestingModule
+	Test,
+	TestingModule
 } from '@nestjs/testing'
 import { RemoveNewsLetterController } from './remove-news-letter.controller'
 import { RemoveNewsLetterService } from './remove-news-letter.service'

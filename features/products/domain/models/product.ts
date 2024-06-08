@@ -1,10 +1,10 @@
-import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
-import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
 import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
+import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
 import { ValidString } from '../../../shared/domain/value_objects/ValidString'
 import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
+import { InsufficientStockException } from '../exceptions/InsufficientStockException'
 
 export class Product {
 	constructor(

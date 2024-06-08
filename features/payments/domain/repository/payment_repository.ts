@@ -1,8 +1,8 @@
-import { Payment } from '../models/payment'
 import { UUID } from '../../../shared/domain/value_objects/UUID'
 import { ValidBool } from '../../../shared/domain/value_objects/ValidBool'
-import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
 import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
+import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
+import { Payment } from '../models/payment'
 
 export abstract class PaymentRepository {
 	abstract createPayment( payment: Payment ): Promise<boolean>

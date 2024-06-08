@@ -1,5 +1,5 @@
-import { InvalidRankException } from '../exceptions/InvalidRankException'
 import { z } from 'zod'
+import { InvalidRankException } from '../exceptions/InvalidRankException'
 
 export class ValidRank {
 	readonly value: number

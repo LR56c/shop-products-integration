@@ -1,5 +1,5 @@
-import { InvalidDecimalException } from '../exceptions/InvalidDecimalException'
 import { z } from 'zod'
+import { InvalidDecimalException } from '../exceptions/InvalidDecimalException'
 
 export class ValidDecimal {
 	readonly value: number

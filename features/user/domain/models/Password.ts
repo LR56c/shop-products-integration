@@ -1,4 +1,5 @@
 import { BaseException } from 'features/shared/domain/exceptions/BaseException'
+import { z } from 'zod'
 import {
 	PasswordInsufficientCharacterException,
 	PasswordInsufficientLengthException,
@@ -6,7 +7,6 @@ import {
 	PasswordInsufficientNumberException,
 	PasswordInsufficientUppercaseException
 } from '../exceptions/PasswordException'
-import { z } from 'zod'
 
 export class Password {
 	readonly value: string
