@@ -1,5 +1,5 @@
-import { BaseException } from '../domain/exceptions/BaseException'
 import { Primitive } from 'zod'
+import { BaseException } from '../domain/exceptions/BaseException'
 import { UnknownException } from '../domain/exceptions/UnknownException'
 
 export function wrapType<T, Err extends BaseException>( returnFunction: () => T ): T | BaseException {

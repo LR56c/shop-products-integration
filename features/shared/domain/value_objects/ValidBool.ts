@@ -1,5 +1,5 @@
-import { InvalidBooleanException } from '../exceptions/InvalidBooleanException'
 import { z } from 'zod'
+import { InvalidBooleanException } from '../exceptions/InvalidBooleanException'
 
 export class ValidBool {
 	readonly value: boolean

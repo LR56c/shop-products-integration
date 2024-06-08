@@ -1,5 +1,5 @@
-import { InvalidRoleException } from '../exceptions/InvalidRoleException'
 import { z } from 'zod'
+import { InvalidRoleException } from '../exceptions/InvalidRoleException'
 
 export enum RoleEnum {
 	ADMIN       = 'ADMIN',

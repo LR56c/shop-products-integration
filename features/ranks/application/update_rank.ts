@@ -11,53 +11,64 @@ import { wrapType } from '../../shared/utils/WrapType'
 import { Rank } from '../domain/rank'
 import { RankRepository } from '../domain/rank_repository'
 
-export const AddRank = async (
+export const UpdateRank = async (
 	repo: RankRepository,
 	props: {
-		code: string
-		user_email: string
-		rank: number
+		code?: string
+		user_email?: string
+		rank?: number
+		created_at?: Date
 	} ): Promise<boolean> => {
+
 	const errors: BaseException[] = []
 
-	const codeResult = wrapType<ValidString, InvalidStringException>(
-		() => ValidString.from( props.code ) )
+	const codeResult = props.code === undefined
+		? undefined
+		: wrapType<ValidString, InvalidStringException>(
+			() => ValidString.from( props.code! ) )
 
 	if ( codeResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'code' ) )
 	}
 
-	const rankResult = wrapType<ValidRank, InvalidRankException>(
-		() => ValidRank.from( props.rank ) )
+	const userEmailResult = props.user_email === undefined
+		? undefined
+		: wrapType<ValidString, InvalidStringException>(
+			() => ValidString.from( props.user_email! ) )
 
-	if ( rankResult instanceof BaseException ) {
-		errors.push( new InvalidRankException() )
+	if ( userEmailResult instanceof BaseException ) {
+		errors.push( new EmailException( 'user_email' ) )
 	}
 
-	const dateResult = wrapType<ValidDate, InvalidDateException>(
-		() => ValidDate.from( new Date() ) )
+	const rankResult = props.rank === undefined
+		? undefined
+		: wrapType<ValidRank, InvalidRankException>(
+			() => ValidRank.from( props.rank! ) )
+
+	if ( rankResult instanceof BaseException ) {
+		errors.push( new InvalidRankException( 'rank' ) )
+	}
+
+	const dateResult = props.created_at === undefined
+		? undefined
+		: wrapType<ValidDate, InvalidDateException>(
+			() => ValidDate.from( props.created_at! ) )
 
 	if ( dateResult instanceof BaseException ) {
 		errors.push( new InvalidDateException( 'created_at' ) )
 	}
 
-	const email = wrapType<Email, EmailException>(
-		() => Email.from( props.user_email ) )
-
-	if ( email instanceof BaseException ) {
-		errors.push( new EmailException() )
-	}
 
 	if ( errors.length > 0 ) {
 		throw errors
 	}
 
-	const r = new Rank(
-		email as Email,
+	const newRank = new Rank(
+		userEmailResult as Email,
 		dateResult as ValidDate,
 		rankResult as ValidRank,
 		codeResult as ValidString
 	)
-	await repo.addRank( r )
+	await repo.updateRank( newRank )
 	return true
 }

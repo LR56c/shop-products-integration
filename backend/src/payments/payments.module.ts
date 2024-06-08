@@ -25,11 +25,11 @@ import { UpdatePaymentService } from './update_payment/update_payment.service'
 		GetAllPaymentController
 	],
 	providers  : [ {
-		provide: PaymentRepository,
+		provide   : PaymentRepository,
 		useFactory: ( client: SupabaseClient<Database> ) => {
 			return new PaymentSupabaseData( client )
 		},
-		inject: [ SupabaseClient<Database> ]
+		inject    : [ SupabaseClient<Database> ]
 	},
 		CreatePaymentService, DeletePaymentService,
 		GetPaymentService, UpdatePaymentService,

@@ -1,16 +1,16 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
-import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import {
 	rankFromJson,
 	rankToJson
 } from '../application/rank_mapper'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { RankRepository } from '../domain/rank_repository'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
 import { Rank } from '../domain/rank'
+import { RankRepository } from '../domain/rank_repository'
 
 export class RankSupabaseData implements RankRepository {
 

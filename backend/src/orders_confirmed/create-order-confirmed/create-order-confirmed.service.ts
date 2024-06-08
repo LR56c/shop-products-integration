@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
+import { CreateOrderConfirmed } from '~features/order_confirmed/application/create_order_confirmed'
 import { OrderConfirmedRepository } from '~features/order_confirmed/domain/order_confirmed_repository'
 import { OrderConfirmedEvent } from '~features/shared/domain/events/order_confirmed_event'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import {CreateOrderConfirmed} from "~features/order_confirmed/application/create_order_confirmed";
-import {OrderConfirmedDto} from "../shared/order_confirmed_dto";
+import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
 
 @Injectable()
 export class CreateOrderConfirmedService {
@@ -22,8 +20,8 @@ export class CreateOrderConfirmedService {
 		} )
 
 		return CreateOrderConfirmed( this.repo, {
-			id            : orderConfirmed.id,
-			creation_date : orderConfirmed.creation_date,
+			id              : orderConfirmed.id,
+			creation_date   : orderConfirmed.creation_date,
 			accountant_email: orderConfirmed.accountant_email
 		} )
 	}

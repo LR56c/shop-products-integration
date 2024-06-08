@@ -1,9 +1,8 @@
-import { Sale } from '../domain/sale'
-import { SubTypeNotExistException } from '../../../../shared/domain/exceptions/SubTypeNotExistException'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
+import { SubTypeNotExistException } from '../../../../shared/domain/exceptions/SubTypeNotExistException'
 import { UUID } from '../../../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
 import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
@@ -14,6 +13,7 @@ import {
 	DiscountTypeEnum
 } from '../../../domain/discount_type'
 import { InvalidDiscountTypeException } from '../../../domain/invalid_discount_type_exception'
+import { Sale } from '../domain/sale'
 
 export const CreateSale = async ( repo: DiscountRepository,
 	props: {

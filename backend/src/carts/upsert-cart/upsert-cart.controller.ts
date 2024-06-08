@@ -1,14 +1,14 @@
 import {
-  Body,
-  Controller,
-  HttpStatus,
-  Post
+	Body,
+	Controller,
+	HttpStatus,
+	Post
 } from '@nestjs/common'
 import {
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags
+	ApiBody,
+	ApiOperation,
+	ApiResponse,
+	ApiTags
 } from '@nestjs/swagger'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'

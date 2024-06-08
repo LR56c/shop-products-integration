@@ -1,4 +1,3 @@
-import { CartRepository } from '../domain/cart_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
@@ -7,6 +6,7 @@ import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { wrapType } from '../../shared/utils/WrapType'
+import { CartRepository } from '../domain/cart_repository'
 
 export const UpsertCart = async ( repo: CartRepository, props: {
 	user_email: string, product_id: string, quantity: number

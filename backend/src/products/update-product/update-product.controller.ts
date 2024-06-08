@@ -14,13 +14,6 @@ import {
 import { PartialProductDto } from 'src/products/shared/dto/partial_product_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { productFromJson } from '~features/products/application/product_mapper'
-import { Product } from '~features/products/domain/models/product'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
-import { ProductDto } from '../shared/dto/product_dto'
 import { UpdateProductService } from './update-product.service'
 
 @ApiTags( 'products' )

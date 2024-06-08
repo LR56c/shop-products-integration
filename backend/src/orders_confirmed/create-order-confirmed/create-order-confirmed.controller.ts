@@ -10,9 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
+import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
 import { CreateOrderConfirmedService } from './create-order-confirmed.service'
 
 @ApiTags( 'orders-confirmed' )
@@ -113,7 +113,7 @@ export class CreateOrderConfirmedController {
 		@Body() id: string
 	): Promise<HttpResult> {
 		try {
-			await this.createOrderConfirmedService.execute(id, dto )
+			await this.createOrderConfirmedService.execute( id, dto )
 
 			return {
 				statusCode: HttpStatus.OK

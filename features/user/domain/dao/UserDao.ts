@@ -1,8 +1,8 @@
-import { User } from '../models/User'
-import { Role } from '../../../shared/domain/value_objects/Role'
-import { ValidString } from '../../../shared/domain/value_objects/ValidString'
-import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
 import { Email } from '../../../shared/domain/value_objects/Email'
+import { Role } from '../../../shared/domain/value_objects/Role'
+import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../../shared/domain/value_objects/ValidString'
+import { User } from '../models/User'
 
 export abstract class UserDao {
 	abstract createUser( user: User ): Promise<boolean>

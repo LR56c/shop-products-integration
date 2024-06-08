@@ -1,6 +1,6 @@
 import {
-  Test,
-  TestingModule
+	Test,
+	TestingModule
 } from '@nestjs/testing'
 import { DeleteUserService } from './delete_user.service'
 

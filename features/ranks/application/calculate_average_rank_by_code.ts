@@ -1,8 +1,8 @@
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
-import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { UUID } from '../../shared/domain/value_objects/UUID'
+import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
+import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { wrapType } from '../../shared/utils/WrapType'
 import { RankRepository } from '../domain/rank_repository'
 

@@ -1,6 +1,6 @@
-import { InvalidUUIDException } from '../exceptions/InvalidUUIDException'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
+import { InvalidUUIDException } from '../exceptions/InvalidUUIDException'
 
 export class UUID {
 	readonly value: string

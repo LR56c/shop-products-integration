@@ -1,7 +1,5 @@
+import { z } from 'zod'
 import { InvalidDateException } from '../exceptions/InvalidDateException'
-import {
-	z
-} from 'zod'
 
 export class ValidDate {
 	readonly value: Date

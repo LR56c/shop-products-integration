@@ -1,5 +1,5 @@
-import { InvalidStringException } from '../exceptions/InvalidStringException'
 import { z } from 'zod'
+import { InvalidStringException } from '../exceptions/InvalidStringException'
 
 export class ValidString {
 	readonly value: string

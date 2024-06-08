@@ -1,5 +1,5 @@
-import { InvalidIntegerException } from '../exceptions/InvalidIntegerException'
 import { z } from 'zod'
+import { InvalidIntegerException } from '../exceptions/InvalidIntegerException'
 
 export class ValidInteger {
 	readonly value: number

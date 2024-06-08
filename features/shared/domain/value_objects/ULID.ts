@@ -1,9 +1,9 @@
-import { InvalidULIDException } from '../exceptions/InvalidULIDException'
 import {
 	decodeTime,
 	ulid
 } from 'ulid'
 import { z } from 'zod'
+import { InvalidULIDException } from '../exceptions/InvalidULIDException'
 
 export class ULID {
 	readonly value: string

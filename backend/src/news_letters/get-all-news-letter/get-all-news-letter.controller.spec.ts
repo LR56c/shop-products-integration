@@ -1,6 +1,6 @@
 import {
-  Test,
-  TestingModule
+	Test,
+	TestingModule
 } from '@nestjs/testing'
 import { GetAllNewsLetterController } from './get-all-news-letter.controller'
 import { GetAllNewsLetterService } from './get-all-news-letter.service'

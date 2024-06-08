@@ -1,7 +1,7 @@
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 import { Email } from '../../shared/domain/value_objects/Email'
 import { UUID } from '../../shared/domain/value_objects/UUID'
 import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
+import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
 
 export class Order {
 	constructor(
