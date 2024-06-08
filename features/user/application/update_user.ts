@@ -1,15 +1,19 @@
-import { UserDao } from '../domain/dao/UserDao'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { Email } from '../../shared/domain/value_objects/email'
+import { Role } from '../../shared/domain/value_objects/role'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { wrapType } from '../../shared/utils/WrapType'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { User } from '../domain/models/User'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { RUT } from '../domain/models/RUT'
-import { InvalidRUTException } from '../domain/exceptions/InvalidRUTException'
-import { Email } from '../../shared/domain/value_objects/Email'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Role } from '../../shared/domain/value_objects/Role'
 import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { UserDao } from '../domain/dao/UserDao'
+import { InvalidRUTException } from '../domain/exceptions/InvalidRUTException'
+import { RUT } from '../domain/models/RUT'
+import { User } from '../domain/models/User'
 
 export const UpdateUser = async (
 	repo: UserDao,
@@ -19,7 +23,7 @@ export const UpdateUser = async (
 		name?: string,
 		email?: string,
 		role?: string
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -56,7 +60,7 @@ export const UpdateUser = async (
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const newUser = new User(
@@ -66,7 +70,6 @@ export const UpdateUser = async (
 		emailResult as Email,
 		roleResult as Role
 	)
-	await repo.updateUser( user.email, newUser )
-	return true
 
+	return await wrapTypeErrors( () => repo.updateUser( user.email, newUser ) )
 }

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { PartialUserDto } from '../shared/partial_user_dto'
+import { PartialUserDto } from 'src/users/dto/partial_user_dto'
 import { UpdateUserService } from './update_user.service'
 
 @ApiTags( 'users' )

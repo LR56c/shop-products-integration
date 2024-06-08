@@ -1,6 +1,6 @@
-import { ValidString } from 'features/shared/domain/value_objects/ValidString'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { Email } from '../../shared/domain/value_objects/email'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { NewsLetter } from './news_letter'
 
 export abstract class NewsLetterRepository {

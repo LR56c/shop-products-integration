@@ -1,8 +1,8 @@
-import { UUID } from '../../../shared/domain/value_objects/UUID'
+import { UUID } from 'features/shared/domain/value_objects/uuid'
 import { RUT } from './RUT'
-import { ValidString } from '../../../shared/domain/value_objects/ValidString'
-import { Email } from '../../../shared/domain/value_objects/Email'
-import { Role } from '../../../shared/domain/value_objects/Role'
+import { ValidString } from 'features/shared/domain/value_objects/valid_string'
+import { Email } from 'features/shared/domain/value_objects/email'
+import { Role } from 'features/shared/domain/value_objects/role'
 
 export class User {
 	constructor(

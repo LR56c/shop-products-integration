@@ -1,3 +1,4 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { categoryFromJson } from '../../categories/application/category_mapper'
 import { Category } from '../../categories/domain/category'
 import {
@@ -12,13 +13,13 @@ import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRank
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
-import { wrapType } from '../../shared/utils/WrapType'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { ValidURL } from '../../shared/domain/value_objects/valid_url'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { Product } from '../domain/models/product'
 import { ProductResponse } from '../domain/models/product_response'
 
@@ -40,7 +41,7 @@ export function productToJson( product: Product ): Record<string, any> {
 	}
 }
 
-export function productFromJson( json: Record<string, any> ): Product | BaseException[] {
+export function productFromJson( json: Record<string, any> ): Product | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -141,7 +142,7 @@ export function productFromJson( json: Record<string, any> ): Product | BaseExce
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors)
 	}
 
 	return new Product(

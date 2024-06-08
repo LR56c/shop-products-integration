@@ -1,4 +1,4 @@
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 export class Category {
 	constructor(

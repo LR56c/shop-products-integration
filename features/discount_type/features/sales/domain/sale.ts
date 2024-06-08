@@ -3,9 +3,9 @@ import {
 	DiscountType,
 	DiscountTypeEnum
 } from '../../../domain/discount_type'
-import { UUID } from '../../../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
+import { UUID } from '../../../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
 
 export class Sale extends Discount {
 	constructor(

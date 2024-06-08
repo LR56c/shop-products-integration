@@ -1,5 +1,5 @@
-import { UUID } from '../value_objects/UUID'
-import { ValidRank } from '../value_objects/ValidRank'
+import { UUID } from '../value_objects/uuid'
+import { ValidRank } from '../value_objects/valid_rank'
 
 export class ProductRankUpdateEvent {
 	static tag = 'ProductRankUpdateEvent'

@@ -1,11 +1,15 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { Email } from '../../shared/domain/value_objects/email'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapType,
+	wrapTypeAsync
+} from '../../shared/utils/wrap_type'
 import { NewsLetter } from '../domain/news_letter'
 import { NewsLetterRepository } from '../domain/news_letter_repository'
 
@@ -16,7 +20,7 @@ export const AddNewsLetter = async (
 		name: string
 		createdAt: Date
 	}
-): Promise<boolean> => {
+): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -42,7 +46,7 @@ export const AddNewsLetter = async (
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const n = new NewsLetter(
@@ -51,6 +55,11 @@ export const AddNewsLetter = async (
 		createdAtResult as ValidDate
 	)
 
-	await repo.add( n )
-	return true
+	const result = await wrapTypeAsync(()=>repo.add( n ))
+
+	if( result instanceof BaseException ) {
+		return new Errors([result])
+	}
+
+	return result
 }

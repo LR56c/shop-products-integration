@@ -1,5 +1,5 @@
-import { ValidInteger } from 'features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from 'features/shared/domain/value_objects/ValidString'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { ShopAddress } from './shop-address'
 
 export abstract class ShopAddressRepository {

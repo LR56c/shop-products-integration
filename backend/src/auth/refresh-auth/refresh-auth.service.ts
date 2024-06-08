@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Auth } from '~features/auth/domain/auth'
 import { AuthRepository } from '~features/auth/domain/auth_repository'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { ValidString } from '~features/shared/domain/value_objects/valid_string'
 
 @Injectable()
 export class RefreshAuthService {

@@ -14,8 +14,8 @@ import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { itemConfirmedToJson } from '~features/item_confirmed/application/item_confimed_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { GetItemConfirmedService } from './get-item-confirmed.service'
 
 @ApiTags( 'items-confirmed' )

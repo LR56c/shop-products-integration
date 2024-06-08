@@ -1,3 +1,4 @@
+import { Errors } from '../../../../shared/domain/exceptions/errors'
 import {
 	productFromJson,
 	productToJson
@@ -9,12 +10,12 @@ import { InvalidIntegerException } from '../../../../shared/domain/exceptions/In
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
 import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '../../../../shared/domain/value_objects/ValidInteger'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
-import { ValidString } from '../../../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../../../shared/utils/WrapType'
+import { UUID } from '../../../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
+import { ValidString } from '../../../../shared/domain/value_objects/valid_string'
+import { wrapType } from '../../../../shared/utils/wrap_type'
 import {
 	Promotion,
 	PromotionProduct
@@ -193,8 +194,8 @@ export function promotionResponseFromJson( json: Record<string, any> ): Promotio
 	if ( json.products !== undefined ) {
 		for ( const product of json.products ) {
 			const p = productFromJson( product )
-			if ( p instanceof BaseException ) {
-				errors.push( p )
+			if ( p instanceof Errors ) {
+				errors.push( ...p.values )
 				break
 			}
 			const q = wrapType<ValidInteger, InvalidIntegerException>(

@@ -1,18 +1,18 @@
-import { PaymentRepository } from '../domain/repository/payment_repository'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidBool } from '../../shared/domain/value_objects/valid_bool'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	paymentFromJson,
 	paymentToJson
 } from '../application/payment_mapper'
 import { Payment } from '../domain/models/payment'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { ValidBool } from '../../shared/domain/value_objects/ValidBool'
+import { PaymentRepository } from '../domain/repository/payment_repository'
 
 export class PaymentSupabaseData implements PaymentRepository {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
@@ -41,8 +41,8 @@ export class PaymentSupabaseData implements PaymentRepository {
 			throw [ new InfrastructureException() ]
 		}
 		const payment = paymentFromJson( result.data[0] )
-		if ( payment instanceof BaseException ) {
-			throw payment
+		if ( payment instanceof Errors ) {
+			throw [ ...payment.values ]
 		}
 		return payment as Payment
 	}
@@ -73,8 +73,8 @@ export class PaymentSupabaseData implements PaymentRepository {
 			const payments: Payment[] = []
 			for ( const json of data ) {
 				const payment = paymentFromJson( json )
-				if ( payment instanceof BaseException ) {
-					throw [ payment ]
+				if ( payment instanceof Errors ) {
+					throw [ ...payment.values ]
 				}
 				payments.push( payment as Payment )
 			}

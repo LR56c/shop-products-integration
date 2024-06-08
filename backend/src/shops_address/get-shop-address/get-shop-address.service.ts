@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
+import { ValidString } from '~features/shared/domain/value_objects/valid_string'
 import { ShopAddress } from '~features/shop-address/domain/shop-address'
 import { ShopAddressRepository } from '~features/shop-address/domain/shop-address-repository'
 

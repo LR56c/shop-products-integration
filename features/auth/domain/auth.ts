@@ -1,5 +1,5 @@
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 export class Auth {
 	constructor(

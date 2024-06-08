@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 import { GetUser } from '~features/user/application/get_user'
 import { UserDao } from '~features/user/domain/dao/UserDao'
 import { User } from '~features/user/domain/models/User'
@@ -9,6 +10,12 @@ export class GetUserService {
 
 	async getUser( from: number, to: number, role?: string,
 		name?: string ): Promise<User[]> {
-		return GetUser( this.repository, { from, to, role, name } )
+		const result = await GetUser( this.repository, { from, to, role, name } )
+
+		if ( result instanceof Errors ) {
+			throw [...result.values]
+		}
+
+		return result
 	}
 }

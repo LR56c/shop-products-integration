@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DeleteProduct } from '~features/products/application/delete_product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 
 @Injectable()
 export class DeleteProductService {
@@ -8,6 +9,11 @@ export class DeleteProductService {
 	}
 
 	async deleteProduct( id: string ): Promise<boolean> {
-		return DeleteProduct( this.repository, id )
+		const result =  await DeleteProduct( this.repository, id )
+
+		if ( result instanceof BaseException ) {
+			throw [result]
+		}
+		return true
 	}
 }

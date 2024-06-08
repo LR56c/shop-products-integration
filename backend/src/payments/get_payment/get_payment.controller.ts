@@ -10,9 +10,6 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { paymentToJson } from '~features/payments/application/payment_mapper'
-import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetPaymentService } from './get_payment.service'
@@ -121,7 +118,7 @@ export class GetPaymentController {
 		'id' ) id: string ): Promise<HttpResultData<Record<string, any>>> {
 		try {
 
-			const payment = await this.getPaymentService.getPayment(id)
+			const payment = await this.getPaymentService.getPayment( id )
 
 			return {
 				data      : paymentToJson( payment ),

@@ -1,16 +1,17 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
 import { User } from '../domain/models/User'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidRUTException } from '../domain/exceptions/InvalidRUTException'
 import { RUT } from '../domain/models/RUT'
-import { wrapType } from '../../shared/utils/WrapType'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { wrapType } from '../../shared/utils/wrap_type'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { Email } from '../../shared/domain/value_objects/Email'
+import { Email } from '../../shared/domain/value_objects/email'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Role } from '../../shared/domain/value_objects/Role'
+import { Role } from '../../shared/domain/value_objects/role'
 
 export function userToJson( user: User ): Record<string, any> {
 	return {
@@ -22,7 +23,7 @@ export function userToJson( user: User ): Record<string, any> {
 	}
 }
 
-export function userFromJson( json: Record<string, any> ): User | BaseException[] {
+export function userFromJson( json: Record<string, any> ): User | Errors {
 	const errors: BaseException[] = []
 
 	const auth_id = wrapType<UUID, InvalidUUIDException>(
@@ -55,7 +56,7 @@ export function userFromJson( json: Record<string, any> ): User | BaseException[
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	return new User(

@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
 import { OrderConfirmedRepository } from '~features/order_confirmed/domain/order_confirmed_repository'
 import { OrderConfirmedEvent } from '~features/shared/domain/events/order_confirmed_event'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 import {CreateOrderConfirmed} from "~features/order_confirmed/application/create_order_confirmed";
 import {OrderConfirmedDto} from "../shared/order_confirmed_dto";
 

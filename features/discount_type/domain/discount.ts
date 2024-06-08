@@ -1,7 +1,7 @@
-import { ValidDate } from 'features/shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from 'features/shared/domain/value_objects/ValidPercentage'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidPercentage } from '../../shared/domain/value_objects/valid_percentage'
 import { DiscountType } from './discount_type'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 
 export class Discount {
 	constructor(

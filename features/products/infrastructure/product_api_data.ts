@@ -1,16 +1,16 @@
 import {
 	productResponseFromJson,
 	productToJson
-} from 'features/products/application/product_mapper'
-import { Product } from 'features/products/domain/models/product'
-import { ProductResponse } from 'features/products/domain/models/product_response'
-import { ProductRepository } from 'features/products/domain/repository/product_repository'
-import { BaseException } from 'features/shared/domain/exceptions/BaseException'
-import { InfrastructureException } from 'features/shared/infrastructure/infrastructure_exception'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+} from '../application/product_mapper'
+import { Product } from '../domain/models/product'
+import { ProductResponse } from '../domain/models/product_response'
+import { ProductRepository } from '../domain/repository/product_repository'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 export class ProductApiData implements ProductRepository {
 

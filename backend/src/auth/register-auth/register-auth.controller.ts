@@ -13,7 +13,7 @@ import {
 import { AuthUserDto } from 'src/auth/register-auth/auth_user_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { wrapTypes } from '~features/shared/utils/WrapType'
+import { wrapTypeErrors } from '~features/shared/utils/wrap_type'
 import { InvalidPasswordException } from '~features/user/domain/exceptions/PasswordException'
 import { Password } from '~features/user/domain/models/Password'
 import { RegisterAuthService } from './register-auth.service'
@@ -122,7 +122,7 @@ export class RegisterAuthController {
 	): Promise<HttpResultData<string>> {
 		try {
 
-			const passwordResult = wrapTypes<Password, InvalidPasswordException>(
+			const passwordResult = wrapTypeErrors<Password, InvalidPasswordException>(
 				() => Password.from( password ) )
 
 			if ( !( passwordResult instanceof Password ) ) {

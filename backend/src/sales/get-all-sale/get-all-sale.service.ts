@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { Sale } from '~features/discount_type/features/sales/domain/sale'
 import { SaleRepository } from '~features/discount_type/features/sales/domain/sale_repository'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { ValidDate } from '~features/shared/domain/value_objects/valid_date'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
 
 @Injectable()
 export class GetAllSaleService {

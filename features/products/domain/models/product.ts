@@ -1,10 +1,10 @@
-import { ValidRank } from '../../../shared/domain/value_objects/ValidRank'
+import { ValidRank } from '../../../shared/domain/value_objects/valid_rank'
 import { InsufficientStockException } from '../exceptions/InsufficientStockException'
-import { UUID } from '../../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '../../../shared/domain/value_objects/ValidInteger'
-import { ValidString } from '../../../shared/domain/value_objects/ValidString'
-import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
+import { UUID } from '../../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../../shared/domain/value_objects/valid_string'
+import { ValidURL } from '../../../shared/domain/value_objects/valid_url'
 
 export class Product {
 	constructor(

@@ -16,9 +16,9 @@ import { saleToJson } from '~features/discount_type/features/sales/application/s
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { ValidDate } from '~features/shared/domain/value_objects/valid_date'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { GetAllSaleService } from './get-all-sale.service'
 
 @ApiTags( 'sales' )

@@ -5,7 +5,7 @@ import {
 	Matches,
 	MinLength
 } from 'class-validator'
-import { RoleEnum } from '~features/shared/domain/value_objects/Role'
+import { RoleEnum } from '~features/shared/domain/value_objects/role'
 
 export class AuthUserDto {
 	@IsEmail()

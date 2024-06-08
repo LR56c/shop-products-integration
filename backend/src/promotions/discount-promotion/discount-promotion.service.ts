@@ -6,9 +6,9 @@ import { PromotionResponse } from '~features/discount_type/features/promotions/d
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { DiscounDto } from '../shared/promotion_dto'
 
 @Injectable()

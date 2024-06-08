@@ -141,7 +141,7 @@ export class GetAllPaymentController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const payments= await this.getAllPaymentService.getAll(
+			const payments = await this.getAllPaymentService.getAll(
 				from,
 				to,
 				approved,

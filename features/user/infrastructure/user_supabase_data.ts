@@ -1,19 +1,19 @@
-import { Email } from '../../shared/domain/value_objects/Email'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { Email } from '../../shared/domain/value_objects/email'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { UserDao } from '../domain/dao/UserDao'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { Role } from '../../shared/domain/value_objects/Role'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { Role } from '../../shared/domain/value_objects/role'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { User } from '../domain/models/User'
 import {
 	userFromJson,
 	userToJson
 } from '../application/user_mapper'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
 
 export class UserSupaBaseData implements UserDao {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
@@ -34,8 +34,8 @@ export class UserSupaBaseData implements UserDao {
 
 			const user = userFromJson( result.data[0] )
 
-			if ( user instanceof BaseException ) {
-				throw user
+			if ( user instanceof Errors ) {
+				throw [...user.values]
 			}
 
 			return user as User
@@ -77,8 +77,8 @@ export class UserSupaBaseData implements UserDao {
 			const users: User[] = []
 			for ( const json of data ) {
 				const user = userFromJson( json )
-				if ( user instanceof BaseException ) {
-					throw [ user ]
+				if ( user instanceof Errors ) {
+					throw [ ...user.values ]
 				}
 				users.push( user as User )
 			}

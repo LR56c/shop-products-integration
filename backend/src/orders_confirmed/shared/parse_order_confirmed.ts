@@ -4,10 +4,10 @@ import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { EmailException } from '~features/shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '~features/shared/domain/exceptions/InvalidDateException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { Email } from '~features/shared/domain/value_objects/email'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { ValidDate } from '~features/shared/domain/value_objects/valid_date'
+import { wrapType } from '~features/shared/utils/wrap_type'
 
 export function parseOrderConfirmed( dto: OrderConfirmedDto ): OrderConfirmed | BaseException[]
 {

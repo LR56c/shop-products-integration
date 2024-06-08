@@ -10,6 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { CreateRankDto } from 'src/ranks/dto/create_rank_dto'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { AddRank } from '~features/ranks/application/add_rank'
 import { TranslationService } from '../../shared/services/translation/translation.service'
@@ -28,17 +29,22 @@ export class AddRankController {
 		schema: {
 			type      : 'object',
 			properties: {
-				product_code: {
-					type   : 'string',
-					example: 'abc2'
-				},
-				user_email  : {
-					type   : 'string',
-					example: 'aaaa@gmail.com'
-				},
-				rank        : {
-					type   : 'number',
-					example: 2
+				rank: {
+					type			: 'object',
+					properties:{
+						product_code: {
+							type   : 'string',
+							example: 'abc2'
+						},
+						user_email  : {
+							type   : 'string',
+							example: 'aaaa@gmail.com'
+						},
+						value        : {
+							type   : 'number',
+							example: 2
+						}
+					}
 				}
 			}
 		}
@@ -105,18 +111,11 @@ export class AddRankController {
 		}
 	} )
 	async handle(
-		@Body( 'product_code' ) code: string,
-		@Body( 'rank' ) rank: number,
-		@Body( 'user_email' ) user_email: string
+		@Body( 'rank' ) rank: CreateRankDto
 	): Promise<HttpResult>
 	{
 		try {
-
-			const rankResult = await AddRank( {
-				code, user_email, rank
-			} )
-
-			await this.addRankService.execute( rankResult )
+			await this.addRankService.execute( rank )
 			return {
 				statusCode: HttpStatus.OK
 			}

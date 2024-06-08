@@ -16,9 +16,9 @@ import { categoryToJson } from '~features/categories/application/category_mapper
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '~features/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
+import { ValidString } from '~features/shared/domain/value_objects/valid_string'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { GetCategoriesService } from './get-categories.service'
 
 @ApiTags( 'categories' )

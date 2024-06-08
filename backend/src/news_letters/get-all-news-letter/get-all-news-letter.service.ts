@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { GetAllNewsLetter } from '~features/news_letter/application/get_all_news_letter'
 import { NewsLetter } from '~features/news_letter/domain/news_letter'
 import { NewsLetterRepository } from '~features/news_letter/domain/news_letter_repository'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetAllNewsLetterService {
@@ -9,6 +10,12 @@ export class GetAllNewsLetterService {
 
 	async getAllNewsLetter( from: number, to: number,
 		name ?: string ): Promise<NewsLetter[]> {
-		return GetAllNewsLetter( this.repo, { from, to, name } )
+		const result = await GetAllNewsLetter( this.repo, { from, to, name } )
+
+		if ( result instanceof Errors ) {
+			throw [...result.values]
+		}
+
+		return result
 	}
 }

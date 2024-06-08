@@ -4,10 +4,10 @@ import { InvalidDateException } from '~features/shared/domain/exceptions/Invalid
 import { InvalidPercentageException } from '~features/shared/domain/exceptions/InvalidPercentageException'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { ValidDate } from '~features/shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from '~features/shared/domain/value_objects/ValidPercentage'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { ValidDate } from '~features/shared/domain/value_objects/valid_date'
+import { ValidPercentage } from '~features/shared/domain/value_objects/valid_percentage'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { SaleDto } from './sale_dto'
 
 export function parseSale( dto: SaleDto ): Sale

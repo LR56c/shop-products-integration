@@ -4,8 +4,8 @@ import { UpdateOrder } from '~features/orders/application/update_order'
 import { OrderRepository } from '~features/orders/domain/order_repository'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { wrapType } from '~features/shared/utils/wrap_type'
 
 @Injectable()
 export class UpdateOrderService {

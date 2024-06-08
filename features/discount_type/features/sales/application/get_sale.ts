@@ -2,8 +2,8 @@ import { Sale } from '../domain/sale'
 import { SaleRepository } from '../domain/sale_repository'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../../../shared/domain/value_objects/UUID'
-import { wrapType } from '../../../../shared/utils/WrapType'
+import { UUID } from '../../../../shared/domain/value_objects/uuid'
+import { wrapType } from '../../../../shared/utils/wrap_type'
 
 export const GetSale = async ( repo: SaleRepository,
 	id: string ): Promise<Sale> => {

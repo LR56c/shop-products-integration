@@ -14,8 +14,8 @@ import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { orderConfirmedToJson } from '~features/order_confirmed/application/order_confirmed_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { GetOrderConfirmedService } from './get-order-confirmed.service'
 
 @ApiTags( 'orders-confirmed' )

@@ -1,7 +1,7 @@
-import { Email } from 'features/shared/domain/value_objects/Email'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { Email } from '../../shared/domain/value_objects/email'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 export class Rank {
 	constructor(

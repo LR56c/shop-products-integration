@@ -10,6 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { CreateRankDto } from 'src/ranks/dto/create_rank_dto'
 import { RankDto } from 'src/ranks/dto/rank_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
@@ -116,13 +117,11 @@ export class UpdateRankController {
 		}
 	} )
 	async handle(
-		@Body() rank: RankDto
+		@Body() rank: CreateRankDto
 	): Promise<HttpResult>
 	{
 		try {
-			const r = rankFromJson( rank )
-
-			await this.updateRankService.updateRank( r as Rank )
+			await this.updateRankService.updateRank( rank )
 			return {
 				statusCode: HttpStatus.OK
 			}

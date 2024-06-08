@@ -10,12 +10,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreatePayment } from '~features/payments/application/creat_payment'
-import { Payment } from '~features/payments/domain/models/payment'
+import { CreatePaymentDto } from 'src/payments/dto/create_payment_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreatePaymentService } from './create_payment.service'
-import { CreatePaymentDto } from './create_payment_dto'
 
 @ApiTags( 'payments' )
 @Controller( 'payments' )
@@ -35,14 +33,6 @@ export class CreatePaymentController {
 						id              : {
 							type   : 'string',
 							example: '668476f7-b08f-40b6-9e02-faa55aca42b1'
-						},
-						created_at      : {
-							type   : 'date',
-							example: '2024-05-13'
-						},
-						approved        : {
-							type   : 'boolean',
-							example: true
 						},
 						delivery_address: {
 							type   : 'string',

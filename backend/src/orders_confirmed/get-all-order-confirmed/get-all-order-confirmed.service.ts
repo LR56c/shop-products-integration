@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { OrderConfirmed } from '~features/order_confirmed/domain/order_confirmed'
 import { OrderConfirmedRepository } from '~features/order_confirmed/domain/order_confirmed_repository'
-import { ValidInteger } from '~features/shared/domain/value_objects/ValidInteger'
+import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
 import {GetAllOrderConfirmed} from "~features/order_confirmed/application/get_all_order_confirmed";
 
 @Injectable()

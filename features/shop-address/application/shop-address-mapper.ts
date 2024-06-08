@@ -1,7 +1,7 @@
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { ShopAddress } from '../domain/shop-address'
 
 export function shopAddressToJson( shopAddress: ShopAddress ): Record<string, any> {

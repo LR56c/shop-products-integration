@@ -1,20 +1,25 @@
+import { RankRepository } from '../domain/rank_repository'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Email } from '../../shared/domain/value_objects/Email'
+import { Email } from '../../shared/domain/value_objects/email'
 import { Rank } from '../domain/rank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 
-export const AddRank = async ( props: {
+export const AddRank = async (repo : RankRepository, props: {
 	code: string
 	user_email: string
 	rank: number
-} ): Promise<Rank> => {
+} ): Promise<boolean | Errors> => {
 	const errors: BaseException[] = []
 
 	const codeResult = wrapType<ValidString, InvalidStringException>(
@@ -46,13 +51,15 @@ export const AddRank = async ( props: {
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	return new Rank(
+	const r = new Rank(
 		email as Email,
 		dateResult as ValidDate,
 		rankResult as ValidRank,
 		codeResult as ValidString
 	)
+
+	return await wrapTypeErrors(()=> repo.addRank(r))
 }

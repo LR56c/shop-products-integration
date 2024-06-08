@@ -14,7 +14,7 @@ import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { ReportTypeException } from '~features/report/domain/exception/ReportTypeException'
 import { ReportType } from '~features/report/domain/models/report_type'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { CreateReportService } from './create-report.service'
 

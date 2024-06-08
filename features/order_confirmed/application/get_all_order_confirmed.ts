@@ -1,7 +1,7 @@
-import {ValidInteger} from "../../shared/domain/value_objects/ValidInteger";
+import {ValidInteger} from '../../shared/domain/value_objects/valid_integer';
 import {OrderConfirmedRepository} from "../domain/order_confirmed_repository";
 import {OrderConfirmed} from "../domain/order_confirmed";
-import {wrapType} from "../../shared/utils/WrapType";
+import {wrapType} from '../../shared/utils/wrap_type';
 import {InvalidIntegerException} from "../../shared/domain/exceptions/InvalidIntegerException";
 import {BaseException} from "../../shared/domain/exceptions/BaseException";
 

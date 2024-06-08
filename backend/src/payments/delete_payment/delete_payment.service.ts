@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common'
+import { DeletePayment } from '~features/payments/application/delete_payment'
 import { PaymentRepository } from '~features/payments/domain/repository/payment_repository'
-import {DeletePayment} from "~features/payments/application/delete_payment";
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 
 @Injectable()
 export class DeletePaymentService {
 	constructor( private repository: PaymentRepository ) {}
 
 	async deletePayment( id: string ): Promise<boolean> {
-		return DeletePayment( this.repository, id )
+		const result = await DeletePayment( this.repository, id )
+
+		if ( result instanceof BaseException ) {
+			throw [ result ]
+
+		}
+		return true
 	}
 }

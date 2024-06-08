@@ -1,30 +1,28 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import {
 	CartProductResponse
 } from '../domain/cart_response'
 import { CartRepository } from '../domain/cart_repository'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { wrapType } from '../../shared/utils/WrapType'
+import { Email } from '../../shared/domain/value_objects/email'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 
 export const GetCartByUserEmail = async (
 	repo: CartRepository,
 	props: {
 		email: string
-	} ): Promise<CartProductResponse[]> => {
-
-	const errors: BaseException[] = []
+	} ): Promise<CartProductResponse[] | Errors> => {
 
 	const emailResult = wrapType<Email, EmailException>(
 		() => Email.from( props.email ) )
 
 	if ( emailResult instanceof BaseException ) {
-		errors.push( new EmailException() )
+		return new Errors( [ new EmailException( 'email' ) ])
 	}
 
-	if ( errors.length > 0 ) {
-		throw errors
-	}
-
-	return repo.getByUserEmail( emailResult as Email )
+	return await wrapTypeErrors(()=>repo.getByUserEmail( emailResult as Email ))
 }

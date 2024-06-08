@@ -14,8 +14,8 @@ import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { saleToJson } from '~features/discount_type/features/sales/application/sale_mapper'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { GetSaleService } from './get-sale.service'
 
 @ApiTags( 'sales' )

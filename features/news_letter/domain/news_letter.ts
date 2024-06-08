@@ -1,6 +1,6 @@
-import { Email } from '../../shared/domain/value_objects/Email'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { Email } from '../../shared/domain/value_objects/email'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 export class NewsLetter {
 	constructor(

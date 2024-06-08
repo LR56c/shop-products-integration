@@ -1,3 +1,4 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import {
 	productFromJson,
 	productToJson
@@ -7,10 +8,10 @@ import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { wrapType } from '../../shared/utils/WrapType'
+import { Email } from '../../shared/domain/value_objects/email'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { Cart } from '../domain/cart'
 import { CartProductResponse } from '../domain/cart_response'
 
@@ -22,7 +23,7 @@ export function cartToJson( cart: Cart ): Record<string, any> {
 	}
 }
 
-export function cartFromJson( json: Record<string, any> ): Cart | BaseException[] {
+export function cartFromJson( json: Record<string, any> ): Cart | Errors {
 
 	const errors: BaseException[] = []
 
@@ -49,7 +50,7 @@ export function cartFromJson( json: Record<string, any> ): Cart | BaseException[
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	return new Cart(
@@ -59,14 +60,14 @@ export function cartFromJson( json: Record<string, any> ): Cart | BaseException[
 	)
 }
 
-export function cartProductResponseFromJson( json: Record<string, any> ): CartProductResponse | BaseException[] {
+export function cartProductResponseFromJson( json: Record<string, any> ): CartProductResponse | Errors {
 
 	const errors: BaseException[] = []
 
 	const product = productFromJson( json.products )
 
-	if ( product instanceof BaseException ) {
-		errors.push( product )
+	if ( product instanceof Errors ) {
+		errors.push( ...product.values )
 
 	}
 	const quantity = wrapType<ValidInteger, InvalidIntegerException>(
@@ -77,7 +78,7 @@ export function cartProductResponseFromJson( json: Record<string, any> ): CartPr
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new CartProductResponse(

@@ -1,25 +1,23 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { Rank } from '../domain/rank'
 import { RankRepository } from '../domain/rank_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 
 export const GetAllRanks = async ( repo: RankRepository, props: {
 	code: string
-} ): Promise<Rank[]> => {
-	const errors: BaseException[] = []
-
+} ): Promise<Rank[] | Errors> => {
 	const codeResult = wrapType<ValidString, InvalidStringException>(
 		() => ValidString.from( props.code ) )
 
 	if ( codeResult instanceof BaseException ) {
-		errors.push( new InvalidStringException( 'code' ) )
+		return new Errors( [new InvalidStringException( 'code' )])
 	}
 
-	if ( errors.length > 0 ) {
-		throw errors
-	}
-
-	return await repo.getAllRankByProductID( codeResult as ValidString )
+	return  await wrapTypeErrors(()=>repo.getAllRankByProductID( codeResult as ValidString ))
 }

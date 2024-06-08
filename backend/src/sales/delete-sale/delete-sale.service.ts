@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { DiscountRepository } from '~features/discount_type/domain/discount_repository'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 
 @Injectable()
 export class DeleteSaleService {

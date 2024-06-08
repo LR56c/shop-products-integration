@@ -7,6 +7,12 @@ export class CheckNewsLetterService {
 	constructor( private readonly repo: NewsLetterRepository ) {}
 
 	public async checkNewsLetter( email: string ): Promise<boolean> {
-		return GetNewsLetter( this.repo, email )
+		const result = await GetNewsLetter( this.repo, email )
+
+		if ( result instanceof Error ) {
+			throw [result]
+		}
+
+		return result
 	}
 }

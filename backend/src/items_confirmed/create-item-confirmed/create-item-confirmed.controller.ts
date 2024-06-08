@@ -11,7 +11,7 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { ItemConfirmed } from '~features/item_confirmed/domain/item_confirmed'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { ItemConfirmedDto } from '../shared/item_confirmed_dto'

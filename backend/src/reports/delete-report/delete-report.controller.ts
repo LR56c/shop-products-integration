@@ -12,8 +12,8 @@ import {
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '~features/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { DeleteReportService } from './delete-report.service'
 

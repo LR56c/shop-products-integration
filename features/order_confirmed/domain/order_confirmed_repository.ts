@@ -1,5 +1,5 @@
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { OrderConfirmed } from './order_confirmed'
 
 export abstract class OrderConfirmedRepository {

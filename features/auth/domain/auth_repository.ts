@@ -1,6 +1,6 @@
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { Auth } from './auth'
-import { Email } from '../../shared/domain/value_objects/Email'
+import { Email } from '../../shared/domain/value_objects/email'
 import { Password } from '../../user/domain/models/Password'
 
 export abstract class AuthRepository {

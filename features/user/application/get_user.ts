@@ -1,12 +1,16 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { UserDao } from '../domain/dao/UserDao'
 import { User } from '../domain/models/User'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { wrapType } from '../../shared/utils/WrapType'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { Role } from '../../shared/domain/value_objects/Role'
+import { Role } from '../../shared/domain/value_objects/role'
 
 export const GetUser = async (
 	repo: UserDao,
@@ -15,7 +19,7 @@ export const GetUser = async (
 		to: number,
 		role?: string,
 		name?: string
-	} ): Promise<User[]> => {
+	} ): Promise<User[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -56,12 +60,13 @@ export const GetUser = async (
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	return repo.getUser(
+	return wrapTypeErrors(()=>repo.getUser(
 		fromResult as ValidInteger,
 		toResult as ValidInteger,
 		role as Role,
 		name as ValidString )
+	)
 }

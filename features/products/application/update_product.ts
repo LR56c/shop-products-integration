@@ -1,15 +1,19 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { ValidURL } from '../../shared/domain/value_objects/valid_url'
+import {
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
-import { wrapType } from '../../shared/utils/WrapType'
 import { Product } from '../domain/models/product'
 import { ProductResponse } from '../domain/models/product_response'
 import { ProductRepository } from '../domain/repository/product_repository'
@@ -30,128 +34,139 @@ export const UpdateProduct = async (
 		average_rank?: number,
 		category_name?: string,
 		discount?: string,
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
-	const codeResult = props.code !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.code! ) ) : product.code
+	const codeResult = wrapTypeDefault(
+		product.code,
+		( value ) => ValidString.from( value ),
+		props.code
+	)
 
 	if ( codeResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'code' ) )
 	}
 
-	const code_productResult = props.product_code !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.product_code! ) )
-		: product.product_code
+	const codeProductResult = wrapTypeDefault(
+		product.product_code,
+		( value ) => ValidString.from( value ),
+		props.product_code
+	)
 
-	if ( code_productResult instanceof BaseException ) {
+	if ( codeProductResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'code_product' ) )
 	}
 
-	const nameResult = props.name !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.name! ) )
-		: product.name
+	const nameResult = wrapTypeDefault(
+		product.name,
+		( value ) => ValidString.from( value ),
+		props.name
+	)
 
 	if ( nameResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'name' ) )
 	}
 
-	const descriptionResult = props.description !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.description! ) )
-		: product.description
+	const descriptionResult = wrapTypeDefault(
+		product.description,
+		( value ) => ValidString.from( value ),
+		props.description
+	)
 
 	if ( descriptionResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'description' ) )
 	}
 
-	const brandResult = props.brand !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.brand! ) )
-		: product.brand
+	const brandResult = wrapTypeDefault(
+		product.brand,
+		( value ) => ValidString.from( value ),
+		props.brand
+	)
 
 	if ( brandResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'brand' ) )
 	}
 
-	const priceResult = props.price !== undefined
-		? wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( props.price! ) )
-		: product.price
+	const priceResult = wrapTypeDefault(
+		product.price,
+		( value ) => ValidInteger.from( value ),
+		props.price
+	)
 
 	if ( priceResult instanceof BaseException ) {
 		errors.push( new InvalidIntegerException( 'price' ) )
 	}
 
-	const image_urlResult = props.image_url !== undefined
-		? wrapType<ValidURL, InvalidURLException>(
-			() => ValidURL.from( props.image_url! ) )
-		: product.image_url
+	const imageUrlResult = wrapTypeDefault(
+		product.image_url,
+		( value ) => ValidURL.from( value ),
+		props.image_url
+	)
 
-	if ( image_urlResult instanceof BaseException ) {
+	if ( imageUrlResult instanceof BaseException ) {
 		errors.push( new InvalidURLException( 'image' ) )
 	}
 
-	const stockResult = props.stock !== undefined
-		? wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( props.stock! ) )
-		: product.stock
+	const stockResult = wrapTypeDefault(
+		product.stock,
+		( value ) => ValidInteger.from( value ),
+		props.stock
+	)
 
 	if ( stockResult instanceof BaseException ) {
 		errors.push( new InvalidIntegerException( 'stock' ) )
 	}
 
-	const average_rankResult = props.average_rank !== undefined
-		? wrapType<ValidRank, InvalidRankException>(
-			() => ValidRank.from( props.average_rank! ) )
-		: product.average_rank
+	const averageRankResult = wrapTypeDefault(
+		product.average_rank,
+		( value ) => ValidRank.from( value ),
+		props.average_rank
+	)
 
-	if ( average_rankResult instanceof BaseException ) {
+	if ( averageRankResult instanceof BaseException ) {
 		errors.push( new InvalidRankException( 'rank' ) )
 	}
 
-	const category_nameResult = props.category_name !== undefined
-		? wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.category_name! ) )
-		: product.category
+	const categoryNameResult = wrapTypeDefault(
+		product.category.name,
+		( value ) => ValidString.from( value ),
+		props.category_name
+	)
 
-	if ( category_nameResult instanceof BaseException ) {
+	if ( categoryNameResult instanceof BaseException ) {
 		errors.push( new InvalidStringException( 'category_name' ) )
 	}
 
-	const discountResult = props.discount !== undefined
-		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.discount! ) )
-		: product.discount
+
+	const discountResult = wrapTypeDefault(
+		product.discount?.id ?? undefined,
+		( value ) => UUID.from( value ),
+		props.discount)
 
 	if ( discountResult instanceof BaseException ) {
 		errors.push( new InvalidUUIDException( 'discount' ) )
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const newProduct = new Product(
 		productID,
 		codeResult as ValidString,
-		code_productResult as ValidString,
+		codeProductResult as ValidString,
 		nameResult as ValidString,
 		descriptionResult as ValidString,
 		product.created_at,
 		brandResult as ValidString,
 		priceResult as ValidInteger,
-		image_urlResult as ValidURL,
+		imageUrlResult as ValidURL,
 		stockResult as ValidInteger,
-		average_rankResult as ValidRank,
-		category_nameResult as ValidString,
-		discountResult as UUID
+		averageRankResult as ValidRank,
+		categoryNameResult as ValidString,
+		discountResult as UUID | undefined
 	)
 
-	await repo.updateProduct( productID, newProduct )
-	return true
+	return await wrapTypeErrors( () => repo.updateProduct( productID, newProduct ) )
 }

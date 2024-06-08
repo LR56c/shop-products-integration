@@ -4,10 +4,10 @@ import { BaseException } from '../../../../shared/domain/exceptions/BaseExceptio
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../../../shared/domain/value_objects/ValidDate'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/ValidPercentage'
-import { wrapType } from '../../../../shared/utils/WrapType'
+import { UUID } from '../../../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
+import { wrapType } from '../../../../shared/utils/wrap_type'
 import { DiscountRepository } from '../../../domain/discount_repository'
 import {
 	DiscountType,

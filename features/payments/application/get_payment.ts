@@ -1,20 +1,24 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import {PaymentRepository} from "../domain/repository/payment_repository";
 import {Payment} from "../domain/models/payment";
 import {InvalidUUIDException} from "../../shared/domain/exceptions/InvalidUUIDException";
-import {wrapType} from "../../shared/utils/WrapType";
-import {UUID} from "../../shared/domain/value_objects/UUID";
+import {
+    wrapType,
+    wrapTypeErrors
+} from '../../shared/utils/wrap_type'
+import {UUID} from '../../shared/domain/value_objects/uuid';
 import {BaseException} from "../../shared/domain/exceptions/BaseException";
 
 export const GetPayment = async (
     repo: PaymentRepository,
-    id: string ): Promise<Payment> => {
+    id: string ): Promise<Payment | Errors> => {
 
     const idResult = wrapType<UUID, InvalidUUIDException>(
         () => UUID.from( id ) )
 
     if ( idResult instanceof BaseException ) {
-        throw [ new InvalidUUIDException( 'id' ) ]
+        return new Errors( [ idResult ] )
     }
 
-    return repo.getPayment( idResult )
+    return await wrapTypeErrors( () => repo.getPayment( idResult ) )
 }

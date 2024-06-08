@@ -1,4 +1,6 @@
 import { OmitType } from '@nestjs/mapped-types'
 import { RankDto } from 'src/ranks/dto/rank_dto'
 
-export class UpdateRankDto extends OmitType( RankDto, [ 'created_at' ] ) {}
+export class CreateRankDto extends OmitType( RankDto,
+	['created_at'] )
+{}

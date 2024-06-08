@@ -1,19 +1,22 @@
-import { ProductRepository } from '../domain/repository/product_repository'
-import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { ValidURL } from '../../shared/domain/value_objects/valid_url'
+import {
+	wrapType,
+	wrapTypeAsync,
+} from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidURLException } from '../../shared/domain/exceptions/InvalidURLException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { ValidURL } from '../../shared/domain/value_objects/ValidURL'
-import { wrapType } from '../../shared/utils/WrapType'
+import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { Product } from '../domain/models/product'
+import { ProductRepository } from '../domain/repository/product_repository'
 
 export const CreateProduct = async (
 	repo: ProductRepository,
@@ -28,7 +31,7 @@ export const CreateProduct = async (
 		price: number
 		stock: number
 		category_name: string
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | BaseException> => {
 
 	const errors: BaseException[] = []
 
@@ -138,6 +141,5 @@ export const CreateProduct = async (
 		categoryResult as ValidString
 	)
 
-	await repo.createProduct( p )
-	return true
+	return await wrapTypeAsync( () => repo.createProduct( p ) )
 }

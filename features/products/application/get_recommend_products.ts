@@ -1,13 +1,14 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidRank } from '../../shared/domain/value_objects/ValidRank'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { ProductResponse } from '../domain/models/product_response'
 import { RecommendProduct } from '../domain/models/recommend_product'
 import { ProductRepository } from '../domain/repository/product_repository'
@@ -20,7 +21,7 @@ export const GetRecommendProductsGroupByCategory = async ( repo: ProductReposito
 			category: string
 		}[],
 		limit: number,
-	} ): Promise<Map<string, ProductResponse[]>> => {
+	} ): Promise<Map<string, ProductResponse[]> | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -42,7 +43,7 @@ export const GetRecommendProductsGroupByCategory = async ( repo: ProductReposito
 		}
 
 		if ( errors.length > 0 ) {
-			throw errors
+			return new Errors( errors )
 		}
 
 		const productResult = new RecommendProduct(
@@ -66,7 +67,7 @@ export const GetRecommendProductsGroupByCategory = async ( repo: ProductReposito
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const productsDatabase = await repo.getProductsByRankThreshold(

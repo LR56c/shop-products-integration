@@ -1,6 +1,6 @@
 import { OrderResponse } from '../domain/order_response'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import {
 	Order,
 	OrderProduct
@@ -9,11 +9,11 @@ import { OrderRepository } from '../domain/order_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { Email } from '../../shared/domain/value_objects/email'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import {
 	wrapType
-} from '../../shared/utils/WrapType'
+} from '../../shared/utils/wrap_type'
 
 export const UpdateOrder = async ( repo: OrderRepository,
 	orderID: UUID,

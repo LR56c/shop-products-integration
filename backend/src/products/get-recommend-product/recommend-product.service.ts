@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { GetRecommendProductsGroupByCategory } from '~features/products/application/get_recommend_products'
 import { ProductResponse } from '~features/products/domain/models/product_response'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 import { GetRecommendProductDto } from '../shared/dto/get_recommend_product_dto'
 
 @Injectable()
@@ -10,10 +11,15 @@ export class RecommendProductService {
 
 	async recommendProductsGroupByCateogry( dto: GetRecommendProductDto ): Promise<Map<string, ProductResponse[]>>
 	{
-		return GetRecommendProductsGroupByCategory( this.repository, {
+		const result = await GetRecommendProductsGroupByCategory( this.repository, {
 			threshold        : dto.threshold,
 			recommendProducts: dto.products,
 			limit            : dto.limit
 		} )
+
+		if( result instanceof Errors ) {
+			throw [...result.values]
+		}
+		return result
 	}
 }

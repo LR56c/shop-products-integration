@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { DeleteUser } from '~features/user/application/delete_user'
 import { UserDao } from '~features/user/domain/dao/UserDao'
 
@@ -8,6 +9,12 @@ export class DeleteUserService {
 	}
 
 	async deleteUser( email: string ): Promise<boolean> {
-		return DeleteUser( this.repository, email )
+		const result = await DeleteUser( this.repository, email )
+
+		if ( result instanceof BaseException ) {
+			throw [result]
+		}
+
+		return result
 	}
 }

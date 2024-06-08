@@ -13,8 +13,8 @@ import {
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '~features/shared/domain/value_objects/ValidString'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { ValidString } from '~features/shared/domain/value_objects/valid_string'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { ShopAddress } from '~features/shop-address/domain/shop-address'
 import { DeleteShopAddressService } from './delete-shop-address.service'
 

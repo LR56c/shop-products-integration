@@ -1,7 +1,7 @@
 import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { EmailException } from '~features/shared/domain/exceptions/EmailException'
-import { Email } from '~features/shared/domain/value_objects/Email'
-import { wrapType } from '~features/shared/utils/WrapType'
+import { Email } from '~features/shared/domain/value_objects/email'
+import { wrapType } from '~features/shared/utils/wrap_type'
 import { Password } from '~features/user/domain/models/Password'
 
 export function parseAuth( props: {

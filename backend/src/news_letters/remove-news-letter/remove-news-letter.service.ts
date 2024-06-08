@@ -8,6 +8,12 @@ export class RemoveNewsLetterService {
 	constructor( private readonly repo: NewsLetterRepository ) {}
 
 	async remove( email: string ): Promise<boolean> {
-		return DeleteNewsLetter( this.repo, email )
+		const result = await DeleteNewsLetter( this.repo, email )
+
+		if ( result instanceof Error ) {
+			throw [result]
+		}
+
+		return result
 	}
 }

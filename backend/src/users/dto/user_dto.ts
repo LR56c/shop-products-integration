@@ -6,17 +6,12 @@ import {
 	Matches,
 	MinLength
 } from 'class-validator'
-import { RoleEnum } from '~features/shared/domain/value_objects/Role'
+import { RoleEnum } from '~features/shared/domain/value_objects/role'
 
-export class CreateUserDto {
+export class UserDto {
+
 	@IsUUID()
 	auth_id: string
-
-	@IsEmail()
-	email: string
-
-	@IsEnum( RoleEnum )
-	role: string
 
 	@Matches( /\b[0-9|.]{1,10}-{1}[K|k|0-9]{1}$/ )
 	@IsString()
@@ -25,4 +20,11 @@ export class CreateUserDto {
 	@MinLength( 1 )
 	@IsString()
 	name: string
+
+	@IsEmail()
+	email: string
+
+	@IsEnum( RoleEnum )
+	role: string
+
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { CreateProduct } from '~features/products/application/create_product'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
+import { BaseException } from '~features/shared/domain/exceptions/BaseException'
 import { CreateProductDto } from '../shared/dto/create_product_dto'
 
 @Injectable()
@@ -8,7 +9,7 @@ export class CreateProductService {
 	constructor( private repository: ProductRepository ) {}
 
 	async createProduct( props: CreateProductDto ): Promise<boolean> {
-		return CreateProduct( this.repository, {
+		const result = await CreateProduct( this.repository, {
 			id           : props.id,
 			code         : props.code,
 			product_code : props.product_code,
@@ -20,5 +21,10 @@ export class CreateProductService {
 			stock        : props.stock,
 			category_name: props.category
 		} )
+
+		if ( result instanceof BaseException ) {
+			throw [result]
+		}
+		return true
 	}
 }

@@ -1,9 +1,10 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import {
 	OrderProductResponse,
 	OrderResponse
 } from '../domain/order_response'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { itemConfirmedFromJson } from '../../item_confirmed/application/item_confimed_mapper'
 import { ItemConfirmed } from '../../item_confirmed/domain/item_confirmed'
 import { orderConfirmedFromJson } from '../../order_confirmed/application/order_confirmed_mapper'
@@ -19,16 +20,16 @@ import {
 } from '../../payments/application/payment_mapper'
 import { Payment } from '../../payments/domain/models/payment'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { wrapType } from '../../shared/utils/WrapType'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import {
 	Order,
 	OrderProduct
 } from '../domain/order'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { ValidDate } from '../../shared/domain/value_objects/ValidDate'
+import { Email } from '../../shared/domain/value_objects/email'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 
 export function orderToJson( order: Order ): Record<string, any> {
@@ -209,8 +210,8 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 
 	const payment = paymentFromJson( json.payments )
 
-	if ( payment instanceof BaseException ) {
-		errors.push( payment )
+	if ( payment instanceof Errors ) {
+		errors.push( ...payment.values )
 	}
 
 	const products: OrderProductResponse[] = []
@@ -220,8 +221,8 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 
 			const p = productFromJson( product )
 
-			if ( p instanceof BaseException ) {
-				errors.push( p )
+			if ( p instanceof Errors ) {
+				errors.push( ...p.values )
 				break
 			}
 

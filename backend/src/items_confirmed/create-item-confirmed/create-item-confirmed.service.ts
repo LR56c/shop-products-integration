@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { ItemConfirmed } from '~features/item_confirmed/domain/item_confirmed'
 import { ItemConfirmedRepository } from '~features/item_confirmed/domain/item_confirmed_repository'
 import { ItemConfirmedEvent } from '~features/shared/domain/events/item_confirmed_event'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 
 @Injectable()
 export class CreateItemConfirmedService {

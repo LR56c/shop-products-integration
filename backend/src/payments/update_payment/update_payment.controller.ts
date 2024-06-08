@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	HttpStatus,
+	Param,
 	Put
 } from '@nestjs/common'
 import {
@@ -10,12 +11,10 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { Payment } from '~features/payments/domain/models/payment'
+import { UpdatePaymentDto } from 'src/payments/dto/update_payment_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { parsePayment } from '../shared/parsePayment'
 import { UpdatePaymentService } from './update_payment.service'
-import { UpdatePaymentDto } from './update_payment_dto'
 
 @ApiTags( 'payments' )
 @Controller( 'payments' )
@@ -24,7 +23,7 @@ export class UpdatePaymentController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put()
+	@Put(':id')
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -32,10 +31,6 @@ export class UpdatePaymentController {
 				payment: {
 					type      : 'object',
 					properties: {
-						id              : {
-							type   : 'string',
-							example: '668476f7-b08f-40b6-9e02-faa55aca42b1'
-						},
 						created_at      : {
 							type   : 'date',
 							example: '2021-09-21'
@@ -124,10 +119,11 @@ export class UpdatePaymentController {
 		}
 	} )
 	async updatePayment(
+		@Param( 'id' ) id: string,
 		@Body( 'payment' ) dto: UpdatePaymentDto
 	): Promise<HttpResult> {
 		try {
-			await this.updatePaymentService.updatePayment( dto )
+			await this.updatePaymentService.updatePayment(id, dto )
 			return {
 				statusCode: HttpStatus.OK
 			}

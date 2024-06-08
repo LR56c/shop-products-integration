@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { AuthRepository } from '~features/auth/domain/auth_repository'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 import { CreateUser } from '~features/user/application/create_user'
 import { UserDao } from '~features/user/domain/dao/UserDao'
 import { AuthUserDto } from './auth_user_dto'

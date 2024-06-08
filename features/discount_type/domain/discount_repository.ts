@@ -1,4 +1,4 @@
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { Discount } from './discount'
 
 export abstract class DiscountRepository {

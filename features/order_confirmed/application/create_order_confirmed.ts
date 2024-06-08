@@ -1,16 +1,13 @@
-import {wrapType} from "../../shared/utils/WrapType";
-import {Role} from "../../shared/domain/value_objects/Role";
-import {InvalidRoleException} from "../../shared/domain/exceptions/InvalidRoleException";
+import {wrapType} from '../../shared/utils/wrap_type';
 import {BaseException} from "../../shared/domain/exceptions/BaseException";
 import {OrderConfirmed} from "../domain/order_confirmed";
-import {Email} from "../../shared/domain/value_objects/Email";
-import {EmailException} from "../../shared/domain/exceptions/EmailException";
-import {UUID} from "../../shared/domain/value_objects/UUID";
+import {Email} from '../../shared/domain/value_objects/email';
+import {UUID} from '../../shared/domain/value_objects/uuid';
 import {InvalidUUIDException} from "../../shared/domain/exceptions/InvalidUUIDException";
-import {ValidDate} from "../../shared/domain/value_objects/ValidDate";
+import {ValidDate} from '../../shared/domain/value_objects/valid_date';
 import {InvalidDateException} from "../../shared/domain/exceptions/InvalidDateException";
 import {OrderConfirmedRepository} from "../domain/order_confirmed_repository";
-import {ValidString} from "../../shared/domain/value_objects/ValidString";
+import {ValidString} from '../../shared/domain/value_objects/valid_string';
 import {InvalidStringException} from "../../shared/domain/exceptions/InvalidStringException";
 
 export const CreateOrderConfirmed = async (

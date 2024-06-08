@@ -1,16 +1,21 @@
-import { CartRepository } from '../domain/cart_repository'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { Email } from '../../shared/domain/value_objects/email'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import {
+	wrapType,
+	wrapTypeAsync,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '../../shared/domain/value_objects/Email'
-import { UUID } from '../../shared/domain/value_objects/UUID'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { wrapType } from '../../shared/utils/WrapType'
+import { CartRepository } from '../domain/cart_repository'
 
 export const UpsertCart = async ( repo: CartRepository, props: {
 	user_email: string, product_id: string, quantity: number
-} ): Promise<boolean> => {
+} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -29,11 +34,17 @@ export const UpsertCart = async ( repo: CartRepository, props: {
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	const existCartsUser = await repo.getByUserEmail( emailResult as Email )
-	let checkedQuantity  = 0
+	const existCartsUser = await wrapTypeErrors(
+		() => repo.getByUserEmail( emailResult as Email ) )
+
+	if ( existCartsUser instanceof Errors ) {
+		return existCartsUser
+	}
+
+	let checkedQuantity = 0
 
 	const existCart = existCartsUser.find(
 		p => p.product.id.value === productIDResult.value )
@@ -45,7 +56,8 @@ export const UpsertCart = async ( repo: CartRepository, props: {
 		resultQuantity = existCart.quantity.value + props.quantity
 
 		if ( resultQuantity <= 0 ) {
-			return await repo.remove( emailResult as Email, productIDResult as UUID )
+			await wrapTypeAsync(
+				() => repo.remove( emailResult as Email, productIDResult as UUID ) )
 		}
 		checkedQuantity = resultQuantity
 	}
@@ -57,6 +69,12 @@ export const UpsertCart = async ( repo: CartRepository, props: {
 		throw [ new InvalidIntegerException() ]
 	}
 
-	return await repo.upsert( emailResult as Email, productIDResult as UUID,
-		quantityResult )
+	const result = await wrapTypeAsync(
+		() => repo.upsert( emailResult as Email, productIDResult as UUID,
+			quantityResult ) )
+
+	if ( result instanceof BaseException ) {
+		return new Errors( [ result ] )
+	}
+	return result
 }

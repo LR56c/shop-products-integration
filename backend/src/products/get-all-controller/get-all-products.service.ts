@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { GetAllProducts } from '~features/products/application/get_all_products'
 import { ProductResponse } from '~features/products/domain/models/product_response'
 import { ProductRepository } from '~features/products/domain/repository/product_repository'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetAllProductsService {
@@ -9,6 +10,12 @@ export class GetAllProductsService {
 
 	async getAll( from: number, to: number,
 		name ?: string ): Promise<ProductResponse[]> {
-		return GetAllProducts( this.repository, { from, to, name } )
+		const result =  await GetAllProducts( this.repository, { from, to, name } )
+
+		if ( result instanceof Errors ) {
+			throw [...result.values]
+		}
+
+		return result
 	}
 }

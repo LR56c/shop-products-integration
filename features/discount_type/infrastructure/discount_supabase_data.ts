@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'backend/database.types'
 import { SubTypeNotExistException } from '../../shared/domain/exceptions/SubTypeNotExistException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'

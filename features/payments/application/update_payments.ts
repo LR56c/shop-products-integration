@@ -1,86 +1,109 @@
-import {PaymentRepository} from "../domain/repository/payment_repository";
-import {wrapType} from "../../shared/utils/WrapType";
-import {UUID} from "../../shared/domain/value_objects/UUID";
-import {InvalidUUIDException} from "../../shared/domain/exceptions/InvalidUUIDException";
-import {BaseException} from "../../shared/domain/exceptions/BaseException";
-import {ValidDate} from "../../shared/domain/value_objects/ValidDate";
-import {InvalidDateException} from "../../shared/domain/exceptions/InvalidDateException";
-import {ValidBool} from "../../shared/domain/value_objects/ValidBool";
-import {InvalidBooleanException} from "../../shared/domain/exceptions/InvalidBooleanException";
-import {ValidString} from "../../shared/domain/value_objects/ValidString";
-import {InvalidStringException} from "../../shared/domain/exceptions/InvalidStringException";
-import {ValidInteger} from "../../shared/domain/value_objects/ValidInteger";
-import {InvalidIntegerException} from "../../shared/domain/exceptions/InvalidIntegerException";
-import {PaymentMethod} from "../domain/models/payment_method";
-import {InvalidPaymentMethodException} from "../../shared/domain/exceptions/InvalidPaymentMethodException";
-import {Payment} from "../domain/models/payment";
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidBool } from '../../shared/domain/value_objects/valid_bool'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { InvalidBooleanException } from '../../shared/domain/exceptions/InvalidBooleanException'
+import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidPaymentMethodException } from '../../shared/domain/exceptions/InvalidPaymentMethodException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
+import { Payment } from '../domain/models/payment'
+import { PaymentMethod } from '../domain/models/payment_method'
+import { PaymentRepository } from '../domain/repository/payment_repository'
 
 export const UpdatePayment = async (
-    repo: PaymentRepository,
-    props: {
-        id: string
-        creationDate: string
-        approved: boolean
-        deliveryName: string
-        paymentValue: number
-        paymentMethod: string
-    } ): Promise<boolean> => {
+	repo: PaymentRepository,
+	payment: Payment,
+	props: {
+		id?: string
+		creation_date?: string
+		approved?: boolean
+		delivery_name?: string
+		payment_value?: number
+		payment_method?: string
+	} ): Promise<boolean | Errors> => {
 
-    const errors: BaseException[] = []
+	const errors: BaseException[] = []
 
-    const idResult = wrapType<UUID, InvalidUUIDException>(
-        () => UUID.from( props.id ) )
+	const idResult = wrapTypeDefault(
+		payment.id,
+		( value ) => UUID.from( value ),
+		props.id
+	)
 
-    if ( idResult instanceof BaseException ) {
-        errors.push( new InvalidUUIDException( 'id' ) )
-    }
+	if ( idResult instanceof BaseException ) {
+		errors.push( new InvalidUUIDException( 'id' ) )
+	}
 
-    const creationDateResult = wrapType<ValidDate, InvalidDateException>(
-        () => ValidDate.from( props.creationDate ) )
+	const creationDateResult = wrapTypeDefault(
+		payment.creationDate,
+		( value ) => ValidDate.from( value ),
+		props.creation_date
+	)
 
-    if ( creationDateResult instanceof BaseException ) {
-        errors.push( new InvalidDateException( 'creationDate' ) )
-    }
+	if ( creationDateResult instanceof BaseException ) {
+		errors.push( new InvalidDateException( 'creation_date' ) )
+	}
 
-    const approvedResult = wrapType<ValidBool, InvalidBooleanException>(
-        () => ValidBool.from( props.approved ) )
+	const approvedResult = wrapTypeDefault(
+		payment.approved,
+		( value ) => ValidBool.from( value ),
+		props.approved
+	)
 
-    if ( approvedResult instanceof BaseException ) {
-        errors.push( new InvalidBooleanException( 'approved' ) )
-    }
+	if ( approvedResult instanceof BaseException ) {
+		errors.push( new InvalidBooleanException( 'approved' ) )
+	}
 
-    const deliveryNameResult = wrapType<ValidString, InvalidStringException>(
-        () => ValidString.from( props.deliveryName ) )
+	const deliveryNameResult = wrapTypeDefault(
+		payment.deliveryName,
+		( value ) => ValidString.from( value ),
+		props.delivery_name
+	)
 
-    if ( deliveryNameResult instanceof BaseException ) {
-        errors.push( new InvalidStringException( 'deliveryName' ) )
-    }
+	if ( deliveryNameResult instanceof BaseException ) {
+		errors.push( new InvalidStringException( 'delivery_name' ) )
+	}
 
-    const paymentValueResult = wrapType<ValidInteger, InvalidIntegerException>(
-        () => ValidInteger.from( props.paymentValue ) )
+	const paymentValueResult = wrapTypeDefault(
+		payment.paymentValue,
+		( value ) => ValidInteger.from( value ),
+		props.payment_value
+	)
 
-    if ( paymentValueResult instanceof BaseException ) {
-        errors.push( new InvalidIntegerException( 'paymentValue' ) )
-    }
+	if ( paymentValueResult instanceof BaseException ) {
+		errors.push( new InvalidIntegerException( 'payment_value' ) )
+	}
 
-    const paymentMethodResult = wrapType<PaymentMethod, InvalidPaymentMethodException>(
-        () => PaymentMethod.from( props.paymentMethod ) )
+	const paymentMethodResult = wrapTypeDefault(
+		payment.paymentMethod,
+		( value ) => PaymentMethod.from( value ),
+		props.payment_method
+	)
 
-    if ( paymentMethodResult instanceof BaseException ) {
-        errors.push( new InvalidPaymentMethodException( 'paymentMethod' ) )
-    }
+	if ( paymentMethodResult instanceof BaseException ) {
+		errors.push( new InvalidPaymentMethodException( 'payment_method' ) )
+	}
 
-    if ( errors.length > 0 ) {
-        throw errors
-    }
-    const p = new Payment(
-        idResult as UUID,
-        creationDateResult as ValidDate,
-        approvedResult as ValidBool,
-        deliveryNameResult as ValidString,
-        paymentValueResult as ValidInteger,
-        paymentMethodResult as PaymentMethod
-    )
-    await repo.updatePayment( p )
-    return true
-    }
+	if ( errors.length > 0 ) {
+		return new Errors( errors )
+	}
+
+	const p = new Payment(
+		idResult as UUID,
+		creationDateResult as ValidDate,
+		approvedResult as ValidBool,
+		deliveryNameResult as ValidString,
+		paymentValueResult as ValidInteger,
+		paymentMethodResult as PaymentMethod
+	)
+	return await wrapTypeErrors( () => repo.updatePayment( p ) )
+}

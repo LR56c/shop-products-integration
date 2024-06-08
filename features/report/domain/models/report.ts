@@ -1,8 +1,8 @@
-import { ValidString } from '../../../shared/domain/value_objects/ValidString'
+import { ValidString } from '../../../shared/domain/value_objects/valid_string'
 import { ReportType } from './report_type'
-import { UUID } from '../../../shared/domain/value_objects/UUID'
-import { ValidURL } from '../../../shared/domain/value_objects/ValidURL'
-import { ValidDate } from '../../../shared/domain/value_objects/ValidDate'
+import { UUID } from '../../../shared/domain/value_objects/uuid'
+import { ValidURL } from '../../../shared/domain/value_objects/valid_url'
+import { ValidDate } from '../../../shared/domain/value_objects/valid_date'
 
 export class Report {
 	constructor(

@@ -1,9 +1,13 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { ValidInteger } from '../../shared/domain/value_objects/ValidInteger'
-import { ValidString } from '../../shared/domain/value_objects/ValidString'
-import { wrapType } from '../../shared/utils/WrapType'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { ProductResponse } from '../domain/models/product_response'
 import { ProductRepository } from '../domain/repository/product_repository'
 
@@ -13,7 +17,7 @@ export const GetAllProducts = async (
 		from: number,
 		to: number,
 		name?: string
-	} ): Promise<ProductResponse[]> => {
+	} ): Promise<ProductResponse[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -43,9 +47,8 @@ export const GetAllProducts = async (
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	return repo.getAll( fromResult as ValidInteger, toResult as ValidInteger,
-		name as ValidString )
+	return await wrapTypeErrors( () => repo.getAll( fromResult as ValidInteger, toResult as ValidInteger, name as ValidString ))
 }

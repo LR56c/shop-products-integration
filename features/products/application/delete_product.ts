@@ -1,12 +1,15 @@
 import { ProductRepository } from '../domain/repository/product_repository'
-import { wrapType } from '../../shared/utils/WrapType'
+import {
+	wrapType,
+	wrapTypeAsync,
+} from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { UUID } from '../../shared/domain/value_objects/UUID'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 
 export const DeleteProduct = async (
 	repo: ProductRepository,
-	id: string ): Promise<boolean> => {
+	id: string ): Promise<boolean| BaseException> => {
 	const idResult = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( id ) )
 
@@ -14,5 +17,5 @@ export const DeleteProduct = async (
 		throw [ new InvalidUUIDException( 'id' ) ]
 	}
 
-	return repo.deleteProduct( idResult )
+	return await wrapTypeAsync(() => repo.deleteProduct( idResult ))
 }

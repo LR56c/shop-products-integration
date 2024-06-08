@@ -1,4 +1,4 @@
-import { UUID } from '../value_objects/UUID'
+import { UUID } from '../value_objects/uuid'
 
 export class OrderConfirmedEvent {
 	static tag = 'OrderConfirmedEvent'

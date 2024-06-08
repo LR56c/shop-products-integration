@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ReportRepository } from '~features/report/domain/repository/report_repository'
-import { UUID } from '~features/shared/domain/value_objects/UUID'
+import { UUID } from '~features/shared/domain/value_objects/uuid'
 
 @Injectable()
 export class DeleteReportService {

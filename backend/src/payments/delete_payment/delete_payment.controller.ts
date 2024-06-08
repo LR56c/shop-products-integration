@@ -17,7 +17,7 @@ import { DeletePaymentService } from './delete_payment.service'
 @Controller( 'payments' )
 export class DeletePaymentController {
 	constructor( private readonly deletePaymentService: DeletePaymentService,
-				 private readonly translation: TranslationService )
+		private readonly translation: TranslationService )
 	{}
 
 	@Delete( ':id' )
