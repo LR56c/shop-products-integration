@@ -9,42 +9,50 @@ import { User } from '../domain/models/User'
 export class UserMemoryData implements UserDao {
 
 	readonly emailDB: Map<string, User>
+	readonly db: Map<string, User>
 
-	constructor(
-		readonly db: Map<string, User>
-	)
+	constructor( db: User[] )
 	{
-		this.db.forEach( ( user ) => {
+		this.db      = new Map()
+		this.emailDB = new Map()
+		db.forEach( ( user ) => {
+			this.db.set( user.auth_id.value, user )
 			this.emailDB.set( user.email.value, user )
 		} )
 	}
 
 	async createUser( user: User ): Promise<boolean> {
 		try {
+
+			const emailExist = this.emailDB.get( user.email.value )
+
+			if ( emailExist !== undefined ) {
+				throw [ new InfrastructureException() ]
+			}
+
 			this.db.set( user.auth_id.value, user )
+			this.emailDB.set( user.email.value, user )
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException() ]
+			throw e
 		}
 	}
 
 	async getUser( from: ValidInteger, to: ValidInteger, role?: Role,
 		name?: ValidString ): Promise<User[]> {
 		try {
-			const users          = Array.from( this.db.values() )
-			const result: User[] = []
+			let result = Array.from( this.db.values() )
+
 			if ( role !== undefined ) {
-				result.push( ...users.filter( user => user.role === role ) )
+				result = result.filter( user => user.role.value === role.value )
 			}
 
 			if ( name !== undefined ) {
-				result.push( ...users.filter( user => user.name === name ) )
+				result = result.filter( user => user.name.value === name.value )
 			}
 
-			result.slice( from.value, to.value )
-
-			return result
+			return result.slice( from.value, to.value )
 		}
 		catch ( e ) {
 			throw [ new InfrastructureException() ]

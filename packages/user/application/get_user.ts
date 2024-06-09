@@ -7,6 +7,7 @@ import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
+	wrapTypeDefault,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
 import { UserDao } from '../domain/dao/UserDao'
@@ -37,10 +38,11 @@ export const GetUser = async (
 		errors.push( new InvalidIntegerException( 'to' ) )
 	}
 
-	const role = props.role === undefined
-		? undefined
-		: wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.role ?? '' ) )
+	const role = wrapTypeDefault(
+		undefined,
+		( value ) => ValidString.from( value ),
+		props.role
+	)
 
 	if ( role != undefined && role instanceof
 		BaseException )
@@ -48,10 +50,11 @@ export const GetUser = async (
 		errors.push( new InvalidStringException( 'role' ) )
 	}
 
-	const name = props.name === undefined
-		? undefined
-		: wrapType<ValidString, InvalidStringException>(
-			() => ValidString.from( props.name ?? '' ) )
+	const name = wrapTypeDefault(
+		undefined,
+		( value ) => ValidString.from( value ),
+		props.name
+	)
 
 	if ( name != undefined && name instanceof
 		BaseException )
