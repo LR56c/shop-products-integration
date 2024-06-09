@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
@@ -142,8 +143,8 @@ export class OrderSupabaseData implements OrderRepository {
 
 			const o = orderResponseFromJson( jsonClear )
 
-			if ( o instanceof BaseException ) {
-				throw o
+			if ( o instanceof Errors ) {
+				throw [...o.values]
 			}
 			orders.push( o as OrderResponse )
 		}
@@ -176,8 +177,8 @@ export class OrderSupabaseData implements OrderRepository {
 
 			const order = orderResponseFromJson( jsonClear )
 
-			if ( order instanceof BaseException ) {
-				throw order
+			if ( order instanceof Errors ) {
+				throw [...order.values]
 			}
 
 			return order as OrderResponse

@@ -1,9 +1,14 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { OrderRepository } from '../domain/order_repository'
 import { OrderResponse } from '../domain/order_response'
 
@@ -12,7 +17,7 @@ export const GetAllOrders = async ( repo: OrderRepository,
 		from: number,
 		to: number,
 		email?: string,
-	} ): Promise<OrderResponse[]> => {
+	} ): Promise<OrderResponse[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -30,23 +35,25 @@ export const GetAllOrders = async ( repo: OrderRepository,
 		errors.push( toResult )
 	}
 
-	const emailResult = props.email === undefined
-		? undefined
-		: wrapType<Email, EmailException>(
-			() => Email.from( props.email! ) )
+	const emailResult= wrapTypeDefault(
+		undefined,
+		( value ) => Email.from( value ),
+		props.email
+
+	)
 
 	if ( emailResult !== undefined && emailResult instanceof BaseException ) {
 		errors.push( emailResult )
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	return repo.getAll(
-		fromResult as ValidInteger,
-		toResult as ValidInteger,
-		emailResult as Email
+	return await wrapTypeErrors(()=>repo.getAll(
+			fromResult as ValidInteger,
+			toResult as ValidInteger,
+			emailResult as Email
+		)
 	)
-
 }

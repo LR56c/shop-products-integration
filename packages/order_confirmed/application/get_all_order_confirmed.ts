@@ -1,7 +1,11 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { OrderConfirmed } from '../domain/order_confirmed'
 import { OrderConfirmedRepository } from '../domain/order_confirmed_repository'
 
@@ -10,7 +14,7 @@ export const GetAllOrderConfirmed = async (
 	props: {
 		from: number,
 		to: number
-	} ): Promise<OrderConfirmed[]> => {
+	} ): Promise<OrderConfirmed[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -29,5 +33,11 @@ export const GetAllOrderConfirmed = async (
 		errors.push( new InvalidIntegerException( 'to' ) )
 	}
 
-	return repo.getAll( fromResult as ValidInteger, toResult as ValidInteger )
+	if ( errors.length > 0 ) {
+		return new Errors( errors )
+	}
+
+	return await wrapTypeErrors(()=>
+		repo.getAll( fromResult as ValidInteger, toResult as ValidInteger )
+	)
 }

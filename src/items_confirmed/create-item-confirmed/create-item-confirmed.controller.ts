@@ -10,12 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { ItemConfirmed } from 'packages/item_confirmed/domain/item_confirmed'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { ItemConfirmedDto } from '../shared/item_confirmed_dto'
-import { parseItemConfirmed } from '../shared/parse_item_confirmed'
 import { CreateItemConfirmedService } from './create-item-confirmed.service'
 
 @ApiTags( 'items-confirmed' )
@@ -116,10 +113,7 @@ export class CreateItemConfirmedController {
 	): Promise<HttpResult> {
 		try {
 
-			const itemConfirmed = parseItemConfirmed( dto )
-
-			await this.createItemConfirmedService.execute( UUID.from( dto.order_id ),
-				itemConfirmed as ItemConfirmed )
+			await this.createItemConfirmedService.execute( dto)
 
 			return {
 				statusCode: HttpStatus.OK

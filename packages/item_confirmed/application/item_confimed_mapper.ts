@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -18,7 +19,7 @@ export function itemConfirmedToJson( itemConfirmed: ItemConfirmed ): Record<stri
 	}
 }
 
-export function itemConfirmedFromJson( json: Record<string, any> ): ItemConfirmed | BaseException[] {
+export function itemConfirmedFromJson( json: Record<string, any> ): ItemConfirmed | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -43,7 +44,7 @@ export function itemConfirmedFromJson( json: Record<string, any> ): ItemConfirme
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors)
 	}
 
 	return new ItemConfirmed(

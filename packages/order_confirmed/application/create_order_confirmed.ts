@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -6,7 +7,10 @@ import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
-import { wrapType } from '../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import { OrderConfirmed } from '../domain/order_confirmed'
 import { OrderConfirmedRepository } from '../domain/order_confirmed_repository'
 
@@ -16,7 +20,7 @@ export const CreateOrderConfirmed = async (
 		id: string,
 		creation_date: Date,
 		accountant_email?: string
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -46,7 +50,7 @@ export const CreateOrderConfirmed = async (
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const orderConfirmed = new OrderConfirmed(
@@ -55,7 +59,5 @@ export const CreateOrderConfirmed = async (
 		emailResult as Email
 	)
 
-	await repo.create( orderConfirmed )
-	return true
-
+	return await wrapTypeErrors(()=>repo.create( orderConfirmed ))
 }

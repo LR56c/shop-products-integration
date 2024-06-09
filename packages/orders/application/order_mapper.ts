@@ -49,7 +49,7 @@ export function orderToJson( order: Order ): Record<string, any> {
 	}
 }
 
-export function orderFromJson( json: Record<string, any> ): Order | BaseException[] {
+export function orderFromJson( json: Record<string, any> ): Order | Errors {
 	const errors: BaseException[] = []
 	const id                      = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.id ) )
@@ -144,7 +144,7 @@ export function orderFromJson( json: Record<string, any> ): Order | BaseExceptio
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	return new Order(
@@ -184,7 +184,7 @@ export function orderResponseToJson( order: OrderResponse ): Record<string, any>
 }
 
 
-export function orderResponseFromJson( json: Record<string, any> ): OrderResponse | BaseException[] {
+export function orderResponseFromJson( json: Record<string, any> ): OrderResponse | Errors {
 	const errors: BaseException[] = []
 	const id                      = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.id ) )
@@ -256,8 +256,8 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 	if ( json.item_confirmed !== null ) {
 		const item_confirmed = itemConfirmedFromJson( json.item_confirmed )
 
-		if ( item_confirmed instanceof BaseException ) {
-			errors.push( item_confirmed )
+		if ( item_confirmed instanceof Errors ) {
+			errors.push( ...item_confirmed.values )
 		}
 		else {
 			itemResult = item_confirmed as ItemConfirmed
@@ -268,8 +268,8 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 	if ( json.orders_confirmed !== null ) {
 		const order_confirmed = orderConfirmedFromJson( json.orders_confirmed )
 
-		if ( order_confirmed instanceof BaseException ) {
-			errors.push( order_confirmed )
+		if ( order_confirmed instanceof Errors ) {
+			errors.push( ...order_confirmed.values )
 		}
 		else {
 			orderResult = order_confirmed as OrderConfirmed
@@ -277,7 +277,7 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new OrderResponse(
@@ -288,7 +288,6 @@ export function orderResponseFromJson( json: Record<string, any> ): OrderRespons
 		products,
 		sellerResult,
 		orderResult,
-
 		itemResult
 	)
 }

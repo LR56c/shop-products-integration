@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
@@ -5,7 +6,11 @@ import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUID
 import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import {
 	Order,
 	OrderProduct
@@ -26,41 +31,45 @@ export const UpdateOrder = async ( repo: OrderRepository,
 		seller_email?: string,
 		order_confirmed_id?: string,
 		item_confirmed_id?: string,
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
-	const clientEmailResult = props.client_email !== undefined
-		? wrapType<Email, EmailException>(
-			() => Email.from( props.client_email ?? '' ) )
-		: order.client_email
+	const clientEmailResult= wrapTypeDefault(
+		undefined,
+		( value ) => Email.from( value ),
+		props.client_email
+	)
 
 	if ( clientEmailResult instanceof BaseException ) {
 		errors.push( clientEmailResult )
 	}
 
-	const paymentIdResult = props.payment_id !== undefined
-		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.payment_id ?? '' ) )
-		: order.payment.id
+	const paymentIdResult = wrapTypeDefault(
+		undefined,
+		( value ) => UUID.from( value ),
+		props.payment_id
+	)
 
 	if ( paymentIdResult instanceof BaseException ) {
 		errors.push( paymentIdResult )
 	}
 
-	const sellerEmailResult = props.seller_email !== undefined
-		? wrapType<Email, EmailException>(
-			() => Email.from( props.seller_email! ) )
-		: order.seller_email ?? undefined
+	const sellerEmailResult = wrapTypeDefault(
+		undefined,
+		( value ) => Email.from( value ),
+		props.seller_email
+	)
 
 	if ( sellerEmailResult instanceof BaseException ) {
 		errors.push( sellerEmailResult )
 	}
 
-	const orderConfirmedResult = props.order_confirmed_id !== undefined
-		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.order_confirmed_id! ) )
-		: order.order_confirmed?.id ?? undefined
+	const orderConfirmedResult = wrapTypeDefault(
+		undefined,
+		( value ) => UUID.from( value ),
+		props.order_confirmed_id
+	)
 
 	if ( orderConfirmedResult !== undefined && orderConfirmedResult instanceof
 		BaseException )
@@ -68,21 +77,21 @@ export const UpdateOrder = async ( repo: OrderRepository,
 		errors.push( orderConfirmedResult )
 	}
 
-	const itemConfirmedResult = props.item_confirmed_id !== undefined
-		? wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.item_confirmed_id! ) )
-		: order.item_confirmed?.id ?? undefined
+	const itemConfirmedResult = wrapTypeDefault(
+		undefined,
+		( value ) => UUID.from( value ),
+		props.item_confirmed_id
+	)
 
 	if ( itemConfirmedResult instanceof BaseException ) {
 		errors.push( itemConfirmedResult )
 	}
 
 	const products = props.products !== undefined ? props.products.map(
-		validateOrderProduct ) : order.products.map(
-		p => new OrderProduct( p.quantity, p.product.id ) )
+		validateOrderProduct ) : order.products.map( p => new OrderProduct( p.quantity, p.product.id ) )
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 	const newOrder = new Order(
 		order.id,
@@ -94,7 +103,7 @@ export const UpdateOrder = async ( repo: OrderRepository,
 		orderConfirmedResult as UUID,
 		itemConfirmedResult as UUID
 	)
-	return repo.updateOrder( orderID, newOrder )
+	return await wrapTypeErrors(() => repo.updateOrder( orderID, newOrder ))
 }
 
 function validateOrderProduct( product: {

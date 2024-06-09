@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { UUID } from '../../shared/domain/value_objects/uuid'
@@ -80,8 +81,8 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 			for ( const orderConfirmed of result.data ) {
 				const order = orderConfirmedFromJson( orderConfirmed )
 
-				if ( order instanceof BaseException ) {
-					throw order
+				if ( order instanceof Errors ) {
+					throw [...order.values]
 				}
 
 				ordersConfirmed.push( order as OrderConfirmed )
@@ -110,8 +111,8 @@ export class OrderConfirmedSupabaseData implements OrderConfirmedRepository {
 
 			const orderConfirmed = orderConfirmedFromJson( result.data[0] )
 
-			if ( orderConfirmed instanceof BaseException ) {
-				throw orderConfirmed
+			if ( orderConfirmed instanceof Errors ) {
+				throw [...orderConfirmed.values]
 			}
 
 			return orderConfirmed as OrderConfirmed

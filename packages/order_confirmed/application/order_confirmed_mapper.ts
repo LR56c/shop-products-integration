@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -16,7 +17,7 @@ export function orderConfirmedToJson( orderConfirmed: OrderConfirmed ): Record<s
 	}
 }
 
-export function orderConfirmedFromJson( json: Record<string, any> ): OrderConfirmed | BaseException[] {
+export function orderConfirmedFromJson( json: Record<string, any> ): OrderConfirmed | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -35,6 +36,14 @@ export function orderConfirmedFromJson( json: Record<string, any> ): OrderConfir
 
 	const accountant_email = wrapType<Email, EmailException>(
 		() => Email.from( json.accountant_email ) )
+
+	if ( accountant_email instanceof BaseException ) {
+		errors.push( new EmailException( 'accountant_email' ) )
+	}
+
+	if ( errors.length > 0 ) {
+		return new Errors( errors)
+	}
 
 	return new OrderConfirmed(
 		id as UUID,

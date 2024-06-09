@@ -114,11 +114,8 @@ export class GetAllItemConfirmedController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const { data } = this.parseGetAllItemConfirmed( { from, to } )
-
 			const ordersConfirmed = await this.getAllItemConfirmedService.execute(
-				data.from,
-				data.to )
+				from, to )
 
 			let json: Record<string, any>[] = []
 			for ( const o of ordersConfirmed ) {

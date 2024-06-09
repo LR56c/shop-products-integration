@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { ItemConfirmed } from 'packages/item_confirmed/domain/item_confirmed'
+import { CreateItemConfirmed } from 'packages/item_confirmed/application/create_item_confirmed'
 import { ItemConfirmedRepository } from 'packages/item_confirmed/domain/item_confirmed_repository'
 import { ItemConfirmedEvent } from 'packages/shared/domain/events/item_confirmed_event'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { ItemConfirmedDto } from 'src/items_confirmed/shared/item_confirmed_dto'
 
 @Injectable()
 export class CreateItemConfirmedService {
@@ -11,12 +12,22 @@ export class CreateItemConfirmedService {
 		private eventEmitter: EventEmitter2 )
 	{}
 
-	async execute( id: UUID, order: ItemConfirmed ): Promise<boolean> {
-		this.eventEmitter.emit( ItemConfirmedEvent.tag, {
-			order_id    : id,
-			confirmed_id: order.id
+	async execute( dto: ItemConfirmedDto ): Promise<boolean> {
+		const result = await CreateItemConfirmed( this.repo, {
+			id               : dto.id,
+			creation_date    : dto.creation_date,
+			shop_keeper_email: dto.shop_keeper_email
 		} )
 
-		return this.repo.create( order )
+		if ( result instanceof Errors ) {
+			throw [ ...result.values ]
+		}
+
+		this.eventEmitter.emit( ItemConfirmedEvent.tag, {
+			order_id    : dto.order_id,
+			confirmed_id: dto.id
+		} )
+
+		return result
 	}
 }

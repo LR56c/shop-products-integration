@@ -109,14 +109,7 @@ export class GetItemConfirmedController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-
-			const result = await this.getItemConfirmedService.execute( idResult )
+			const result = await this.getItemConfirmedService.execute( id )
 
 			return {
 				statusCode: HttpStatus.OK,

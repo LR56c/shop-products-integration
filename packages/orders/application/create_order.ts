@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -6,7 +7,11 @@ import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../shared/utils/wrap_type'
 import {
 	Order,
 	OrderProduct
@@ -25,7 +30,7 @@ export const CreateOrder = async ( repo: OrderRepository,
 		seller_email?: string,
 		order_confirmed_id?: string,
 		item_confirmed_id?: string,
-	} ): Promise<boolean> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -87,10 +92,11 @@ export const CreateOrder = async ( repo: OrderRepository,
 		errors.push( creationDate )
 	}
 
-	const idResult = props.id === undefined
-		? UUID.create()
-		: wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.id! ) )
+	const idResult=wrapTypeDefault(
+		UUID.create(),
+		( value ) => UUID.from( value ),
+		props.id
+	)
 
 	if ( idResult instanceof BaseException ) {
 		errors.push( idResult )
@@ -121,19 +127,19 @@ export const CreateOrder = async ( repo: OrderRepository,
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	return await repo.createOrder(
-		new Order(
-			idResult as UUID,
-			client_email as Email,
-			creationDate as ValidDate,
-			payment as UUID,
-			products,
-			sellerResult,
-			orderResult,
-			itemResult
-		)
+	const o = 		new Order(
+		idResult as UUID,
+		client_email as Email,
+		creationDate as ValidDate,
+		payment as UUID,
+		products,
+		sellerResult,
+		orderResult,
+		itemResult
 	)
+
+	return await wrapTypeErrors(()=>repo.createOrder(o))
 }

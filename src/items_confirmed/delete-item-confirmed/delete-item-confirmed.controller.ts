@@ -91,15 +91,7 @@ export class DeleteItemConfirmedController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResult> {
 		try {
-
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-
-			await this.deleteItemConfirmedService.execute( idResult )
+			await this.deleteItemConfirmedService.execute( id )
 			return {
 				statusCode: HttpStatus.OK
 			}
