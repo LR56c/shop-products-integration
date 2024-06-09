@@ -3,20 +3,34 @@ import { Database } from 'backend/database.types'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from '../../shared/domain/value_objects/uuid'
-import { wrapType } from '../../shared/utils/wrap_type'
-import { AuthRepository } from '../domain/auth_repository'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { Email } from '../../shared/domain/value_objects/email'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { wrapType } from '../../shared/utils/wrap_type'
 import { Password } from '../../user/domain/models/Password'
 import { Auth } from '../domain/auth'
+import { AuthRepository } from '../domain/auth_repository'
 
 export class AuthSupabaseData implements AuthRepository {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
 	readonly tableRelatedName = 'users'
+
+	async delete( id: UUID ): Promise<boolean> {
+		try {
+			const result = await this.client.auth.admin.deleteUser( id.value )
+
+			if ( result.error ) {
+				throw [ new InfrastructureException() ]
+			}
+			return true
+		}
+		catch ( e ) {
+			throw e
+		}
+	}
 
 	async register( email: Email, password: Password ): Promise<Auth> {
 		try {

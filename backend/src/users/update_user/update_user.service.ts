@@ -24,8 +24,8 @@ export class UpdateUserService {
 
 		const userSaved = await GetOneUser( this.repository, (emailResult as Email).value)
 
-		if ( userSaved instanceof BaseException ) {
-			throw [userSaved]
+		if ( userSaved instanceof Errors ) {
+			throw [...userSaved.values]
 		}
 
 		const result = await UpdateUser( this.repository, userSaved, {

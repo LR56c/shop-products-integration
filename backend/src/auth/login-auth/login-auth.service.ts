@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common'
+import { LoginAuth } from '~features/auth/application/login_auth'
 import { Auth } from '~features/auth/domain/auth'
 import { AuthRepository } from '~features/auth/domain/auth_repository'
-import { Email } from '~features/shared/domain/value_objects/email'
-import { Password } from '~features/user/domain/models/Password'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 
 @Injectable()
 export class LoginAuthService {
 	constructor( private readonly repo: AuthRepository ) {}
 
 	async login(
-		email: Email,
-		password: Password
+		email: string,
+		password: string
 	): Promise<Auth> {
-		return this.repo.login( email, password )
+		const result = await LoginAuth( this.repo, email, password )
+
+		if ( result instanceof Errors ) {
+			throw [...result.values]
+		}
+
+		return result
 	}
 }

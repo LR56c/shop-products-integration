@@ -104,17 +104,8 @@ export class DeleteCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
+			await this.deleteCategoriesService.deleteCategory(name)
 
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.deleteCategoriesService.deleteCategory(
-				new Category( nameResult as ValidString )
-			)
 			return {
 				statusCode: HttpStatus.OK
 			}

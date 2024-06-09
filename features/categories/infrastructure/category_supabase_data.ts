@@ -33,11 +33,11 @@ export class CategorySupabaseData implements CategoryRepository {
 		return true
 	}
 
-	async delete( category: Category ): Promise<boolean> {
+	async delete( category: ValidString ): Promise<boolean> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
-			                         .eq( 'name', category.name.value )
+			                         .eq( 'name', category.value )
 
 			if ( result.data?.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'name' ) ]
@@ -47,7 +47,7 @@ export class CategorySupabaseData implements CategoryRepository {
 			          .delete()
 			          .eq(
 				          'name',
-				          category.name.value
+				          category.value
 			          )
 			return true
 		}

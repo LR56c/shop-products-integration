@@ -7,7 +7,8 @@ import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
 	wrapTypeAsync,
-	wrapTypeDefault
+	wrapTypeDefault,
+	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidBooleanException } from '../../shared/domain/exceptions/InvalidBooleanException'
@@ -85,10 +86,10 @@ export const CreatePayment = async (
 		paymentValueResult as ValidInteger,
 		paymentMethodResult as PaymentMethod
 	)
-	const result = await wrapTypeAsync( () => repo.createPayment( p ) )
+	const result = await wrapTypeErrors( () => repo.createPayment( p ) )
 
-	if ( result instanceof BaseException ) {
-		return new Errors( [ result ] )
+	if ( result instanceof Errors ) {
+		return result
 	}
 	return p
 }

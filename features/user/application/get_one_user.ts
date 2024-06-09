@@ -1,23 +1,23 @@
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { UserDao } from '../domain/dao/UserDao'
 import { User } from '../domain/models/User'
 import { Email } from '../../shared/domain/value_objects/email'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import {
 	wrapType,
-	wrapTypeAsync
+	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
 
 export const GetOneUser = async (
 	repo: UserDao,
-	email: string ): Promise<User | BaseException> => {
+	email: string ): Promise<User | Errors> => {
 
 	const emailResult = wrapType<Email, EmailException>(
 		() => Email.from( email ) )
 
 	if ( emailResult instanceof EmailException ) {
-		return new EmailException( 'email' )
+		return new Errors( [ emailResult ])
 	}
 
-	return wrapTypeAsync(()=>repo.getOneUser( emailResult as Email ))
+	return wrapTypeErrors(()=>repo.getOneUser( emailResult as Email ))
 }

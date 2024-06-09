@@ -1,3 +1,4 @@
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
@@ -6,7 +7,7 @@ import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { ValidURL } from '../../shared/domain/value_objects/valid_url'
 import {
 	wrapType,
-	wrapTypeAsync,
+	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -31,7 +32,7 @@ export const CreateProduct = async (
 		price: number
 		stock: number
 		category_name: string
-	} ): Promise<boolean | BaseException> => {
+	} ): Promise<boolean | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -123,7 +124,7 @@ export const CreateProduct = async (
 
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const p = new Product(
@@ -141,5 +142,5 @@ export const CreateProduct = async (
 		categoryResult as ValidString
 	)
 
-	return await wrapTypeAsync( () => repo.createProduct( p ) )
+	return await wrapTypeErrors( () => repo.createProduct( p ) )
 }

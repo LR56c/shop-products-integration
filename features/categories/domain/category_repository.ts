@@ -5,7 +5,7 @@ import { ValidString } from '../../shared/domain/value_objects/valid_string'
 export abstract class CategoryRepository {
 	abstract save( category: Category ): Promise<boolean>
 
-	abstract delete( category: Category ): Promise<boolean>
+	abstract delete( category: ValidString ): Promise<boolean>
 
 	abstract get( from: ValidInteger, to: ValidInteger,
 		name?: ValidString ): Promise<Category[]>

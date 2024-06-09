@@ -10,10 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { Category } from '~features/categories/domain/category'
-import { InvalidStringException } from '~features/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from '~features/shared/domain/value_objects/valid_string'
-import { wrapType } from '~features/shared/utils/wrap_type'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateCategoriesService } from './create-categories.service'
@@ -103,17 +99,8 @@ export class CreateCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
+			await this.createCategoriesService.createCategory(name)
 
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.createCategoriesService.createCategory(
-				new Category( nameResult as ValidString )
-			)
 			return {
 				statusCode: HttpStatus.OK
 			}

@@ -10,7 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { parseAuth } from 'src/auth/shared/parse_auth'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
 import { LoginAuthService } from './login-auth.service'
@@ -103,12 +102,7 @@ export class LoginAuthController {
 	): Promise<HttpResultData<string>> {
 		try {
 
-			const data   = parseAuth( {
-				email,
-				password
-			} )
-			const result = await this.loginAuthService.login( data.email,
-				data.password )
+			const result = await this.loginAuthService.login( email, password )
 			return {
 				statusCode: HttpStatus.OK,
 				data      : result.token.value

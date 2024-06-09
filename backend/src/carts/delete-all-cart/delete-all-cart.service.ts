@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DeleteAllCart } from '~features/carts/application/delete_all_cart'
 import { CartRepository } from '~features/carts/domain/cart_repository'
-import { BaseException } from '~features/shared/domain/exceptions/BaseException'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteAllCartService {
@@ -10,8 +10,8 @@ export class DeleteAllCartService {
 	async deleteAllCart( email: string ): Promise<boolean> {
 		const result = await DeleteAllCart( this.repo, email )
 
-		if ( result instanceof BaseException ) {
-			throw [result]
+		if ( result instanceof Errors ) {
+			throw [...result.values]
 		}
 
 		return result

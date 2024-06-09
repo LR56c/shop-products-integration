@@ -10,12 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { AuthUserDto } from 'src/auth/register-auth/auth_user_dto'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { wrapTypeErrors } from '~features/shared/utils/wrap_type'
-import { InvalidPasswordException } from '~features/user/domain/exceptions/PasswordException'
-import { Password } from '~features/user/domain/models/Password'
+import { AuthUserDto } from '../shared/auth_user_dto'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { RegisterAuthService } from './register-auth.service'
 
 @ApiTags( 'auth' )
@@ -121,14 +118,6 @@ export class RegisterAuthController {
 		@Body( 'user' ) dto: AuthUserDto
 	): Promise<HttpResultData<string>> {
 		try {
-
-			const passwordResult = wrapTypeErrors<Password, InvalidPasswordException>(
-				() => Password.from( password ) )
-
-			if ( !( passwordResult instanceof Password ) ) {
-				throw password
-			}
-
 			const result = await this.registerAuthService.register(
 				dto,
 				password
@@ -136,7 +125,7 @@ export class RegisterAuthController {
 
 			return {
 				statusCode: HttpStatus.OK,
-				data      : result
+				data      : result.token.value
 			}
 		}
 		catch ( e ) {

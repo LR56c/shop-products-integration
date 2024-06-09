@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common'
+import { AuthUserDto } from 'src/auth/shared/auth_user_dto'
+import { DeleteAuth } from '~features/auth/application/delete_auth'
+import { RegisterAuth } from '~features/auth/application/register_auth'
+import { Auth } from '~features/auth/domain/auth'
 import { AuthRepository } from '~features/auth/domain/auth_repository'
-import { UUID } from '~features/shared/domain/value_objects/uuid'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 import { CreateUser } from '~features/user/application/create_user'
 import { UserDao } from '~features/user/domain/dao/UserDao'
-import { AuthUserDto } from './auth_user_dto'
 
 @Injectable()
 export class RegisterAuthService {
@@ -13,19 +16,26 @@ export class RegisterAuthService {
 
 	async register( dto: AuthUserDto,
 		password: string
-		// ): Promise<Auth> {
-	): Promise<string> {
+		): Promise<Auth> {
 
-		// const auth = await this.repo.register( email, password )
-		const tempID = UUID.create()
+		const auth = await RegisterAuth( this.repo, dto.email, password )
 
+		if ( auth instanceof Errors ) {
+			throw [...auth.values]
+		}
 		const user = await CreateUser( this.userRepo, {
-			authId: tempID.value,
+			authId: auth.id.value,
 			rut   : dto.rut,
 			name  : dto.name,
 			email : dto.email,
 			role  : dto.role
 		} )
-		return tempID.value
+
+		if(user instanceof Errors){
+			await DeleteAuth( this.repo, auth.id.value )
+			throw [...user.values]
+		}
+
+		return auth
 	}
 }

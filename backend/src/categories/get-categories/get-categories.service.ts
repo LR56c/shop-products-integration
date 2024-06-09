@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common'
+import { GetCategory } from '~features/categories/application/get_category'
 import { CategoryRepository } from '~features/categories/domain/category_repository'
-import { ValidInteger } from '~features/shared/domain/value_objects/valid_integer'
-import { ValidString } from '~features/shared/domain/value_objects/valid_string'
+import { Errors } from '~features/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetCategoriesService {
 	constructor( private readonly repo: CategoryRepository ) {}
 
-	async getCategories( from: ValidInteger, to: ValidInteger,
-		name?: ValidString )
+	async getCategories( from: number, to: number,
+		name?: string )
 	{
-		return this.repo.get( from, to, name )
+		const result = await GetCategory( this.repo, {
+			from: from,
+			to: to,
+			name: name
+		} )
+
+		if ( result instanceof Errors ) {
+			throw [...result.values]
+		}
+
+		return result
 	}
 }

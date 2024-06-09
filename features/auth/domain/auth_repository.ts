@@ -1,3 +1,4 @@
+import { UUID } from 'features/shared/domain/value_objects/uuid'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { Auth } from './auth'
 import { Email } from '../../shared/domain/value_objects/email'
@@ -9,4 +10,5 @@ export abstract class AuthRepository {
 	abstract login( email: Email, password: Password ): Promise<Auth>
 
 	abstract recover( token: ValidString ): Promise<Auth>
+	abstract delete( id: UUID ): Promise<boolean>
 }

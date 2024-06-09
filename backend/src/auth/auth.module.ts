@@ -2,6 +2,8 @@ import {
 	forwardRef,
 	Module
 } from '@nestjs/common'
+import { DeleteAuthController } from './delete-auth/delete-auth.controller'
+import { DeleteAuthService } from './delete-auth/delete-auth.service'
 import { AppModule } from '../app.module'
 import { LoginAuthController } from './login-auth/login-auth.controller'
 import { LoginAuthService } from './login-auth/login-auth.service'
@@ -11,11 +13,11 @@ import { RegisterAuthController } from './register-auth/register-auth.controller
 import { RegisterAuthService } from './register-auth/register-auth.service'
 
 @Module( {
-	controllers: [ LoginAuthController, RegisterAuthController,
+	controllers: [ LoginAuthController, RegisterAuthController, DeleteAuthController,
 		RefreshAuthController ],
-	providers  : [ LoginAuthService, RegisterAuthService, RefreshAuthService ],
+	providers  : [ LoginAuthService, RegisterAuthService, RefreshAuthService, DeleteAuthService ],
 	imports    : [
-		forwardRef( () => AppModule )
+		forwardRef( () => AppModule ),
 	]
 } )
 export class AuthModule {}
