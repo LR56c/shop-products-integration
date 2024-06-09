@@ -30,9 +30,9 @@ describe( 'User Repository', () => {
 			RoleMother.random()
 		)
 
-		const result = await repo.updateUser( u2.email, updated )
+		const result = await repo.update( u2.email, updated )
 
-		const updatedUser = await repo.getOneUser( u2.email )
+		const updatedUser = await repo.getOne( u2.email )
 
 		console.log( 'should update user' )
 		console.log( 'inputs:', db )
@@ -48,9 +48,9 @@ describe( 'User Repository', () => {
 
 		repo           = new UserMemoryData( [] )
 
-		const create = await repo.createUser( u1 )
+		const create = await repo.create( u1 )
 
-		const result = await repo.getUser( ValidInteger.from( 0 ), ValidInteger.from( 2 ) )
+		const result = await repo.get( ValidInteger.from( 0 ), ValidInteger.from( 2 ) )
 
 		console.log( 'should create user' )
 		console.log( 'inputs:', u1 )
@@ -73,9 +73,9 @@ describe( 'User Repository', () => {
 		const dbLength = db.length
 		repo           = new UserMemoryData( db )
 
-		await repo.deleteUser( u2.email )
+		await repo.delete( u2.email )
 
-		const result = await repo.getUser( ValidInteger.from( 0 ),
+		const result = await repo.get( ValidInteger.from( 0 ),
 			ValidInteger.from( dbLength ) )
 
 		console.log( 'should delete user' )
@@ -98,7 +98,7 @@ describe( 'User Repository', () => {
 		const dbLength = db.length
 		repo           = new UserMemoryData( db )
 
-		const result = await repo.getUser( ValidInteger.from( 0 ),
+		const result = await repo.get( ValidInteger.from( 0 ),
 			ValidInteger.from( dbLength ) )
 
 		console.log( 'should get all users' )
@@ -143,7 +143,7 @@ describe( 'User Repository', () => {
 		const dbLength = db.length
 		repo           = new UserMemoryData( db )
 
-		const result = await repo.getUser( ValidInteger.from( 0 ),
+		const result = await repo.get( ValidInteger.from( 0 ),
 			ValidInteger.from( dbLength ), Role.from('ADMIN') )
 
 		console.log( 'should get all users' )
@@ -166,7 +166,7 @@ describe( 'User Repository', () => {
 		const db       = [ u1, u2 ]
 		repo           = new UserMemoryData( db )
 
-		const result = await repo.getOneUser( u2.email )
+		const result = await repo.getOne( u2.email )
 
 		console.log( 'should get one user' )
 		console.log( 'inputs:', db )

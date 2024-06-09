@@ -76,5 +76,5 @@ export const CreateUser = async (
 		roleResult as Role
 	)
 
-	return await wrapTypeErrors( () => repo.createUser( u ) )
+	return await wrapTypeErrors( () => repo.create( u ) )
 }

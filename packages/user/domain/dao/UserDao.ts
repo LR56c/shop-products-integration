@@ -5,14 +5,14 @@ import { ValidString } from '../../../shared/domain/value_objects/valid_string'
 import { User } from '../models/User'
 
 export abstract class UserDao {
-	abstract createUser( user: User ): Promise<boolean>
+	abstract create( user: User ): Promise<boolean>
 
-	abstract getUser( from: ValidInteger, to: ValidInteger, role?: Role,
+	abstract get( from: ValidInteger, to: ValidInteger, role?: Role,
 		name?: ValidString ): Promise<User[]>
 
-	abstract getOneUser( email: Email ): Promise<User>
+	abstract getOne( email: Email ): Promise<User>
 
-	abstract updateUser( email: Email, user: User ): Promise<boolean>
+	abstract update( email: Email, user: User ): Promise<boolean>
 
-	abstract deleteUser( email: Email ): Promise<boolean>
+	abstract delete( email: Email ): Promise<boolean>
 }

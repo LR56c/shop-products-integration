@@ -23,9 +23,11 @@ export class CreatePaymentService {
 		if ( result instanceof Errors ) {
 			throw [ ...result.values ]
 		}
+
 		this.eventEmitter.emit( PaymentProcessedEvent.tag, {
 			payment: result
 		} )
+
 		return true
 	}
 }

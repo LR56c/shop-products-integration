@@ -40,14 +40,14 @@ export const GetUser = async (
 
 	const role = wrapTypeDefault(
 		undefined,
-		( value ) => ValidString.from( value ),
+		( value ) => Role.from( value ),
 		props.role
 	)
 
 	if ( role != undefined && role instanceof
 		BaseException )
 	{
-		errors.push( new InvalidStringException( 'role' ) )
+		errors.push( role )
 	}
 
 	const name = wrapTypeDefault(
@@ -66,7 +66,7 @@ export const GetUser = async (
 		return new Errors( errors )
 	}
 
-	return wrapTypeErrors( () => repo.getUser(
+	return wrapTypeErrors( () => repo.get(
 		fromResult as ValidInteger,
 		toResult as ValidInteger,
 		role as Role,

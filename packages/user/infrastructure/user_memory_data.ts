@@ -21,7 +21,7 @@ export class UserMemoryData implements UserDao {
 		} )
 	}
 
-	async createUser( user: User ): Promise<boolean> {
+	async create( user: User ): Promise<boolean> {
 		try {
 
 			const emailExist = this.emailDB.get( user.email.value )
@@ -39,7 +39,7 @@ export class UserMemoryData implements UserDao {
 		}
 	}
 
-	async getUser( from: ValidInteger, to: ValidInteger, role?: Role,
+	async get( from: ValidInteger, to: ValidInteger, role?: Role,
 		name?: ValidString ): Promise<User[]> {
 		try {
 			let result = Array.from( this.db.values() )
@@ -59,7 +59,7 @@ export class UserMemoryData implements UserDao {
 		}
 	}
 
-	async getOneUser( email: Email ): Promise<User> {
+	async getOne( email: Email ): Promise<User> {
 		try {
 
 			const user = this.emailDB.get( email.value )
@@ -74,7 +74,7 @@ export class UserMemoryData implements UserDao {
 		}
 	}
 
-	async updateUser( email: Email, user: User ): Promise<boolean> {
+	async update( email: Email, user: User ): Promise<boolean> {
 		try {
 			const emailUser = this.emailDB.get( email.value )
 
@@ -92,7 +92,7 @@ export class UserMemoryData implements UserDao {
 		}
 	}
 
-	async deleteUser( email: Email ): Promise<boolean> {
+	async delete( email: Email ): Promise<boolean> {
 		try {
 			const user = this.emailDB.get( email.value )
 

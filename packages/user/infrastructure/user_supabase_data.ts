@@ -19,7 +19,7 @@ import { User } from '../domain/models/User'
 export class UserSupaBaseData implements UserDao {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
-	async getOneUser( email: Email ): Promise<User> {
+	async getOne( email: Email ): Promise<User> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
@@ -48,7 +48,7 @@ export class UserSupaBaseData implements UserDao {
 
 	readonly tableName = 'users'
 
-	async getUser( from: ValidInteger, to: ValidInteger, role?: Role,
+	async get( from: ValidInteger, to: ValidInteger, role?: Role,
 		name?: ValidString ): Promise<User[]> {
 		try {
 
@@ -90,7 +90,7 @@ export class UserSupaBaseData implements UserDao {
 		}
 	}
 
-	async updateUser( email: ValidString, user: User ): Promise<boolean> {
+	async update( email: ValidString, user: User ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
 			          .update( userToJson( user ) as any )
@@ -102,7 +102,7 @@ export class UserSupaBaseData implements UserDao {
 		}
 	}
 
-	async deleteUser( email: ValidString ): Promise<boolean> {
+	async delete( email: ValidString ): Promise<boolean> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
@@ -122,7 +122,7 @@ export class UserSupaBaseData implements UserDao {
 		}
 	}
 
-	async createUser( user: User ): Promise<boolean> {
+	async create( user: User ): Promise<boolean> {
 		try {
 			await this.client.from( this.tableName )
 			          .insert( userToJson( user ) as any )

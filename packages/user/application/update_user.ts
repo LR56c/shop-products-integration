@@ -71,5 +71,5 @@ export const UpdateUser = async (
 		roleResult as Role
 	)
 
-	return await wrapTypeErrors( () => repo.updateUser( user.email, newUser ) )
+	return await wrapTypeErrors( () => repo.update( user.email, newUser ) )
 }

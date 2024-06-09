@@ -19,5 +19,5 @@ export const DeleteUser = async (
 		return new Errors( [ emailResult ] )
 	}
 
-	return wrapTypeErrors( () => repo.deleteUser( emailResult ) )
+	return wrapTypeErrors( () => repo.delete( emailResult ) )
 }

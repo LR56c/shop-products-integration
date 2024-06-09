@@ -19,5 +19,5 @@ export const GetOneUser = async (
 		return new Errors( [ emailResult ] )
 	}
 
-	return wrapTypeErrors( () => repo.getOneUser( emailResult as Email ) )
+	return wrapTypeErrors( () => repo.getOne( emailResult as Email ) )
 }
