@@ -7,13 +7,7 @@ export function wrapType<T, Err extends BaseException>( returnFunction: () => T 
 		return returnFunction()
 	}
 	catch ( e: unknown ) {
-		const err = e as Err
-		if ( e instanceof Error && e.name === err.name ) {
-			return err
-		}
-		else {
-			return new UnknownException()
-		}
+		return e as BaseException
 	}
 }
 
@@ -22,13 +16,7 @@ export async function wrapTypeAsync<T, Err extends BaseException>( returnFunctio
 		return await returnFunction()
 	}
 	catch ( e: unknown ) {
-		const err = e as Err
-		if ( e instanceof Error && e.name === err.name ) {
-			return err
-		}
-		else {
-			return new UnknownException()
-		}
+		return e as BaseException
 	}
 }
 
@@ -54,13 +42,8 @@ export async function wrapTypeErrors<T, Err extends BaseException>( returnFuncti
 
 		const errors: BaseException[] = []
 
-		for ( const baseException of e as BaseException[] ) {
-			if ( e instanceof Error && err.name === baseException.name ) {
-				errors.push( baseException )
-			}
-			else {
-				errors.push( new UnknownException() )
-			}
+		for ( const err of e as BaseException[] ) {
+			errors.push( err )
 		}
 
 		return new Errors( errors )
