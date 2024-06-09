@@ -7,15 +7,28 @@ import { NewsLetterRepository } from '../domain/news_letter_repository'
 
 export class NewsLetterMemoryData implements NewsLetterRepository {
 
-	constructor( readonly db: Map<string, NewsLetter> ) {}
+	constructor( db : NewsLetter[]  ) {
+		this.db = new Map()
+
+		db.forEach( ( newsLetter ) => {
+			this.db.set( newsLetter.userEmail.value, newsLetter )
+		} )
+	}
+	readonly db: Map<string, NewsLetter>
 
 	async add( newsLetter: NewsLetter ): Promise<boolean> {
 		try {
+			const exist = this.db.get( newsLetter.userEmail.value )
+
+			if ( exist !== undefined ) {
+				throw [ new InfrastructureException() ]
+			}
+
 			this.db.set( newsLetter.userEmail.value, newsLetter )
 			return true
 		}
 		catch ( e ) {
-			throw [ new InfrastructureException() ]
+			throw e
 		}
 	}
 
@@ -36,6 +49,12 @@ export class NewsLetterMemoryData implements NewsLetterRepository {
 
 	async remove( email: Email ): Promise<boolean> {
 		try {
+			const newsLetter = this.db.get( email.value )
+
+			if ( newsLetter === undefined ) {
+				throw [ new InfrastructureException() ]
+			}
+
 			this.db.delete( email.value )
 			return true
 		}
@@ -47,18 +66,14 @@ export class NewsLetterMemoryData implements NewsLetterRepository {
 	async getAll( from: ValidInteger, to: ValidInteger,
 		name?: ValidString ): Promise<NewsLetter[]> {
 		try {
-			const newsLetters = Array.from( this.db.values() )
+			let newsLetters = Array.from( this.db.values() )
 
-			const result: NewsLetter[] = []
 
 			if ( name !== undefined ) {
-				result.push(
-					...newsLetters.filter( newsLetter => newsLetter.name === name ) )
+				newsLetters = newsLetters.filter( newsLetter => newsLetter.name.value === name.value )
 			}
 
-			result.slice( from.value, to.value )
-
-			return result
+			return newsLetters.slice( from.value, to.value )
 		}
 		catch ( e ) {
 			throw [ new InfrastructureException() ]
