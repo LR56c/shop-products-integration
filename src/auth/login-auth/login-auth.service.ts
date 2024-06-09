@@ -15,7 +15,7 @@ export class LoginAuthService {
 		const result = await LoginAuth( this.repo, email, password )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

@@ -1,6 +1,6 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { Email } from '../../shared/domain/value_objects/email'
 import {
 	wrapType,
@@ -19,6 +19,6 @@ export const DeleteNewsLetter = async (
 		return new Errors( [ emailResult ] )
 	}
 
-	return await wrapTypeErrors(()=>repo.remove( emailResult ))
+	return await wrapTypeErrors( () => repo.remove( emailResult ) )
 
 }

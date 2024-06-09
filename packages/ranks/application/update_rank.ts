@@ -1,5 +1,8 @@
-import { RankRepository } from '../domain/rank_repository'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
@@ -7,13 +10,10 @@ import {
 	wrapTypeDefault,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Rank } from '../domain/rank'
+import { RankRepository } from '../domain/rank_repository'
 
-export const UpdateRank = async (repo : RankRepository, rank : Rank, props: {
+export const UpdateRank = async ( repo: RankRepository, rank: Rank, props: {
 	code?: string
 	user_email?: string
 	rank?: number
@@ -22,7 +22,7 @@ export const UpdateRank = async (repo : RankRepository, rank : Rank, props: {
 
 	const codeResult = wrapTypeDefault(
 		rank.code,
-		(value) => ValidString.from( value ),
+		( value ) => ValidString.from( value ),
 		props.code
 	)
 
@@ -32,7 +32,7 @@ export const UpdateRank = async (repo : RankRepository, rank : Rank, props: {
 
 	const rankResult = wrapTypeDefault(
 		rank.value,
-		(value) => ValidRank.from( value ),
+		( value ) => ValidRank.from( value ),
 		props.rank
 	)
 
@@ -42,7 +42,7 @@ export const UpdateRank = async (repo : RankRepository, rank : Rank, props: {
 
 	const email = wrapTypeDefault(
 		rank.user_email,
-		(value) => Email.from( value ),
+		( value ) => Email.from( value ),
 		props.user_email
 	)
 
@@ -61,5 +61,5 @@ export const UpdateRank = async (repo : RankRepository, rank : Rank, props: {
 		codeResult as ValidString
 	)
 
-	return await wrapTypeErrors(()=> repo.updateRank(r))
+	return await wrapTypeErrors( () => repo.updateRank( r ) )
 }

@@ -1,5 +1,3 @@
-import { Auth } from '../domain/auth'
-import { AuthRepository } from '../domain/auth_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -8,10 +6,12 @@ import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
+import { Auth } from '../domain/auth'
+import { AuthRepository } from '../domain/auth_repository'
 
 export const RecoverAuth = async (
 	repo: AuthRepository,
-	token: string,
+	token: string
 ): Promise<Auth | Errors> => {
 
 	const tokenResult = wrapType<ValidString, InvalidStringException>(
@@ -19,10 +19,10 @@ export const RecoverAuth = async (
 	)
 
 	if ( tokenResult instanceof BaseException ) {
-		return new Errors([new InvalidStringException( 'token' )])
+		return new Errors( [ new InvalidStringException( 'token' ) ] )
 	}
 
-	return await wrapTypeErrors(()=>repo.recover(
+	return await wrapTypeErrors( () => repo.recover(
 		tokenResult as ValidString
-	))
+	) )
 }

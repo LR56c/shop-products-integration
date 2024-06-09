@@ -1,9 +1,9 @@
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { UserDao } from '../domain/dao/UserDao'
 import { Email } from '../../shared/domain/value_objects/email'
 import { Role } from '../../shared/domain/value_objects/role'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
+import { UserDao } from '../domain/dao/UserDao'
 import { User } from '../domain/models/User'
 
 export class UserMemoryData implements UserDao {

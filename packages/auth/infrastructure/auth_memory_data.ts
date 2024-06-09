@@ -8,11 +8,12 @@ import { AuthRepository } from '../domain/auth_repository'
 
 export class AuthMemoryData implements AuthRepository {
 
-	constructor(db : {
+	constructor( db: {
 		password: Password,
 		email: Email,
-		auth : Auth
-	}[]) {
+		auth: Auth
+	}[] )
+	{
 		this.db      = new Map()
 		this.dbp     = new Map()
 		this.dbEmail = new Map()

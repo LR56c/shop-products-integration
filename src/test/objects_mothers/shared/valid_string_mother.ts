@@ -3,10 +3,10 @@ import { ValidString } from '../../../../packages/shared/domain/value_objects/va
 
 export class ValidStringMother {
 	static random(): ValidString {
-		return ValidString.from(FakerFirstNameMother.random())
+		return ValidString.from( FakerFirstNameMother.random() )
 	}
 
 	static invalid(): ValidString {
-		return ValidString.from('')
+		return ValidString.from( '' )
 	}
 }

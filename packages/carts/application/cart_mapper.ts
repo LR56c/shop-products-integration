@@ -1,4 +1,3 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
 import {
 	productFromJson,
 	productToJson
@@ -6,6 +5,7 @@ import {
 import { Product } from '../../products/domain/models/product'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '../../shared/domain/value_objects/email'

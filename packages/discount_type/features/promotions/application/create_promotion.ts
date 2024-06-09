@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
@@ -9,7 +10,11 @@ import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
 import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
 import { ValidString } from '../../../../shared/domain/value_objects/valid_string'
-import { wrapType } from '../../../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../../../shared/utils/wrap_type'
 import { DiscountRepository } from '../../../domain/discount_repository'
 import {
 	Promotion,
@@ -28,14 +33,15 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 			quantity: number,
 			product_id: string
 		}[]
-	} ): Promise<Promotion> => {
+	} ): Promise<Promotion | Errors> => {
 
 	const errors: BaseException[] = []
 
-	const idResult = props.id === undefined
-		? UUID.create()
-		: wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.id! ) )
+	const idResult = wrapTypeDefault(
+		UUID.create(),
+		( value ) => UUID.from( value ),
+		props.id
+	)
 
 	if ( idResult instanceof BaseException ) {
 		errors.push( idResult )
@@ -98,7 +104,7 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	const promotion = new Promotion(
@@ -111,7 +117,11 @@ export const CreatePromotion = async ( repo: DiscountRepository,
 		products
 	)
 
-	await repo.create( promotion )
+	const result = await wrapTypeErrors( () => repo.create( promotion ) )
+
+	if ( result instanceof Errors ) {
+		return result
+	}
 
 	return promotion
 }

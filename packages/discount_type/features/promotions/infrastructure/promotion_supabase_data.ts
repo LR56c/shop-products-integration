@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
@@ -82,8 +82,8 @@ export class PromotionSupabaseData implements PromotionRepository {
 				}
 
 				const d = promotionResponseFromJson( jsonClear )
-				if ( d instanceof BaseException ) {
-					throw d
+				if ( d instanceof Errors ) {
+					throw [ ...d.values ]
 				}
 				discounts.push( d as PromotionResponse )
 			}
@@ -123,8 +123,8 @@ export class PromotionSupabaseData implements PromotionRepository {
 
 			const discount = promotionResponseFromJson( jsonClear )
 
-			if ( discount instanceof BaseException ) {
-				throw discount
+			if ( discount instanceof Errors ) {
+				throw [ ...discount.values ]
 			}
 
 			return discount as PromotionResponse

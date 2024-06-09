@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../shared/domain/exceptions/InvalidPercentageException'
@@ -21,7 +22,7 @@ export function discountToJson( discount: Discount ): Record<string, any> {
 	}
 }
 
-export function discountFromJson( json: Record<string, any> ): Discount | BaseException[] {
+export function discountFromJson( json: Record<string, any> ): Discount | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -67,7 +68,7 @@ export function discountFromJson( json: Record<string, any> ): Discount | BaseEx
 	}
 
 	if ( type instanceof BaseException || errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new Discount(

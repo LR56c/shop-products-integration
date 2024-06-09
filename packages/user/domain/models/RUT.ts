@@ -1,17 +1,21 @@
-import { InvalidRUTException } from '../exceptions/InvalidRUTException'
 import { z } from 'zod'
+import { InvalidRUTException } from '../exceptions/InvalidRUTException'
 
-export const RUTSchema = z.string({
-	message: 'Ingrese un RUT válido',
-}).superRefine((arg, ctx) => {
-	if( !arg.match( RegExp( /\b[0-9|.]{1,10}-{1}[K|k|0-9]{1}$/ ) ) || !verify_id( arg )) {
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: 'Ingrese un RUT válido'
-		})
-	}
-	return arg
-})
+export const RUTSchema = z.string( {
+	message: 'Ingrese un RUT válido'
+} )
+                          .superRefine( ( arg, ctx ) => {
+	                          if ( !arg.match(
+			                          RegExp( /\b[0-9|.]{1,10}-{1}[K|k|0-9]{1}$/ ) ) ||
+		                          !verify_id( arg ) )
+	                          {
+		                          ctx.addIssue( {
+			                          code   : z.ZodIssueCode.custom,
+			                          message: 'Ingrese un RUT válido'
+		                          } )
+	                          }
+	                          return arg
+                          } )
 
 export class RUT {
 	readonly value: string
@@ -25,7 +29,7 @@ export class RUT {
 	 * @throws {InvalidRUTException} - if string is invalid
 	 */
 	static from( value: string ): RUT {
-		const parseValue = RUTSchema.safeParse( value)
+		const parseValue = RUTSchema.safeParse( value )
 		if ( !parseValue.success ) {
 			throw new InvalidRUTException()
 		}
@@ -35,7 +39,8 @@ export class RUT {
 }
 
 function verify_id_digits( rut: string ): string {
-	let clean_id = rut.replaceAll( '.', '' ).replaceAll( '-', '' )
+	let clean_id = rut.replaceAll( '.', '' )
+	                  .replaceAll( '-', '' )
 	let body     = clean_id.substring( 0, clean_id.length - 1 )
 	let add      = 0
 	let multiple = 2

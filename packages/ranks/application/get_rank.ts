@@ -1,11 +1,11 @@
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Rank } from '../domain/rank'
 import { RankRepository } from '../domain/rank_repository'
 

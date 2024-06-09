@@ -99,7 +99,7 @@ export class CreateCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
-			await this.createCategoriesService.createCategory(name)
+			await this.createCategoriesService.createCategory( name )
 
 			return {
 				statusCode: HttpStatus.OK

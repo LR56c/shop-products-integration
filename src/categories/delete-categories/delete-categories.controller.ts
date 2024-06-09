@@ -10,10 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { Category } from 'packages/categories/domain/category'
-import { InvalidStringException } from 'packages/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteCategoriesService } from './delete-categories.service'
@@ -104,7 +100,7 @@ export class DeleteCategoriesController {
 		@Body( 'name' ) name: string
 	): Promise<HttpResult> {
 		try {
-			await this.deleteCategoriesService.deleteCategory(name)
+			await this.deleteCategoriesService.deleteCategory( name )
 
 			return {
 				statusCode: HttpStatus.OK

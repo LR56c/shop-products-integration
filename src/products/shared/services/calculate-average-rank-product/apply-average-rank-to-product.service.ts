@@ -19,15 +19,16 @@ export class ApplyAverageRankToProductService {
 				payload.product_id.value )
 
 			if ( productResult instanceof Errors ) {
-				throw [...productResult.values]
+				throw [ ...productResult.values ]
 			}
 
-			const result = await UpdateProduct( this.repository, payload.product_id, productResult, {
-				average_rank: payload.average_value.value
-			} )
+			const result = await UpdateProduct( this.repository, payload.product_id,
+				productResult, {
+					average_rank: payload.average_value.value
+				} )
 
 			if ( result instanceof Errors ) {
-				throw [...result.values]
+				throw [ ...result.values ]
 			}
 
 			console.log(

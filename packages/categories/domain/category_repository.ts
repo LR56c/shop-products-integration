@@ -1,6 +1,6 @@
-import { Category } from './category'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { Category } from './category'
 
 export abstract class CategoryRepository {
 	abstract save( category: Category ): Promise<boolean>

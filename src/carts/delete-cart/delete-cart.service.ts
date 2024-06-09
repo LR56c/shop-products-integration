@@ -11,7 +11,7 @@ export class DeleteCartService {
 		const result = await DeleteCart( this.repo, email, product_id )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

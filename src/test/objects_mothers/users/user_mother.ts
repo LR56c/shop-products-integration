@@ -1,9 +1,9 @@
-import { UUIDMother } from '../shared/uuid_mother'
 import { UUID } from '../../../../packages/shared/domain/value_objects/uuid'
 import { User } from '../../../../packages/user/domain/models/User'
 import { EmailMother } from '../shared/email_mother'
 import { RoleMother } from '../shared/role_mother'
 import { RUTMother } from '../shared/rut_mother'
+import { UUIDMother } from '../shared/uuid_mother'
 import { ValidStringMother } from '../shared/valid_string_mother'
 
 export class UserMother {
@@ -24,6 +24,6 @@ export class UserMother {
 			ValidStringMother.invalid(),
 			EmailMother.invalid(),
 			RoleMother.invalid()
-		 )
+		)
 	}
 }

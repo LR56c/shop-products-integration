@@ -1,5 +1,5 @@
-import { EmailException } from '../exceptions/EmailException'
 import { z } from 'zod'
+import { EmailException } from '../exceptions/EmailException'
 
 export class Email {
 	readonly value: string

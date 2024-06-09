@@ -1,7 +1,7 @@
 import { UUID } from '../../../shared/domain/value_objects/uuid'
-import { ValidInteger } from '../../../shared/domain/value_objects/valid_integer'
-import { ValidDate } from '../../../shared/domain/value_objects/valid_date'
 import { ValidBool } from '../../../shared/domain/value_objects/valid_bool'
+import { ValidDate } from '../../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../../shared/domain/value_objects/valid_string'
 import { PaymentMethod } from './payment_method'
 

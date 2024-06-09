@@ -12,12 +12,12 @@ export class GetCategoriesService {
 	{
 		const result = await GetCategory( this.repo, {
 			from: from,
-			to: to,
+			to  : to,
 			name: name
 		} )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

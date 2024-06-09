@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { PromotionDto } from 'src/promotions/shared/promotion_dto'
 import { DiscountRepository } from 'packages/discount_type/domain/discount_repository'
 import { CreatePromotion } from 'packages/discount_type/features/promotions/application/create_promotion'
@@ -17,7 +18,7 @@ export class CreatePromotionService {
 	{}
 
 	async execute( promotion: PromotionDto ): Promise<boolean> {
-		const p  = await CreatePromotion( this.discountRepo, {
+		const p = await CreatePromotion( this.discountRepo, {
 			id           : promotion.id,
 			name         : promotion.name,
 			percentage   : promotion.percentage,
@@ -26,10 +27,20 @@ export class CreatePromotionService {
 			end_date     : promotion.end_date,
 			products     : promotion.products
 		} )
+
+		if ( p instanceof Errors ) {
+			throw [ ...p.values ]
+		}
+
 		const lp = await LinkProducts( this.promotionRepo, {
 			id      : p.id.value,
 			products: promotion.products
 		} )
+
+		if ( lp instanceof Errors ) {
+			throw [ ...lp.values ]
+		}
+
 		for ( const l of lp ) {
 			this.eventEmitter.emit( DiscountCreatedEvent.tag, {
 				discount_id: p.id.value,

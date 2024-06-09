@@ -142,7 +142,7 @@ export function productFromJson( json: Record<string, any> ): Product | Errors {
 	}
 
 	if ( errors.length > 0 ) {
-		return new Errors( errors)
+		return new Errors( errors )
 	}
 
 	return new Product(
@@ -270,8 +270,8 @@ export function productResponseFromJson( json: Record<string, any> ): ProductRes
 	let discountResult: Discount | undefined = undefined
 	if ( json.discounts !== null ) {
 		const discount = discountFromJson( json.discounts )
-		if ( discount instanceof BaseException ) {
-			errors.push( discount )
+		if ( discount instanceof Errors ) {
+			errors.push( ...discount.values )
 		}
 		else {
 			discountResult = discount as Discount

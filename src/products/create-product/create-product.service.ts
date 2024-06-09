@@ -23,7 +23,7 @@ export class CreateProductService {
 		} )
 
 		if ( result instanceof BaseException ) {
-			throw [result]
+			throw [ result ]
 		}
 		return true
 	}

@@ -1,16 +1,16 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
-import { UserDao } from '../domain/dao/UserDao'
-import { User } from '../domain/models/User'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { Role } from '../../shared/domain/value_objects/role'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidString } from '../../shared/domain/value_objects/valid_string'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { Role } from '../../shared/domain/value_objects/role'
+import { UserDao } from '../domain/dao/UserDao'
+import { User } from '../domain/models/User'
 
 export const GetUser = async (
 	repo: UserDao,
@@ -63,7 +63,7 @@ export const GetUser = async (
 		return new Errors( errors )
 	}
 
-	return wrapTypeErrors(()=>repo.getUser(
+	return wrapTypeErrors( () => repo.getUser(
 		fromResult as ValidInteger,
 		toResult as ValidInteger,
 		role as Role,

@@ -1,4 +1,3 @@
-import { OrderConfirmedDto } from './order_confirmed_dto'
 import { OrderConfirmed } from 'packages/order_confirmed/domain/order_confirmed'
 import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
 import { EmailException } from 'packages/shared/domain/exceptions/EmailException'
@@ -8,6 +7,7 @@ import { Email } from 'packages/shared/domain/value_objects/email'
 import { UUID } from 'packages/shared/domain/value_objects/uuid'
 import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
 import { wrapType } from 'packages/shared/utils/wrap_type'
+import { OrderConfirmedDto } from './order_confirmed_dto'
 
 export function parseOrderConfirmed( dto: OrderConfirmedDto ): OrderConfirmed | BaseException[]
 {

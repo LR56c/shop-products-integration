@@ -13,7 +13,7 @@ export class DeleteCategoriesService {
 		} )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

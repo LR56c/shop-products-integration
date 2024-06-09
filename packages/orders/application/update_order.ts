@@ -1,19 +1,17 @@
-import { OrderResponse } from '../domain/order_response'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
+import { Email } from '../../shared/domain/value_objects/email'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { wrapType } from '../../shared/utils/wrap_type'
 import {
 	Order,
 	OrderProduct
 } from '../domain/order'
 import { OrderRepository } from '../domain/order_repository'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
-import { Email } from '../../shared/domain/value_objects/email'
-import { UUID } from '../../shared/domain/value_objects/uuid'
-import {
-	wrapType
-} from '../../shared/utils/wrap_type'
+import { OrderResponse } from '../domain/order_response'
 
 export const UpdateOrder = async ( repo: OrderRepository,
 	orderID: UUID,

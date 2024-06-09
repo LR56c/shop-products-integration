@@ -1,10 +1,10 @@
-import { Errors } from '../../../../shared/domain/exceptions/errors'
 import {
 	productFromJson,
 	productToJson
 } from '../../../../products/application/product_mapper'
 import { Product } from '../../../../products/domain/models/product'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../../../shared/domain/exceptions/errors'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
@@ -42,7 +42,7 @@ export function promotionToJson( promotion: Promotion ): Record<string, any> {
 	}
 }
 
-export function promotionFromJson( json: Record<string, any> ): Promotion | BaseException[] {
+export function promotionFromJson( json: Record<string, any> ): Promotion | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -113,7 +113,7 @@ export function promotionFromJson( json: Record<string, any> ): Promotion | Base
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new Promotion(
@@ -144,7 +144,7 @@ export function promotionResponseToJson( promotion: PromotionResponse ): Record<
 	}
 }
 
-export function promotionResponseFromJson( json: Record<string, any> ): PromotionResponse | BaseException[] {
+export function promotionResponseFromJson( json: Record<string, any> ): PromotionResponse | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -214,7 +214,7 @@ export function promotionResponseFromJson( json: Record<string, any> ): Promotio
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new PromotionResponse(

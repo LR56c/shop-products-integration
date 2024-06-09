@@ -1,12 +1,12 @@
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Errors } from '../../shared/domain/exceptions/errors'
-import { CartRepository } from '../domain/cart_repository'
+import { Email } from '../../shared/domain/value_objects/email'
 import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { Email } from '../../shared/domain/value_objects/email'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { CartRepository } from '../domain/cart_repository'
 
 export const DeleteAllCart = async (
 	repo: CartRepository,
@@ -20,5 +20,5 @@ export const DeleteAllCart = async (
 		return new Errors( [ emailResult ] )
 	}
 
-	return await wrapTypeErrors(()=>repo.removeAll( emailResult ))
+	return await wrapTypeErrors( () => repo.removeAll( emailResult ) )
 }

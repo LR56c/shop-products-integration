@@ -9,10 +9,10 @@ export class DeleteProductService {
 	}
 
 	async deleteProduct( id: string ): Promise<boolean> {
-		const result =  await DeleteProduct( this.repository, id )
+		const result = await DeleteProduct( this.repository, id )
 
 		if ( result instanceof BaseException ) {
-			throw [result]
+			throw [ result ]
 		}
 		return true
 	}

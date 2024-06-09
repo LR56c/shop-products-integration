@@ -12,10 +12,6 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidStringException } from 'packages/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { RefreshAuthService } from './refresh-auth.service'
 
 @ApiTags( 'auth' )

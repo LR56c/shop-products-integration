@@ -1,5 +1,5 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
@@ -50,7 +50,7 @@ export const GetAllNewsLetter = async (
 		return new Errors( errors )
 	}
 
-	return await wrapTypeErrors(()=>repo.getAll(
+	return await wrapTypeErrors( () => repo.getAll(
 		fromResult as ValidInteger,
 		toResult as ValidInteger,
 		name as ValidString )

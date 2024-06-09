@@ -13,7 +13,7 @@ export class GetOneUserService {
 		const result = await GetOneUser( this.repo, email )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

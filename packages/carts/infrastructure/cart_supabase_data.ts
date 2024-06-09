@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { CartProductResponse } from '../domain/cart_response'
 import { Errors } from '../../shared/domain/exceptions/errors'
 import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
@@ -10,6 +9,7 @@ import { KeyAlreadyExistException } from '../../shared/infrastructure/key_alread
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import { cartProductResponseFromJson } from '../application/cart_mapper'
 import { CartRepository } from '../domain/cart_repository'
+import { CartProductResponse } from '../domain/cart_response'
 
 export class CartSupabaseData implements CartRepository {
 
@@ -112,7 +112,7 @@ export class CartSupabaseData implements CartRepository {
 				}
 				const cartResult = cartProductResponseFromJson( json )
 				if ( cartResult instanceof Errors ) {
-					throw [...cartResult.values]
+					throw [ ...cartResult.values ]
 				}
 
 				cartProducts.push( cartResult as CartProductResponse )

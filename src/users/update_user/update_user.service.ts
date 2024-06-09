@@ -21,10 +21,11 @@ export class UpdateUserService {
 			throw [ new EmailException( 'email' ) ]
 		}
 
-		const userSaved = await GetOneUser( this.repository, (emailResult as Email).value)
+		const userSaved = await GetOneUser( this.repository,
+			( emailResult as Email ).value )
 
 		if ( userSaved instanceof Errors ) {
-			throw [...userSaved.values]
+			throw [ ...userSaved.values ]
 		}
 
 		const result = await UpdateUser( this.repository, userSaved, {
@@ -35,7 +36,7 @@ export class UpdateUserService {
 		} )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

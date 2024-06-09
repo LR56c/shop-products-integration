@@ -142,7 +142,7 @@ export const UpdateProduct = async (
 	const discountResult = wrapTypeDefault(
 		product.discount?.id ?? undefined,
 		( value ) => UUID.from( value ),
-		props.discount)
+		props.discount )
 
 	if ( discountResult instanceof BaseException ) {
 		errors.push( new InvalidUUIDException( 'discount' ) )
@@ -168,5 +168,6 @@ export const UpdateProduct = async (
 		discountResult as UUID | undefined
 	)
 
-	return await wrapTypeErrors( () => repo.updateProduct( productID, newProduct ) )
+	return await wrapTypeErrors(
+		() => repo.updateProduct( productID, newProduct ) )
 }

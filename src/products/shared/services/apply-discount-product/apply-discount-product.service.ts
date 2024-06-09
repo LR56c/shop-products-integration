@@ -17,16 +17,17 @@ export class ApplyDiscountProductService {
 			const product = await GetProduct( this.repo, payload.product_id )
 
 			if ( product instanceof Errors ) {
-				throw [...product.values]
+				throw [ ...product.values ]
 			}
 
-			const result = await UpdateProduct( this.repo, UUID.from( payload.product_id ), product,
+			const result = await UpdateProduct( this.repo,
+				UUID.from( payload.product_id ), product,
 				{
 					discount: payload.discount_id
 				} )
 
 			if ( result instanceof Errors ) {
-				throw [...result.values]
+				throw [ ...result.values ]
 			}
 
 			console.log(

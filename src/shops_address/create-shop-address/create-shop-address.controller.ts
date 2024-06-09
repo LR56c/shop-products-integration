@@ -10,10 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { InvalidStringException } from 'packages/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { ShopAddress } from 'packages/shop-address/domain/shop-address'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreateShopAddressService } from './create-shop-address.service'
@@ -101,17 +97,8 @@ export class CreateShopAddressController {
 	} )
 	async createShopAddress( @Body( 'name' ) name: string ): Promise<HttpResult> {
 		try {
+			await this.createShopAddressService.createShopAddress( name )
 
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.createShopAddressService.createShopAddress(
-				new ShopAddress( nameResult as ValidString )
-			)
 			return {
 				statusCode: HttpStatus.OK
 			}

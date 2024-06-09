@@ -11,7 +11,7 @@ export class CheckNewsLetterService {
 		const result = await GetNewsLetter( this.repo, email )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

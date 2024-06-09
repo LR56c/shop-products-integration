@@ -4,6 +4,7 @@ import { PromotionProduct } from 'packages/discount_type/features/promotions/dom
 import { PromotionRepository } from 'packages/discount_type/features/promotions/domain/promotion_repository'
 import { PromotionResponse } from 'packages/discount_type/features/promotions/domain/promotion_response'
 import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { InvalidIntegerException } from 'packages/shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from 'packages/shared/domain/value_objects/uuid'
@@ -50,9 +51,20 @@ export class DiscountPromotionService {
 				id
 			) )
 		}
-		return GetDiscountPromotions( this.repo, products_map, {
+
+		if ( errors.length > 0 ) {
+			throw [ ...errors ]
+		}
+
+		const result = await GetDiscountPromotions( this.repo, products_map, {
 			from: 0,
 			to  : 1000
 		} )
+
+		if ( result instanceof Errors ) {
+			throw [ ...result.values ]
+		}
+
+		return result
 	}
 }

@@ -10,12 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from 'packages/shared/domain/exceptions/InvalidIntegerException'
-import { InvalidStringException } from 'packages/shared/domain/exceptions/InvalidStringException'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
-import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { shopAddressToJson } from 'packages/shop-address/application/shop-address-mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
@@ -116,17 +110,8 @@ export class GetShopAddressController {
 		@Query( 'name' ) name?: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-
-			const { data } = this.parseGetShopAddress( {
-				from,
-				to,
-				name
-			} )
-
 			const result = await this.getShopAddressService.getShopAddress(
-				data.from,
-				data.to,
-				data.name
+				from, to, name
 			)
 			return {
 				statusCode: HttpStatus.OK,
@@ -142,57 +127,4 @@ export class GetShopAddressController {
 		}
 
 	}
-
-	parseGetShopAddress( dto: {
-		from: number,
-		to: number,
-		name?: string,
-	} ): {
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			name?: ValidString
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from ) )
-
-		if ( from instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to ) )
-
-		if ( to instanceof InvalidIntegerException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-
-		const name = dto.name === undefined
-			? undefined
-			: wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( dto.name ?? '' ) )
-
-		if ( name != undefined && name instanceof
-			InvalidStringException )
-		{
-			throw [ new InvalidStringException( 'name' ) ]
-		}
-
-		if ( errors.length > 0 ) {
-			throw errors
-		}
-
-		return {
-			data: {
-				from: from as ValidInteger,
-				to  : to as ValidInteger,
-				name: name as ValidString
-			}
-		}
-	}
-
 }

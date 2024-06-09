@@ -1,20 +1,20 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
-import { UserDao } from '../domain/dao/UserDao'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { UUID } from '../../shared/domain/value_objects/uuid'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
+import { Email } from '../../shared/domain/value_objects/email'
+import { Role } from '../../shared/domain/value_objects/role'
+import { UUID } from '../../shared/domain/value_objects/uuid'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { ValidString } from '../../shared/domain/value_objects/valid_string'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
-import { Email } from '../../shared/domain/value_objects/email'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { RUT } from '../domain/models/RUT'
+import { UserDao } from '../domain/dao/UserDao'
 import { InvalidRUTException } from '../domain/exceptions/InvalidRUTException'
-import { Role } from '../../shared/domain/value_objects/role'
-import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
+import { RUT } from '../domain/models/RUT'
 import { User } from '../domain/models/User'
 
 export const CreateUser = async (
@@ -65,7 +65,7 @@ export const CreateUser = async (
 	}
 
 	if ( errors.length > 0 ) {
-		return new Errors( errors)
+		return new Errors( errors )
 	}
 
 	const u = new User(
@@ -76,5 +76,5 @@ export const CreateUser = async (
 		roleResult as Role
 	)
 
-	return await wrapTypeErrors(()=>repo.createUser( u ))
+	return await wrapTypeErrors( () => repo.createUser( u ) )
 }

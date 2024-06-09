@@ -1,11 +1,12 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
-import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
-import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
-import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../../../shared/domain/exceptions/InvalidStringException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
+import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
+import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
 import { wrapType } from '../../../../shared/utils/wrap_type'
 import { Sale } from '../domain/sale'
 
@@ -20,7 +21,7 @@ export function saleToJson( sale: Sale ): Record<string, any> {
 	}
 }
 
-export function saleFromJson( json: Record<string, any> ): Sale | BaseException[] {
+export function saleFromJson( json: Record<string, any> ): Sale | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidUUIDException>(
@@ -66,7 +67,7 @@ export function saleFromJson( json: Record<string, any> ): Sale | BaseException[
 	}
 
 	if ( errors.length > 0 ) {
-		return errors
+		return new Errors( errors )
 	}
 
 	return new Sale(

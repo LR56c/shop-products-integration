@@ -17,8 +17,8 @@ export class RecommendProductService {
 			limit            : dto.limit
 		} )
 
-		if( result instanceof Errors ) {
-			throw [...result.values]
+		if ( result instanceof Errors ) {
+			throw [ ...result.values ]
 		}
 		return result
 	}

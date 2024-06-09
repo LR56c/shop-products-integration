@@ -13,7 +13,7 @@ export class GetUserService {
 		const result = await GetUser( this.repository, { from, to, role, name } )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

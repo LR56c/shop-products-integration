@@ -1,5 +1,5 @@
-import { Errors } from '../domain/exceptions/errors'
 import { BaseException } from '../domain/exceptions/BaseException'
+import { Errors } from '../domain/exceptions/errors'
 import { UnknownException } from '../domain/exceptions/UnknownException'
 
 export function wrapType<T, Err extends BaseException>( returnFunction: () => T ): T | BaseException {
@@ -28,7 +28,8 @@ export async function wrapTypeAsync<T, Err extends BaseException>( returnFunctio
 		}
 		else {
 			return new UnknownException()
-		}	}
+		}
+	}
 }
 
 export function wrapTypeDefault<T, R>(
@@ -62,6 +63,6 @@ export async function wrapTypeErrors<T, Err extends BaseException>( returnFuncti
 			}
 		}
 
-		return new Errors( errors)
+		return new Errors( errors )
 	}
 }

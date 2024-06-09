@@ -1,7 +1,11 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../../../shared/utils/wrap_type'
 import { PromotionProduct } from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
 import { PromotionResponse } from '../domain/promotion_response'
@@ -11,7 +15,7 @@ export const GetDiscountPromotions = async ( repo: PromotionRepository,
 	products_map: Map<string, PromotionProduct>, props: {
 		from: number,
 		to: number,
-	} ): Promise<PromotionResponse[]> => {
+	} ): Promise<PromotionResponse[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -30,11 +34,17 @@ export const GetDiscountPromotions = async ( repo: PromotionRepository,
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
-	const databasePromotions = await repo.getAll( fromResult as ValidInteger,
-		toResult as ValidInteger )
+	const databasePromotions = await wrapTypeErrors( () => repo.getAll(
+		fromResult as ValidInteger,
+		toResult as ValidInteger
+	) )
+
+	if ( databasePromotions instanceof Errors ) {
+		return databasePromotions
+	}
 
 	const promotions: PromotionResponse[] = []
 

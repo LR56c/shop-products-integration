@@ -1,15 +1,15 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Email } from '../../shared/domain/value_objects/email'
-import { Rank } from '../domain/rank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { Email } from '../../shared/domain/value_objects/email'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { wrapType } from '../../shared/utils/wrap_type'
+import { Rank } from '../domain/rank'
 
 export function rankToJson( rank: Rank ): Record<string, any> {
 	return {
@@ -52,7 +52,7 @@ export function rankFromJson( rank: Record<string, any> ): Rank | Errors {
 	}
 
 	if ( errors.length > 0 ) {
-		return new Errors(errors)
+		return new Errors( errors )
 	}
 
 	return new Rank(

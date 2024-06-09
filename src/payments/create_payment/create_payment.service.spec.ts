@@ -10,12 +10,14 @@ describe( 'CreatePaymentService', () => {
 	beforeEach( async () => {
 		const module: TestingModule = await Test.createTestingModule( {
 			providers: [ CreatePaymentService ]
-		} ).compile()
+		} )
+		                                        .compile()
 
 		service = module.get<CreatePaymentService>( CreatePaymentService )
 	} )
 
 	it( 'should be defined', () => {
-		expect( service ).toBeDefined()
+		expect( service )
+			.toBeDefined()
 	} )
 } )

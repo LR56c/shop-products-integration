@@ -1,9 +1,13 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
-import { wrapType } from '../../../../shared/utils/wrap_type'
+import {
+	wrapType,
+	wrapTypeErrors
+} from '../../../../shared/utils/wrap_type'
 import { PromotionProduct } from '../domain/promotion'
 import { PromotionRepository } from '../domain/promotion_repository'
 
@@ -14,7 +18,7 @@ export const LinkProducts = async ( repo: PromotionRepository,
 			quantity: number,
 			product_id: string
 		}[]
-	} ): Promise<PromotionProduct[]> => {
+	} ): Promise<PromotionProduct[] | Errors> => {
 
 	const errors: BaseException[] = []
 
@@ -48,6 +52,16 @@ export const LinkProducts = async ( repo: PromotionRepository,
 				productResult as UUID ) )
 	}
 
-	await repo.linkProducts( idResult as UUID, promotionsProducts )
+	if ( errors.length > 0 ) {
+		return new Errors( errors )
+	}
+
+	const result = await wrapTypeErrors(
+		() => repo.linkProducts( idResult as UUID, promotionsProducts ) )
+
+	if ( result instanceof Errors ) {
+		return result
+	}
+
 	return promotionsProducts
 }

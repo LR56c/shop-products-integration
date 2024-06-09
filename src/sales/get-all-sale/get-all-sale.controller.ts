@@ -10,15 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { saleToJson } from 'packages/discount_type/features/sales/application/sale_mapper'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { saleToJson } from 'packages/discount_type/features/sales/application/sale_mapper'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidDateException } from 'packages/shared/domain/exceptions/InvalidDateException'
-import { InvalidIntegerException } from 'packages/shared/domain/exceptions/InvalidIntegerException'
-import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { GetAllSaleService } from './get-all-sale.service'
 
 @ApiTags( 'sales' )
@@ -140,23 +134,11 @@ export class GetAllSaleController {
 		@Query( 'to_date' ) to_date?: string
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
-			const { data, errors } = this.parseGetAllSales( {
+			const sales                     = await this.getAllSaleService.getAll(
 				from,
 				to,
 				from_date,
 				to_date
-			} )
-			if ( errors.length > 0 ) {
-				return {
-					statusCode: HttpStatus.BAD_REQUEST,
-					message   : this.translation.translateAll( errors )
-				}
-			}
-			const sales                     = await this.getAllSaleService.getAll(
-				data.from,
-				data.to,
-				data.from_date,
-				data.to_date
 			)
 			let json: Record<string, any>[] = []
 			for ( const p of sales ) {
@@ -172,54 +154,6 @@ export class GetAllSaleController {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )
 			}
-		}
-	}
-
-	parseGetAllSales( dto: {
-		from: number,
-		to: number,
-		from_date?: string,
-		to_date?: string,
-	} ): {
-		errors: BaseException[],
-		data: {
-			from: ValidInteger
-			to: ValidInteger
-			from_date?: ValidDate
-			to_date?: ValidDate
-		}
-	}
-	{
-		const errors: BaseException[] = []
-
-		const from = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.from )
-		)
-		if ( from instanceof BaseException ) {
-			errors.push( new InvalidIntegerException( 'from' ) )
-		}
-		const to = wrapType<ValidInteger, InvalidIntegerException>(
-			() => ValidInteger.from( dto.to )
-		)
-		if ( to instanceof BaseException ) {
-			errors.push( new InvalidIntegerException( 'to' ) )
-		}
-		const from_date = dto.from_date === undefined ?
-			undefined : wrapType<ValidDate, InvalidDateException>(
-				() => ValidDate.from( dto.from_date ?? '' ) )
-
-		const to_date = dto.to_date === undefined ?
-			undefined : wrapType<ValidDate, InvalidDateException>(
-				() => ValidDate.from( dto.to_date ?? '' ) )
-
-		return {
-			data: {
-				from     : from as ValidInteger,
-				to       : to as ValidInteger,
-				from_date: from_date as ValidDate,
-				to_date  : to_date as ValidDate
-			},
-			errors
 		}
 	}
 }

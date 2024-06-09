@@ -12,10 +12,6 @@ import {
 } from '@nestjs/swagger'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { InvalidStringException } from 'packages/shared/domain/exceptions/InvalidStringException'
-import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { ShopAddress } from 'packages/shop-address/domain/shop-address'
 import { DeleteShopAddressService } from './delete-shop-address.service'
 
 @ApiTags( 'shops-address' )
@@ -105,16 +101,7 @@ export class DeleteShopAddressController {
 	): Promise<HttpResult> {
 		try {
 
-			const nameResult = wrapType<ValidString, InvalidStringException>(
-				() => ValidString.from( name ) )
-
-			if ( nameResult instanceof InvalidStringException ) {
-				throw [ new InvalidStringException( 'name' ) ]
-			}
-
-			await this.deleteShopAddressService.deleteShopAddress(
-				new ShopAddress( nameResult as ValidString )
-			)
+			await this.deleteShopAddressService.deleteShopAddress( name )
 			return {
 				statusCode: HttpStatus.OK
 			}

@@ -1,5 +1,5 @@
-import { InvalidPercentageException } from '../exceptions/InvalidPercentageException'
 import { z } from 'zod'
+import { InvalidPercentageException } from '../exceptions/InvalidPercentageException'
 
 export class ValidPercentage {
 	readonly value: number

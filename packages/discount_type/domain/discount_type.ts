@@ -1,5 +1,5 @@
-import { InvalidDiscountTypeException } from './invalid_discount_type_exception'
 import { z } from 'zod'
+import { InvalidDiscountTypeException } from './invalid_discount_type_exception'
 
 export enum DiscountTypeEnum {
 	SALE      = 'SALE',

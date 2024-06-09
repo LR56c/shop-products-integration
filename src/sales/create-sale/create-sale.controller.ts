@@ -10,7 +10,6 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { parseSale } from 'src/sales/shared/parse_sale'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { SaleDto } from '../shared/sale_dto'
@@ -123,9 +122,7 @@ export class CreateSaleController {
 		@Body() saleDto: SaleDto
 	): Promise<HttpResult> {
 		try {
-			const sale = parseSale( saleDto )
-
-			await this.createSaleService.createSale( sale )
+			await this.createSaleService.createSale( saleDto )
 
 			return {
 				statusCode: HttpStatus.OK

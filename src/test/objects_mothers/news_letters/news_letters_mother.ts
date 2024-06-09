@@ -3,7 +3,7 @@ import { ValidDateMother } from '../shared/valid_date_mother'
 import { ValidStringMother } from '../shared/valid_string_mother'
 import { NewsLetter } from '../../../../packages/news_letter/domain/news_letter'
 
-export class NewsLettersMother{
+export class NewsLettersMother {
 	static random(): NewsLetter {
 		return new NewsLetter(
 			EmailMother.random(),

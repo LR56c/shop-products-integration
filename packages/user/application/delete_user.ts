@@ -1,12 +1,12 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { Email } from '../../shared/domain/value_objects/email'
-import { UserDao } from '../domain/dao/UserDao'
 import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { UserDao } from '../domain/dao/UserDao'
 
 export const DeleteUser = async (
 	repo: UserDao,
@@ -19,5 +19,5 @@ export const DeleteUser = async (
 		return new Errors( [ emailResult ] )
 	}
 
-	return wrapTypeErrors(()=>repo.deleteUser( emailResult ))
+	return wrapTypeErrors( () => repo.deleteUser( emailResult ) )
 }

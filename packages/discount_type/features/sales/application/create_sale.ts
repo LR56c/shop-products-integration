@@ -1,5 +1,4 @@
-import { Sale } from '../domain/sale'
-import { SubTypeNotExistException } from '../../../../shared/domain/exceptions/SubTypeNotExistException'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../../../shared/domain/exceptions/InvalidPercentageException'
@@ -7,31 +6,31 @@ import { InvalidUUIDException } from '../../../../shared/domain/exceptions/Inval
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import { ValidPercentage } from '../../../../shared/domain/value_objects/valid_percentage'
-import { wrapType } from '../../../../shared/utils/wrap_type'
-import { DiscountRepository } from '../../../domain/discount_repository'
 import {
-	DiscountType,
-	DiscountTypeEnum
-} from '../../../domain/discount_type'
-import { InvalidDiscountTypeException } from '../../../domain/invalid_discount_type_exception'
+	wrapType,
+	wrapTypeDefault,
+	wrapTypeErrors
+} from '../../../../shared/utils/wrap_type'
+import { DiscountRepository } from '../../../domain/discount_repository'
+import { Sale } from '../domain/sale'
 
 export const CreateSale = async ( repo: DiscountRepository,
 	props: {
 		id?: string,
 		product_id: string,
-		type: string,
 		percentage: number,
 		creation_date: Date,
 		start_date: Date,
 		end_date: Date,
-	} ): Promise<boolean> => {
+	} ): Promise<Sale | Errors> => {
 
 	const errors: BaseException[] = []
 
-	const idResult = props.id === undefined
-		? UUID.create()
-		: wrapType<UUID, InvalidUUIDException>(
-			() => UUID.from( props.id! ) )
+	const idResult = wrapTypeDefault(
+		UUID.create(),
+		( value ) => UUID.from( value ),
+		props.id
+	)
 
 	if ( idResult instanceof BaseException ) {
 		errors.push( idResult )
@@ -42,13 +41,6 @@ export const CreateSale = async ( repo: DiscountRepository,
 
 	if ( productIDResult instanceof BaseException ) {
 		errors.push( productIDResult )
-	}
-
-	const typeResult = wrapType<DiscountType, InvalidDiscountTypeException>(
-		() => DiscountType.from( props.type ) )
-
-	if ( typeResult instanceof BaseException ) {
-		errors.push( typeResult )
 	}
 
 	const percentageResult = wrapType<ValidPercentage, InvalidPercentageException>(
@@ -80,11 +72,7 @@ export const CreateSale = async ( repo: DiscountRepository,
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
-	}
-
-	if ( typeResult.value !== DiscountTypeEnum.SALE ) {
-		throw [ new SubTypeNotExistException() ]
+		return new Errors( errors )
 	}
 
 	const promotion = new Sale(
@@ -96,7 +84,11 @@ export const CreateSale = async ( repo: DiscountRepository,
 		endDateResult as ValidDate
 	)
 
-	await repo.create( promotion )
+	const result = await wrapTypeErrors( () => repo.create( promotion ) )
 
-	return true
+	if ( result instanceof Errors ) {
+		return result
+	}
+
+	return promotion
 }

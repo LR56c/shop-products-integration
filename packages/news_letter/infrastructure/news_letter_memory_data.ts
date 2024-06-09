@@ -1,9 +1,9 @@
-import { NewsLetterRepository } from '../domain/news_letter_repository'
-import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { Email } from '../../shared/domain/value_objects/email'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
+import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { NewsLetter } from '../domain/news_letter'
+import { NewsLetterRepository } from '../domain/news_letter_repository'
 
 export class NewsLetterMemoryData implements NewsLetterRepository {
 
@@ -47,12 +47,13 @@ export class NewsLetterMemoryData implements NewsLetterRepository {
 	async getAll( from: ValidInteger, to: ValidInteger,
 		name?: ValidString ): Promise<NewsLetter[]> {
 		try {
-			const newsLetters          = Array.from( this.db.values() )
+			const newsLetters = Array.from( this.db.values() )
 
 			const result: NewsLetter[] = []
 
 			if ( name !== undefined ) {
-				result.push( ...newsLetters.filter( newsLetter => newsLetter.name === name ) )
+				result.push(
+					...newsLetters.filter( newsLetter => newsLetter.name === name ) )
 			}
 
 			result.slice( from.value, to.value )

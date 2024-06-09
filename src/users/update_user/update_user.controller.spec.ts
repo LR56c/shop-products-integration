@@ -1,6 +1,6 @@
 import {
-  Test,
-  TestingModule
+	Test,
+	TestingModule
 } from '@nestjs/testing'
 import { UpdateUserController } from './update_user.controller'
 import { UpdateUserService } from './update_user.service'

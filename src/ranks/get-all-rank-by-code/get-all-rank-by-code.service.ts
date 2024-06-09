@@ -11,8 +11,8 @@ export class GetAllRankByCodeService {
 	async execute( code: string ): Promise<Rank[]> {
 		const result = await GetAllRanks( this.repo, { code } )
 
-		if(result instanceof Errors) {
-			throw [result.values]
+		if ( result instanceof Errors ) {
+			throw [ result.values ]
 		}
 		return result
 	}

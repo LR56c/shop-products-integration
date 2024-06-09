@@ -1,4 +1,8 @@
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
@@ -7,10 +11,6 @@ import {
 	wrapTypeAsync,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { CartRepository } from '../domain/cart_repository'
 
 export const UpsertCart = async ( repo: CartRepository, props: {

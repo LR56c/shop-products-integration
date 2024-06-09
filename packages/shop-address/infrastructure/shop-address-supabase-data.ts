@@ -1,9 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
 
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
@@ -11,8 +11,8 @@ import {
 	shopAddressFromJson,
 	shopAddressToJson
 } from '../application/shop-address-mapper'
-import { ShopAddressRepository } from '../domain/shop-address-repository'
 import { ShopAddress } from '../domain/shop-address'
+import { ShopAddressRepository } from '../domain/shop-address-repository'
 
 export class ShopAddressSupabaseData implements ShopAddressRepository {
 
@@ -20,7 +20,7 @@ export class ShopAddressSupabaseData implements ShopAddressRepository {
 
 	readonly tableName = 'shops_address'
 
-	async createShopAddress( shopAddress: ShopAddress ): Promise<boolean> {
+	async create( shopAddress: ShopAddress ): Promise<boolean> {
 
 		const result = await this.client.from( this.tableName )
 		                         .insert( shopAddressToJson( shopAddress ) as any )
@@ -36,11 +36,11 @@ export class ShopAddressSupabaseData implements ShopAddressRepository {
 		return true
 	}
 
-	async deleteShopAddress( shopAddress: ShopAddress ): Promise<boolean> {
+	async delete( shopAddress: ValidString ): Promise<boolean> {
 		try {
 			const result = await this.client.from( this.tableName )
 			                         .select()
-			                         .eq( 'name', shopAddress.name.value )
+			                         .eq( 'name', shopAddress.value )
 
 			if ( result.data?.length === 0 ) {
 				throw [ new ParameterNotMatchException( 'name' ) ]
@@ -50,7 +50,7 @@ export class ShopAddressSupabaseData implements ShopAddressRepository {
 			          .delete()
 			          .eq(
 				          'name',
-				          shopAddress.name.value
+				          shopAddress.value
 			          )
 			return true
 		}
@@ -59,7 +59,7 @@ export class ShopAddressSupabaseData implements ShopAddressRepository {
 		}
 	}
 
-	async getShopAddress( from: ValidInteger, to: ValidInteger,
+	async getAll( from: ValidInteger, to: ValidInteger,
 		name?: ValidString ): Promise<ShopAddress[]> {
 		try {
 			const result = this.client.from( this.tableName )

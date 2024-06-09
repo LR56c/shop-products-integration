@@ -9,6 +9,7 @@ export abstract class RankRepository {
 	abstract updateRank( rank: Rank ): Promise<boolean>
 
 	abstract getAllRankByProductID( id: UUID ): Promise<Rank[]>
+
 	abstract getRank(
 		user_email: Email,
 		code: ValidString

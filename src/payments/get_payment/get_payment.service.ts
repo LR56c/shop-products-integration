@@ -11,8 +11,8 @@ export class GetPaymentService {
 	async getPayment( id: string ): Promise<Payment> {
 		const result = await GetPayment( this.repository, id )
 
-		if(result instanceof Errors) {
-			throw [...result.values]
+		if ( result instanceof Errors ) {
+			throw [ ...result.values ]
 		}
 
 		return result

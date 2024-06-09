@@ -9,13 +9,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { saleToJson } from 'packages/discount_type/features/sales/application/sale_mapper'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResultData } from 'src/shared/utils/HttpResultData'
-import { saleToJson } from 'packages/discount_type/features/sales/application/sale_mapper'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { GetSaleService } from './get-sale.service'
 
 @ApiTags( 'sales' )
@@ -122,14 +118,7 @@ export class GetSaleController {
 		@Param( 'id' ) id: string
 	): Promise<HttpResultData<Record<string, any>>> {
 		try {
-			const idResult = wrapType<UUID, InvalidUUIDException>(
-				() => UUID.from( id ) )
-
-			if ( idResult instanceof BaseException ) {
-				throw [ new InvalidUUIDException( 'id' ) ]
-			}
-
-			const result = await this.getSaleService.getSale( idResult )
+			const result = await this.getSaleService.getSale( id )
 
 			return {
 				statusCode: HttpStatus.OK,

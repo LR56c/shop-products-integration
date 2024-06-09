@@ -9,13 +9,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { orderConfirmedToJson } from 'packages/order_confirmed/application/order_confirmed_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
-import { orderConfirmedToJson } from 'packages/order_confirmed/application/order_confirmed_mapper'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { GetOrderConfirmedService } from './get-order-confirmed.service'
 
 @ApiTags( 'orders-confirmed' )

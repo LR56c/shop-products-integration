@@ -12,7 +12,7 @@ export class RemoveNewsLetterService {
 		const result = await DeleteNewsLetter( this.repo, email )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

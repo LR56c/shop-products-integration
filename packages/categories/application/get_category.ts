@@ -1,7 +1,7 @@
-import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,

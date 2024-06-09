@@ -12,6 +12,7 @@ describe( 'News Letter Repository', () => {
 	// } )
 
 	it( 'should be defined', () => {
-		expect( repo ).toBeDefined()
+		expect( repo )
+			.toBeDefined()
 	} )
 } )

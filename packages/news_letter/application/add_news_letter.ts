@@ -1,6 +1,6 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Email } from '../../shared/domain/value_objects/email'
@@ -55,10 +55,10 @@ export const AddNewsLetter = async (
 		createdAtResult as ValidDate
 	)
 
-	const result = await wrapTypeAsync(()=>repo.add( n ))
+	const result = await wrapTypeAsync( () => repo.add( n ) )
 
-	if( result instanceof BaseException ) {
-		return new Errors([result])
+	if ( result instanceof BaseException ) {
+		return new Errors( [ result ] )
 	}
 
 	return result

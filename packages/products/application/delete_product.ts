@@ -10,7 +10,7 @@ import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUID
 
 export const DeleteProduct = async (
 	repo: ProductRepository,
-	id: string ): Promise<boolean| Errors> => {
+	id: string ): Promise<boolean | Errors> => {
 	const idResult = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( id ) )
 
@@ -18,5 +18,5 @@ export const DeleteProduct = async (
 		return new Errors( [ idResult ] )
 	}
 
-	return await wrapTypeErrors(() => repo.deleteProduct( idResult ))
+	return await wrapTypeErrors( () => repo.deleteProduct( idResult ) )
 }

@@ -12,7 +12,6 @@ import {
 } from '@nestjs/swagger'
 import { CreateRankDto } from 'src/ranks/dto/create_rank_dto'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { AddRank } from 'packages/ranks/application/add_rank'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { AddRankService } from './add-rank.service'
 
@@ -30,8 +29,8 @@ export class AddRankController {
 			type      : 'object',
 			properties: {
 				rank: {
-					type			: 'object',
-					properties:{
+					type      : 'object',
+					properties: {
 						product_code: {
 							type   : 'string',
 							example: 'abc2'
@@ -40,7 +39,7 @@ export class AddRankController {
 							type   : 'string',
 							example: 'aaaa@gmail.com'
 						},
-						value        : {
+						value       : {
 							type   : 'number',
 							example: 2
 						}

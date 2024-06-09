@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ChartConfiguration } from 'chart.js'
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
-import { PDFDocument } from 'pdf-lib'
 import {
 	ReportType,
 	ReportTypeEnum
@@ -15,6 +14,7 @@ import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
 import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
 import { ValidString } from 'packages/shared/domain/value_objects/valid_string'
 import { ValidURL } from 'packages/shared/domain/value_objects/valid_url'
+import { PDFDocument } from 'pdf-lib'
 
 @Injectable()
 export class CreateReportService {

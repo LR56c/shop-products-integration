@@ -1,20 +1,20 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
-import { Email } from '../../shared/domain/value_objects/email'
-import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
-import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
-import { UserDao } from '../domain/dao/UserDao'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { Email } from '../../shared/domain/value_objects/email'
+import { Role } from '../../shared/domain/value_objects/role'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { ValidString } from '../../shared/domain/value_objects/valid_string'
 
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
-import { Role } from '../../shared/domain/value_objects/role'
-import { ValidString } from '../../shared/domain/value_objects/valid_string'
-import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
-import { User } from '../domain/models/User'
+import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
+import { ParameterNotMatchException } from '../../shared/infrastructure/parameter_not_match_exception'
 import {
 	userFromJson,
 	userToJson
 } from '../application/user_mapper'
+import { UserDao } from '../domain/dao/UserDao'
+import { User } from '../domain/models/User'
 
 export class UserSupaBaseData implements UserDao {
 	constructor( private readonly client: SupabaseClient<Database> ) {}
@@ -36,7 +36,7 @@ export class UserSupaBaseData implements UserDao {
 			const user = userFromJson( result.data[0] )
 
 			if ( user instanceof Errors ) {
-				throw [...user.values]
+				throw [ ...user.values ]
 			}
 
 			return user as User

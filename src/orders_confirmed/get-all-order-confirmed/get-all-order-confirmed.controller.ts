@@ -10,10 +10,6 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { orderConfirmedToJson } from 'packages/order_confirmed/application/order_confirmed_mapper'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidIntegerException } from 'packages/shared/domain/exceptions/InvalidIntegerException'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
-import { wrapType } from 'packages/shared/utils/wrap_type'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetAllOrderConfirmedService } from './get-all-order-confirmed.service'
@@ -114,7 +110,8 @@ export class GetAllOrderConfirmedController {
 	): Promise<HttpResultData<Record<string, any>[]>> {
 		try {
 
-			const ordersConfirmed = await this.getAllOrderConfirmedService.execute(from, to )
+			const ordersConfirmed = await this.getAllOrderConfirmedService.execute(
+				from, to )
 
 			let json: Record<string, any>[] = []
 			for ( const o of ordersConfirmed ) {

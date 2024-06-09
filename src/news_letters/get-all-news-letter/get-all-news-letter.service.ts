@@ -13,7 +13,7 @@ export class GetAllNewsLetterService {
 		const result = await GetAllNewsLetter( this.repo, { from, to, name } )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

@@ -23,6 +23,6 @@ export class PasswordMother {
 	}
 
 	static invalid(): Password {
-		return Password.from('')
+		return Password.from( '' )
 	}
 }

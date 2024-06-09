@@ -11,7 +11,7 @@ export class DeleteAllCartService {
 		const result = await DeleteAllCart( this.repo, email )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

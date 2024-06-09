@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { AuthUserDto } from 'src/auth/shared/auth_user_dto'
 import { DeleteAuth } from 'packages/auth/application/delete_auth'
 import { RegisterAuth } from 'packages/auth/application/register_auth'
 import { Auth } from 'packages/auth/domain/auth'
@@ -7,6 +6,7 @@ import { AuthRepository } from 'packages/auth/domain/auth_repository'
 import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { CreateUser } from 'packages/user/application/create_user'
 import { UserDao } from 'packages/user/domain/dao/UserDao'
+import { AuthUserDto } from 'src/auth/shared/auth_user_dto'
 
 @Injectable()
 export class RegisterAuthService {
@@ -16,12 +16,12 @@ export class RegisterAuthService {
 
 	async register( dto: AuthUserDto,
 		password: string
-		): Promise<Auth> {
+	): Promise<Auth> {
 
 		const auth = await RegisterAuth( this.repo, dto.email, password )
 
 		if ( auth instanceof Errors ) {
-			throw [...auth.values]
+			throw [ ...auth.values ]
 		}
 		const user = await CreateUser( this.userRepo, {
 			authId: auth.id.value,
@@ -31,9 +31,9 @@ export class RegisterAuthService {
 			role  : dto.role
 		} )
 
-		if(user instanceof Errors){
+		if ( user instanceof Errors ) {
 			await DeleteAuth( this.repo, auth.id.value )
-			throw [...user.values]
+			throw [ ...user.values ]
 		}
 
 		return auth

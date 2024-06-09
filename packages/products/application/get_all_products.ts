@@ -50,5 +50,7 @@ export const GetAllProducts = async (
 		return new Errors( errors )
 	}
 
-	return await wrapTypeErrors( () => repo.getAll( fromResult as ValidInteger, toResult as ValidInteger, name as ValidString ))
+	return await wrapTypeErrors(
+		() => repo.getAll( fromResult as ValidInteger, toResult as ValidInteger,
+			name as ValidString ) )
 }

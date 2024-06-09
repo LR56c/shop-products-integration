@@ -1,8 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { Errors } from '../../shared/domain/exceptions/errors'
 
 import { Email } from '../../shared/domain/value_objects/email'
-import { Errors } from '../../shared/domain/exceptions/errors'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
@@ -57,10 +57,10 @@ export class RankSupabaseData implements RankRepository {
 
 	async getRank( user_email: Email, code: ValidString ): Promise<Rank> {
 		try {
-			const result = await this.client.from(this.tableName)
-				.select()
-				.eq('product_code', code.value)
-				.eq('user_email', user_email.value)
+			const result = await this.client.from( this.tableName )
+			                         .select()
+			                         .eq( 'product_code', code.value )
+			                         .eq( 'user_email', user_email.value )
 
 			if ( result.error ) {
 				throw [ new InfrastructureException() ]
@@ -73,7 +73,7 @@ export class RankSupabaseData implements RankRepository {
 			const product = rankFromJson( result[0] )
 
 			if ( product instanceof Errors ) {
-				throw [...product.values]
+				throw [ ...product.values ]
 			}
 
 			return product as Rank
@@ -104,7 +104,7 @@ export class RankSupabaseData implements RankRepository {
 				const product = rankFromJson( json )
 
 				if ( product instanceof Errors ) {
-					throw [...product.values]
+					throw [ ...product.values ]
 				}
 				ranks.push( product as Rank )
 			}

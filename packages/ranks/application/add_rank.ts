@@ -1,12 +1,10 @@
-import { RankRepository } from '../domain/rank_repository'
-import { Errors } from '../../shared/domain/exceptions/errors'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { Email } from '../../shared/domain/value_objects/email'
-import { Rank } from '../domain/rank'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
+import { Email } from '../../shared/domain/value_objects/email'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidRank } from '../../shared/domain/value_objects/valid_rank'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
@@ -14,8 +12,10 @@ import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
+import { Rank } from '../domain/rank'
+import { RankRepository } from '../domain/rank_repository'
 
-export const AddRank = async (repo : RankRepository, props: {
+export const AddRank = async ( repo: RankRepository, props: {
 	code: string
 	user_email: string
 	rank: number
@@ -61,5 +61,5 @@ export const AddRank = async (repo : RankRepository, props: {
 		codeResult as ValidString
 	)
 
-	return await wrapTypeErrors(()=> repo.addRank(r))
+	return await wrapTypeErrors( () => repo.addRank( r ) )
 }

@@ -9,9 +9,7 @@ import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from 'packages/shared/domain/value_objects/uuid'
 import { ValidDecimal } from 'packages/shared/domain/value_objects/valid_decimal'
-import {
-	wrapType,
-} from 'packages/shared/utils/wrap_type'
+import { wrapType } from 'packages/shared/utils/wrap_type'
 
 @Injectable()
 export class AverageRankService {
@@ -29,16 +27,16 @@ export class AverageRankService {
 
 		const ranks = await GetAllRanks( this.repo, {
 			code: id
-		})
+		} )
 
-		if ( ranks instanceof Errors) {
-			throw [...ranks.values]
+		if ( ranks instanceof Errors ) {
+			throw [ ...ranks.values ]
 		}
 
 		const result = await CalculateAverageRankByCode( this.repo, ranks )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		this.eventEmitter.emit( ProductRankUpdateEvent.tag, {

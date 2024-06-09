@@ -11,9 +11,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
+import { PartialUserDto } from 'src/users/dto/partial_user_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
-import { PartialUserDto } from 'src/users/dto/partial_user_dto'
 import { UpdateUserService } from './update_user.service'
 
 @ApiTags( 'users' )

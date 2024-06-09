@@ -13,7 +13,7 @@ export class GetAllPaymentService {
 		const result = await GetAllPayments( this.repository,
 			{ from, to, approved, from_date, to_date } )
 
-		if( result instanceof Errors ) {
+		if ( result instanceof Errors ) {
 			throw [ ...result.values ]
 		}
 		return result

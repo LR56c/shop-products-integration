@@ -11,11 +11,8 @@ import {
 	ApiTags
 } from '@nestjs/swagger'
 import { CreateRankDto } from 'src/ranks/dto/create_rank_dto'
-import { RankDto } from 'src/ranks/dto/rank_dto'
 import { TranslationService } from 'src/shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
-import { rankFromJson } from 'packages/ranks/application/rank_mapper'
-import { Rank } from 'packages/ranks/domain/rank'
 import { UpdateRankService } from './update-rank.service'
 
 @ApiTags( 'ranks' )

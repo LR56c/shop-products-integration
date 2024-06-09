@@ -10,10 +10,10 @@ export class GetAllProductsService {
 
 	async getAll( from: number, to: number,
 		name ?: string ): Promise<ProductResponse[]> {
-		const result =  await GetAllProducts( this.repository, { from, to, name } )
+		const result = await GetAllProducts( this.repository, { from, to, name } )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

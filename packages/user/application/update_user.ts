@@ -1,4 +1,8 @@
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Errors } from '../../shared/domain/exceptions/errors'
+import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
+import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { Role } from '../../shared/domain/value_objects/role'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
@@ -6,10 +10,6 @@ import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
-import { InvalidRoleException } from '../../shared/domain/exceptions/InvalidRoleException'
-import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { UserDao } from '../domain/dao/UserDao'
 import { InvalidRUTException } from '../domain/exceptions/InvalidRUTException'
 import { RUT } from '../domain/models/RUT'

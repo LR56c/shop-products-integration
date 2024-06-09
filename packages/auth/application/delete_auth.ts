@@ -1,4 +1,3 @@
-import { AuthRepository } from '../domain/auth_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -8,10 +7,11 @@ import {
 	wrapType,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
+import { AuthRepository } from '../domain/auth_repository'
 
 export const DeleteAuth = async (
 	repo: AuthRepository,
-	id: string,
+	id: string
 ): Promise<boolean | Errors> => {
 
 	const idResult = wrapType<UUID, InvalidUUIDException>(
@@ -19,10 +19,10 @@ export const DeleteAuth = async (
 	)
 
 	if ( idResult instanceof BaseException ) {
-		return new Errors([new InvalidStringException( 'token' )])
+		return new Errors( [ new InvalidStringException( 'token' ) ] )
 	}
 
-	return await wrapTypeErrors(()=>repo.delete(
+	return await wrapTypeErrors( () => repo.delete(
 		idResult as UUID
-	))
+	) )
 }

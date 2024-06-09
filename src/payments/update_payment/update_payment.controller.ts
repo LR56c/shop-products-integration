@@ -23,7 +23,7 @@ export class UpdatePaymentController {
 		private readonly translation: TranslationService )
 	{}
 
-	@Put(':id')
+	@Put( ':id' )
 	@ApiBody( {
 		schema: {
 			type      : 'object',
@@ -123,7 +123,7 @@ export class UpdatePaymentController {
 		@Body( 'payment' ) dto: UpdatePaymentDto
 	): Promise<HttpResult> {
 		try {
-			await this.updatePaymentService.updatePayment(id, dto )
+			await this.updatePaymentService.updatePayment( id, dto )
 			return {
 				statusCode: HttpStatus.OK
 			}

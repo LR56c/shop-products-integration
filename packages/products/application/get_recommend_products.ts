@@ -1,5 +1,5 @@
-import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidRankException } from '../../shared/domain/exceptions/InvalidRankException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'

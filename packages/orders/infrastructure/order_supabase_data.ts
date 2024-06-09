@@ -1,12 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-
-import { OrderResponse } from '../domain/order_response'
-import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { Email } from '../../shared/domain/value_objects/email'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
+import { DataNotFoundException } from '../../shared/infrastructure/data_not_found_exception'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'
 import { KeyAlreadyExistException } from '../../shared/infrastructure/key_already_exist_exception'
 import { LimitIsNotInRangeException } from '../../shared/infrastructure/limit_is_not_in_range_exception'
@@ -15,10 +13,10 @@ import {
 	orderResponseFromJson,
 	orderToJson
 } from '../application/order_mapper'
-import {
-	Order
-} from '../domain/order'
+import { Order } from '../domain/order'
 import { OrderRepository } from '../domain/order_repository'
+
+import { OrderResponse } from '../domain/order_response'
 
 function cleanProducts( products, orders_products ): Record<string, any>[] {
 

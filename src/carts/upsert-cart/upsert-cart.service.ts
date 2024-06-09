@@ -16,7 +16,7 @@ export class UpsertCartService {
 		} )
 
 		if ( result instanceof Errors ) {
-			throw [...result.values]
+			throw [ ...result.values ]
 		}
 
 		return result

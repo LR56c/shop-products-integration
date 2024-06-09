@@ -1,8 +1,8 @@
-import { OrderRepository } from '../domain/order_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { wrapType } from '../../shared/utils/wrap_type'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../shared/domain/value_objects/uuid'
+import { wrapType } from '../../shared/utils/wrap_type'
+import { OrderRepository } from '../domain/order_repository'
 
 export const DeleteOrder = async ( repo: OrderRepository,
 	id: string ): Promise<boolean> => {

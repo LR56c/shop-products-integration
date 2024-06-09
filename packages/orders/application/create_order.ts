@@ -1,5 +1,3 @@
-import { OrderProduct } from '../domain/order'
-import { OrderRepository } from '../domain/order_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
@@ -9,7 +7,11 @@ import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { wrapType } from '../../shared/utils/wrap_type'
-import { Order } from '../domain/order'
+import {
+	Order,
+	OrderProduct
+} from '../domain/order'
+import { OrderRepository } from '../domain/order_repository'
 
 export const CreateOrder = async ( repo: OrderRepository,
 	props: {

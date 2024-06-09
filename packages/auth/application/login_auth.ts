@@ -1,5 +1,3 @@
-import { Auth } from '../domain/auth'
-import { AuthRepository } from '../domain/auth_repository'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { Errors } from '../../shared/domain/exceptions/errors'
@@ -9,6 +7,8 @@ import {
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'
 import { Password } from '../../user/domain/models/Password'
+import { Auth } from '../domain/auth'
+import { AuthRepository } from '../domain/auth_repository'
 
 export const LoginAuth = async (
 	repo: AuthRepository,
@@ -25,7 +25,7 @@ export const LoginAuth = async (
 		errors.push( new EmailException( 'email' ) )
 	}
 
-	const passwordResult = await wrapTypeErrors(()=>Password.from( password ) )
+	const passwordResult = await wrapTypeErrors( () => Password.from( password ) )
 
 	if ( passwordResult instanceof Errors ) {
 		errors.push( ...passwordResult.values )
@@ -35,8 +35,8 @@ export const LoginAuth = async (
 		return new Errors( errors )
 	}
 
-	return await wrapTypeErrors(()=>repo.login(
+	return await wrapTypeErrors( () => repo.login(
 		emailResult as Email,
 		passwordResult as Password
-	))
+	) )
 }

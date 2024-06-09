@@ -29,7 +29,7 @@ export function paymentToJson( payment: Payment ): Record<string, any> {
 export function paymentFromJson( json: Record<string, any> ): Payment | Errors {
 	const errors: BaseException[] = []
 
-	const id                      = wrapType<UUID, InvalidUUIDException>(
+	const id = wrapType<UUID, InvalidUUIDException>(
 		() => UUID.from( json.id )
 	)
 	if ( id instanceof BaseException ) {
@@ -72,7 +72,7 @@ export function paymentFromJson( json: Record<string, any> ): Payment | Errors {
 	}
 
 	if ( errors.length > 0 ) {
-		return new Errors( errors)
+		return new Errors( errors )
 	}
 
 	return new Payment(
