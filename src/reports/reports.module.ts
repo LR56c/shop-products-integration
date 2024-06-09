@@ -4,10 +4,10 @@ import {
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { ReportRepository } from 'packages/report/domain/repository/report_repository'
+import { ReportDAO } from 'packages/report/domain/repository/report_dao'
 import { ReportPaymentRepository } from 'packages/report/features/payments/domain/report_payment_repository'
 import { ReportPaymentSupabaseData } from 'packages/report/features/payments/infrastructure/report_payment_supabase_data'
-import { ReportSupabaseData } from 'packages/report/infrastructure/report_supabase_data'
+import { ReportSupabaseDataDAO } from 'packages/report/infrastructure/report_supabase_data_dao'
 import { CatchPaymentProcessedService } from 'src/reports/shared/services/catch-payment-processed/catch-payment-processed.service'
 import { AppModule } from '../app.module'
 import { CreateReportController } from './create-report/create-report.controller'
@@ -23,9 +23,9 @@ import { GetReportService } from './get-report/get-report.service'
 	],
 	providers  : [
 		{
-			provide   : ReportRepository,
+			provide   : ReportDAO,
 			useFactory: ( client: SupabaseClient<Database> ) => {
-				return new ReportSupabaseData( client )
+				return new ReportSupabaseDataDAO( client )
 			},
 			inject    : [ SupabaseClient<Database> ]
 		},

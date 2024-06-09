@@ -9,6 +9,7 @@ import {
 	I18nValidationExceptionFilter,
 	I18nValidationPipe
 } from 'nestjs-i18n'
+import { getMonthName } from 'packages/shared/utils/parse_date'
 import { AppModule } from './app.module'
 
 async function bootstrap() {

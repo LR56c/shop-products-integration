@@ -1,3 +1,4 @@
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
@@ -22,7 +23,7 @@ export function reportToJson( report: Report ): Record<string, any> {
 	}
 }
 
-export function reportFromJson( json: Record<string, any> ): Report | BaseException[] {
+export function reportFromJson( json: Record<string, any> ): Report | Errors {
 	const errors: BaseException[] = []
 
 	const id = wrapType<UUID, InvalidStringException>(
@@ -61,7 +62,7 @@ export function reportFromJson( json: Record<string, any> ): Report | BaseExcept
 	}
 
 	if ( errors.length > 0 ) {
-		throw errors
+		return new Errors( errors )
 	}
 
 	return new Report(

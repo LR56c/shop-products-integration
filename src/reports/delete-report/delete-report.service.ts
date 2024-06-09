@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { ReportRepository } from 'packages/report/domain/repository/report_repository'
+import { ReportDAO } from 'packages/report/domain/repository/report_dao'
 import { UUID } from 'packages/shared/domain/value_objects/uuid'
 
 @Injectable()
 export class DeleteReportService {
-	constructor( private repo: ReportRepository ) {}
+	constructor( private repo: ReportDAO ) {}
 
 	async deleteReport( id: UUID ): Promise<boolean> {
-		return this.repo.deleteReport( id )
+		return this.repo.delete( id )
 	}
 }

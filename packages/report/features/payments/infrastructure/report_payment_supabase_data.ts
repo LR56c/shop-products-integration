@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'
@@ -60,7 +60,7 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 		}
 	}
 
-	async get( from: ValidInteger, to: ValidInteger, from_date?: ValidDate,
+	async get( from_date?: ValidDate,
 		to_date?: ValidDate ): Promise<ReportPayment[]> {
 		const result = this.client.from( this.tableName )
 		                   .select()
@@ -71,7 +71,7 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 		}
 
 
-		const { data, error } = await result.range( from.value, to.value )
+		const { data, error } = await result
 
 		if ( data?.length === 0 ) {
 			throw [ new ParameterNotMatchException( 'report_payment' ) ]
@@ -89,8 +89,8 @@ export class ReportPaymentSupabaseData implements ReportPaymentRepository {
 
 			const rp = reportPaymentFromJson( json )
 
-			if ( rp instanceof BaseException ) {
-				throw rp
+			if ( rp instanceof Errors ) {
+				throw [ ...rp.values ]
 			}
 			reportPayments.push( rp as ReportPayment )
 		}

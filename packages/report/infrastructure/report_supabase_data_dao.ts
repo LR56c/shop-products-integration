@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
+import { Errors } from 'packages/shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidStringException } from '../../shared/domain/exceptions/InvalidStringException'
 import { UUID } from '../../shared/domain/value_objects/uuid'
@@ -19,9 +20,9 @@ import {
 } from '../application/report_mapper'
 import { Report } from '../domain/models/report'
 import { ReportType } from '../domain/models/report_type'
-import { ReportRepository } from '../domain/repository/report_repository'
+import { ReportDAO } from 'packages/report/domain/repository/report_dao'
 
-export class ReportSupabaseData implements ReportRepository {
+export class ReportSupabaseDataDAO implements ReportDAO {
 
 	constructor( private readonly client: SupabaseClient<Database> ) {}
 
@@ -29,7 +30,7 @@ export class ReportSupabaseData implements ReportRepository {
 
 	// readonly tableRelatedName = 'reports_products'
 
-	async createReport( type: ReportType, name: ValidString,
+	async create( type: ReportType, name: ValidString,
 		data: Uint8Array ): Promise<ValidURL> {
 		const result = await this.client.storage.from( this.tableName )
 		                         .upload( name.value, data )
@@ -69,7 +70,7 @@ export class ReportSupabaseData implements ReportRepository {
 		return pathResult
 	}
 
-	async deleteReport( id: UUID ): Promise<boolean> {
+	async delete( id: UUID ): Promise<boolean> {
 		try {
 
 
@@ -83,8 +84,8 @@ export class ReportSupabaseData implements ReportRepository {
 
 			const report = reportFromJson( result.data![0] )
 
-			if ( report instanceof BaseException ) {
-				throw report
+			if ( report instanceof Errors ) {
+				throw [ ...report.values ]
 			}
 
 			const r               = report as Report
@@ -108,7 +109,7 @@ export class ReportSupabaseData implements ReportRepository {
 		}
 	}
 
-	async getReport( from: ValidInteger, to: ValidInteger, type?: ReportType,
+	async getAll( from: ValidInteger, to: ValidInteger, type?: ReportType,
 		from_date?: ValidDate, to_date?: ValidDate ): Promise<Report[]> {
 		const result = this.client.from( this.tableName )
 		                   .select()
@@ -141,8 +142,8 @@ export class ReportSupabaseData implements ReportRepository {
 
 			const r = reportFromJson( json )
 
-			if ( r instanceof BaseException ) {
-				throw r
+			if ( r instanceof Errors ) {
+				throw [ ...r.values ]
 			}
 			reports.push( r as Report )
 		}

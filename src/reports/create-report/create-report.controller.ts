@@ -99,14 +99,7 @@ export class CreateReportController {
 		@Body( 'type' ) type: string
 	): Promise<HttpResultData<string>> {
 		try {
-			const typeResult = wrapType<ReportType, ReportTypeException>(
-				() => ReportType.from( type ) )
-			if ( typeResult instanceof BaseException ) {
-				throw typeResult
-			}
-
-			const result = await this.createReportService.createReport(
-				typeResult as ReportType )
+			const result = await this.createReportService.execute(type)
 
 			return {
 				statusCode: HttpStatus.OK,
