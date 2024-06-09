@@ -1,0 +1,15 @@
+import { Injectable } from '@nestjs/common'
+import { Sale } from 'packages/discount_type/features/sales/domain/sale'
+import { SaleRepository } from 'packages/discount_type/features/sales/domain/sale_repository'
+import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
+import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
+
+@Injectable()
+export class GetAllSaleService {
+	constructor( private readonly repo: SaleRepository ) {}
+
+	async getAll( from: ValidInteger, to: ValidInteger, from_date?: ValidDate,
+		to_date?: ValidDate ): Promise<Sale[]> {
+		return this.repo.getAll( from, to, from_date, to_date )
+	}
+}
