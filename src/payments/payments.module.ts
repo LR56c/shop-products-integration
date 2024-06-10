@@ -3,8 +3,8 @@ import {
 	Module
 } from '@nestjs/common'
 import { SupabaseClient } from '@supabase/supabase-js'
-import { PaymentRepository } from 'packages/payments/domain/repository/payment_repository'
-import { PaymentSupabaseData } from 'packages/payments/infrastructure/payment_supabase_data'
+import { PaymentRepository } from '../../packages/payments/domain/repository/payment_repository'
+import { PaymentSupabaseData } from '../../packages/payments/infrastructure/payment_supabase_data'
 import { Database } from '../../database.types'
 import { AppModule } from '../app.module'
 import { CreatePaymentController } from './create_payment/create_payment.controller'

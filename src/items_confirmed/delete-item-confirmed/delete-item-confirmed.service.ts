@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteItemConfirmed } from 'packages/item_confirmed/application/delete_item_confirmed'
-import { ItemConfirmedRepository } from 'packages/item_confirmed/domain/item_confirmed_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { DeleteItemConfirmed } from '../../../packages/item_confirmed/application/delete_item_confirmed'
+import { ItemConfirmedRepository } from '../../../packages/item_confirmed/domain/item_confirmed_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteItemConfirmedService {

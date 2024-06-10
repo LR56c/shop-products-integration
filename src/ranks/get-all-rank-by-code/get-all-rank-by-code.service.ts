@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { GetAllRanks } from 'packages/ranks/application/get_all_ranks'
-import { Rank } from 'packages/ranks/domain/rank'
-import { RankRepository } from 'packages/ranks/domain/rank_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetAllRanks } from '../../../packages/ranks/application/get_all_ranks'
+import { Rank } from '../../../packages/ranks/domain/rank'
+import { RankRepository } from '../../../packages/ranks/domain/rank_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetAllRankByCodeService {

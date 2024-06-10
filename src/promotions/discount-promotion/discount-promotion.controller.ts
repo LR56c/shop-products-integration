@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { promotionResponseToJson } from 'packages/discount_type/features/promotions/application/promotion_mapper'
+import { promotionResponseToJson } from '../../../packages/discount_type/features/promotions/application/promotion_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { DiscounDto } from '../shared/promotion_dto'

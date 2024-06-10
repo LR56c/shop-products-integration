@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { CreateOrderConfirmed } from 'packages/order_confirmed/application/create_order_confirmed'
-import { OrderConfirmedRepository } from 'packages/order_confirmed/domain/order_confirmed_repository'
-import { OrderConfirmedEvent } from 'packages/shared/domain/events/order_confirmed_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { CreateOrderConfirmed } from '../../../packages/order_confirmed/application/create_order_confirmed'
+import { OrderConfirmedRepository } from '../../../packages/order_confirmed/domain/order_confirmed_repository'
+import { OrderConfirmedEvent } from '../../../packages/shared/domain/events/order_confirmed_event'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 import { OrderConfirmedDto } from '../shared/order_confirmed_dto'
 
 @Injectable()

@@ -2,8 +2,8 @@ import {
 	Test,
 	TestingModule
 } from '@nestjs/testing'
-import { RecommendProductController } from 'src/products/get-recommend-product/recommend-product.controller'
-import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
+import { RecommendProductController } from './recommend-product.controller'
+import { RecommendProductService } from './recommend-product.service'
 
 describe( 'RecommendProductController', () => {
 	let controller: RecommendProductController

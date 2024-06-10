@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteAuth } from 'packages/auth/application/delete_auth'
-import { AuthRepository } from 'packages/auth/domain/auth_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { DeleteAuth } from '../../../packages/auth/application/delete_auth'
+import { AuthRepository } from '../../../packages/auth/domain/auth_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteAuthService {

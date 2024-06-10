@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteCategory } from 'packages/categories/application/delete_category'
-import { CategoryRepository } from 'packages/categories/domain/category_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { DeleteCategory } from '../../../packages/categories/application/delete_category'
+import { CategoryRepository } from '../../../packages/categories/domain/category_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteCategoriesService {

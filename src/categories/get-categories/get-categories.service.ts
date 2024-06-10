@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { GetCategory } from 'packages/categories/application/get_category'
-import { CategoryRepository } from 'packages/categories/domain/category_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetCategory } from '../../../packages/categories/application/get_category'
+import { CategoryRepository } from '../../../packages/categories/domain/category_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetCategoriesService {

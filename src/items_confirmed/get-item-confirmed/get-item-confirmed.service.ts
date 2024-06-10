@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { GetItemConfirmed } from 'packages/item_confirmed/application/get_item_confirmed'
-import { ItemConfirmed } from 'packages/item_confirmed/domain/item_confirmed'
-import { ItemConfirmedRepository } from 'packages/item_confirmed/domain/item_confirmed_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetItemConfirmed } from '../../../packages/item_confirmed/application/get_item_confirmed'
+import { ItemConfirmed } from '../../../packages/item_confirmed/domain/item_confirmed'
+import { ItemConfirmedRepository } from '../../../packages/item_confirmed/domain/item_confirmed_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetItemConfirmedService {

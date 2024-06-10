@@ -129,8 +129,6 @@ export class RegisterAuthController {
 			}
 		}
 		catch ( e ) {
-			console.log( 'e ' )
-			console.log( e )
 			return {
 				statusCode: HttpStatus.BAD_REQUEST,
 				message   : this.translation.translateAll( e )

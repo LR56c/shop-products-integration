@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common'
-import { CreateReport } from 'packages/report/application/create_report'
-import { ExportReport } from 'packages/report/application/export_report'
-import { ReportSaleMethod } from 'packages/report/application/report_methods/report_sale_method'
+import { CreateReport } from '../../../packages/report/application/create_report'
+import { ExportReport } from '../../../packages/report/application/export_report'
+import { ReportSaleMethod } from '../../../packages/report/application/report_methods/report_sale_method'
 import {
 	ReportType,
 	ReportTypeEnum
-} from 'packages/report/domain/models/report_type'
-import { ReportDAO } from 'packages/report/domain/repository/report_dao'
-import { GetAllReportPayment } from 'packages/report/features/payments/application/get_all_report_payment'
-import { ReportPaymentRepository } from 'packages/report/features/payments/domain/report_payment_repository'
-import { ExportReportImageGraphData } from 'packages/report/infrastructure/export_report_image_graph_data'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { NotImplementedException } from 'packages/shared/domain/exceptions/NotImplementedException'
-import { SubTypeNotExistException } from 'packages/shared/domain/exceptions/SubTypeNotExistException'
-import { ValidURL } from 'packages/shared/domain/value_objects/valid_url'
+} from '../../../packages/report/domain/models/report_type'
+import { ReportDAO } from '../../../packages/report/domain/repository/report_dao'
+import { GetAllReportPayment } from '../../../packages/report/features/payments/application/get_all_report_payment'
+import { ReportPaymentRepository } from '../../../packages/report/features/payments/domain/report_payment_repository'
+import { ExportReportImageGraphData } from '../../../packages/report/infrastructure/export_report_image_graph_data'
+import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { NotImplementedException } from '../../../packages/shared/domain/exceptions/NotImplementedException'
+import { SubTypeNotExistException } from '../../../packages/shared/domain/exceptions/SubTypeNotExistException'
+import { ValidURL } from '../../../packages/shared/domain/value_objects/valid_url'
 import {
 	dateToUTC,
 	getMonthName,
 	getStartAndEndOfMonth
-} from 'packages/shared/utils/parse_date'
-import { wrapType } from 'packages/shared/utils/wrap_type'
+} from '../../../packages/shared/utils/parse_date'
+import { wrapType } from '../../../packages/shared/utils/wrap_type'
 import { PDFDocument } from 'pdf-lib'
 
 @Injectable()

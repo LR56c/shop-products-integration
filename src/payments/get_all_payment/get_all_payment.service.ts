@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { GetAllPayments } from 'packages/payments/application/get_all_payments'
-import { Payment } from 'packages/payments/domain/models/payment'
-import { PaymentRepository } from 'packages/payments/domain/repository/payment_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetAllPayments } from '../../../packages/payments/application/get_all_payments'
+import { Payment } from '../../../packages/payments/domain/models/payment'
+import { PaymentRepository } from '../../../packages/payments/domain/repository/payment_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetAllPaymentService {

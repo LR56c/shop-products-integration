@@ -61,7 +61,6 @@ export class UserMemoryData implements UserDao {
 
 	async getOne( email: Email ): Promise<User> {
 		try {
-
 			const user = this.emailDB.get( email.value )
 
 			if ( user === undefined ) {

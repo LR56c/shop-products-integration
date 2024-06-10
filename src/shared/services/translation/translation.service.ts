@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { I18nService } from 'nestjs-i18n'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
+import { BaseException } from '../../../../packages/shared/domain/exceptions/BaseException'
 import { flatErrors } from './utils/flat_errors'
 import { manualTranslation } from './utils/manual_translation'
 

@@ -1,4 +1,4 @@
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidDateException } from '../../shared/domain/exceptions/InvalidDateException'
 import { InvalidPercentageException } from '../../shared/domain/exceptions/InvalidPercentageException'

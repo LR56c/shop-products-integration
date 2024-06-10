@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { CreateItemConfirmed } from 'packages/item_confirmed/application/create_item_confirmed'
-import { ItemConfirmedRepository } from 'packages/item_confirmed/domain/item_confirmed_repository'
-import { ItemConfirmedEvent } from 'packages/shared/domain/events/item_confirmed_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { ItemConfirmedDto } from 'src/items_confirmed/shared/item_confirmed_dto'
+import { CreateItemConfirmed } from '../../../packages/item_confirmed/application/create_item_confirmed'
+import { ItemConfirmedRepository } from '../../../packages/item_confirmed/domain/item_confirmed_repository'
+import { ItemConfirmedEvent } from '../../../packages/shared/domain/events/item_confirmed_event'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { ItemConfirmedDto } from '../shared/item_confirmed_dto'
 
 @Injectable()
 export class CreateItemConfirmedService {

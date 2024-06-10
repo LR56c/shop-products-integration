@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { GetProduct } from 'packages/products/application/get_product'
-import { ProductResponse } from 'packages/products/domain/models/product_response'
-import { ProductRepository } from 'packages/products/domain/repository/product_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetProduct } from '../../../packages/products/application/get_product'
+import { ProductResponse } from '../../../packages/products/domain/models/product_response'
+import { ProductRepository } from '../../../packages/products/domain/repository/product_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetProductService {

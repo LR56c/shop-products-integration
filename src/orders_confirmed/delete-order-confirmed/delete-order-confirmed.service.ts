@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteOrderConfirmed } from 'packages/order_confirmed/application/delete_order_confirmed'
-import { OrderConfirmedRepository } from 'packages/order_confirmed/domain/order_confirmed_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { DeleteOrderConfirmed } from '../../../packages/order_confirmed/application/delete_order_confirmed'
+import { OrderConfirmedRepository } from '../../../packages/order_confirmed/domain/order_confirmed_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteOrderConfirmedService {

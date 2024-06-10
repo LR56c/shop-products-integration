@@ -10,8 +10,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { LoginAuthService } from './login-auth.service'
 
 @ApiTags( 'auth' )

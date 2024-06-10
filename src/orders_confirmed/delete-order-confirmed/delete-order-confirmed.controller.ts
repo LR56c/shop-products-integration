@@ -9,8 +9,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResult } from 'src/shared/utils/HttpResult'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { DeleteOrderConfirmedService } from './delete-order-confirmed.service'
 
 @ApiTags( 'orders-confirmed' )

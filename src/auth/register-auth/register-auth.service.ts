@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteAuth } from 'packages/auth/application/delete_auth'
-import { RegisterAuth } from 'packages/auth/application/register_auth'
-import { Auth } from 'packages/auth/domain/auth'
-import { AuthRepository } from 'packages/auth/domain/auth_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { CreateUser } from 'packages/user/application/create_user'
-import { UserDao } from 'packages/user/domain/dao/UserDao'
-import { AuthUserDto } from 'src/auth/shared/auth_user_dto'
+import { DeleteAuth } from '../../../packages/auth/application/delete_auth'
+import { RegisterAuth } from '../../../packages/auth/application/register_auth'
+import { Auth } from '../../../packages/auth/domain/auth'
+import { AuthRepository } from '../../../packages/auth/domain/auth_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { CreateUser } from '../../../packages/user/application/create_user'
+import { UserDao } from '../../../packages/user/domain/dao/UserDao'
+import { AuthUserDto } from '../shared/auth_user_dto'
 
 @Injectable()
 export class RegisterAuthService {

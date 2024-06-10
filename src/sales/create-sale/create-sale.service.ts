@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { DiscountRepository } from 'packages/discount_type/domain/discount_repository'
-import { CreateSale } from 'packages/discount_type/features/sales/application/create_sale'
-import { DiscountCreatedEvent } from 'packages/shared/domain/events/discount_created_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { SaleDto } from 'src/sales/shared/sale_dto'
+import { DiscountRepository } from '../../../packages/discount_type/domain/discount_repository'
+import { CreateSale } from '../../../packages/discount_type/features/sales/application/create_sale'
+import { DiscountCreatedEvent } from '../../../packages/shared/domain/events/discount_created_event'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { SaleDto } from '../shared/sale_dto'
 
 @Injectable()
 export class CreateSaleService {

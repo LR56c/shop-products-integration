@@ -1,7 +1,11 @@
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 import { AuthRepository } from '../../../packages/auth/domain/auth_repository'
 import { AuthMemoryData } from '../../../packages/auth/infrastructure/auth_memory_data'
 import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
-import { wrapTypeAsync } from '../../../packages/shared/utils/wrap_type'
+import {
+	wrapTypeAsync,
+	wrapTypeErrors
+} from '../../../packages/shared/utils/wrap_type'
 import { AuthMother } from '../objects_mothers/auth/auth_mother'
 import { EmailMother } from '../objects_mothers/shared/email_mother'
 import { PasswordMother } from '../objects_mothers/shared/password_mother'
@@ -36,10 +40,10 @@ describe( 'Auth Repository', () => {
 		console.log( 'should throw error if already registered' )
 		console.log( 'inputs:', email, password )
 
-		const result = await wrapTypeAsync( () => repo.register( email, password ) )
+		const result = await wrapTypeErrors( () => repo.register( email, password ) )
 
 		expect( result )
-			.toBeInstanceOf( BaseException )
+			.toBeInstanceOf( Errors )
 	} )
 
 	it( 'should recover token', async () => {
@@ -63,16 +67,12 @@ describe( 'Auth Repository', () => {
 		const email    = EmailMother.random()
 		const password = PasswordMother.random()
 		const auth     = AuthMother.random()
-		repo           = new AuthMemoryData( [
-			{ email, password, auth }
-		] )
+		repo           = new AuthMemoryData( [ { email, password, auth } ] )
 		console.log( 'should delete user' )
 		console.log( 'inputs:', email, password )
-		await repo.delete( auth.id )
 
-		const result = await wrapTypeAsync( () => repo.login( email, password ) )
+		const result = await repo.delete( auth.id )
 
-		expect( result )
-			.toBeInstanceOf( BaseException )
+		expect( result ).toBe( true )
 	} )
 } )

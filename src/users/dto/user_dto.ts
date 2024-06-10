@@ -6,7 +6,7 @@ import {
 	Matches,
 	MinLength
 } from 'class-validator'
-import { RoleEnum } from 'packages/shared/domain/value_objects/role'
+import { RoleEnum } from '../../../packages/shared/domain/value_objects/role'
 
 export class UserDto {
 

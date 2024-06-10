@@ -9,7 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { rankToJson } from 'packages/ranks/application/rank_mapper'
+import { rankToJson } from '../../../packages/ranks/application/rank_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetAllRankByCodeService } from './get-all-rank-by-code.service'

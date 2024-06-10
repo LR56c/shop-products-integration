@@ -2,7 +2,7 @@ import {
 	Test,
 	TestingModule
 } from '@nestjs/testing'
-import { RecommendProductService } from 'src/products/get-recommend-product/recommend-product.service'
+import { RecommendProductService } from './recommend-product.service'
 
 describe( 'RecommendProductService', () => {
 	let service: RecommendProductService

@@ -11,8 +11,8 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { PartialOrderDto } from 'src/orders/shared/dto/partial_order_dto'
-import { HttpResult } from 'src/shared/utils/HttpResult'
+import { PartialOrderDto } from '../shared/dto/partial_order_dto'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { UpdateOrderService } from './update-order.service'
 

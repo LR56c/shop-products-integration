@@ -1,4 +1,4 @@
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { UUID } from '../../shared/domain/value_objects/uuid'

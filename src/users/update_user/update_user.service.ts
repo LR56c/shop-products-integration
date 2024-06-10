@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { EmailException } from 'packages/shared/domain/exceptions/EmailException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { Email } from 'packages/shared/domain/value_objects/email'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { GetOneUser } from 'packages/user/application/get_one_user'
-import { UpdateUser } from 'packages/user/application/update_user'
-import { UserDao } from 'packages/user/domain/dao/UserDao'
-import { PartialUserDto } from 'src/users/dto/partial_user_dto'
+import { EmailException } from '../../../packages/shared/domain/exceptions/EmailException'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { Email } from '../../../packages/shared/domain/value_objects/email'
+import { wrapType } from '../../../packages/shared/utils/wrap_type'
+import { GetOneUser } from '../../../packages/user/application/get_one_user'
+import { UpdateUser } from '../../../packages/user/application/update_user'
+import { UserDao } from '../../../packages/user/domain/dao/UserDao'
+import { PartialUserDto } from '../dto/partial_user_dto'
 
 @Injectable()
 export class UpdateUserService {

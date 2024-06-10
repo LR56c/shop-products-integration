@@ -11,7 +11,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { UpdatePaymentDto } from 'src/payments/dto/update_payment_dto'
+import { UpdatePaymentDto } from '../dto/update_payment_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { UpdatePaymentService } from './update_payment.service'

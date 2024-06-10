@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { RecoverAuth } from 'packages/auth/application/recover_auth'
-import { Auth } from 'packages/auth/domain/auth'
-import { AuthRepository } from 'packages/auth/domain/auth_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { RecoverAuth } from '../../../packages/auth/application/recover_auth'
+import { Auth } from '../../../packages/auth/domain/auth'
+import { AuthRepository } from '../../../packages/auth/domain/auth_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class RefreshAuthService {

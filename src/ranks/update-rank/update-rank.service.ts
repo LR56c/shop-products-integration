@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { GetRank } from 'packages/ranks/application/get_rank'
-import { UpdateRank } from 'packages/ranks/application/update_rank'
-import { RankRepository } from 'packages/ranks/domain/rank_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { CreateRankDto } from 'src/ranks/dto/create_rank_dto'
+import { GetRank } from '../../../packages/ranks/application/get_rank'
+import { UpdateRank } from '../../../packages/ranks/application/update_rank'
+import { RankRepository } from '../../../packages/ranks/domain/rank_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { CreateRankDto } from '../dto/create_rank_dto'
 
 @Injectable()
 export class UpdateRankService {

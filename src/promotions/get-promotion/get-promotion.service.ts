@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { GetPromotion } from 'packages/discount_type/features/promotions/application/get_promotion'
-import { PromotionRepository } from 'packages/discount_type/features/promotions/domain/promotion_repository'
-import { PromotionResponse } from 'packages/discount_type/features/promotions/domain/promotion_response'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetPromotion } from '../../../packages/discount_type/features/promotions/application/get_promotion'
+import { PromotionRepository } from '../../../packages/discount_type/features/promotions/domain/promotion_repository'
+import { PromotionResponse } from '../../../packages/discount_type/features/promotions/domain/promotion_response'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class GetPromotionService {

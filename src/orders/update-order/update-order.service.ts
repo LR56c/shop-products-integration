@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { UpdateOrder } from 'packages/orders/application/update_order'
-import { OrderRepository } from 'packages/orders/domain/order_repository'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { PartialOrderDto } from 'src/orders/shared/dto/partial_order_dto'
+import { UpdateOrder } from '../../../packages/orders/application/update_order'
+import { OrderRepository } from '../../../packages/orders/domain/order_repository'
+import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { InvalidUUIDException } from '../../../packages/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '../../../packages/shared/domain/value_objects/uuid'
+import { wrapType } from '../../../packages/shared/utils/wrap_type'
+import { PartialOrderDto } from '../shared/dto/partial_order_dto'
 
 @Injectable()
 export class UpdateOrderService {

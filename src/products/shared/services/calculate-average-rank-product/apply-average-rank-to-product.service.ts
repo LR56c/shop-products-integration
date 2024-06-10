@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { GetProduct } from 'packages/products/application/get_product'
-import { UpdateProduct } from 'packages/products/application/update_product'
-import { ProductRepository } from 'packages/products/domain/repository/product_repository'
-import { ProductRankUpdateEvent } from 'packages/shared/domain/events/product_rank_update_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../../../../packages/shared/domain/exceptions/errors'
+import { GetProduct } from '../../../../../packages/products/application/get_product'
+import { UpdateProduct } from '../../../../../packages/products/application/update_product'
+import { ProductRepository } from '../../../../../packages/products/domain/repository/product_repository'
+import { ProductRankUpdateEvent } from '../../../../../packages/shared/domain/events/product_rank_update_event'
 
 @Injectable()
 export class ApplyAverageRankToProductService {

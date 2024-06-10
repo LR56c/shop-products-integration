@@ -10,9 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { newsLetterToJson } from 'packages/news_letter/application/news_letter_mapper'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { newsLetterToJson } from '../../../packages/news_letter/application/news_letter_mapper'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetAllNewsLetterService } from './get-all-news-letter.service'
 
 @ApiTags( 'news-letters' )

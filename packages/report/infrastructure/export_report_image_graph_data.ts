@@ -1,6 +1,6 @@
 import { ChartConfiguration } from 'chart.js'
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas'
-import { ExportReportRepository } from 'packages/report/domain/repository/export_report_repository'
+import { ExportReportRepository } from '../domain/repository/export_report_repository'
 import { ExportReportFormat } from '../domain/models/export_report_format'
 
 export class ExportReportImageGraphData implements ExportReportRepository {

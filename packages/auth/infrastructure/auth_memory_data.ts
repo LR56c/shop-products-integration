@@ -67,7 +67,7 @@ export class AuthMemoryData implements AuthRepository {
 
 			const pass = this.dbp.get( idAuthByEmail )
 
-			if ( pass !== password ) {
+			if ( pass?.value !== password.value ) {
 				throw [ new InfrastructureException() ]
 			}
 
@@ -104,6 +104,7 @@ export class AuthMemoryData implements AuthRepository {
 			const auth = this.db.get( id.value )
 
 			if ( auth === undefined ) {
+				console.log( 'auth not found')
 				throw [ new InfrastructureException() ]
 			}
 

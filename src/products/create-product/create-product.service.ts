@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { CreateProduct } from 'packages/products/application/create_product'
-import { ProductRepository } from 'packages/products/domain/repository/product_repository'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
+import { CreateProduct } from '../../../packages/products/application/create_product'
+import { ProductRepository } from '../../../packages/products/domain/repository/product_repository'
+import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
 import { CreateProductDto } from '../shared/dto/create_product_dto'
 
 @Injectable()

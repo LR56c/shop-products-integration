@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { CreatePaymentDto } from 'src/payments/dto/create_payment_dto'
+import { CreatePaymentDto } from '../dto/create_payment_dto'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from '../../shared/utils/HttpResult'
 import { CreatePaymentService } from './create_payment.service'

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { GetOneUser } from 'packages/user/application/get_one_user'
-import { UserDao } from 'packages/user/domain/dao/UserDao'
-import { User } from 'packages/user/domain/models/User'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { GetOneUser } from '../../../packages/user/application/get_one_user'
+import { UserDao } from '../../../packages/user/domain/dao/UserDao'
+import { User } from '../../../packages/user/domain/models/User'
 
 @Injectable()
 export class GetOneUserService {

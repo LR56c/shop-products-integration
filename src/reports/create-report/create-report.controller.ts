@@ -10,11 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { ReportTypeException } from 'packages/report/domain/exception/ReportTypeException'
-import { ReportType } from 'packages/report/domain/models/report_type'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { CreateReportService } from './create-report.service'
 

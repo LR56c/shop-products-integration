@@ -1,6 +1,5 @@
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { BaseException } from '../../shared/domain/exceptions/BaseException'
-import { EmailException } from '../../shared/domain/exceptions/EmailException'
 import { InvalidIntegerException } from '../../shared/domain/exceptions/InvalidIntegerException'
 import { InvalidUUIDException } from '../../shared/domain/exceptions/InvalidUUIDException'
 import { Email } from '../../shared/domain/value_objects/email'

@@ -1,15 +1,15 @@
-import { Report } from 'packages/report/domain/models/report'
-import { ReportType } from 'packages/report/domain/models/report_type'
-import { ReportDAO } from 'packages/report/domain/repository/report_dao'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
+import { Report } from '../domain/models/report'
+import { ReportType } from '../domain/models/report_type'
+import { ReportDAO } from '../domain/repository/report_dao'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { ValidDate } from '../../shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import {
 	wrapType,
 	wrapTypeDefault,
 	wrapTypeErrors
-} from 'packages/shared/utils/wrap_type'
+} from '../../shared/utils/wrap_type'
 
 export const GetAllReports = async ( repo: ReportDAO,
 	props: {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { LoginAuth } from 'packages/auth/application/login_auth'
-import { Auth } from 'packages/auth/domain/auth'
-import { AuthRepository } from 'packages/auth/domain/auth_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { LoginAuth } from '../../../packages/auth/application/login_auth'
+import { Auth } from '../../../packages/auth/domain/auth'
+import { AuthRepository } from '../../../packages/auth/domain/auth_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class LoginAuthService {

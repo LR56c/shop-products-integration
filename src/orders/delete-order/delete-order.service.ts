@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeleteOrder } from 'packages/orders/application/delete_order'
-import { OrderRepository } from 'packages/orders/domain/order_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { DeleteOrder } from '../../../packages/orders/application/delete_order'
+import { OrderRepository } from '../../../packages/orders/domain/order_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeleteOrderService {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { ReportPayment } from 'packages/report/features/payments/domain/report_payment'
-import { ReportPaymentRepository } from 'packages/report/features/payments/domain/report_payment_repository'
-import { PaymentProcessedEvent } from 'packages/shared/domain/events/payment_processed_event'
+import { ReportPayment } from '../../../../../packages/report/features/payments/domain/report_payment'
+import { ReportPaymentRepository } from '../../../../../packages/report/features/payments/domain/report_payment_repository'
+import { PaymentProcessedEvent } from '../../../../../packages/shared/domain/events/payment_processed_event'
 
 @Injectable()
 export class CatchPaymentProcessedService {

@@ -1,4 +1,4 @@
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../../../shared/domain/exceptions/errors'
 import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
 import { InvalidIntegerException } from '../../../../shared/domain/exceptions/InvalidIntegerException'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'

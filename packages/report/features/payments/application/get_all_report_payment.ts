@@ -1,13 +1,13 @@
-import { ReportPayment } from 'packages/report/features/payments/domain/report_payment'
-import { ReportPaymentRepository } from 'packages/report/features/payments/domain/report_payment_repository'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
+import { ReportPayment } from '../domain/report_payment'
+import { ReportPaymentRepository } from '../domain/report_payment_repository'
+import { BaseException } from '../../../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../../../shared/domain/exceptions/errors'
+
+import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import {
-	wrapType,
 	wrapTypeDefault,
 	wrapTypeErrors
-} from 'packages/shared/utils/wrap_type'
+} from '../../../../shared/utils/wrap_type'
 
 export const GetAllReportPayment = async ( repo: ReportPaymentRepository,
 	props: {

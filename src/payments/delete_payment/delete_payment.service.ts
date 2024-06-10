@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { DeletePayment } from 'packages/payments/application/delete_payment'
-import { PaymentRepository } from 'packages/payments/domain/repository/payment_repository'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
+import { DeletePayment } from '../../../packages/payments/application/delete_payment'
+import { PaymentRepository } from '../../../packages/payments/domain/repository/payment_repository'
+import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
 
 @Injectable()
 export class DeletePaymentService {

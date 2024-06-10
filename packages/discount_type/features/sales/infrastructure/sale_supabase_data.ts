@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { Errors } from '../../../../shared/domain/exceptions/errors'
 import { UUID } from '../../../../shared/domain/value_objects/uuid'
 import { ValidDate } from '../../../../shared/domain/value_objects/valid_date'
 import { ValidInteger } from '../../../../shared/domain/value_objects/valid_integer'

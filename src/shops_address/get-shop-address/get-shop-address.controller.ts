@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { shopAddressToJson } from 'packages/shop-address/application/shop-address-mapper'
+import { shopAddressToJson } from '../../../packages/shop-address/application/shop-address-mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetShopAddressService } from './get-shop-address.service'

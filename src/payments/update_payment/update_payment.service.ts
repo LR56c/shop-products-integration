@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { GetPayment } from 'packages/payments/application/get_payment'
-import { UpdatePayment } from 'packages/payments/application/update_payments'
-import { PaymentRepository } from 'packages/payments/domain/repository/payment_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { UpdatePaymentDto } from 'src/payments/dto/update_payment_dto'
+import { GetPayment } from '../../../packages/payments/application/get_payment'
+import { UpdatePayment } from '../../../packages/payments/application/update_payments'
+import { PaymentRepository } from '../../../packages/payments/domain/repository/payment_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { UpdatePaymentDto } from '../dto/update_payment_dto'
 
 @Injectable()
 export class UpdatePaymentService {

@@ -1,8 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Database } from 'database.types'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-
-import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
 import { UUID } from '../../shared/domain/value_objects/uuid'
 import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { InfrastructureException } from '../../shared/infrastructure/infrastructure_exception'

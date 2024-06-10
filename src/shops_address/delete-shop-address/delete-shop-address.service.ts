@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { DeleteShopAddress } from 'packages/shop-address/application/delete_shop_address'
-import { ShopAddressRepository } from 'packages/shop-address/domain/shop-address-repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { DeleteShopAddress } from '../../../packages/shop-address/application/delete_shop_address'
+import { ShopAddressRepository } from '../../../packages/shop-address/domain/shop-address-repository'
 
 @Injectable()
 export class DeleteShopAddressService {

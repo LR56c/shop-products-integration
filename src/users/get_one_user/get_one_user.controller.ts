@@ -9,7 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { userToJson } from 'packages/user/application/user_mapper'
+import { userToJson } from '../../../packages/user/application/user_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetOneUserService } from './get_one_user.service'

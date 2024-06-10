@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { orderResponseToJson } from 'packages/orders/application/order_mapper'
+import { orderResponseToJson } from '../../../packages/orders/application/order_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetAllOrdersService } from './get-all-orders.service'

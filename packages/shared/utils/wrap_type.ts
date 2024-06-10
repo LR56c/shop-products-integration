@@ -1,6 +1,5 @@
 import { BaseException } from '../domain/exceptions/BaseException'
 import { Errors } from '../domain/exceptions/errors'
-import { UnknownException } from '../domain/exceptions/UnknownException'
 
 export function wrapType<T, Err extends BaseException>( returnFunction: () => T ): T | BaseException {
 	try {

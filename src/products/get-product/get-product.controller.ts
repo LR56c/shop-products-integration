@@ -9,7 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { productResponseToJson } from 'packages/products/application/product_mapper'
+import { productResponseToJson } from '../../../packages/products/application/product_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetProductService } from './get-product.service'

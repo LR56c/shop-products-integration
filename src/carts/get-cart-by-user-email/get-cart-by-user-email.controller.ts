@@ -9,7 +9,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { cartProductResponseToJson } from 'packages/carts/application/cart_mapper'
+import { cartProductResponseToJson } from '../../../packages/carts/application/cart_mapper'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetCartByUserEmailService } from './get-cart-by-user-email.service'

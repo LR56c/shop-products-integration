@@ -6,7 +6,6 @@ import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import {
 	wrapType,
-	wrapTypeAsync,
 	wrapTypeDefault,
 	wrapTypeErrors
 } from '../../shared/utils/wrap_type'

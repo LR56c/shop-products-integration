@@ -9,11 +9,11 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { InvalidUUIDException } from 'packages/shared/domain/exceptions/InvalidUUIDException'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
-import { wrapType } from 'packages/shared/utils/wrap_type'
-import { HttpResult } from 'src/shared/utils/HttpResult'
+import { BaseException } from '../../../packages/shared/domain/exceptions/BaseException'
+import { InvalidUUIDException } from '../../../packages/shared/domain/exceptions/InvalidUUIDException'
+import { UUID } from '../../../packages/shared/domain/value_objects/uuid'
+import { wrapType } from '../../../packages/shared/utils/wrap_type'
+import { HttpResult } from '../../shared/utils/HttpResult'
 import { TranslationService } from '../../shared/services/translation/translation.service'
 import { DeleteReportService } from './delete-report.service'
 

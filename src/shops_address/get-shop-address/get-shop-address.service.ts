@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { GetAllShopAddress } from 'packages/shop-address/application/get_all_shop_address'
-import { ShopAddress } from 'packages/shop-address/domain/shop-address'
-import { ShopAddressRepository } from 'packages/shop-address/domain/shop-address-repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { GetAllShopAddress } from '../../../packages/shop-address/application/get_all_shop_address'
+import { ShopAddress } from '../../../packages/shop-address/domain/shop-address'
+import { ShopAddressRepository } from '../../../packages/shop-address/domain/shop-address-repository'
 
 @Injectable()
 export class GetShopAddressService {

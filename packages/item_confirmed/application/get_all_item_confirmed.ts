@@ -1,12 +1,12 @@
-import { ItemConfirmed } from 'packages/item_confirmed/domain/item_confirmed'
-import { ItemConfirmedRepository } from 'packages/item_confirmed/domain/item_confirmed_repository'
-import { BaseException } from 'packages/shared/domain/exceptions/BaseException'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
+import { ItemConfirmed } from '../domain/item_confirmed'
+import { ItemConfirmedRepository } from '../domain/item_confirmed_repository'
+import { BaseException } from '../../shared/domain/exceptions/BaseException'
+import { Errors } from '../../shared/domain/exceptions/errors'
+import { ValidInteger } from '../../shared/domain/value_objects/valid_integer'
 import {
 	wrapType,
 	wrapTypeErrors
-} from 'packages/shared/utils/wrap_type'
+} from '../../shared/utils/wrap_type'
 
 export const GetAllItemConfirmed = async ( repo: ItemConfirmedRepository, props:{
 	from: number,

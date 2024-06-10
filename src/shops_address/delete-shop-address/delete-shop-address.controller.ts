@@ -10,7 +10,7 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { TranslationService } from '../../shared/services/translation/translation.service'
 import { HttpResult } from 'src/shared/utils/HttpResult'
 import { DeleteShopAddressService } from './delete-shop-address.service'
 

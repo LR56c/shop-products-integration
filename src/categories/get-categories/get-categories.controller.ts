@@ -10,9 +10,9 @@ import {
 	ApiResponse,
 	ApiTags
 } from '@nestjs/swagger'
-import { categoryToJson } from 'packages/categories/application/category_mapper'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
-import { HttpResultData } from 'src/shared/utils/HttpResultData'
+import { categoryToJson } from '../../../packages/categories/application/category_mapper'
+import { TranslationService } from '../../shared/services/translation/translation.service'
+import { HttpResultData } from '../../shared/utils/HttpResultData'
 import { GetCategoriesService } from './get-categories.service'
 
 @ApiTags( 'categories' )

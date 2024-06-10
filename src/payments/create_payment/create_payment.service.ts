@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { CreatePayment } from 'packages/payments/application/create_payment'
-import { PaymentRepository } from 'packages/payments/domain/repository/payment_repository'
-import { PaymentProcessedEvent } from 'packages/shared/domain/events/payment_processed_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { CreatePaymentDto } from 'src/payments/dto/create_payment_dto'
+import { CreatePayment } from '../../../packages/payments/application/create_payment'
+import { PaymentRepository } from '../../../packages/payments/domain/repository/payment_repository'
+import { PaymentProcessedEvent } from '../../../packages/shared/domain/events/payment_processed_event'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { CreatePaymentDto } from '../dto/create_payment_dto'
 
 @Injectable()
 export class CreatePaymentService {

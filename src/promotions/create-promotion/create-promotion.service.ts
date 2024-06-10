@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
-import { PromotionDto } from 'src/promotions/shared/promotion_dto'
-import { DiscountRepository } from 'packages/discount_type/domain/discount_repository'
-import { CreatePromotion } from 'packages/discount_type/features/promotions/application/create_promotion'
-import { LinkProducts } from 'packages/discount_type/features/promotions/application/link_products'
-import { PromotionRepository } from 'packages/discount_type/features/promotions/domain/promotion_repository'
-import { DiscountCreatedEvent } from 'packages/shared/domain/events/discount_created_event'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
+import { PromotionDto } from '../shared/promotion_dto'
+import { DiscountRepository } from '../../../packages/discount_type/domain/discount_repository'
+import { CreatePromotion } from '../../../packages/discount_type/features/promotions/application/create_promotion'
+import { LinkProducts } from '../../../packages/discount_type/features/promotions/application/link_products'
+import { PromotionRepository } from '../../../packages/discount_type/features/promotions/domain/promotion_repository'
+import { DiscountCreatedEvent } from '../../../packages/shared/domain/events/discount_created_event'
 
 @Injectable()
 export class CreatePromotionService {

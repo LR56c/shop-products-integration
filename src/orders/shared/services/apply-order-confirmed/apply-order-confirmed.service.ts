@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { GetOrder } from 'packages/orders/application/get_order'
-import { UpdateOrder } from 'packages/orders/application/update_order'
-import { OrderRepository } from 'packages/orders/domain/order_repository'
-import { OrderConfirmedEvent } from 'packages/shared/domain/events/order_confirmed_event'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { GetOrder } from '../../../../../packages/orders/application/get_order'
+import { UpdateOrder } from '../../../../../packages/orders/application/update_order'
+import { OrderRepository } from '../../../../../packages/orders/domain/order_repository'
+import { OrderConfirmedEvent } from '../../../../../packages/shared/domain/events/order_confirmed_event'
+import { Errors } from '../../../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class ApplyOrderConfirmedService {

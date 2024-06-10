@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { ReportDAO } from 'packages/report/domain/repository/report_dao'
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
+import { ReportDAO } from '../../../packages/report/domain/repository/report_dao'
+import { UUID } from '../../../packages/shared/domain/value_objects/uuid'
 
 @Injectable()
 export class DeleteReportService {

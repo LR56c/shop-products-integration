@@ -15,13 +15,13 @@ import {
 	QueryResolver
 } from 'nestjs-i18n'
 import { join } from 'node:path'
-import { AuthRepository } from 'packages/auth/domain/auth_repository'
-import { AuthSupabaseData } from 'packages/auth/infrastructure/auth_supabase_data'
-import { DiscountRepository } from 'packages/discount_type/domain/discount_repository'
-import { DiscountSupabaseData } from 'packages/discount_type/infrastructure/discount_supabase_data'
-import { UserDao } from 'packages/user/domain/dao/UserDao'
-import { UserSupaBaseData } from 'packages/user/infrastructure/user_supabase_data'
-import { TranslationService } from 'src/shared/services/translation/translation.service'
+import { AuthRepository } from '../packages/auth/domain/auth_repository'
+import { AuthSupabaseData } from '../packages/auth/infrastructure/auth_supabase_data'
+import { DiscountRepository } from '../packages/discount_type/domain/discount_repository'
+import { DiscountSupabaseData } from '../packages/discount_type/infrastructure/discount_supabase_data'
+import { UserDao } from '../packages/user/domain/dao/UserDao'
+import { UserSupaBaseData } from '../packages/user/infrastructure/user_supabase_data'
+import { TranslationService } from './shared/services/translation/translation.service'
 import { AuthModule } from './auth/auth.module'
 import { CartsModule } from './carts/carts.module'
 import { CategoriesModule } from './categories/categories.module'
@@ -37,6 +37,22 @@ import { ReportsModule } from './reports/reports.module'
 import { SalesModule } from './sales/sales.module'
 import { ShopsAddressModule } from './shops_address/shops_address.module'
 import { UsersModule } from './users/users.module'
+
+export const i18nModule = 		I18nModule.forRootAsync( {
+	useFactory: () => ( {
+		fallbackLanguage: 'en',
+		loaderOptions   : {
+			path : join( __dirname, '/i18n/' ),
+			watch: true
+		}
+	} ),
+	resolvers : [
+		{ use: QueryResolver, options: [ 'lang' ] },
+		AcceptLanguageResolver,
+		new HeaderResolver( [ 'x-lang' ] )
+	],
+	inject    : []
+} )
 
 @Global()
 @Module( {
@@ -80,21 +96,7 @@ import { UsersModule } from './users/users.module'
 	],
 	imports  : [
 		EventEmitterModule.forRoot(),
-		I18nModule.forRootAsync( {
-			useFactory: () => ( {
-				fallbackLanguage: 'en',
-				loaderOptions   : {
-					path : join( __dirname, '/i18n/' ),
-					watch: true
-				}
-			} ),
-			resolvers : [
-				{ use: QueryResolver, options: [ 'lang' ] },
-				AcceptLanguageResolver,
-				new HeaderResolver( [ 'x-lang' ] )
-			],
-			inject    : []
-		} ),
+		i18nModule,
 		PromotionsModule, NewsLettersModule, OrdersModule,
 		PaymentsModule, ItemsConfirmedModule, OrdersConfirmedModule, CartsModule,
 		ProductsModule,

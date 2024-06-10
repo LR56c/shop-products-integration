@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { RemoveDiscount } from 'packages/discount_type/application/remove_discount'
-import { DiscountRepository } from 'packages/discount_type/domain/discount_repository'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { RemoveDiscount } from '../../../packages/discount_type/application/remove_discount'
+import { DiscountRepository } from '../../../packages/discount_type/domain/discount_repository'
+import { Errors } from '../../../packages/shared/domain/exceptions/errors'
 
 @Injectable()
 export class DeletePromotionService {

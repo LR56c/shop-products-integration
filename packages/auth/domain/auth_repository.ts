@@ -1,4 +1,4 @@
-import { UUID } from 'packages/shared/domain/value_objects/uuid'
+import { UUID } from '../../shared/domain/value_objects/uuid'
 import { Email } from '../../shared/domain/value_objects/email'
 import { ValidString } from '../../shared/domain/value_objects/valid_string'
 import { Password } from '../../user/domain/models/Password'

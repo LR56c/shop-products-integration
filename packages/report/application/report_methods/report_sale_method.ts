@@ -1,6 +1,6 @@
-import { ExportReportFormat } from 'packages/report/domain/models/export_report_format'
-import { ReportPayment } from 'packages/report/features/payments/domain/report_payment'
-import { Errors } from 'packages/shared/domain/exceptions/errors'
+import { ExportReportFormat } from '../../domain/models/export_report_format'
+import { ReportPayment } from '../../features/payments/domain/report_payment'
+import { Errors } from '../../../shared/domain/exceptions/errors'
 
 export const ReportSaleMethod = async ( title: string,
 	reports: ReportPayment[] ): Promise<ExportReportFormat | Errors> => {

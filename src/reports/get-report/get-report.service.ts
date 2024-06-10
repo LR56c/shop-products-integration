@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { Report } from 'packages/report/domain/models/report'
-import { ReportType } from 'packages/report/domain/models/report_type'
-import { ReportDAO } from 'packages/report/domain/repository/report_dao'
-import { ValidDate } from 'packages/shared/domain/value_objects/valid_date'
-import { ValidInteger } from 'packages/shared/domain/value_objects/valid_integer'
+import { Report } from '../../../packages/report/domain/models/report'
+import { ReportType } from '../../../packages/report/domain/models/report_type'
+import { ReportDAO } from '../../../packages/report/domain/repository/report_dao'
+import { ValidDate } from '../../../packages/shared/domain/value_objects/valid_date'
+import { ValidInteger } from '../../../packages/shared/domain/value_objects/valid_integer'
 
 @Injectable()
 export class GetReportService {
