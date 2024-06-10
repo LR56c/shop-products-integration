@@ -18,7 +18,7 @@ export const AddNewsLetter = async (
 	props: {
 		userEmail: string
 		name: string
-		createdAt: Date
+		createdAt: string | Date
 	}
 ): Promise<boolean | Errors> => {
 
