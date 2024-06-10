@@ -26,41 +26,41 @@ export class UserMockData implements UserDao {
 
 	async get( from: ValidInteger, to: ValidInteger, role?: Role | undefined, name?: ValidString | undefined ): Promise<User[]> {
 		this.mockGetAll( from, to, role, name )
+		console.log('result get:', from, to, role, name)
 		return this.db
 	}
 
 	assertGetAllHasBeenCalledWith(from : ValidInteger, to : ValidInteger, role?: Role | undefined, name?: ValidString | undefined) {
-		console.log('result get:', from, to, role, name)
 		expect(this.mockGetAll).toHaveBeenCalledWith(from, to, role, name);
 	}
 
 	async getOne( email: Email ): Promise<User> {
 		this.mockGet( email )
+		console.log('result get:', email)
 		return this.db[0]
 	}
 
 	assertGetOneHasBeenCalledWith(email : Email) {
-		console.log('result get:', email)
 		expect(this.mockGet).toHaveBeenCalledWith(email);
 	}
 
 	async update( email: Email, user: User ): Promise<boolean> {
 		this.mockUpdate( email, user )
+		console.log('result update:', email, user)
 		return true
 	}
 
 	assertUpdateHasBeenCalledWith(email : Email, user : User) {
-		console.log('result update:', email, user)
 		expect(this.mockUpdate).toHaveBeenCalledWith(email, user);
 	}
 
 	async delete( email: Email ): Promise<boolean> {
 		this.mockDelete( email )
+		console.log('result delete:', email)
 		return true
 	}
 
 	assertDeletedHasBeenCalledWith(email : Email) {
-		console.log('result delete:', email)
 		expect(this.mockDelete).toHaveBeenCalledWith(email);
 	}
 }
