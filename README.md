@@ -5,7 +5,12 @@ npm i
 ```
 - Paso 2: ejecutar servidor
 ```
-npm run start --workspaces=backend
+npm run start
+```
+***
+- Ejecutar test
+```
+npm run test
 ```
 - Paso 3: Ingresar a swagger
 ```
