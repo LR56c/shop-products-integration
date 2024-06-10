@@ -70,6 +70,7 @@ describe( 'RegisterAuthController', () => {
 		    .mockResolvedValue( a1 )
 		const result = await controller.register( p1.value, dto )
 
+		console.log( 'result:', result )
 		expect( result.statusCode ).toBe(200)
 		expect( errors ).toHaveLength(0)
 		expect( result.data ).toBe( a1.token.value )
@@ -87,6 +88,7 @@ describe( 'RegisterAuthController', () => {
 		const errors = await validate( dto )
 
 		const result = await controller.register( p1.value, dto )
+		console.log( 'result:', result)
 
 		expect( errors.length ).toBeGreaterThan(0)
 		expect( result.statusCode ).toBe( 400 )
