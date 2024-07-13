@@ -34,17 +34,17 @@ export class CreatePaymentController {
 							type   : 'string',
 							example: '668476f7-b08f-40b6-9e02-faa55aca42b1'
 						},
-						delivery_address: {
-							type   : 'string',
-							example: 'John Doe'
-						},
-						value           : {
-							type   : 'integer',
-							example: 1000
-						},
 						payment_method  : {
 							type   : 'string',
 							example: 'CREDIT'
+						},
+						payment_value           : {
+							type   : 'integer',
+							example: 1000
+						},
+						delivery_name: {
+							type   : 'string',
+							example: 'John Doe'
 						}
 					}
 				}
